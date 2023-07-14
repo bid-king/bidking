@@ -21,7 +21,7 @@ public class Member extends BaseEntity {
     @Column(name = "member_code")
     private Long code; // 객체상 쓸 것
     private String name;
-    private String nickName; //( 닉네임 )
+    private String nickname; //( 닉네임 )
     private String mobile; //( 핸드폰 번호 )
     @Embedded
     private Address address; //( 기본배송지 )
