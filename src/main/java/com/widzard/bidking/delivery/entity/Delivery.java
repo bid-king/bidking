@@ -1,15 +1,19 @@
 package com.widzard.bidking.delivery.entity;
 
 import com.widzard.bidking.common.entity.Address;
+import com.widzard.bidking.common.entity.BaseEntity;
 import com.widzard.bidking.order.entity.Order;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "delivery")
-public class Delivery {
+public class Delivery extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

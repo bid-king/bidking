@@ -3,15 +3,19 @@ package com.widzard.bidking.member.entity;
 
 
 import com.widzard.bidking.common.entity.Address;
+import com.widzard.bidking.common.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue()
     @Column(name = "member_code")
