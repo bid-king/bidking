@@ -18,8 +18,8 @@ public class Image extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "image_code")
-    Long code;
+    @Column(name = "image_id")
+    Long id;
 
     @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
     Member member;

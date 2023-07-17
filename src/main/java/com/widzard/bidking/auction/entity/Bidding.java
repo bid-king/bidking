@@ -18,15 +18,15 @@ public class Bidding extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "bidding_code")
-    Long code;
+    @Column(name = "bidding_id")
+    Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_code")
+    @JoinColumn(name = "member_id")
     Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code")
+    @JoinColumn(name = "item_id")
     Item item;
 
     Long price;

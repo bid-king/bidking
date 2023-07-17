@@ -18,17 +18,17 @@ public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "order_code")
-    private Long code; // (주문코드)
+    @Column(name = "order_id")
+    private Long id; // (주문코드)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_code")
+    @JoinColumn(name = "member_id")
     private Member orderer;
 
     @Enumerated(EnumType.STRING)
     private OrderState orderState; // (주문 상태 (OrderState))
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_room_code")
+    @JoinColumn(name = "auction_room_id")
     private AuctionRoom auctionRoom; // 경매 방
 }

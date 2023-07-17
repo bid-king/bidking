@@ -18,15 +18,15 @@ public class Bookmark extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "bookmark_code")
-    private Long code;
+    @Column(name = "bookmark_id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_code")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_room_code")
+    @JoinColumn(name = "auction_room_id")
     private AuctionRoom auctionRoom;
 
     private boolean isAdded;

@@ -17,8 +17,8 @@ public class LoginInfoSocial extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "login_info_social_code")
-    Long code;
+    @Column(name = "login_info_social_id")
+    Long id;
 
     @Enumerated(EnumType.STRING)
     SocialType socialType;
@@ -26,6 +26,6 @@ public class LoginInfoSocial extends BaseEntity {
     String token;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_code")
+    @JoinColumn(name = "member_id")
     Member member;
 }

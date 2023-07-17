@@ -79,12 +79,12 @@ set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
 if %ERRORLEVEL% equ 0 goto mainEnd
 
 :fail
-rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
-rem the _cmd.exe /c_ return code!
-set EXIT_CODE=%ERRORLEVEL%
-if %EXIT_CODE% equ 0 set EXIT_CODE=1
-if not ""=="%GRADLE_EXIT_CONSOLE%" exit %EXIT_CODE%
-exit /b %EXIT_CODE%
+rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return id instead of
+rem the _cmd.exe /c_ return id!
+set EXIT_id=%ERRORLEVEL%
+if %EXIT_id% equ 0 set EXIT_id=1
+if not ""=="%GRADLE_EXIT_CONSOLE%" exit %EXIT_id%
+exit /b %EXIT_id%
 
 :mainEnd
 if "%OS%"=="Windows_NT" endlocal

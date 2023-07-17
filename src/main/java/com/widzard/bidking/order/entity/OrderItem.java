@@ -17,13 +17,13 @@ public class OrderItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "order_item_code")
-    private Long code;// (주문상품코드)
+    @Column(name = "order_item_id")
+    private Long id;// (주문상품코드)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_code")
+    @JoinColumn(name = "order_id")
     private Order order;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code")
+    @JoinColumn(name = "item_id")
     private Item item;// (상품코드, Item)
     private Long price;// (주문가격(낙찰가격))
 

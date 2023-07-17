@@ -9,15 +9,15 @@ public class Address {
 
     private String street; // 도로명 주소
     private String details; // (상세주소)
-    private String zipcode; //우편번호
+    private String zipCode; //우편번호
 
     protected Address() {
     }
 
-    public Address(String street, String details, String zipcode) {
+    public Address(String street, String details, String zipCode) {
         this.street = street;
         this.details = details;
-        this.zipcode = zipcode;
+        this.zipCode = zipCode;
     }
 
     public String getStreet() {
@@ -28,8 +28,8 @@ public class Address {
         return details;
     }
 
-    public String getZipcode() {
-        return zipcode;
+    public String getZipCode() {
+        return zipCode;
     }
 
     private void setStreet(String street) {
@@ -40,8 +40,8 @@ public class Address {
         this.details = details;
     }
 
-    private void setZipcode(String zipcode) {
-        this.zipcode = zipcode;
+    private void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     @Override
@@ -49,11 +49,11 @@ public class Address {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getDetails(), address.getDetails()) && Objects.equals(getZipcode(), address.getZipcode());
+        return Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getDetails(), address.getDetails()) && Objects.equals(getZipCode(), address.getZipCode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStreet(), getDetails(), getZipcode());
+        return Objects.hash(getStreet(), getDetails(), getZipCode());
     }
 }

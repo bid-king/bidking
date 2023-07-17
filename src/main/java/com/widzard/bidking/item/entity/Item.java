@@ -17,11 +17,11 @@ import javax.persistence.*;
 public class Item extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "item_code")
-    private Long code;// (상품코드)
+    @Column(name = "item_id")
+    private Long id;// (상품코드)
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_room_code")
+    @JoinColumn(name = "auction_room_id")
     private AuctionRoom auctionRoom;// (경매방코드)
 
     private Long startPrice;// (시작가)
@@ -34,13 +34,13 @@ public class Item extends BaseEntity {
     private ItemState itemState;// (상태)
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_category_code")
+    @JoinColumn(name = "item_category_id")
     private ItemCategory itemCategory;//(카테고리)
 
     private int ordering;// (순서)
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_code")
+    @JoinColumn(name = "image_id")
     private Image image;// (대표이미지)
 
 

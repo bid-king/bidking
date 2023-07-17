@@ -17,16 +17,12 @@ public class Delivery extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "delivery_code")
-    private Long code; //
+    @Column(name = "delivery_id")
+    private Long id; //
 
     @OneToOne
-    @JoinColumn(name = "order_code")
+    @JoinColumn(name = "order_id")
     private Order order;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invoice_code")
-    private Invoice invoice; // 배송 정보 ( 송장번호 + 택배사)
 
     @Enumerated(EnumType.STRING)
     private DeliveryState deliveryState;
@@ -35,6 +31,10 @@ public class Delivery extends BaseEntity {
     private Address address; //
 
     private String message; // (배송 메세지)
+
+    private String receiverName;
+
+    private String receiverPhoneNumber;
 
 //    private int cost; // 배송비
 

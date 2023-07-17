@@ -21,11 +21,11 @@ public class AuctionRoom extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "auction_room_code")
-    private Long code;
+    @Column(name = "auction_room_id")
+    private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_code")
+    @JoinColumn(name = "member_id")
     private Member seller; //
 
     private String name; //(방이름)
@@ -36,7 +36,7 @@ public class AuctionRoom extends BaseEntity {
     private AuctionRoomType auctionRoomType; // (경매방식)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_code")
+    @JoinColumn(name = "image_id")
     private Image image; // (썸네일)
 
     @OneToMany(mappedBy = "auctionRoom")
