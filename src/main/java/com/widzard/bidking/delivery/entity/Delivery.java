@@ -19,6 +19,7 @@ public class Delivery extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "delivery_code")
     private Long code; //
+
     @OneToOne
     @JoinColumn(name = "order_code")
     private Order order;
@@ -31,8 +32,10 @@ public class Delivery extends BaseEntity {
     private DeliveryState deliveryState;
 
     @Embedded
-    private Address address; // (주소, Address)
+    private Address address; //
+
     private String message; // (배송 메세지)
 
 //    private int cost; // 배송비
+
 }
