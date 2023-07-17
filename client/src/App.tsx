@@ -9,10 +9,20 @@ function App() {
       <Global
         styles={css`
           ${normalize}
-          h1, h2, h3, h4, h5, h6, p {
+          html {
+            line-height: 1.75;
+          }
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6,
+          p {
             font-size: 1rem;
             font-weight: normal;
             margin: 0;
+            padding: 0;
           }
         `}
       />
