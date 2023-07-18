@@ -2,10 +2,10 @@
 import React from 'react';
 
 interface Props {
-  spacing: 1 | 2 | 3 | 4 | 5;
+  spacing: '1' | '2' | '3' | '4' | '5';
 }
 
-export function Spacing({ spacing = 1 }: Props) {
+export function Spacing({ spacing = '1' }: Props) {
   return (
     <div
       css={{

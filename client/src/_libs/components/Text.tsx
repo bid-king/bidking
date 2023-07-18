@@ -1,24 +1,23 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { HTMLAttributes } from 'react';
 import colors from '../design/colors';
 
-interface Props {
-  weight?: 'normal' | 'bold';
-  content: string;
+interface Props extends HTMLAttributes<HTMLSpanElement> {
+  type?: 'h1' | 'h2' | 'h3' | 'normal' | 'bold';
+  content: string | undefined;
 }
 
-export function Text({
-  weight = 'normal',
-  content = '안녕 나는 P 태그야',
-}: Props) {
+export function Text({ type = 'normal', content = '예시 텍스트' }: Props) {
   return (
-    <p
+    <span
       css={{
-        ...FONT_TYPE[weight],
-      }}
-    >
+        ...FONT_TYPE[type],
+        margin: 0,
+        padding: 0,
+        lineHeight: 1.75,
+      }}>
       {content}
-    </p>
+    </span>
   );
 }
 
@@ -28,5 +27,17 @@ const FONT_TYPE = {
   },
   bold: {
     fontWeight: '700',
+  },
+  h1: {
+    fontWeight: '900',
+    fontSize: '2rem',
+  },
+  h2: {
+    fontWeight: '700',
+    fontSize: '1.5rem',
+  },
+  h3: {
+    fontWeight: '700',
+    fontSize: '1.25rem',
   },
 };
