@@ -14,6 +14,6 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     content: '안녕?',
-    weight: 'normal',
+    type: 'normal',
   },
 };

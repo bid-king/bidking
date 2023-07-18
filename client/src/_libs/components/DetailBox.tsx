@@ -21,7 +21,7 @@ export function DetailBox({ title = '경매제목', theme = 'light' }: Props) {
         ...THEME_VARIANTS[theme],
       }}
     >
-      <Text weight='bold' content={title}></Text>
+      <Text type="h3" content={title}></Text>
     </div>
   );
 }
