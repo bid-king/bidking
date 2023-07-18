@@ -36,6 +36,9 @@ export function AuctionList({
         borderRadius: '0.5rem',
         position: 'relative',
         backgroundImage: `url(${img})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         transition: 'filter 0.3s',
         '&:hover': {
           backgroundImage: `url(${bid})`,
