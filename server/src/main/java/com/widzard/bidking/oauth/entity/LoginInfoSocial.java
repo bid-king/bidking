@@ -1,7 +1,7 @@
 package com.widzard.bidking.oauth.entity;
 
 
-import com.widzard.bidking.common.entity.BaseEntity;
+import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Getter;

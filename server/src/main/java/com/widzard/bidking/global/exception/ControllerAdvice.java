@@ -1,4 +1,4 @@
-package com.widzard.bidking.common.exception;
+package com.widzard.bidking.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

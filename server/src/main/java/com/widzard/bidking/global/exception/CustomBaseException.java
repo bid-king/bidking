@@ -1,4 +1,4 @@
-package com.widzard.bidking.common.exception;
+package com.widzard.bidking.global.exception;
 
 public class CustomBaseException extends RuntimeException {
 

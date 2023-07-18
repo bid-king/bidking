@@ -1,6 +1,6 @@
 package com.widzard.bidking.item.entity;
 
-import com.widzard.bidking.common.entity.BaseEntity;
+import com.widzard.bidking.global.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

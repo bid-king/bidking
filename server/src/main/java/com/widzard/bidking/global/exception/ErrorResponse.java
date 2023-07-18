@@ -1,4 +1,4 @@
-package com.widzard.bidking.common.exception;
+package com.widzard.bidking.global.exception;
 
 import lombok.AccessLevel;
 import lombok.Getter;

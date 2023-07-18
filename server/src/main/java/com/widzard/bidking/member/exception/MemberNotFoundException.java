@@ -1,7 +1,7 @@
 package com.widzard.bidking.member.exception;
 
-import com.widzard.bidking.common.exception.CustomBaseException;
-import com.widzard.bidking.common.exception.ErrorCode;
+import com.widzard.bidking.global.exception.CustomBaseException;
+import com.widzard.bidking.global.exception.ErrorCode;
 
 public class MemberNotFoundException extends CustomBaseException {
     public MemberNotFoundException(ErrorCode errorCode) {

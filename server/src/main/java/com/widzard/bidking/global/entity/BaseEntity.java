@@ -1,4 +1,4 @@
-package com.widzard.bidking.common.entity;
+package com.widzard.bidking.global.entity;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

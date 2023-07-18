@@ -2,7 +2,7 @@ package com.widzard.bidking.bookmark.entity;
 
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
-import com.widzard.bidking.common.entity.BaseEntity;
+import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Getter;

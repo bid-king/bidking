@@ -1,4 +1,4 @@
-package com.widzard.bidking.common.response;
+package com.widzard.bidking.global.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

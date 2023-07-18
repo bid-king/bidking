@@ -2,8 +2,8 @@ package com.widzard.bidking.member.entity;
 
 
 
-import com.widzard.bidking.common.entity.Address;
-import com.widzard.bidking.common.entity.BaseEntity;
+import com.widzard.bidking.global.entity.Address;
+import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import lombok.AccessLevel;
 import lombok.Getter;

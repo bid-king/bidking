@@ -1,4 +1,4 @@
-package com.widzard.bidking.common.entity;
+package com.widzard.bidking.global.entity;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
