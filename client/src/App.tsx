@@ -1,7 +1,8 @@
 import { Global, css } from '@emotion/react';
 import React from 'react';
-
+import { Router } from './Router/Router';
 import normalize from 'emotion-normalize';
+import { LinkDebug } from './LinkDebug';
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
           }
         `}
       />
+      <LinkDebug></LinkDebug>
+      <Router />
     </>
   );
 }
