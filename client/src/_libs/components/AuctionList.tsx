@@ -60,7 +60,9 @@ export function AuctionList({
           fontWeight: 'bold',
         }}
       >
-        {getTradeStateText(auctionRoomTradeState)}
+        {auctionRoomTradeState === 'ALL_COMPLETED' && '완료'}
+        {auctionRoomTradeState === 'IN_PROGRESS' && '결제/배송중'}
+        {auctionRoomTradeState === 'BEFORE_PROGRESS' && '결제대기'}
       </div>
       <div
         css={{
@@ -104,15 +106,3 @@ const TRADE_STATE = {
     color: `${colors.black}`,
   },
 };
-
-function getTradeStateText(tradeState: string) {
-  if (tradeState === 'ALL_COMPLETED') {
-    return '완료';
-  }
-  if (tradeState === 'IN_PROGRESS') {
-    return '결제/배송중';
-  }
-  if (tradeState === 'BEFORE_PROGRESS') {
-    return '결제대기';
-  }
-}
