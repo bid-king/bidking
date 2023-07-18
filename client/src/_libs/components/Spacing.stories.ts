@@ -13,6 +13,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    spacing: 1,
+    spacing: '1',
   },
 };
