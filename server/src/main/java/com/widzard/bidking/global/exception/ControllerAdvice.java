@@ -1,10 +1,13 @@
 package com.widzard.bidking.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -15,7 +18,7 @@ public class ControllerAdvice {
      */
     @ExceptionHandler(CustomBaseException.class)
     protected ResponseEntity<ErrorResponse> handle(CustomBaseException e) {
-        log.error("Business CustomException 발생: ", e);
+        log.error("Business CustomException: ", e);
         return createErrorResponseEntity(e.getErrorCode());
     }
 
@@ -25,7 +28,7 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handle(Exception e) {
         e.printStackTrace();
-        log.error("Exception 발생: ", e);
+        log.error("Exception: ", e);
         return createErrorResponseEntity(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 
@@ -36,6 +39,14 @@ public class ControllerAdvice {
     protected ResponseEntity<ErrorResponse> handle(HttpRequestMethodNotSupportedException e) {
         log.error("HttpRequestMethodNotSupportedException: ", e);
         return createErrorResponseEntity(ErrorCode.METHOD_NOT_ALLOWED);
+    }
+
+    // 404예외처리 핸들러
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handle404(NoHandlerFoundException e) {
+        log.error("NoHandlerFoundException: ", e);
+        return createErrorResponseEntity(ErrorCode.NOT_FOUND);
     }
 
     private ResponseEntity<ErrorResponse> createErrorResponseEntity(ErrorCode errorCode) {
