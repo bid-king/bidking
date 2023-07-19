@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { ChatMessage } from './ChatMessage';
-import bid from '../static/bid.jpg';
 
 const meta = {
   title: 'Components/ChatMessage',
