@@ -9,7 +9,6 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
   message: string;
   systemLog: string;
-  chatInput: 'light' | 'dark';
 }
 
 export function ChatRoom({
@@ -29,8 +28,8 @@ export function ChatRoom({
     >
       {message}
       <div className="inputArea">
-        <Input placeholder="채팅을 입력해주세요" shape="round" />
-        <RoundButton label={'입력'} />
+        <Input placeholder={'asdasd'} shape="round" />
+        <RoundButton label={'asdf'} />
       </div>
     </div>
   );
