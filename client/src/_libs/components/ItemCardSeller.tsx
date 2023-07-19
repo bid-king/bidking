@@ -2,12 +2,11 @@
 import React, { HTMLAttributes, useState } from 'react';
 import colors from '../design/colors';
 import { Text } from './Text';
-import { ButtonHTMLAttributes } from 'react';
 import paymentState from '../constants/paymentState';
 import { Input } from './Input';
 import { Spacing } from './Spacing';
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
   item: {
     itemId: string;

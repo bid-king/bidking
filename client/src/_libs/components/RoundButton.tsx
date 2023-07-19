@@ -10,17 +10,13 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   activated?: 0 | 1;
 }
 
-export function RoundButton({
-  variant = 'confirm',
-  size = 'small',
-  label = '로그인',
-  activated = 1,
-}: Props) {
+export function RoundButton({ variant = 'confirm', size = 'small', label = '로그인', activated = 1 }: Props) {
   return (
     <button
       css={{
         borderRadius: '2.25rem',
         fontSize: '1rem',
+        transition: 'filter 0.3s',
         ...TYPE_VARIANTS[variant],
         ...SIZE_VARIANTS[size],
         ...IS_ACTIVATED[activated],
@@ -35,18 +31,15 @@ const TYPE_VARIANTS = {
   confirm: {
     border: `1px solid ${colors.confirm}`,
     backgroundColor: colors.confirm,
-    // backgroundColor: colors.confirm,
     '&:hover': {
-      border: `1px solid ${colors.confirm33}`,
-      backgroundColor: colors.confirm33,
+      filter: 'brightness(0.9)',
     },
   },
   white: {
     border: `1px solid ${colors.confirm}`,
     backgroundColor: colors.white,
     '&:hover': {
-      backgroundColor: colors.lightgrey,
-      border: `1px solid ${colors.lightgrey}`,
+      filter: 'brightness(0.9)',
     },
   },
 };

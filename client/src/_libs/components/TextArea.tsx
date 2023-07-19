@@ -7,18 +7,18 @@ interface Props {
   placeholder: string;
 }
 
-export function TextArea({
-  placeholder = 'placeholder를 입력하세요',
-  theme = 'light',
-}: Props) {
+export function TextArea({ placeholder = 'placeholder를 입력하세요', theme = 'light' }: Props) {
   return (
     <textarea
       placeholder={placeholder}
       css={{
+        fontFamily: 'Pretendard',
+        fontSize: '1rem',
+        lineHeight: '1.6',
         width: '100%',
-        height: '10rem',
+        height: '12rem',
         padding: '1rem',
-        fontWeight: 400,
+        fontWeight: '400',
         outline: 'none',
         borderRadius: '1rem',
         resize: 'none',
