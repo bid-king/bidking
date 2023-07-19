@@ -5,9 +5,10 @@ import colors from '../design/colors';
 interface Props extends HTMLAttributes<HTMLSpanElement> {
   type?: 'h1' | 'h2' | 'h3' | 'normal' | 'bold';
   content: string | undefined;
+  color: 'white' | 'confirm' | 'warn' | 'progress' | 'ok' | 'black';
 }
 
-export function Text({ type = 'normal', content = '예시 텍스트' }: Props) {
+export function Text({ type = 'normal', content = '예시 텍스트', color = 'black' }: Props) {
   return (
     <span
       css={{
@@ -15,7 +16,9 @@ export function Text({ type = 'normal', content = '예시 텍스트' }: Props) {
         margin: 0,
         padding: 0,
         lineHeight: 1.75,
-      }}>
+        color: colors[color],
+      }}
+    >
       {content}
     </span>
   );
