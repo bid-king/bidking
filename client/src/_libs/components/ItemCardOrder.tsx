@@ -169,6 +169,8 @@ export function ItemCardOrder({
             alt={item.item.description}
             css={{
               borderRadius: '1rem',
+              width: '100%',
+              maxHeight: '15rem',
             }}
           />
           <Spacing spacing="1" />

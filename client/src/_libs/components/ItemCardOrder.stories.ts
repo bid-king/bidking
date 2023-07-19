@@ -40,7 +40,7 @@ export const Primary: Story = {
           id: '1',
           createdAt: 'yyyy-mm-dd hh:mm:ss',
           fileName: 'asdf.jpg',
-          filePath: 'suc/img',
+          filePath: '/image/bid.jpg',
         },
       },
     },

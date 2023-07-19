@@ -133,6 +133,8 @@ export function ItemCardSeller({
             alt={item.itemDescription}
             css={{
               borderRadius: '1rem',
+              width: '100%',
+              maxHeight: '15rem',
             }}
           />
           <Spacing spacing="1" />
