@@ -2,26 +2,27 @@
 import React, { HTMLAttributes } from 'react';
 import colors from '../design/colors';
 
-interface Props extends HTMLAttributes<HTMLSpanElement> {
+interface Props {
   type?: 'h1' | 'h2' | 'h3' | 'normal' | 'bold';
-  content: string | undefined;
-  color: 'white' | 'confirm' | 'warn' | 'progress' | 'ok' | 'black';
+  color?: 'white' | 'confirm' | 'warn' | 'progress' | 'ok' | 'black';
+  content: string;
 }
 
-export function Text({ type = 'normal', content = '예시 텍스트', color = 'black' }: Props) {
-  return (
-    <span
-      css={{
-        ...FONT_TYPE[type],
-        margin: 0,
-        padding: 0,
-        lineHeight: 1.75,
-        color: colors[color],
-      }}
-    >
-      {content}
-    </span>
-  );
+export function Text({ type = 'normal', color = 'black', content = '예시 텍스트' }: Props) {
+  if (type === 'h1') return <h1 css={{ ...FONT_TYPE[type], color: colors[color] }}>{content}</h1>;
+  if (type === 'h2') return <h2 css={{ ...FONT_TYPE[type], color: colors[color] }}>{content}</h2>;
+  if (type === 'h3') return <h3 css={{ ...FONT_TYPE[type], color: colors[color] }}>{content}</h3>;
+  else
+    return (
+      <span
+        css={{
+          ...FONT_TYPE[type],
+          color: colors[color],
+        }}
+      >
+        {content}
+      </span>
+    );
 }
 
 const FONT_TYPE = {
