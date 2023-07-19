@@ -14,7 +14,6 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     theme: 'light',
-    message: '이름: 저는 입찰왕입니다.',
-    systemLog: '<낙찰> 입찰왕님 30,000원',
+    chatInput: 'light',
   },
 };

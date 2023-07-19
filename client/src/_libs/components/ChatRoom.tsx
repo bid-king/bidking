@@ -4,47 +4,49 @@ import { HTMLAttributes } from 'react';
 import colors from '../design/colors';
 import { Input } from './Input';
 import { RoundButton } from './RoundButton';
+import { Text } from './Text';
+import { ChatMessage } from './ChatMessage';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
-  message: string;
-  systemLog: string;
+  chatInput: 'light' | 'dark';
 }
 
-export function ChatRoom({
-  theme = 'light',
-  message = '이름: 저는 입찰왕입니다.',
-  systemLog = '<낙찰> 입찰왕님 30,000원',
-}: Props) {
+export function ChatRoom({ theme = 'light', chatInput = 'light' }: Props) {
   return (
     <div
       css={{
-        width: '20rem',
+        width: '100%',
         height: '28.97rem',
         borderRadius: '1rem',
-        border: '1px solid black',
         position: 'relative',
         ...THEME_VARIANTS[theme],
       }}
     >
-      <div
-        className="messageBox"
-        css={{
-          margin: '1rem',
-        }}
-      >
-        {message}
+      <div>
+        <ChatMessage />
       </div>
       <div
         className="inputArea"
         css={{
+          width: '100%',
           bottom: '0',
           position: 'absolute',
-          margin: '1rem',
+          padding: '1rem',
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
-        <Input placeholder={'asdasd'} shape="round" />
-        <RoundButton label={'asdf'} />
+        <div
+          css={{
+            width: '19em',
+            marginRight: '1rem',
+          }}
+        >
+          <Input placeholder={`${CHAT_INTPUT[chatInput].chatPlaceHolder}`} shape="round" />
+        </div>
+
+        <RoundButton label={`${CHAT_INTPUT[chatInput].chatBtn}`} />
       </div>
     </div>
   );
@@ -57,5 +59,16 @@ const THEME_VARIANTS = {
   dark: {
     backgroundColor: colors.backgroundDark2,
     color: colors.white,
+  },
+};
+
+const CHAT_INTPUT = {
+  light: {
+    chatPlaceHolder: '채팅을 입력해주세요',
+    chatBtn: '입력',
+  },
+  dark: {
+    chatPlaceHolder: '공지를 입력해주세요',
+    chatBtn: '공지',
   },
 };

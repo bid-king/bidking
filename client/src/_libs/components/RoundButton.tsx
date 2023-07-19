@@ -17,6 +17,8 @@ export function RoundButton({ variant = 'confirm', size = 'small', label = 'ë¡œê
         borderRadius: '2.25rem',
         fontSize: '1rem',
         transition: 'filter 0.3s',
+        paddingLeft: '1rem',
+        paddingRight: '1rem',
         ...TYPE_VARIANTS[variant],
         ...SIZE_VARIANTS[size],
         ...IS_ACTIVATED[activated],
