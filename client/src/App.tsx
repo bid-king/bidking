@@ -3,31 +3,13 @@ import React from 'react';
 import { Router } from './Router/Router';
 import normalize from 'emotion-normalize';
 import { LinkDebug } from './LinkDebug';
+import { globalStyle } from './_libs/design/globalStyle';
 
 function App() {
   return (
     <>
-      <Global
-        styles={css`
-          ${normalize}
-          html {
-            line-height: 1.75;
-          }
-          h1,
-          h2,
-          h3,
-          h4,
-          h5,
-          h6,
-          p {
-            font-size: 1rem;
-            font-weight: normal;
-            margin: 0;
-            padding: 0;
-          }
-        `}
-      />
-      <LinkDebug></LinkDebug>
+      <Global styles={globalStyle} />
+      <LinkDebug />
       <Router />
     </>
   );
