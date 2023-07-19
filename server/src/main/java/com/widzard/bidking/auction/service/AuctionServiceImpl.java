@@ -42,8 +42,6 @@ public class AuctionServiceImpl implements AuctionService {
 
         auctionRoom = auctionRoomRepository.save(auctionRoom);
 
-//        if (auctionRoom == null) {
-//        }
         return auctionRoom;
     }
 }
