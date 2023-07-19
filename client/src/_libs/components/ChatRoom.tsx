@@ -23,11 +23,26 @@ export function ChatRoom({
         height: '28.97rem',
         borderRadius: '1rem',
         border: '1px solid black',
+        position: 'relative',
         ...THEME_VARIANTS[theme],
       }}
     >
-      {message}
-      <div className="inputArea">
+      <div
+        className="messageBox"
+        css={{
+          margin: '1rem',
+        }}
+      >
+        {message}
+      </div>
+      <div
+        className="inputArea"
+        css={{
+          bottom: '0',
+          position: 'absolute',
+          margin: '1rem',
+        }}
+      >
         <Input placeholder={'asdasd'} shape="round" />
         <RoundButton label={'asdf'} />
       </div>
