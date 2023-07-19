@@ -3,18 +3,13 @@ import React from 'react';
 import { Global, css } from '@emotion/react';
 import type { Preview } from '@storybook/react';
 import { globalStyle } from '../src/_libs/design/globalStyle';
-// The styles imported from the design system.
 
 const preview: Preview = {
   decorators: [
     (Story) => (
       <>
         <Global styles={globalStyle} />
-        <div
-          css={{
-            padding: '1rem',
-          }}
-        >
+        <div css={{ padding: '1rem' }}>
           <div
             css={{
               position: 'absolute',
