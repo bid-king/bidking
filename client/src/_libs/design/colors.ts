@@ -14,10 +14,10 @@ export default {
   ok,
   black,
   //unactivated colors
-  confirm33: 'rgba(251, 183, 8, 0.5)',
-  warn33: 'rgba(251,183,8, 0.5)',
-  progress33: 'rgba(80, 28, 224, 0.5)',
-  ok33: 'rgba(32,233,185, 0.5)',
+  confirm33: 'rgba(251, 183, 8, 0.33)',
+  warn33: 'rgba(221, 53, 0, 0.33)',
+  progress33: 'rgba(68, 28, 228, 0.33)',
+  ok33: 'rgba(32, 233, 185, 0.33)',
   //greys
   grey: '#666666',
   lightgrey: '#AAAAAA',
