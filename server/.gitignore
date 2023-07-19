@@ -25,9 +25,9 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-vcs.xml
-misc.xml
-modules.xml
+.idea
+.idea/misc.xml
+.idea/vcs.xml
 
 ### NetBeans ###
 /nbproject/private/

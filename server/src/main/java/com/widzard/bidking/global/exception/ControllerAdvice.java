@@ -41,7 +41,9 @@ public class ControllerAdvice {
         return createErrorResponseEntity(ErrorCode.METHOD_NOT_ALLOWED);
     }
 
-    // 404예외처리 핸들러
+    /*
+     *404예외처리 핸들러
+     */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handle404(NoHandlerFoundException e) {
