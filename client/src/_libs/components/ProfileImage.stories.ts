@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ProfileImage } from './ProfileImage';
-import profileImg from '../static/profile.png';
 
 const meta = {
   title: 'Components/ProfileImage',
@@ -13,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    imgSrc: `${profileImg}`,
+    imgSrc: '/image/profile.png',
     myWidth: '3.375rem',
     myHeight: '3.375rem',
   },

@@ -1,18 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { HTMLAttributes } from 'react';
-import profileImg from '../static/profile.png';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   imgSrc?: string;
   myWidth: string;
   myHeight: string;
 }
-export function ProfileImage({
-  imgSrc = `${profileImg}`,
-  myWidth = '3.375rem',
-  myHeight = '3.375rem',
-}: Props) {
+export function ProfileImage({ imgSrc = '/image/profile.png', myWidth = '3.375rem', myHeight = '3.375rem' }: Props) {
   return (
     <img
       src={imgSrc}

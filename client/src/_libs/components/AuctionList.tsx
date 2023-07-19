@@ -2,18 +2,13 @@
 import React from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../design/colors';
-import bid from '../static/bid.jpg';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
   title?: string;
   date?: string;
   items?: string[];
-  auctionRoomTradeState?:
-    | 'ALL_COMPLETED'
-    | 'IN_PROGRESS'
-    | 'BEFORE_PROGRESS'
-    | 'NONE';
+  auctionRoomTradeState?: 'ALL_COMPLETED' | 'IN_PROGRESS' | 'BEFORE_PROGRESS' | 'NONE';
   auctionRoomLiveState?: 'ON_LIVE' | 'BEFORE_LIVE' | 'OFF_LIVE';
   // link: '',
   img?: string;
@@ -26,7 +21,7 @@ export function AuctionList({
   items = ['물품1', '물품2', '물품3', '물품4', '물품5', '물품6'],
   auctionRoomTradeState = 'NONE',
   auctionRoomLiveState = 'ON_LIVE', // 라이브 현재 상태 설정 필요
-  img = bid,
+  img = '/image/bid.jpg',
 }: Props) {
   return (
     <div
@@ -41,7 +36,7 @@ export function AuctionList({
         backgroundRepeat: 'no-repeat',
         transition: 'filter 0.3s',
         '&:hover': {
-          backgroundImage: `url(${bid})`,
+          backgroundImage: `url(${img})`,
           filter: 'brightness(0.7)',
         },
         ...TYPE_VARAIANTS[theme],

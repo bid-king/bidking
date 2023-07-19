@@ -19,6 +19,6 @@ export const Primary: Story = {
     date: '오늘 18:00',
     items: ['물품1', '물품2', '물품3', '물품4', '물품5', '물품6'],
     auctionRoomTradeState: 'NONE',
-    img: bid,
+    img: '/image/bid.jpg',
   },
 };
