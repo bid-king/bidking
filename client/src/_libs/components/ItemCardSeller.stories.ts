@@ -18,7 +18,7 @@ export const Primary: Story = {
       itemId: '1',
       itemName: '낙찰된 상품명',
       category: '카테고리',
-      itemImage: 'img src',
+      itemImage: '/image/bid.jpg',
       itemDescription: '상품 설명',
       itemOrdering: '1',
       paymentState: 'PAYMENT_OK',
