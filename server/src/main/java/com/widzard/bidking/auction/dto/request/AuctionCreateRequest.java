@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.dto.request;
 
 import com.widzard.bidking.auction.entity.AuctionRoomType;
+import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.entity.Item;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,12 +9,14 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuctionCreateRequest {
@@ -34,8 +37,17 @@ public class AuctionCreateRequest {
     private Boolean deliveryRulesChecked; // 배송 규정 확인 여부
 
     @NotNull
-    private String imageName; // 경매방 썸네일
+    private String imageName; // 경매방 썸네일 이름
 
     @NotNull
     private List<Item> itemList; // 상품 리스트
+
+    public Image createImage(String imageName) {
+        Image image = Image.builder()
+            .fileName(imageName)
+//            .filePath()
+            .build();
+
+        return image;
+    }
 }

@@ -1,10 +1,17 @@
 package com.widzard.bidking.auction.service;
 
+import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
+import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.item.entity.Item;
+import com.widzard.bidking.item.entity.ItemState;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,27 +22,48 @@ import org.springframework.transaction.annotation.Transactional;
 class AuctionServiceImplTest {
 
     @Autowired
-    AuctionServiceImpl a;
+    AuctionServiceImpl auctionService;
+
+    private List<Item> itemList = new ArrayList<>();
+    private Item item = new Item();
 
     @BeforeEach
-    void data() {
-        List<Item> itemList = new ArrayList<>();
+    void setUp() {
+        itemList = new ArrayList<>();
 
         Item item = Item.builder()
             .id(1L)
             .name("아이패드22")
-
+            .itemState(ItemState.SUCCESS)
+            .ordering(1)
+            .startPrice(22222L)
             .build();
     }
 
+
     @Test
-    void create() {
-        AuctionRoom ar = AuctionRoom.builder()
+    @DisplayName("성공 케이스")
+    void success() {
+        //given
+        AuctionCreateRequest auctionCreateRequest = AuctionCreateRequest.builder()
+            .auctionTitle("title")
+            .startedAt(LocalDateTime.now().plusHours(5))
+            .auctionRoomType(AuctionRoomType.GENERAL)
+            .itemPermissionChecked(true)
+            .deliveryRulesChecked(true)
+            .imageName("image")
+            .itemList(itemList)
+            .build();
+
+        AuctionCreateResponse auctionCreateResponse1 = AuctionCreateResponse.builder()
             .id(1L)
             .build();
-//        AuctionCreateRequest req = new AuctionCreateRequest("title", "2023-07-23 12:12:12",
-//            "GENERAL", "true", "true", "imageName");
-//        Assertions.assertSame(ar, a.createAuctionRoom(req));
+
+        //when
+        AuctionRoom result1 = auctionService.createAuctionRoom(auctionCreateRequest);
+        //then
+        Assertions.assertThat(result1.getId()).isEqualTo(auctionCreateResponse1.getId());
+
     }
 
 }

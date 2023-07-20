@@ -58,18 +58,15 @@ public class AuctionServiceImpl implements AuctionService {
         }
 
         //AuctionRoom image save ( thumnail )
-        Image auctionRoomThumnail = Image.builder()
-//            .filePath()
-//            .fileName(auctionCreateRequest.getImageName())
-            .build();
-        auctionRoomThumnail = imageRepository.save(auctionRoomThumnail);
+        Image thumnail = auctionCreateRequest.createImage(auctionCreateRequest.getImageName());
+        thumnail = imageRepository.save(thumnail);
 
         AuctionRoom auctionRoom = AuctionRoom.builder()
 //            .seller()
             .name(auctionCreateRequest.getAuctionTitle())
             .auctionRoomState(AuctionRoomState.BEFORE)
             .auctionRoomType(auctionCreateRequest.getAuctionRoomType())
-            .image(auctionRoomThumnail)
+            .image(thumnail)
             .itemList(itemList)
             .build();
         auctionRoom = auctionRoomRepository.save(auctionRoom);

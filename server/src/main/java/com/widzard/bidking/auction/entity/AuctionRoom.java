@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
 public class AuctionRoom extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "auction_room_id")
     private Long id;
 
@@ -57,5 +57,8 @@ public class AuctionRoom extends BaseEntity {
 
     @OneToMany(mappedBy = "auctionRoom")
     private List<Item> itemList = new ArrayList<>(); // (상품리스트)
-    
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
 }
