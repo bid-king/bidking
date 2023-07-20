@@ -7,10 +7,7 @@ export const globalStyle = css`
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    line-height: 1.75;
-    font-size: 1rem;
     font-family: 'Pretendard';
-    font-weight: 400;
     color: ${colors.black};
   }
   *,
@@ -27,6 +24,16 @@ export const globalStyle = css`
   a {
     color: inherit;
     text-decoration: none;
+  }
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  textarea {
+    line-height: 1.75;
   }
   @font-face {
     font-family: 'Pretendard';
