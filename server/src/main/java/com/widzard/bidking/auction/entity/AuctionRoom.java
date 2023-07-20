@@ -21,6 +21,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "auction_room")
 public class AuctionRoom extends BaseEntity {
@@ -54,15 +57,5 @@ public class AuctionRoom extends BaseEntity {
 
     @OneToMany(mappedBy = "auctionRoom")
     private List<Item> itemList = new ArrayList<>(); // (상품리스트)
-
-    @Builder
-    public AuctionRoom(Member seller, String name, AuctionRoomState auctionRoomState,
-        AuctionRoomType auctionRoomType, Image image, List<Item> itemList) {
-        this.seller = seller;
-        this.name = name;
-        this.auctionRoomState = auctionRoomState;
-        this.auctionRoomType = auctionRoomType;
-        this.image = image;
-        this.itemList = itemList;
-    }
+    
 }
