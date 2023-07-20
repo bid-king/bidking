@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../design/colors';
-import { Input } from './Input';
-import { RoundButton } from './RoundButton';
-import { Text } from './Text';
+import colors from '../../design/colors';
+import { Input } from '../common/Input';
+import { RoundButton } from '../common/RoundButton';
+import { Text } from '../common/Text';
 import { ChatMessage } from './ChatMessage';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

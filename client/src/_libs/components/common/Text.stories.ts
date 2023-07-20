@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { ChatRoom } from './ChatRoom';
+import { Text } from './Text';
 
 const meta = {
-  title: 'Components/ChatRoom',
-  component: ChatRoom,
+  title: 'Common/Text',
+  component: Text,
   argTypes: {},
-} satisfies Meta<typeof ChatRoom>;
+} satisfies Meta<typeof Text>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    theme: 'light',
-    chatInput: 'light',
+    content: '안녕?',
+    type: 'normal',
   },
 };

@@ -1,19 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Text } from './Text';
+import { Spacing } from './Spacing';
 
 const meta = {
-  title: 'Components/Text',
-  component: Text,
+  title: 'Common/Spacing',
+  component: Spacing,
   argTypes: {},
-} satisfies Meta<typeof Text>;
+} satisfies Meta<typeof Spacing>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    content: '안녕?',
-    type: 'normal',
+    rem: '1',
   },
 };

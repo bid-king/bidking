@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import React, { HTMLAttributes, useState } from 'react';
-import colors from '../design/colors';
-import { Text } from './Text';
-import paymentState from '../constants/paymentState';
-import { Input } from './Input';
-import { Spacing } from './Spacing';
-import orderState from '../constants/orderState';
-import { ConfirmButton } from './ConfirmButton';
+import colors from '../../design/colors';
+import { Text } from '../common/Text';
+import paymentState from '../../constants/paymentState';
+import { Input } from '../common/Input';
+import { Spacing } from '../common/Spacing';
+import orderState from '../../constants/orderState';
+import { ConfirmButton } from '../common/ConfirmButton';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -100,11 +100,11 @@ export function ItemCardOrder({
         <Text content={'낙찰번호 ' + item.order.orderId} />
         <Text type="bold" content={paymentState[item.currentState]} />
       </div>
-      <Spacing spacing="1" />
+      <Spacing rem="1" />
       <div className="cardBody-ItemName">
         <Text type="h3" content={item.item.name} />
       </div>
-      <Spacing spacing="1" />
+      <Spacing rem="1" />
       <div
         className="cardBody-orderInfo"
         css={{
@@ -128,13 +128,13 @@ export function ItemCardOrder({
       <div>
         <Text type="bold" content={item.order.orderAt + ' 낙찰'} />
       </div>
-      <Spacing spacing="1" />
+      <Spacing rem="1" />
       {item.currentState === 'PAYMENT_WAITING' ? (
         <ConfirmButton btnType="confirm" label={`${item.order.orderAt}일 까지 결제해야 해요.`} />
       ) : (
         <ConfirmButton btnType="ok" label={'영수증 보기'} />
       )}
-      <Spacing spacing="1" />
+      <Spacing rem="1" />
       <div>
         <div
           css={{
@@ -156,7 +156,7 @@ export function ItemCardOrder({
           display: 'flex',
         }}
       ></div>
-      <Spacing spacing="1" />
+      <Spacing rem="1" />
       {/*이 아래는 접으면 접히는 부분*/}
       <div
         css={{
@@ -173,12 +173,12 @@ export function ItemCardOrder({
               maxHeight: '15rem',
             }}
           />
-          <Spacing spacing="1" />
+          <Spacing rem="1" />
         </div>
         <div>
           <Text type="normal" content={item.item.description} />
         </div>
-        <Spacing spacing="2" />
+        <Spacing rem="2" />
       </div>
 
       {/* 여기까지 접는 부분 */}

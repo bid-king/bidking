@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ProfileImage } from './ProfileImage';
 
 const meta = {
-  title: 'Components/ProfileImage',
+  title: 'Common/ProfileImage',
   component: ProfileImage,
   argTypes: {},
 } satisfies Meta<typeof ProfileImage>;

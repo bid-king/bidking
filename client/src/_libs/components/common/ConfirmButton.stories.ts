@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ConfirmButton } from './ConfirmButton';
 
 const meta = {
-  title: 'Components/ConfirmButton',
+  title: 'Common/ConfirmButton',
   component: ConfirmButton,
   argTypes: {},
 } satisfies Meta<typeof ConfirmButton>;

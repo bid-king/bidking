@@ -1,18 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Spacing } from './Spacing';
+import { ChatRoom } from './ChatRoom';
 
 const meta = {
-  title: 'Components/Spacing',
-  component: Spacing,
+  title: 'Auction/ChatRoom',
+  component: ChatRoom,
   argTypes: {},
-} satisfies Meta<typeof Spacing>;
+} satisfies Meta<typeof ChatRoom>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    spacing: '1',
+    theme: 'light',
+    chatInput: 'light',
   },
 };

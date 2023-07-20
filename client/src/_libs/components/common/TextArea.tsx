@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import colors from '../design/colors';
+import colors from '../../design/colors';
 
 interface Props {
   theme?: 'light' | 'dark';

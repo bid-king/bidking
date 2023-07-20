@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import colors from '../design/colors';
+import colors from '../../design/colors';
 import { ButtonHTMLAttributes } from 'react';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,11 +9,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
 }
 
-export function ConfirmButton({
-  btnType = 'confirm',
-  activated = 1,
-  label = '안녕 나는 확인버튼이야',
-}: Props) {
+export function ConfirmButton({ btnType = 'confirm', activated = 1, label = '안녕 나는 확인버튼이야' }: Props) {
   return (
     <button
       css={{
@@ -23,7 +19,7 @@ export function ConfirmButton({
         border: 'none',
         outline: 'none',
         borderRadius: '0.5rem',
-        fontWeight: '700',
+        fontWeight: '600',
         ...BTN_TYPES[btnType],
         ...BTN_TYPES[activated],
       }}

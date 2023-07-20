@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../design/colors';
+import colors from '../../design/colors';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';

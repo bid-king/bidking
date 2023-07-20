@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { HTMLAttributes } from 'react';
-import { Text } from './Text';
-import colors from '../design/colors';
+import { Text } from '../common/Text';
+import colors from '../../design/colors';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   message?: string;

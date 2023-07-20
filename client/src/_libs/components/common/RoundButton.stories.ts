@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { RoundButton } from './RoundButton';
 
 const meta = {
-  title: 'Components/RoundButton',
+  title: 'Common/RoundButton',
   component: RoundButton,
   argTypes: {},
 } satisfies Meta<typeof RoundButton>;

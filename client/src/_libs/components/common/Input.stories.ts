@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from './Input';
 
 const meta = {
-  title: 'Components/Input',
+  title: 'Common/Input',
   component: Input,
   argTypes: {},
 } satisfies Meta<typeof Input>;

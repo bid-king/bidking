@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import colors from '../design/colors';
+import colors from '../../design/colors';
 import { ButtonHTMLAttributes } from 'react';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,12 +13,14 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 export function RoundButton({ variant = 'confirm', size = 'small', label = '로그인', activated = 1 }: Props) {
   return (
     <button
+      type="button"
       css={{
+        cursor: 'pointer',
         borderRadius: '2.25rem',
-        fontSize: '1rem',
         transition: 'filter 0.3s',
         paddingLeft: '1rem',
         paddingRight: '1rem',
+        fontWeight: '600',
         ...TYPE_VARIANTS[variant],
         ...SIZE_VARIANTS[size],
         ...IS_ACTIVATED[activated],

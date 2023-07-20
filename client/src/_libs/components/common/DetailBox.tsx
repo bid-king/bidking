@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { JSXElementConstructor } from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../design/colors';
+import colors from '../../design/colors';
 import { Text } from './Text';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {

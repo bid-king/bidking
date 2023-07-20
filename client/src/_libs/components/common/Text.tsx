@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { HTMLAttributes } from 'react';
-import colors from '../design/colors';
+import colors from '../../design/colors';
 
 interface Props {
   type?: 'h1' | 'h2' | 'h3' | 'normal' | 'bold' | 'p';

@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import React, { HTMLAttributes, useState } from 'react';
-import colors from '../design/colors';
-import { Text } from './Text';
-import paymentState from '../constants/paymentState';
-import { Input } from './Input';
-import { Spacing } from './Spacing';
+import colors from '../../design/colors';
+import { Text } from '../common/Text';
+import paymentState from '../../constants/paymentState';
+import { Input } from '../common/Input';
+import { Spacing } from '../common/Spacing';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -67,11 +67,11 @@ export function ItemCardSeller({
         <Text type="bold" content={'순번 ' + item.itemOrdering} />
         <Text type="bold" content={paymentState[item.paymentState]} />
       </div>
-      <Spacing spacing="1" />
+      <Spacing rem="1" />
       <div className="cardBody-ItemName">
         <Text type="h3" content={item.itemName} />
       </div>
-      <Spacing spacing="1" />
+      <Spacing rem="1" />
       <div
         className="cardBody-orderInfo"
         css={{
@@ -95,7 +95,7 @@ export function ItemCardSeller({
       <div>
         <Text type="bold" content={item.successTime + ' 낙찰'} />
       </div>
-      <Spacing spacing="1" />
+      <Spacing rem="1" />
       <div>
         <Text content={'배송정보'} />
         {item.paymentState === 'PAYMENT_OK' && item.deliveryAddress.length > 0 ? (
@@ -120,7 +120,7 @@ export function ItemCardSeller({
         <Input theme={theme} inputType="text" placeholder={item.invoice.courier} />
         <Input theme={theme} inputType="text" placeholder={item.invoice.invoiceNumber} />
       </div>
-      <Spacing spacing="1" />
+      <Spacing rem="1" />
       {/*이 아래는 접으면 접히는 부분*/}
       <div
         css={{
@@ -137,12 +137,12 @@ export function ItemCardSeller({
               maxHeight: '15rem',
             }}
           />
-          <Spacing spacing="1" />
+          <Spacing rem="1" />
         </div>
         <div>
           <Text type="normal" content={item.itemDescription} />
         </div>
-        <Spacing spacing="2" />
+        <Spacing rem="2" />
       </div>
 
       {/* 여기까지 접는 부분 */}
