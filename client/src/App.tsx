@@ -1,7 +1,6 @@
 import { Global, css } from '@emotion/react';
 import React from 'react';
-import { Router } from './Router/Router';
-import normalize from 'emotion-normalize';
+import { AppRouter } from './Router/AppRouter';
 import { LinkDebug } from './LinkDebug';
 import { globalStyle } from './_libs/design/globalStyle';
 
@@ -10,7 +9,7 @@ function App() {
     <>
       <Global styles={globalStyle} />
       <LinkDebug />
-      <Router />
+      <AppRouter />
     </>
   );
 }

@@ -1,4 +1,4 @@
-export function AuctionDateParse(dateString: string): string {
+export function auctionDateParse(dateString: string): string {
   const date = new Date(dateString);
   const now = new Date();
   const diffDate = Math.floor((date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)) + 1;

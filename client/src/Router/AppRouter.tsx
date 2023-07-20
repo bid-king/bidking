@@ -14,24 +14,21 @@ import { SellerCreateAuction } from '../pages/SellerCreateAuction';
 import { SellerDetail } from '../pages/SellerDetail';
 import { LayOut } from '../pages/LayOut';
 
-export function Router() {
+export function AppRouter() {
   return (
     <Routes>
       <Route element={<LayOut />}>
-        <Route path='/' element={<Main />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/mypage/:name' element={<MyPage />} />
-        <Route path='/purchased' element={<Purchased />} />
-        <Route path='/detail/:auctionId' element={<Detail />} />
-        <Route
-          path='/seller/create-auction'
-          element={<SellerCreateAuction />}
-        />
-        <Route path='/seller' element={<Seller />}></Route>
-        <Route path='/seller/detail/:auctionId' element={<SellerDetail />} />
+        <Route path="/" element={<Main />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/mypage/:name" element={<MyPage />} />
+        <Route path="/purchased" element={<Purchased />} />
+        <Route path="/detail/:auctionId" element={<Detail />} />
+        <Route path="/seller/create-auction" element={<SellerCreateAuction />} />
+        <Route path="/seller" element={<Seller />}></Route>
+        <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
       </Route>
-      <Route path='/seller/auction/:auctionId' element={<SellerAuction />} />
-      <Route path='/auction/:auctionId' element={<Auction />} />
+      <Route path="/seller/auction/:auctionId" element={<SellerAuction />} />
+      <Route path="/auction/:auctionId" element={<Auction />} />
     </Routes>
   );
 }
