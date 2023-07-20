@@ -2,17 +2,22 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { KaKaoButton } from '../_libs/components/KaKaoButton';
 import { useSearchParams } from 'react-router-dom';
+import { checkMyName } from '../store/slices/userSlice';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 export function Login() {
   const [searchParams, setSearchParams] = useSearchParams();
   const code = searchParams.get('code');
   console.log(code);
-  const Loginurl = 'http://70.12.247.192:8080/api/v1/oauth/test';
 
-  function kakaoLogin() {
+  const dispatch = useAppDispatch();
+  const name = useAppSelector(state => state);
+  console.log(name);
+
+  function kakaoLogin(code: string) {
+    const LoginUrl = 'http://116.33.177.60:8080/req_post';
     axios
-      .post(Loginurl, { code })
-      // .get(Loginurl)
+      .post(LoginUrl, { code })
       .then(res => {
         console.log(res);
       })
@@ -24,7 +29,7 @@ export function Login() {
   return (
     <div>
       <KaKaoButton />
-      <button onClick={kakaoLogin}>서버로 요청</button>
+      <button onClick={() => dispatch(checkMyName())}>서버로 요청</button>
     </div>
   );
 }
