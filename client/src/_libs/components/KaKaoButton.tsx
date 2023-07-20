@@ -4,7 +4,8 @@ import colors from '../design/colors';
 
 export function KaKaoButton() {
   const KAKAO_CLIENT_ID = `${process.env.REACT_APP_KAKAO_CLIENT_ID}`;
-  const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=http://localhost:3000/user/kakao/callback&response_type=code`;
+  const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=http://localhost:3000/login`;
+
   return (
     <>
       <a href={KAKAO_AUTH_URI}>
