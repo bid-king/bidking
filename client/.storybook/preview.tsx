@@ -9,17 +9,15 @@ const preview: Preview = {
     (Story) => (
       <>
         <Global styles={globalStyle} />
-        <div css={{ padding: '1rem' }}>
-          <div
-            css={{
-              position: 'absolute',
-              width: '430px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-            }}
-          >
-            <Story />
-          </div>
+        <div
+          css={{
+            position: 'absolute',
+            width: '430px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+          }}
+        >
+          <Story />
         </div>
       </>
     ),
