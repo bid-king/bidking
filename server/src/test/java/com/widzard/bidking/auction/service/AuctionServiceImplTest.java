@@ -4,6 +4,7 @@ import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
+import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemState;
 import java.time.LocalDateTime;
@@ -43,7 +44,7 @@ class AuctionServiceImplTest {
 
     @Test
     @DisplayName("성공 케이스")
-    void success() {
+    void Success() {
         //given
         AuctionCreateRequest auctionCreateRequest = AuctionCreateRequest.builder()
             .auctionTitle("title")
@@ -63,6 +64,26 @@ class AuctionServiceImplTest {
         AuctionRoom result1 = auctionService.createAuctionRoom(auctionCreateRequest);
         //then
         Assertions.assertThat(result1.getId()).isEqualTo(auctionCreateResponse1.getId());
+
+    }
+
+    @Test
+    @DisplayName("시작시간 에러 케이스")
+    void auctionStartTimeInvalidException() {
+        //given
+        AuctionCreateRequest auctionCreateRequest = AuctionCreateRequest.builder()
+            .auctionTitle("title")
+            .startedAt(LocalDateTime.now())
+            .auctionRoomType(AuctionRoomType.GENERAL)
+            .itemPermissionChecked(true)
+            .deliveryRulesChecked(true)
+            .imageName("image")
+            .itemList(itemList)
+            .build();
+
+        //when,then
+        Assertions.assertThatThrownBy(() -> auctionService.createAuctionRoom(auctionCreateRequest))
+            .isInstanceOf(AuctionStartTimeInvalidException.class);
 
     }
 
