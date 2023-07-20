@@ -46,8 +46,8 @@ public class AuctionServiceImpl implements AuctionService {
         List<Item> itemList = auctionCreateRequest.getItemList();
         for (Item item : itemList) {
             Image itemImage = Image.builder()
-//                .filePath()
-//                .fileName(item.getName())
+//                .filePath("asd/asd")
+//                .fileName("asd.jpg")
                 .build();
             itemImage = imageRepository.save(itemImage);
 

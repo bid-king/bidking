@@ -67,5 +67,4 @@ public class Item extends BaseEntity {
         this.itemCategory = itemCategory;
         itemCategory.getItemList().add(this);
     }
-
 }
