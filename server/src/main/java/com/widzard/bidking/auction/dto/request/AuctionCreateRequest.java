@@ -43,8 +43,9 @@ public class AuctionCreateRequest {
     private List<Item> itemList; // 상품 리스트
 
     public Image createImage(String imageName) {
+//TODO image file path ,name 양식
         Image image = Image.builder()
-            .fileName(imageName)
+//            .fileName(imageName)
 //            .filePath()
             .build();
 

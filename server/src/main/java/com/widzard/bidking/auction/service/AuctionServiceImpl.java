@@ -39,10 +39,12 @@ public class AuctionServiceImpl implements AuctionService {
             throw new AuctionStartTimeInvalidException();
         }
 
-        //ItemList 의 각 item  및 item의 image save
+        //ItemList의 item && item의 image save
         List<Item> itemList = auctionCreateRequest.getItemList();
         for (Item item : itemList) {
             Image itemImage = Image.builder()
+//TODO 각 아이템 image file 저장 로직
+
 //                .filePath("asd/asd")
 //                .fileName("asd.jpg")
                 .build();
@@ -59,6 +61,7 @@ public class AuctionServiceImpl implements AuctionService {
         thumnail = imageRepository.save(thumnail);
 
         AuctionRoom auctionRoom = AuctionRoom.builder()
+//TODO 경매방 판매자 id받아오기
 //            .seller()
             .name(auctionCreateRequest.getAuctionTitle())
             .auctionRoomState(AuctionRoomState.BEFORE)
