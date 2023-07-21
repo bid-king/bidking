@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class ItemCategory extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_category_id")
     private Long id;
 

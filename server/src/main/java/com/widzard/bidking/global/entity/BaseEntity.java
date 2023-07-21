@@ -1,13 +1,12 @@
 package com.widzard.bidking.global.entity;
 
+import java.time.LocalDateTime;
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
-import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
@@ -16,6 +15,7 @@ public abstract class BaseEntity {
 
     @CreatedDate
     private LocalDateTime createdAt; // data 생성 시간
+
     @LastModifiedDate
     private LocalDateTime lastModifiedAt; // data 마지막 변경 시간
 

@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 public class Member extends BaseEntity {
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id; // 객체상 쓸 것
 
@@ -42,20 +42,16 @@ public class Member extends BaseEntity {
     @Embedded
     private Address address; //( 기본배송지 )
 
-    private String gender; //( 성별 )
-
-    private String birth; //( 생년월일 )
-
     private String email; //( 메일 )
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image image; //( 프사 )
 
-    private Boolean available; //( 상태 )
+    private boolean available; //( 상태 )
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private MemberRole memberRole; //(역할)
 
-
+    private int penalty;
 }

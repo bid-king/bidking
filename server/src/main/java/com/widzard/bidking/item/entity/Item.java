@@ -31,7 +31,7 @@ import lombok.ToString;
 public class Item extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id")
     private Long id;// (상품코드)
 
@@ -54,7 +54,7 @@ public class Item extends BaseEntity {
 
     private int ordering;// (순서)
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image image;// (대표이미지)
 
