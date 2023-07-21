@@ -33,6 +33,7 @@ public class AuctionController {
         if (bindingResult.hasErrors()) {
             throw new InvalidAuctionRoomRequestException();
         }
+
         AuctionRoom result = auctionService.createAuctionRoom(auctionCreateRequest);
         return new ResponseEntity<Long>(result.getId(), HttpStatus.OK);
     }

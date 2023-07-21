@@ -2,7 +2,8 @@ package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
-import com.widzard.bidking.auction.entity.AuctionRoomState;
+import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
+import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.image.entity.Image;
@@ -11,12 +12,14 @@ import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.repository.ItemRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Component
 @Transactional
+@Slf4j
 public class AuctionServiceImpl implements AuctionService {
 
     private final AuctionRoomRepository auctionRoomRepository;
@@ -34,10 +37,26 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public AuctionRoom createAuctionRoom(AuctionCreateRequest auctionCreateRequest) {
+
         LocalDateTime now = LocalDateTime.now();
         if (auctionCreateRequest.getStartedAt().isBefore(now.plusHours(1))) {
             throw new AuctionStartTimeInvalidException();
         }
+
+        Image thumnail = auctionCreateRequest.createImage(auctionCreateRequest.getImageName());
+        thumnail = imageRepository.save(thumnail);
+
+        AuctionRoom auctionRoom = AuctionRoom.builder()
+//TODO 경매방 판매자 id받아오기
+//            .seller()
+            .name(auctionCreateRequest.getAuctionTitle())
+            .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
+            .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
+            .auctionRoomType(auctionCreateRequest.getAuctionRoomType())
+            .image(thumnail)
+            .build();
+        auctionRoom = auctionRoomRepository.save(auctionRoom);
+        log.info("auctionRoom is {}", auctionRoom.toString());
 
         //ItemList의 item && item의 image save
         List<Item> itemList = auctionCreateRequest.getItemList();
@@ -52,30 +71,26 @@ public class AuctionServiceImpl implements AuctionService {
 
             item = Item.builder()
                 .image(itemImage)
+                .description(item.getDescription())
+//TODO itemCategory 정하고 매핑해야함
+//                .itemCategory()
                 .build();
+            item.setAuctionRoom(auctionRoom);
+
             item = itemRepository.save(item);
+
         }
 
-        //AuctionRoom image save ( thumnail )
-        Image thumnail = auctionCreateRequest.createImage(auctionCreateRequest.getImageName());
-        thumnail = imageRepository.save(thumnail);
-
-        AuctionRoom auctionRoom = AuctionRoom.builder()
-//TODO 경매방 판매자 id받아오기
-//            .seller()
-            .name(auctionCreateRequest.getAuctionTitle())
-            .auctionRoomState(AuctionRoomState.BEFORE)
-            .auctionRoomType(auctionCreateRequest.getAuctionRoomType())
-            .image(thumnail)
-            .itemList(itemList)
-            .build();
-        auctionRoom = auctionRoomRepository.save(auctionRoom);
+//        auctionRoom = AuctionRoom.builder()
+//            .itemList(itemList)
+//            .build();
+//        auctionRoom = auctionRoomRepository.save(auctionRoom);
 
         return auctionRoom;
     }
 
     @Override
-    public AuctionRoom findAuctionRoom(Long id) {
+    public AuctionRoom readAuctionRoom(Long id) {
         return auctionRoomRepository.findAuctionRoomById(id);
     }
 }

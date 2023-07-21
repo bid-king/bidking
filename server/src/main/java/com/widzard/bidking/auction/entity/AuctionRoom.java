@@ -25,11 +25,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Getter
 @Entity
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "auction_room")
@@ -46,7 +48,11 @@ public class AuctionRoom extends BaseEntity {
 
     private String name; //(방이름)
 
-    private AuctionRoomState auctionRoomState; // (상태)
+    @Enumerated(EnumType.STRING)
+    private AuctionRoomLiveState auctionRoomLiveState; // (라이브 상태)
+
+    @Enumerated(EnumType.STRING)
+    private AuctionRoomTradeState auctionRoomTradeState; //(거래 상태)
 
     @Enumerated(EnumType.STRING)
     private AuctionRoomType auctionRoomType; // (경매방식)

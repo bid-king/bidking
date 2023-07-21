@@ -6,9 +6,11 @@ import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemState;
+import com.widzard.bidking.item.entity.repository.ItemRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,10 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
+@Slf4j
 class AuctionServiceImplTest {
 
     @Autowired
     AuctionServiceImpl auctionService;
+    @Autowired
+    ItemRepository itemREpository;
 
     private List<Item> itemList = new ArrayList<>();
     private Item item = new Item();
@@ -59,10 +64,9 @@ class AuctionServiceImplTest {
 
         //when
         AuctionRoom auctionRoom = auctionService.createAuctionRoom(auctionCreateRequest);
-
         //then
         Boolean result = auctionRoom.equals(
-            auctionService.findAuctionRoom(auctionRoom.getId()));
+            auctionService.readAuctionRoom(auctionRoom.getId()));
 
         Assertions.assertThat(result);
 

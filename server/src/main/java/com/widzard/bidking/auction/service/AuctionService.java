@@ -8,5 +8,5 @@ public interface AuctionService {
 
     public AuctionRoom createAuctionRoom(AuctionCreateRequest auctionCreateRequest);
 
-    public AuctionRoom findAuctionRoom(Long id);
+    public AuctionRoom readAuctionRoom(Long id);
 }
