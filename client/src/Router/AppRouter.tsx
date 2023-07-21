@@ -13,6 +13,7 @@ import { SellerAuction } from '../pages/SellerAuction';
 import { SellerCreateAuction } from '../pages/SellerCreateAuction';
 import { SellerDetail } from '../pages/SellerDetail';
 import { LayOut } from '../pages/LayOut';
+import { LoginLoading } from '../pages/LoginLoading';
 
 export function AppRouter() {
   return (
@@ -29,6 +30,7 @@ export function AppRouter() {
       </Route>
       <Route path="/seller/auction/:auctionId" element={<SellerAuction />} />
       <Route path="/auction/:auctionId" element={<Auction />} />
+      <Route path="/login/loading" element={<LoginLoading />} />
     </Routes>
   );
 }
