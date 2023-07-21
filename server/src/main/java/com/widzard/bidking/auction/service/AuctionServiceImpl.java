@@ -45,7 +45,7 @@ public class AuctionServiceImpl implements AuctionService {
         if (auctionCreateRequest.getStartedAt().isBefore(now.plusHours(1))) {
             throw new AuctionStartTimeInvalidException();
         }
-        
+
         Address tempAddress = new Address("asd", "asd", "asd");
         Member tempMember = Member.builder()
             .birth("asd123")
@@ -68,7 +68,6 @@ public class AuctionServiceImpl implements AuctionService {
             .build();
         tempImage = imageRepository.save(tempImage);
 
-        System.out.println(auctionCreateRequest.getItemList().get(0).toString());
         AuctionRoom auctionRoom = AuctionRoom.builder()
 //TODO 경매방 판매자 id받아오기
 //            .seller(tempMember)

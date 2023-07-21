@@ -57,8 +57,6 @@ class AuctionServiceImplTest {
         Boolean result = auctionRoom.equals(
             auctionService.readAuctionRoom(auctionRoom.getId()));
 
-        System.out.println(auctionRoom.getItemList().get(0).toString());
-
         Assertions.assertThat(result);
 
     }
