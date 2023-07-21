@@ -28,6 +28,8 @@ export function AppRouter() {
         <Route path="/seller" element={<Seller />}></Route>
         <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
       </Route>
+
+      {/* 네브바가 안들어가는 페이지 */}
       <Route path="/seller/auction/:auctionId" element={<SellerAuction />} />
       <Route path="/auction/:auctionId" element={<Auction />} />
       <Route path="/login/loading" element={<LoginLoading />} />

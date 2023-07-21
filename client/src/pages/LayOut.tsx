@@ -1,11 +1,12 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { NavBar } from '../_libs/components/layout/NavBar';
 
 export function LayOut() {
   return (
     <div>
-      네브바가 여기 들어야가 합니다
-      <Outlet></Outlet>
+      <NavBar />
+      <Outlet />
     </div>
   );
 }
