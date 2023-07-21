@@ -2,7 +2,7 @@
 import React from 'react';
 import colors from '../design/colors';
 
-export function KaKaoButton() {
+export function KakaoButton() {
   const KAKAO_CLIENT_ID = `${process.env.REACT_APP_KAKAO_CLIENT_ID}`;
   const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=http://localhost:3000/login/loading`;
 
