@@ -3,7 +3,7 @@ import React from 'react';
 
 export function KakaoButton() {
   const KAKAO_CLIENT_ID = `${process.env.REACT_APP_KAKAO_CLIENT_ID}`;
-  const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=http://localhost:3000/login/loading`;
+  const KAKAO_AUTH_URI = 'http://70.12.247.192:8080/api/v1/oauth/KAKAO';
 
   return (
     <>
@@ -17,7 +17,7 @@ export function KakaoButton() {
               filter: 'brightness(0.9)',
             },
           }}
-          src="/image/kakao_login_large_narrow.png"
+          src="/image/kakao_login/kakao_login_large_narrow.png"
           alt="asd"
         />
       </a>

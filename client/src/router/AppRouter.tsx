@@ -12,13 +12,13 @@ import { Auction } from '../pages/Auction';
 import { SellerAuction } from '../pages/SellerAuction';
 import { SellerCreateAuction } from '../pages/SellerCreateAuction';
 import { SellerDetail } from '../pages/SellerDetail';
-import { LayOut } from '../pages/LayOut';
+import { Layout } from '../pages/Layout';
 import { LoginLoading } from '../pages/LoginLoading';
 
 export function AppRouter() {
   return (
     <Routes>
-      <Route element={<LayOut />}>
+      <Route element={<Layout />}>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mypage/:name" element={<MyPage />} />
@@ -28,6 +28,8 @@ export function AppRouter() {
         <Route path="/seller" element={<Seller />}></Route>
         <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
       </Route>
+
+      {/* 네브바가 안들어가는 페이지 */}
       <Route path="/seller/auction/:auctionId" element={<SellerAuction />} />
       <Route path="/auction/:auctionId" element={<Auction />} />
       <Route path="/login/loading" element={<LoginLoading />} />
