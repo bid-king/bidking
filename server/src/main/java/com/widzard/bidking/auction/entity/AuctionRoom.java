@@ -61,9 +61,6 @@ public class AuctionRoom extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image; // (썸네일)
 
-    @OneToMany(mappedBy = "auctionRoom")
-    private List<Item> itemList = new ArrayList<>(); // (상품리스트)
-
     public void setImage(Image image) {
         this.image = image;
     }

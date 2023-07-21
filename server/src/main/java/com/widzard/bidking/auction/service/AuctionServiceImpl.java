@@ -75,32 +75,10 @@ public class AuctionServiceImpl implements AuctionService {
             .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
             .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
             .auctionRoomType(auctionCreateRequest.getAuctionRoomType())
-            .itemList(auctionCreateRequest.getItemList())
 //            .image(tempImage)
             .build();
         auctionRoom = auctionRoomRepository.save(auctionRoom);
 
-        //ItemList의 item && item의 image save
-        List<Item> itemList = auctionRoom.getItemList();
-        for (Item item : itemList) {
-            Image itemImage = Image.builder()
-//TODO 각 아이템 image file 저장 로직
-//                .member(m)
-                .filePath("asd/asd")
-                .fileName("asd.jpg")
-                .build();
-            itemImage = imageRepository.save(itemImage);
-
-            item = Item.builder()
-                .image(itemImage)
-                .description(item.getDescription())
-                .auctionRoom(auctionRoom)
-//TODO itemCategory 정하고 매핑해야함
-//                .itemCategory()
-                .build();
-            log.info("item is{}", item.toString());
-            item = itemRepository.save(item);
-        }
         return auctionRoom;
     }
 
