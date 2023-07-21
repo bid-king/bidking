@@ -2,6 +2,7 @@ package com.widzard.bidking.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,31 +25,23 @@ public class SecurityConfig {
     - 경매방 생성
     - 경매방 참여
      */
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//        http.authorizeRequests()
-//                .antMatchers("/api/v1/oauth/**", "/api/v1/items/categories").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
-//                .antMatchers("/api/v1/bookmarks/**", "/api/v1/members/**").authenticated()
-//                .anyRequest().hasRole("USER")
-//                .and()
-//                .formLogin()
-//                .loginPage("/api/v1/oauth/login")
-////                .loginProcessingUrl("/loginProc")
-////                .defaultSuccessUrl("/")
-//                .and()
-//                .oauth2Login()
-//                .loginPage("/api/v1/oauth/login");
-////                .userInfoEndpoint();
-//
-//        return http.build();
-//    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests()
-            .anyRequest().permitAll();
+                .antMatchers("/api/v1/oauth/**", "/api/v1/items/categories").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
+                .antMatchers("/api/v1/bookmarks/**", "/api/v1/members/**").authenticated()
+                .anyRequest().hasRole("USER")
+                .and()
+                .formLogin()
+                .loginPage("/api/v1/oauth/login")
+//                .loginProcessingUrl("/loginProc")
+//                .defaultSuccessUrl("/")
+                .and()
+                .oauth2Login()
+                .loginPage("/api/v1/oauth/login");
+//                .userInfoEndpoint();
 
         return http.build();
     }
