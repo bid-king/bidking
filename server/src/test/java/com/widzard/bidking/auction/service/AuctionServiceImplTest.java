@@ -1,7 +1,6 @@
 package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
-import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
@@ -39,6 +38,8 @@ class AuctionServiceImplTest {
             .ordering(1)
             .startPrice(22222L)
             .build();
+
+        itemList.add(item);
     }
 
 
@@ -56,14 +57,14 @@ class AuctionServiceImplTest {
             .itemList(itemList)
             .build();
 
-        AuctionCreateResponse auctionCreateResponse1 = AuctionCreateResponse.builder()
-            .id(1L)
-            .build();
-
         //when
-        AuctionRoom result1 = auctionService.createAuctionRoom(auctionCreateRequest);
+        AuctionRoom auctionRoom = auctionService.createAuctionRoom(auctionCreateRequest);
+
         //then
-        Assertions.assertThat(result1.getId()).isEqualTo(auctionCreateResponse1.getId());
+        Boolean result = auctionRoom.equals(
+            auctionService.findAuctionRoom(auctionRoom.getId()));
+
+        Assertions.assertThat(result);
 
     }
 

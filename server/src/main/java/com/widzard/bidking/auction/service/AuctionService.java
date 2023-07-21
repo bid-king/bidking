@@ -7,4 +7,6 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 public interface AuctionService {
 
     public AuctionRoom createAuctionRoom(AuctionCreateRequest auctionCreateRequest);
+
+    public AuctionRoom findAuctionRoom(Long id);
 }

@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@RequestMapping("api/v1/auctions")
+@RequestMapping("/api/v1/auctions")
 public class AuctionController {
 
-    AuctionService auctionService;
+    private final AuctionService auctionService;
 
     public AuctionController(AuctionService auctionService) {
         this.auctionService = auctionService;

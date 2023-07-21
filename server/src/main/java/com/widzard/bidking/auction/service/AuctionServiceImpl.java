@@ -11,13 +11,10 @@ import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.repository.ItemRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@Service
 @Component
 @Transactional
 public class AuctionServiceImpl implements AuctionService {
@@ -26,7 +23,7 @@ public class AuctionServiceImpl implements AuctionService {
     private final ItemRepository itemRepository;
     private final ImageRepository imageRepository;
 
-    @Autowired
+
     public AuctionServiceImpl(AuctionRoomRepository auctionRoomRepository,
         ItemRepository itemRepository, ImageRepository imageRepository
     ) {
@@ -72,5 +69,10 @@ public class AuctionServiceImpl implements AuctionService {
         auctionRoom = auctionRoomRepository.save(auctionRoom);
 
         return auctionRoom;
+    }
+
+    @Override
+    public AuctionRoom findAuctionRoom(Long id) {
+        return auctionRoomRepository.findAuctionRoomById(id);
     }
 }
