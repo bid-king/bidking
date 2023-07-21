@@ -58,7 +58,6 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image;// (대표이미지)
 
-
     public void setAuctionRoom(AuctionRoom auctionRoom) {
         this.auctionRoom = auctionRoom;
         auctionRoom.getItemList().add(this);

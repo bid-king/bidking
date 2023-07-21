@@ -9,10 +9,8 @@ import com.widzard.bidking.item.entity.ItemState;
 import com.widzard.bidking.item.entity.repository.ItemRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,31 +25,22 @@ class AuctionServiceImplTest {
     @Autowired
     AuctionServiceImpl auctionService;
     @Autowired
-    ItemRepository itemREpository;
+    ItemRepository itemRepository;
 
-    private List<Item> itemList = new ArrayList<>();
-    private Item item = new Item();
-
-    @BeforeEach
-    void setUp() {
-        itemList = new ArrayList<>();
-
-        Item item = Item.builder()
-            .id(1L)
-            .name("아이패드22")
-            .itemState(ItemState.SUCCESS)
-            .ordering(1)
-            .startPrice(22222L)
-            .build();
-
-        itemList.add(item);
-    }
-
+    private ArrayList<Item> itemList = new ArrayList<>();
+    private Item item = Item.builder()
+        .name("아이패드22")
+        .itemState(ItemState.SUCCESS)
+        .ordering(1)
+        .startPrice(22222L)
+        .description("자세한 설명은 생략한다")
+        .build();
 
     @Test
     @DisplayName("성공 케이스")
     void Success() {
         //given
+        itemList.add(item);
         AuctionCreateRequest auctionCreateRequest = AuctionCreateRequest.builder()
             .auctionTitle("title")
             .startedAt(LocalDateTime.now().plusHours(5))
@@ -67,6 +56,8 @@ class AuctionServiceImplTest {
         //then
         Boolean result = auctionRoom.equals(
             auctionService.readAuctionRoom(auctionRoom.getId()));
+
+        System.out.println(auctionRoom.getItemList().get(0).toString());
 
         Assertions.assertThat(result);
 

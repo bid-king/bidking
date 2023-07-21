@@ -1,7 +1,6 @@
 package com.widzard.bidking.auction.dto.request;
 
 import com.widzard.bidking.auction.entity.AuctionRoomType;
-import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.entity.Item;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,13 +41,4 @@ public class AuctionCreateRequest {
     @NotNull
     private List<Item> itemList; // 상품 리스트
 
-    public Image createImage(String imageName) {
-//TODO image file path ,name 양식
-        Image image = Image.builder()
-//            .fileName(imageName)
-//            .filePath()
-            .build();
-
-        return image;
-    }
 }
