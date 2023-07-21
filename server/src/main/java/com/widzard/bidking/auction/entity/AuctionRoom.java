@@ -16,16 +16,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Getter
 @Entity
+@Builder
+@ToString
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "auction_room")
 public class AuctionRoom extends BaseEntity {
@@ -35,13 +42,17 @@ public class AuctionRoom extends BaseEntity {
     @Column(name = "auction_room_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member seller; //
 
     private String name; //(방이름)
 
-    private AuctionRoomState auctionRoomState; // (상태)
+    @Enumerated(EnumType.STRING)
+    private AuctionRoomLiveState auctionRoomLiveState; // (라이브 상태)
+
+    @Enumerated(EnumType.STRING)
+    private AuctionRoomTradeState auctionRoomTradeState; //(거래 상태)
 
     @Enumerated(EnumType.STRING)
     private AuctionRoomType auctionRoomType; // (경매방식)
@@ -50,7 +61,7 @@ public class AuctionRoom extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image; // (썸네일)
 
-    @OneToMany(mappedBy = "auctionRoom")
-    private List<Item> itemList = new ArrayList<>(); // (상품리스트)
-
+    public void setImage(Image image) {
+        this.image = image;
+    }
 }

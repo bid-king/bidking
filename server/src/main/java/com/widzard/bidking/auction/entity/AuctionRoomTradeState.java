@@ -1,9 +1,7 @@
 package com.widzard.bidking.auction.entity;
 
-public enum AuctionRoomState {
-    BEFORE,
-    ON_LIVE,
-    OFF_LIVE,
+public enum AuctionRoomTradeState {
+    BEFORE_PROGRESS,
     IN_PROGRESS,
     ALL_COMPLETED
 }
