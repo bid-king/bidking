@@ -1,5 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { KakaoButton } from '../_libs/components/KakaoButton';
+import { useSearchParams } from 'react-router-dom';
+// import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 export function Login() {
-  return <div>로그인입니다.</div>;
+  return (
+    <div>
+      <KakaoButton />
+    </div>
+  );
 }
