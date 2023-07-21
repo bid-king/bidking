@@ -12,13 +12,13 @@ import { Auction } from '../pages/Auction';
 import { SellerAuction } from '../pages/SellerAuction';
 import { SellerCreateAuction } from '../pages/SellerCreateAuction';
 import { SellerDetail } from '../pages/SellerDetail';
-import { LayOut } from '../pages/LayOut';
+import { Layout } from '../pages/Layout';
 import { LoginLoading } from '../pages/LoginLoading';
 
 export function AppRouter() {
   return (
     <Routes>
-      <Route element={<LayOut />}>
+      <Route element={<Layout />}>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/mypage/:name" element={<MyPage />} />
