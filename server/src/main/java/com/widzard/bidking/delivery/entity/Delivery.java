@@ -3,11 +3,19 @@ package com.widzard.bidking.delivery.entity;
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.order.entity.Order;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Getter
 @Entity
@@ -16,16 +24,13 @@ import javax.persistence.*;
 public class Delivery extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "delivery_id")
     private Long id; //
 
     @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
-
-    @Enumerated(EnumType.STRING)
-    private DeliveryState deliveryState;
 
     @Embedded
     private Address address; //
@@ -36,6 +41,8 @@ public class Delivery extends BaseEntity {
 
     private String receiverPhoneNumber;
 
-//    private int cost; // 배송비
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
+    
 }

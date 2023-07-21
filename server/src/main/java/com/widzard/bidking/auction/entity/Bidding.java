@@ -4,11 +4,19 @@ package com.widzard.bidking.auction.entity;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.member.entity.Member;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Getter
 @Entity
@@ -17,17 +25,17 @@ import javax.persistence.*;
 public class Bidding extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bidding_id")
-    Long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    Member member;
+    private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
-    Item item;
+    private Item item;
 
-    Long price;
+    private Long price;
 }

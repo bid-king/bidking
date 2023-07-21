@@ -1,7 +1,12 @@
 package com.widzard.bidking.order.entity;
 
 public enum OrderState {
-    ORDER_SUCCESS,
-    ORDER_CANCELED;
+    
+    PAYMENT_WAITING,
+    DELIVERY_WAITING,
+    DELIVERING,
+    COMPLETED,
+    ORDER_CANCELED,
+    DELIVERY_CANCELED
 
 }

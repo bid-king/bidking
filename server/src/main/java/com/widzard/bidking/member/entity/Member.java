@@ -1,23 +1,33 @@
 package com.widzard.bidking.member.entity;
 
 
-
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 public class Member extends BaseEntity {
+
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id; // 객체상 쓸 것
 
@@ -30,21 +40,16 @@ public class Member extends BaseEntity {
     @Embedded
     private Address address; //( 기본배송지 )
 
-    private String gender; //( 성별 )
-
-    private String birth; //( 생년월일 )
-
     private String email; //( 메일 )
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image image; //( 프사 )
 
-    private Boolean available; //( 상태 )
+    private boolean available; //( 상태 )
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private MemberRole memberRole; //(역할)
 
-
-
+    private int penalty;
 }

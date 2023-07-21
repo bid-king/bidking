@@ -2,12 +2,15 @@ package com.widzard.bidking.image.entity;
 
 
 import com.widzard.bidking.global.entity.BaseEntity;
-import com.widzard.bidking.member.entity.Member;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Getter
 @Entity
@@ -16,15 +19,12 @@ import javax.persistence.*;
 public class Image extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
-    Long id;
+    private Long id;
 
-    @OneToOne(mappedBy = "image", fetch = FetchType.LAZY)
-    Member member;
+    private String fileName;
 
-    String fileName;
-
-    String filePath;
+    private String filePath;
 
 }
