@@ -13,10 +13,12 @@ import { SellerAuction } from '../pages/SellerAuction';
 import { SellerCreateAuction } from '../pages/SellerCreateAuction';
 import { SellerDetail } from '../pages/SellerDetail';
 import { Layout } from '../pages/Layout';
+import { SellerLayout } from '../pages/SellerLayout';
 import { LoginLoading } from '../pages/LoginLoading';
 
 export function AppRouter() {
   return (
+    // 구매자 라우터 페이지
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Main />} />
@@ -24,12 +26,16 @@ export function AppRouter() {
         <Route path="/mypage/:name" element={<MyPage />} />
         <Route path="/purchased" element={<Purchased />} />
         <Route path="/detail/:auctionId" element={<Detail />} />
-        <Route path="/seller/create-auction" element={<SellerCreateAuction />} />
-        <Route path="/seller" element={<Seller />}></Route>
-        <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
       </Route>
 
-      {/* 네브바가 안들어가는 페이지 */}
+      {/* 판매자 라우터 페이지 */}
+      <Route element={<SellerLayout />}>
+        <Route path="/seller/create-auction" element={<SellerCreateAuction />} />
+        <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
+        <Route path="/seller" element={<Seller />}></Route>
+      </Route>
+
+      {/* 네브바가 안들어가는 페이지 및 판매페이지 */}
       <Route path="/seller/auction/:auctionId" element={<SellerAuction />} />
       <Route path="/auction/:auctionId" element={<Auction />} />
       <Route path="/login/loading" element={<LoginLoading />} />

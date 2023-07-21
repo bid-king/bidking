@@ -2,12 +2,12 @@
 import React from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
-import bid from '../static/bid.jpg';
 import { Text } from '../common/Text';
 import { Spacing } from '../common/Spacing';
 import { Input } from '../common/Input';
 import { RoundButton } from '../common/RoundButton';
 import { Link } from 'react-router-dom';
+import { ProfileImage } from '../common/ProfileImage';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -15,43 +15,62 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export function NavBar({ theme = 'light' }: Props) {
   const breakpoints = [576, 768, 992, 1200];
-
   const mq = breakpoints.map(bp => `@media (min-width: ${bp}px)`);
   return (
-    <div
+    <nav
       css={{
         display: 'flex',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        // justifyContent: 'center',
-        height: '4.5rem',
+        padding: '10px',
         ...THEME_VARIANTS[theme],
       }}
     >
-      <Spacing rem="2" dir="h" />
-      <div>
-        <Link to={'/'}>
-          <img
-            css={{
-              width: '4rem',
-              height: '4rem',
-            }}
-            src="/image/logo/logo_light.png"
-            alt=""
-          />
-        </Link>
-      </div>
-      <Spacing rem="2" dir="h" />
-      <div>
-        <Text type="h3" content="판매" />
-      </div>
-      <Spacing rem="2" dir="h" />
       <div
         css={{
-          width: '937px',
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
-        <Input shape="round" theme="light" placeholder="경매방을 검색하세요" />
+        <div>
+          <Link to={'/'}>
+            <img
+              css={{
+                width: '4rem',
+                height: '4rem',
+              }}
+              src="/image/logo/logo_light.png"
+              alt=""
+            />
+          </Link>
+        </div>
+        <div
+          css={{
+            marginLeft: '1.5rem',
+            marginRight: '1.5rem',
+          }}
+        >
+          {theme === 'light' ? <Text type="h3" content="판매" /> : null}
+        </div>
+        <div
+          css={{
+            marginRight: '1.5rem',
+            // 미디어 쿼리 사용설정만 해놓음 적용 x
+            [mq[3]]: {
+              width: '934px',
+            },
+            [mq[2]]: {
+              width: '600px',
+            },
+          }}
+        >
+          <Input shape="round" theme="light" placeholder="경매방을 검색하세요" />
+        </div>
+        <div>
+          <RoundButton label="검색" />
+        </div>
       </div>
+
       <div
         css={{
           display: 'flex',
@@ -59,12 +78,26 @@ export function NavBar({ theme = 'light' }: Props) {
           alignItems: 'center',
         }}
       >
-        <Spacing rem="2" dir="h" />
-        <Link to={'/mypage/:name'}>내 경매</Link>
-        <Spacing rem="2" dir="h" />
-        <RoundButton label="검색" />
+        <Link
+          css={{
+            marginRight: '1.5rem',
+          }}
+          to={'/mypage/:name'}
+        >
+          내 경매
+        </Link>
+        <div
+          css={{
+            marginRight: '1.5rem',
+          }}
+        >
+          <img src={`/image/Bell_${theme}.png`} alt="bell" />
+        </div>
+        <div>
+          <ProfileImage />
+        </div>
       </div>
-    </div>
+    </nav>
   );
 }
 
