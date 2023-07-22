@@ -7,6 +7,7 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
+import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.image.entity.repository.ImageRepository;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
@@ -14,7 +15,6 @@ import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,7 @@ public class AuctionServiceImpl implements AuctionService {
 
         //시작시간 예외 로직
         LocalDateTime now = LocalDateTime.now();
-        if (toLocalDateTime(request.getStartedAt()).isBefore(now.plusHours(1))) {
+        if (TimeUtility.toLocalDateTime(request.getStartedAt()).isBefore(now.plusHours(1))) {
             throw new AuctionStartTimeInvalidException();
         }
         //TODO ItemCategory 테스트용
@@ -60,7 +60,7 @@ public class AuctionServiceImpl implements AuctionService {
             .name(request.getAuctionTitle())
             .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
             .auctionRoomType(request.getAuctionRoomType())
-            .startedAt(toLocalDateTime(request.getStartedAt()))
+            .startedAt(TimeUtility.toLocalDateTime(request.getStartedAt()))
             .build();
 
         AuctionRoom savedAuctionRoom = auctionRoomRepository.save(auctionRoom);
@@ -94,8 +94,5 @@ public class AuctionServiceImpl implements AuctionService {
             .build();
     }
 
-    private LocalDateTime toLocalDateTime(String str) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return LocalDateTime.parse(str, formatter);
-    }
+
 }
