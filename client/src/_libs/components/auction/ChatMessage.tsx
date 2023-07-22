@@ -3,28 +3,29 @@ import React from 'react';
 import { HTMLAttributes } from 'react';
 import { Text } from '../common/Text';
 import colors from '../../design/colors';
+import { Spacing } from '../common/Spacing';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  message?: string;
-  bidProgress?: string;
-  bidSuccess?: string;
+  type?: 'normal' | 'notice';
+  nickname: string;
+  msg: string;
 }
 
-export function ChatMessage({
-  message = '이름: 저는 입찰왕입니다.',
-  bidProgress = '<낙찰> 입찰왕님 30,000원',
-  bidSuccess = '<입찰> 입찰왕님 23,000원',
-}: Props) {
+export function ChatMessage({ type = 'normal', nickname = '정예지', msg = '저는 입찰왕입니다.' }: Props) {
   return (
-    <div
-      className="messageBox"
-      css={{
-        padding: '1rem',
-      }}
-    >
-      <Text type="p" content={message} />
-      <Text type="p" content={bidProgress} css={{ color: colors.ok }} />
-      <Text type="p" content={bidSuccess} css={{ color: colors.confirm }} />
+    <div css={{ ...COLOR_VARIANT[type] }}>
+      <Text type="bold" content={nickname} />
+      <Text content={' ' + msg} />
+      <Spacing dir="v" rem="0.5" />
     </div>
   );
 }
+
+const COLOR_VARIANT = {
+  notice: {
+    color: colors.confirm,
+  },
+  normal: {
+    color: 'inherit',
+  },
+};

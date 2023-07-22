@@ -4,7 +4,6 @@ import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { Input } from '../common/Input';
 import { RoundButton } from '../common/RoundButton';
-import { Text } from '../common/Text';
 import { ChatMessage } from './ChatMessage';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -19,34 +18,35 @@ export function ChatRoom({ theme = 'light', chatInput = 'light' }: Props) {
         width: '100%',
         height: '28.97rem',
         borderRadius: '1rem',
+        padding: '1rem',
         position: 'relative',
         ...THEME_VARIANTS[theme],
       }}
     >
       <div>
-        <ChatMessage />
+        <ChatMessage nickname="김동현" msg="또 나야?" />
       </div>
       <div
         className="inputArea"
         css={{
           width: '100%',
-          bottom: '0',
+          left: '0.5rem',
+          bottom: '1rem',
           position: 'absolute',
-          padding: '1rem',
           display: 'flex',
           justifyContent: 'center',
         }}
       >
         <div
           css={{
-            width: '19em',
+            width: '100%',
             marginRight: '1rem',
+            display: 'flex',
           }}
         >
           <Input placeholder={`${CHAT_INTPUT[chatInput].chatPlaceHolder}`} shape="round" />
+          <RoundButton label={`${CHAT_INTPUT[chatInput].chatBtn}`} />
         </div>
-
-        <RoundButton label={`${CHAT_INTPUT[chatInput].chatBtn}`} />
       </div>
     </div>
   );
