@@ -4,15 +4,15 @@ import { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   imgSrc?: string;
-  myWidth: string;
-  myHeight: string;
+  myWidth?: string;
+  myHeight?: string;
 }
 export function ProfileImage({ imgSrc = '/image/profile.png', myWidth = '3.375rem', myHeight = '3.375rem' }: Props) {
   return (
     <img
       src={imgSrc}
       css={{
-        borderRadius: '50%',
+        borderRadius: '100%',
         width: `${myWidth}`,
         height: `${myHeight}`,
       }}

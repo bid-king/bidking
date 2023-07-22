@@ -13,7 +13,7 @@ export function Login() {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        height: '89vh',
+        height: '91.5vh',
       }}
     >
       <KakaoButton />
