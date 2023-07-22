@@ -11,11 +11,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /*
+     * 회원 가입
+     */
     @Override
     public Member signup(MemberFormRequest request) {
         validateDuplicatedMember(request.getUserId());
@@ -23,12 +26,20 @@ public class MemberServiceImpl implements MemberService{
         Member member = Member.createMember(request, encodedPassword);
         return memberRepository.save(member);
     }
+
+    /*
+     * 아이디 중복 검사
+     */
+    @Override
+    public boolean checkUserId(String userId) {
+        return memberRepository.existsByUserId(userId);
+    }
+
     // 아이디 중복 검사
     // 휴대폰 인증
     // 기존 회원 정보 확인
     private void validateDuplicatedMember(String userId) {
-        Member findMember = memberRepository.findByUserId(userId);
-        if (findMember != null) {
+        if (memberRepository.existsByUserId(userId)) {
             throw new MemberDuplicatedException();
         }
     }

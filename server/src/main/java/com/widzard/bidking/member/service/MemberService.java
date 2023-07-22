@@ -6,4 +6,6 @@ import com.widzard.bidking.member.entity.Member;
 public interface MemberService {
 
     Member signup(MemberFormRequest entity);
+
+    boolean checkUserId(String userId);
 }

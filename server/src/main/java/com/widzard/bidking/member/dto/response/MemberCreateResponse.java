@@ -1,17 +1,18 @@
 package com.widzard.bidking.member.dto.response;
 
+import com.widzard.bidking.member.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/*
- * Test Response
- */
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class MemberCreateResponse {
+
     private Long id;
 
-    public MemberCreateResponse(Long id) {
-        this.id = id;
+    public static MemberCreateResponse from(Member savedMember) {
+        return new MemberCreateResponse(savedMember.getId());
     }
 }
