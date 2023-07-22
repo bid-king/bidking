@@ -18,8 +18,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "item_category")
 public class ItemCategory extends BaseEntity {
@@ -31,7 +29,15 @@ public class ItemCategory extends BaseEntity {
 
     private String name;// (카테명)
 
-    @OneToMany(mappedBy = "itemCategory")
-    private List<Item> itemList = new ArrayList<>();// (상품코드, Item)
+    // TODO
+//    @OneToMany(mappedBy = "itemCategory")
+//    private List<Item> itemList = new ArrayList<>();// (상품코드, Item)
+//
+//
 
+    // TODO Test
+    public ItemCategory(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -4,8 +4,10 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.item.entity.Item;
+import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.item.entity.ItemState;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
@@ -18,8 +20,8 @@ public class AuctionCreateRequest {
     @NotBlank(message = "경매방 제목을 입력하세요")
     private String auctionTitle; //경매방 제목
 
-    @NotNull(message = "시작 시간을 입력하세요")
-    private LocalDateTime startedAt; //경매방 시작시간
+    @NotBlank(message = "시작 시간을 입력하세요")
+    private String startedAt; //경매방 시작시간
 
     @NotNull(message = "경매 방식을 선택하세요")
     private AuctionRoomType auctionRoomType; //경매 방식
@@ -36,7 +38,7 @@ public class AuctionCreateRequest {
     public AuctionCreateRequest() {
     }
 
-    public AuctionCreateRequest(String auctionTitle, LocalDateTime startedAt,
+    public AuctionCreateRequest(String auctionTitle, String startedAt,
         AuctionRoomType auctionRoomType, Boolean itemPermissionChecked,
         Boolean deliveryRulesChecked,
         List<ItemCreateRequest> itemList) {
@@ -52,7 +54,7 @@ public class AuctionCreateRequest {
         return auctionTitle;
     }
 
-    public LocalDateTime getStartedAt() {
+    public String getStartedAt() {
         return startedAt;
     }
 
@@ -72,23 +74,28 @@ public class AuctionCreateRequest {
         return itemList;
     }
 
-    public List<Item> toItem() {
-        return this.itemList.stream().map(
-            itemRequest -> Item.builder()
-                .startPrice(itemRequest.getStartPrice())
-                .name(itemRequest.getName())
-                .description(itemRequest.getDescription())
-                .itemState(ItemState.PRE_AUCTION)
-                .itemCategory(itemRequest.getItemCategory())
-                .ordering(itemRequest.getOrdering())
-                .build()
-        ).collect(Collectors.toList());
-    }
-    public AuctionRoom toEntity() {
-        return AuctionRoom.builder()
-            .name(this.auctionTitle)
-            .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
-            .auctionRoomType(this.auctionRoomType) // TODO enumerate string으로 바로 들어오는가? 안들어오면 변환해줘야함
-            .build();
-    }
+//    public List<Item> toItem() {
+//        return this.itemList.stream().map(
+//            itemRequest -> Item.builder()
+//                .startPrice(itemRequest.getStartPrice())
+//                .name(itemRequest.getName())
+//                .description(itemRequest.getDescription())
+//                .itemState(ItemState.PRE_AUCTION)
+//                .itemCategory()
+//                .ordering(itemRequest.getOrdering())
+//                .build()
+//        ).collect(Collectors.toList());
+//    }
+//    public List<Item> toItem() {
+//        return this.itemList.stream().map(
+//            itemRequest -> Item.create(
+//                .startPrice(itemRequest.getStartPrice())
+//                .name(itemRequest.getName())
+//                .description(itemRequest.getDescription())
+//                .itemCategory(itemRequest.getItemCategory())
+//                .ordering(itemRequest.getOrdering())
+//                );
+//        ).collect(Collectors.toList());
+//    }
+
 }

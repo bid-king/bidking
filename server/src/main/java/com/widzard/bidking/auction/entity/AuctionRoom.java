@@ -5,8 +5,10 @@ import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.member.entity.Member;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -57,21 +59,24 @@ public class AuctionRoom extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AuctionRoomType auctionRoomType; // (경매방식)
 
+    private LocalDateTime startedAt; //경매방 시작시간
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image image; // (썸네일)
+
 
     public void setImage(Image image) {
         this.image = image;
     }
 
     public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
-        AuctionRoomTradeState auctionRoomTradeState, AuctionRoomType auctionRoomType, Image image) {
+        AuctionRoomTradeState auctionRoomTradeState, AuctionRoomType auctionRoomType, LocalDateTime startedAt) {
         this.seller = seller;
         this.name = name;
         this.auctionRoomLiveState = auctionRoomLiveState;
         this.auctionRoomTradeState = auctionRoomTradeState;
         this.auctionRoomType = auctionRoomType;
-        this.image = image;
+        this.startedAt = startedAt;
     }
 }

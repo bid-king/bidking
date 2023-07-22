@@ -1,6 +1,5 @@
 package com.widzard.bidking.auction.dto.request;
 
-import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -18,13 +17,13 @@ public class ItemCreateRequest {
     private String description;// (설명)
 
     @NotNull(message = "카테고리를 선택하세요")
-    private ItemCategory itemCategory;//(카테고리)
+    private Long itemCategory;//(카테고리)
 
     @NotNull(message = "순서를 입력하세요")
     private int ordering;// (순서)
 
     public ItemCreateRequest(Long startPrice, String name, String description,
-        ItemCategory itemCategory, int ordering) {
+        Long itemCategory, int ordering) {
         this.startPrice = startPrice;
         this.name = name;
         this.description = description;
@@ -47,7 +46,7 @@ public class ItemCreateRequest {
         return description;
     }
 
-    public ItemCategory getItemCategory() {
+    public Long getItemCategory() {
         return itemCategory;
     }
 
