@@ -99,18 +99,22 @@ public class AuctionServiceImpl implements AuctionService {
             .startedAt(toLocalDateTime(request.getStartedAt()))
             .build();
 
-        request.getItemList().stream().map(
-            r -> Item.create(
-                auctionRoom,
-                r.getStartPrice(),
-                r.getName(),
-                r.getDescription(),
-                itemCategoryRepository.findById(r.getItemCategory()),
-                r.getOrdering()
-            )
+        AuctionRoom savedAuctionRoom = auctionRoomRepository.save(auctionRoom);
+
+        request.getItemList().forEach(
+            r -> {
+                Item item = Item.create(
+                    auctionRoom,
+                    r.getStartPrice(),
+                    r.getName(),
+                    r.getDescription(),
+                    itemCategoryRepository.findById(r.getItemCategory()),
+                    r.getOrdering()
+                );
+                itemRepository.save(item);
+            }
         );
 
-        AuctionRoom savedAuctionRoom = auctionRoomRepository.save(auctionRoom);
         log.info(String.valueOf(savedAuctionRoom));
         return savedAuctionRoom;
     }
