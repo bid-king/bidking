@@ -8,6 +8,8 @@ public interface ImageService {
 
 
     //파일 리스트 업로드
-    public List<String> uploadImage(MultipartFile[] multipartFileList) throws IOException;
+    public List<String> uploadImageList(MultipartFile[] multipartFileList) throws IOException;
+
+    public String uploadImage(MultipartFile multipartFile) throws IOException;
 
 }

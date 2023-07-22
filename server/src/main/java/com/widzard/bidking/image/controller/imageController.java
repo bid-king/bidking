@@ -21,7 +21,8 @@ public class imageController {
         if (multipartFileList == null) {
             throw new RuntimeException();
         }
-        List<String> imagePathList = imageService.uploadImage(multipartFileList);
+        List<String> imagePathList = imageService.uploadImageList(multipartFileList);
+//        String imagePathList = imageService.uploadImage(multipartFileList);
         return new ResponseEntity<Object>(imagePathList, HttpStatus.OK);
     }
 }
