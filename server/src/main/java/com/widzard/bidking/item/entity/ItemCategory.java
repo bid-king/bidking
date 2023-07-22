@@ -24,13 +24,7 @@ public class ItemCategory extends BaseEntity {
 
     private String name;// (카테명)
 
-    // TODO
-//    @OneToMany(mappedBy = "itemCategory")
-//    private List<Item> itemList = new ArrayList<>();// (상품코드, Item)
-//
-//
 
-    // TODO Test
     public ItemCategory(Long id, String name) {
         this.id = id;
         this.name = name;

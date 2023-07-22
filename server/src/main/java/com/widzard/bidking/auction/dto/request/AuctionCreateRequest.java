@@ -7,13 +7,16 @@ import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionCreateRequest {
 
     @NotBlank(message = "경매방 제목을 입력하세요")
     private String auctionTitle; //경매방 제목
 
-    @NotBlank(message = "시작 시간을 입력하세요")
+    @NotNull(message = "시작 시간을 입력하세요")
     private String startedAt; //경매방 시작시간
 
     @NotNull(message = "경매 방식을 선택하세요")
@@ -28,20 +31,6 @@ public class AuctionCreateRequest {
     @Valid
     private List<ItemCreateRequest> itemList = new ArrayList<>(); // 상품 리스트
 
-    public AuctionCreateRequest() {
-    }
-
-    public AuctionCreateRequest(String auctionTitle, String startedAt,
-        AuctionRoomType auctionRoomType, Boolean itemPermissionChecked,
-        Boolean deliveryRulesChecked,
-        List<ItemCreateRequest> itemList) {
-        this.auctionTitle = auctionTitle;
-        this.startedAt = startedAt;
-        this.auctionRoomType = auctionRoomType;
-        this.itemPermissionChecked = itemPermissionChecked;
-        this.deliveryRulesChecked = deliveryRulesChecked;
-        this.itemList = itemList;
-    }
 
     public String getAuctionTitle() {
         return auctionTitle;
@@ -67,28 +56,5 @@ public class AuctionCreateRequest {
         return itemList;
     }
 
-//    public List<Item> toItem() {
-//        return this.itemList.stream().map(
-//            itemRequest -> Item.builder()
-//                .startPrice(itemRequest.getStartPrice())
-//                .name(itemRequest.getName())
-//                .description(itemRequest.getDescription())
-//                .itemState(ItemState.PRE_AUCTION)
-//                .itemCategory()
-//                .ordering(itemRequest.getOrdering())
-//                .build()
-//        ).collect(Collectors.toList());
-//    }
-//    public List<Item> toItem() {
-//        return this.itemList.stream().map(
-//            itemRequest -> Item.create(
-//                .startPrice(itemRequest.getStartPrice())
-//                .name(itemRequest.getName())
-//                .description(itemRequest.getDescription())
-//                .itemCategory(itemRequest.getItemCategory())
-//                .ordering(itemRequest.getOrdering())
-//                );
-//        ).collect(Collectors.toList());
-//    }
 
 }

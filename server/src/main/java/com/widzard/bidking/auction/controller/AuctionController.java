@@ -1,7 +1,7 @@
 package com.widzard.bidking.auction.controller;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
-import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.exception.InvalidAuctionRoomRequestException;
 import com.widzard.bidking.auction.service.AuctionService;
 import com.widzard.bidking.global.entity.Address;
@@ -30,7 +30,7 @@ public class AuctionController {
 
     // TODO token으로 user 정보 받아야 함. (login check: 본인인증 된 유저)
     @PostMapping
-    public ResponseEntity<Long> createAuction(
+    public ResponseEntity<AuctionCreateResponse> createAuction(
         @RequestBody @Valid AuctionCreateRequest auctionCreateRequest,
         BindingResult bindingResult) {
 
@@ -49,8 +49,10 @@ public class AuctionController {
         if (bindingResult.hasErrors()) {
             throw new InvalidAuctionRoomRequestException();
         }
+        
+        AuctionCreateResponse response = auctionService.createAuctionRoom(tempMember,
+            auctionCreateRequest);
+        return new ResponseEntity<AuctionCreateResponse>(response, HttpStatus.OK);
 
-        AuctionRoom result = auctionService.createAuctionRoom(tempMember, auctionCreateRequest);
-        return new ResponseEntity<Long>(result.getId(), HttpStatus.OK);
     }
 }

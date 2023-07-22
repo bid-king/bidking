@@ -2,18 +2,21 @@ package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
+import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
+import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.image.entity.repository.ImageRepository;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
-import com.widzard.bidking.item.entity.repository.ItemCategoryRepository;
-import com.widzard.bidking.item.entity.repository.ItemRepository;
+import com.widzard.bidking.item.repository.ItemCategoryRepository;
+import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,16 +42,17 @@ public class AuctionServiceImpl implements AuctionService {
         this.imageRepository = imageRepository;
     }
 
-    @Override
-    public AuctionRoom readAuctionRoom(Long id) {
-        return auctionRoomRepository.findAuctionRoomById(id);
-    }
 
     @Transactional
     @Override
-    public AuctionRoom createAuctionRoom(Member member, AuctionCreateRequest request) {
+    public AuctionCreateResponse createAuctionRoom(Member member, AuctionCreateRequest request) {
 
-        // ItemCategory 테스트용
+        //시작시간 예외 로직
+        LocalDateTime now = LocalDateTime.now();
+        if (toLocalDateTime(request.getStartedAt()).isBefore(now.plusHours(1))) {
+            throw new AuctionStartTimeInvalidException();
+        }
+        //TODO ItemCategory 테스트용
         itemCategoryRepository.save(new ItemCategory(0L, "전자기기"));
 
         AuctionRoom auctionRoom = AuctionRoom.builder()
@@ -62,24 +66,32 @@ public class AuctionServiceImpl implements AuctionService {
         AuctionRoom savedAuctionRoom = auctionRoomRepository.save(auctionRoom);
         List<ItemCreateRequest> itemCreateRequestList = request.getItemList();
 
-        if (itemCreateRequestList == null) {
+        if (itemCreateRequestList == null || itemCreateRequestList.size() == 0) {
             throw new RuntimeException("아이템이 하나도 없습니다");//TODO EmptyItemListException 추가 후 주석 해제
         }
         itemCreateRequestList.forEach(
             r -> {
+                Optional<ItemCategory> itemCategoryOptional = itemCategoryRepository.findById(
+                    r.getItemCategory());
+                if (itemCategoryOptional.isEmpty()) {
+                    //TODO ItemNotFoundException으로 변경
+                    throw new RuntimeException("ItemNotFoundException");
+                }
+                ItemCategory itemCategory = itemCategoryOptional.get();
                 Item item = Item.create(
                     auctionRoom,
                     r.getStartPrice(),
                     r.getName(),
                     r.getDescription(),
-                    itemCategoryRepository.getOne(r.getItemCategory()),
+                    itemCategory,
                     r.getOrdering()
                 );
                 itemRepository.save(item);
             }
         );
-
-        return savedAuctionRoom;
+        return AuctionCreateResponse.builder()
+            .id(savedAuctionRoom.getId())
+            .build();
     }
 
     private LocalDateTime toLocalDateTime(String str) {

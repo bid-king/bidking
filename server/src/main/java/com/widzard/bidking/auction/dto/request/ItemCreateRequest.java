@@ -2,8 +2,12 @@ package com.widzard.bidking.auction.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 // TODO 이미지
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemCreateRequest {
 
     @NotNull(message = "시작가를 입력하세요")
@@ -21,6 +25,7 @@ public class ItemCreateRequest {
     @NotNull(message = "순서를 입력하세요")
     private int ordering;// (순서)
 
+    @Builder
     public ItemCreateRequest(Long startPrice, String name, String description,
         Long itemCategory, int ordering) {
         this.startPrice = startPrice;
@@ -30,8 +35,6 @@ public class ItemCreateRequest {
         this.ordering = ordering;
     }
 
-    public ItemCreateRequest() {
-    }
 
     public Long getStartPrice() {
         return startPrice;

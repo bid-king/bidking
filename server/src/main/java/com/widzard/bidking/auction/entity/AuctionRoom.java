@@ -26,7 +26,6 @@ import lombok.ToString;
 
 @Getter
 @Entity
-@Builder
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -61,6 +60,7 @@ public class AuctionRoom extends BaseEntity {
     private Image image; // (썸네일)
 
 
+    @Builder
     //TODO member 추가 후 주석 해제
 //    public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
     public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
@@ -74,7 +74,4 @@ public class AuctionRoom extends BaseEntity {
         this.startedAt = startedAt;
     }
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
 }

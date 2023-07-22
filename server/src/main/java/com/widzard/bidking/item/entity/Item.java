@@ -52,20 +52,7 @@ public class Item extends BaseEntity {
     private ItemCategory itemCategory;//(카테고리)
 
     private int ordering;// (순서)
-
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "image_id")
-//    private Image image;// (대표이미지)
-
-//    public void setAuctionRoom(AuctionRoom auctionRoom) {
-//        this.auctionRoom = auctionRoom;
-//        auctionRoom.getItemList().add(this);
-//    }
-
-//    public void setItemCategory(ItemCategory itemCategory) {
-//        this.itemCategory = itemCategory;
-//        itemCategory.getItemList().add(this);
-//    }
+    
 
     public static Item create(
         AuctionRoom auctionRoom,
