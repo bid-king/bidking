@@ -1,6 +1,7 @@
 package com.widzard.bidking.config;
 
 import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,15 +26,19 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors().configurationSource(corsConfigurationSource())
+            .cors().configurationSource(corsConfigurationSource)
             .and()
             .csrf().disable()
             .httpBasic().disable() // 토큰 사용하므로 basic disable
+            .formLogin().disable() // 토큰 사용하므로 form login disable
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -42,9 +47,6 @@ public class SecurityConfig {
                 "/api/v1/members/signup", "/api/v1/items/categories").permitAll()
             .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
             .anyRequest().authenticated()
-            .and()
-            .formLogin()
-            .loginPage("/api/v1/members/login")
             .and()
             .logout()
             .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/members/logout"));
@@ -61,14 +63,13 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOriginPattern("*"); //TODO System.getenv("CLIENT_URL")
-        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE"));
-        configuration.addAllowedHeader("*");
-        // Cross Origin 에 요청을 보낼 때 요청에 인증(credential) 정보를 담아서 보낼 수 있는지 결정하는 항목
-        configuration.setAllowCredentials(true);
+        configuration.addAllowedOriginPattern("*"); //TODO System.getenv("CLIENT_URL") 응답을 허용할 ip
+        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE")); // 응답을 허용할 http method
+        configuration.addAllowedHeader("*"); // 모든 header 허용
+        configuration.setAllowCredentials(true); // 서버가 응답을 할 때 json을 자바스크립트에서 처리할 수 있게 할지 여부
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/api/**", configuration);
 
         return source;
     }
