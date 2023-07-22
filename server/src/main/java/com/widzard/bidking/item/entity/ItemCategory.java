@@ -8,12 +8,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "item_category")
 public class ItemCategory extends BaseEntity {
 
@@ -23,10 +25,4 @@ public class ItemCategory extends BaseEntity {
     private Long id;
 
     private String name;// (카테명)
-
-
-    public ItemCategory(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }
