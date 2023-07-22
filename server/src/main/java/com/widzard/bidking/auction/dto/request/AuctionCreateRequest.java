@@ -8,8 +8,10 @@ import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionCreateRequest {
 
@@ -30,31 +32,6 @@ public class AuctionCreateRequest {
 
     @Valid
     private List<ItemCreateRequest> itemList = new ArrayList<>(); // 상품 리스트
-
-
-    public String getAuctionTitle() {
-        return auctionTitle;
-    }
-
-    public String getStartedAt() {
-        return startedAt;
-    }
-
-    public AuctionRoomType getAuctionRoomType() {
-        return auctionRoomType;
-    }
-
-    public Boolean getItemPermissionChecked() {
-        return itemPermissionChecked;
-    }
-
-    public Boolean getDeliveryRulesChecked() {
-        return deliveryRulesChecked;
-    }
-
-    public List<ItemCreateRequest> getItemList() {
-        return itemList;
-    }
 
 
 }

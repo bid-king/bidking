@@ -4,9 +4,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 // TODO 이미지
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemCreateRequest {
 
@@ -33,27 +35,6 @@ public class ItemCreateRequest {
         this.description = description;
         this.itemCategory = itemCategory;
         this.ordering = ordering;
-    }
-
-
-    public Long getStartPrice() {
-        return startPrice;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Long getItemCategory() {
-        return itemCategory;
-    }
-
-    public int getOrdering() {
-        return ordering;
     }
 
 
