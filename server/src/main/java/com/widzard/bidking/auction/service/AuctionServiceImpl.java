@@ -39,10 +39,10 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public AuctionRoom createAuctionRoom(AuctionCreateRequest auctionCreateRequest) {
+    public AuctionRoom createAuctionRoom(AuctionCreateRequest request) {
 
         LocalDateTime now = LocalDateTime.now();
-        if (auctionCreateRequest.getStartedAt().isBefore(now.plusHours(1))) {
+        if (request.getStartedAt().isBefore(now.plusHours(1))) {
             throw new AuctionStartTimeInvalidException();
         }
 
@@ -69,13 +69,15 @@ public class AuctionServiceImpl implements AuctionService {
         AuctionRoom auctionRoom = AuctionRoom.builder()
 //TODO 경매방 판매자 id받아오기
 //            .seller(tempMember)
-            .name(auctionCreateRequest.getAuctionTitle())
+            .name(request.getAuctionTitle())
             .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
             .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
-            .auctionRoomType(auctionCreateRequest.getAuctionRoomType())
+            .auctionRoomType(request.getAuctionRoomType())
 //            .image(tempImage)
             .build();
         auctionRoom = auctionRoomRepository.save(auctionRoom);
+
+
 
         return auctionRoom;
     }

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/v1/auctions")
+@RequestMapping("/api/v1/auctions/")
 public class AuctionController {
 
     private final AuctionService auctionService;
@@ -25,8 +25,10 @@ public class AuctionController {
         this.auctionService = auctionService;
     }
 
+    // TODO token으로 user 정보 받아야 함. (login check: 본인인증 된 유저)
     @PostMapping("/")
     public ResponseEntity<?> createAuction(
+
         @RequestBody @Valid AuctionCreateRequest auctionCreateRequest,
         BindingResult bindingResult) {
 
