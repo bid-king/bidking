@@ -7,14 +7,11 @@ import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.global.entity.Address;
-import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.image.entity.repository.ImageRepository;
-import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.entity.MemberRole;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,7 +85,9 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public AuctionRoom createAuctionRoom(Long memberId, AuctionCreateRequest request) {
+    public AuctionRoom createAuctionRoom(Long sellerId, AuctionCreateRequest request) {
+        AuctionRoom auctionRoom = request.toEntity();
+        auctionRoomRepository.save(auctionRoom);
 
         return null;
     }

@@ -64,4 +64,14 @@ public class AuctionRoom extends BaseEntity {
     public void setImage(Image image) {
         this.image = image;
     }
+
+    public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
+        AuctionRoomTradeState auctionRoomTradeState, AuctionRoomType auctionRoomType, Image image) {
+        this.seller = seller;
+        this.name = name;
+        this.auctionRoomLiveState = auctionRoomLiveState;
+        this.auctionRoomTradeState = auctionRoomTradeState;
+        this.auctionRoomType = auctionRoomType;
+        this.image = image;
+    }
 }

@@ -1,18 +1,17 @@
 package com.widzard.bidking.auction.dto.request;
 
+import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.item.entity.Item;
+import com.widzard.bidking.item.entity.ItemState;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 public class AuctionCreateRequest {
 
@@ -71,5 +70,25 @@ public class AuctionCreateRequest {
 
     public List<ItemCreateRequest> getItemList() {
         return itemList;
+    }
+
+    public List<Item> toItem() {
+        return this.itemList.stream().map(
+            itemRequest -> Item.builder()
+                .startPrice(itemRequest.getStartPrice())
+                .name(itemRequest.getName())
+                .description(itemRequest.getDescription())
+                .itemState(ItemState.PRE_AUCTION)
+                .itemCategory(itemRequest.getItemCategory())
+                .ordering(itemRequest.getOrdering())
+                .build()
+        ).collect(Collectors.toList());
+    }
+    public AuctionRoom toEntity() {
+        return AuctionRoom.builder()
+            .name(this.auctionTitle)
+            .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
+            .auctionRoomType(this.auctionRoomType) // TODO enumerate string으로 바로 들어오는가? 안들어오면 변환해줘야함
+            .build();
     }
 }
