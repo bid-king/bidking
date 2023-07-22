@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.widzard.bidking.image.entity.Image;
+import com.widzard.bidking.image.entity.repository.ImageRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ImageServiceImpl implements ImageService {
 
     private final AmazonS3 amazonS3;
+    private final ImageRepository imageRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -50,6 +53,11 @@ public class ImageServiceImpl implements ImageService {
             String imagePath = amazonS3.getUrl(bucket, originalName)
                 .toString(); // 접근가능한 URL
             imagePathList.add(imagePath);
+            Image image = Image.builder()
+                .filePath(imagePath)
+//                .fileName() 필요 없을듯?
+                .build();
+            imageRepository.save(image);
         }
         return imagePathList;
     }
@@ -64,6 +72,13 @@ public class ImageServiceImpl implements ImageService {
 
         amazonS3.putObject(bucket, originalName, multipartFile.getInputStream(),
             metadata);
-        return amazonS3.getUrl(bucket, originalName).toString();
+        String imagePath = amazonS3.getUrl(bucket, originalName).toString();
+        Image image = Image.builder()
+            .filePath(imagePath)
+//                .fileName() 필요 없을듯?
+            .build();
+        imageRepository.save(image);
+
+        return imagePath;
     }
 }
