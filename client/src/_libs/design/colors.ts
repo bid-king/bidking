@@ -7,6 +7,8 @@ const black = '#333333';
 
 export default {
   //Theme Colors
+  light: black,
+  dark: white,
   white,
   confirm,
   warn,
