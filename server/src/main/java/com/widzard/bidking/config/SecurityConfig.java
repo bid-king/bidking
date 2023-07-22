@@ -17,7 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /*
 로그인 인증이 필요 없는 경우
-- 로그인, 회원가입, 로그아웃, 카테고리 리스트
+- 로그인, 회원가입, 로그아웃, 유저 닉네임/아이디 체크, 카테고리 리스트
 - 경매 진행 예정, 경매 진행 중 리스트
 
 로그인 인증이 필요함
@@ -38,7 +38,7 @@ public class SecurityConfig {
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-            .antMatchers("/api/v1/members/login", "/api/v1/members/logout",
+            .antMatchers("/api/v1/members/login", "/api/v1/members/logout", "/api/v1/members/check/**",
                 "/api/v1/members/signup", "/api/v1/items/categories").permitAll()
             .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
             .anyRequest().authenticated()

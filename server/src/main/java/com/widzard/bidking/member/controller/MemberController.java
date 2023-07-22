@@ -2,6 +2,7 @@ package com.widzard.bidking.member.controller;
 
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.UserIdRequest;
+import com.widzard.bidking.member.dto.request.UserNicknameRequest;
 import com.widzard.bidking.member.dto.response.MemberCheckResponse;
 import com.widzard.bidking.member.dto.response.MemberCreateResponse;
 import com.widzard.bidking.member.entity.Member;
@@ -23,7 +24,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/signup")
+    @PostMapping("/signup")
     public ResponseEntity<MemberCreateResponse> signup(@RequestBody @Valid MemberFormRequest request) {
         Member savedMember = memberService.signup(request);
         return new ResponseEntity<>(MemberCreateResponse.from(savedMember), HttpStatus.OK);
@@ -32,6 +33,12 @@ public class MemberController {
     @PostMapping("/check/userId")
     public ResponseEntity<MemberCheckResponse> checkUserId(@RequestBody @Valid UserIdRequest request) {
         boolean isDuplicated = memberService.checkUserId(request.getUserId());
+        return new ResponseEntity<>(MemberCheckResponse.from(isDuplicated), HttpStatus.OK);
+    }
+
+    @PostMapping("/check/nickname")
+    public ResponseEntity<MemberCheckResponse> checkNickname(@RequestBody @Valid UserNicknameRequest request) {
+        boolean isDuplicated = memberService.checkNickname(request.getNickname());
         return new ResponseEntity<>(MemberCheckResponse.from(isDuplicated), HttpStatus.OK);
     }
 

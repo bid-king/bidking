@@ -22,7 +22,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Entity
@@ -35,7 +34,7 @@ public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
-    private Long id; // 객체상 쓸 것
+    private Long id; // 멤버 식별자
 
     @Column(unique = true, nullable = false)
     private String userId; // 유저 아이디
@@ -43,31 +42,34 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String password; // 유저 패스워드
 
-    private String nickname; //( 닉네임 )
+    @Column(unique = true, nullable = false)
+    private String nickname; // 닉네임
 
-    private String phoneNumber; //( 핸드폰 번호 )
+    private String phoneNumber; // 핸드폰 번호
 
     @Embedded
-    private Address address; //( 기본배송지 )
+    private Address address; // 기본배송지
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
-    private Image image; //( 프사 )
+    private Image image; // 프로필 사진
 
-    private boolean available; //( 상태 )
+    private boolean available; // 활성화 여부 (탈퇴 시 false)
 
     @Enumerated(EnumType.STRING)
-    private MemberRole memberRole; //(역할)
+    private MemberRole memberRole; // 역할
 
     private int penalty;
 
     public static Member createMember(MemberFormRequest request, String encodedPassword) {
         return Member.builder()
             .userId(request.getUserId())
+            .nickname(request.getNickname())
             .password(encodedPassword)
             .address(request.getAddress())
             .phoneNumber(request.getPhoneNumber())
             .memberRole(MemberRole.USER)
+            .available(true)
             .build();
     }
 }

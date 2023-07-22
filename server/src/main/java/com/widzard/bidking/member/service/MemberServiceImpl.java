@@ -22,7 +22,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public Member signup(MemberFormRequest request) {
-        validateDuplicatedMember(request.getUserId());
+        validateDuplicatedMember(request);
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         Member member = Member.createMember(request, encodedPassword);
         return memberRepository.save(member);
@@ -37,12 +37,20 @@ public class MemberServiceImpl implements MemberService {
     }
 
     /*
-     * 기존 회원 정보 확인
-     * 유저 아이디를 unique한 값으로 지정하였기 때문에 userId 존재 여부로 이미 존재하는 회원인지를 판단하는 메서드
-     * api 분리와 exception / response 처리를 위해 별도의 메서드로 분리하였습니다.
+     * 닉네임 중복 검사
      */
-    private void validateDuplicatedMember(String userId) {
-        if (memberRepository.existsByUserId(userId)) {
+    @Override
+    public boolean checkNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
+
+    /*
+     * 기존 회원 정보 확인
+     * 유저 아이디 및 닉네임을 unique한 값으로 지정하였기 때문에 존재 여부로 이미 존재하는 회원인지를 판단하는 메서드
+     * 회원가입 전에 유저 아이디, 유저 닉네임 검증 메서드가 있지만 최종 회원가입 시 한 번 더 검증해야 합니다.
+     */
+    private void validateDuplicatedMember(MemberFormRequest request) {
+        if (checkUserId(request.getUserId()) || checkNickname(request.getNickname())) {
             throw new MemberDuplicatedException();
         }
     }

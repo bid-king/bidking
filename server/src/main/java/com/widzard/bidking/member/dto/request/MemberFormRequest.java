@@ -11,7 +11,10 @@ public class MemberFormRequest {
     @NotBlank(message = "아이디를 입력해주세요.")
     private String userId;
 
-    @NotBlank(message = "비밀번호를 입력해주세요") //TODO 비밀번호 형식 논의 필요
+    @NotBlank(message = "닉네임을 입력해주세요.")
+    private String nickname;
+
+    @NotBlank(message = "비밀번호를 입력해주세요")
     @Length(min = 8, max = 16, message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.")
     private String password; // 유저 패스워드
 

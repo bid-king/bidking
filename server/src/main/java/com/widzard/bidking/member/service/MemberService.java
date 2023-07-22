@@ -8,4 +8,6 @@ public interface MemberService {
     Member signup(MemberFormRequest entity);
 
     boolean checkUserId(String userId);
+
+    boolean checkNickname(String nickname);
 }
