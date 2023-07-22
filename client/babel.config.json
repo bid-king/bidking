@@ -1,14 +1,18 @@
 {
+  "plugins": [
+    "@emotion",
+    "@babel/plugin-proposal-optional-chaining",
+    "@babel/plugin-proposal-nullish-coalescing-operator"
+  ],
   "presets": [
     [
-      "@babel/preset-env",
+      "@babel/preset-react",
       {
-        "useBuiltIns": "usage",
-        "corejs": 3
+        "runtime": "automatic",
+        "importSource": "@emotion/react"
       }
     ],
-    "@babel/preset-react",
-    "@babel/preset-typescript",
-    "@emotion/babel-preset-css-prop"
+    ["@babel/preset-env", { "targets": { "node": "current" } }],
+    "@babel/preset-typescript"
   ]
 }
