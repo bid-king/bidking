@@ -86,4 +86,10 @@ public class AuctionServiceImpl implements AuctionService {
     public AuctionRoom readAuctionRoom(Long id) {
         return auctionRoomRepository.findAuctionRoomById(id);
     }
+
+    @Override
+    public AuctionRoom createAuctionRoom(Long memberId, AuctionCreateRequest request) {
+
+        return null;
+    }
 }

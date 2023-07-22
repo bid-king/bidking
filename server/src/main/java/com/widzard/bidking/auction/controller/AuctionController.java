@@ -4,6 +4,7 @@ import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.exception.InvalidAuctionRoomRequestException;
 import com.widzard.bidking.auction.service.AuctionService;
+import com.widzard.bidking.member.entity.Member;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,8 @@ public class AuctionController {
 
     // TODO token으로 user 정보 받아야 함. (login check: 본인인증 된 유저)
     @PostMapping("/")
-    public ResponseEntity<?> createAuction(
-
+    public ResponseEntity<Long> createAuction(
+        Member member,
         @RequestBody @Valid AuctionCreateRequest auctionCreateRequest,
         BindingResult bindingResult) {
 
@@ -36,7 +37,7 @@ public class AuctionController {
             throw new InvalidAuctionRoomRequestException();
         }
 
-        AuctionRoom result = auctionService.createAuctionRoom(auctionCreateRequest);
+        AuctionRoom result = auctionService.createAuctionRoom(member.getId(), auctionCreateRequest);
         return new ResponseEntity<Long>(result.getId(), HttpStatus.OK);
     }
 }

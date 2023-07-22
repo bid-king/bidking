@@ -9,4 +9,6 @@ public interface AuctionService {
     public AuctionRoom createAuctionRoom(AuctionCreateRequest auctionCreateRequest);
 
     public AuctionRoom readAuctionRoom(Long id);
+
+    AuctionRoom createAuctionRoom(Long id, AuctionCreateRequest auctionCreateRequest);
 }
