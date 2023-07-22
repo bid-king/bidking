@@ -1,4 +1,4 @@
-import { http } from './_http';
+import { http } from '../_libs/util/http';
 
 export default {
   get: () => http.get('/api/v1/auctions'),
@@ -10,7 +10,6 @@ export default {
   delete: (auctionId: number) => http.delete(`/api/v1/auctions/${auctionId}`),
   //경매 삭제
 };
-
 interface AuctionCreateRequest {
   auctionTitle: string;
   startedAt: string;

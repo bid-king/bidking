@@ -1,4 +1,4 @@
-import { http } from './_http';
+import { http } from '../_libs/util/http';
 
 export default {
   get: (data: AuctionListRequest) => http.post('/api/v1/auctions', data),
