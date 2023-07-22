@@ -15,22 +15,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+/*
+로그인 인증이 필요 없는 경우
+- 로그인, 회원가입, 로그아웃, 카테고리 리스트
+- 경매 진행 예정, 경매 진행 중 리스트
+
+로그인 인증이 필요함
+- 나머지 모든 기능
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    /*
-    로그인 인증이 필요 없는 경우
-    - 로그인, 회원가입, 카테고리 리스트
-    - 경매 진행 예정, 경매 진행 중 리스트
-
-    로그인 인증이 필요함
-    - 나머지 기능
-
-    auth 이상의 권한이 필요한 경우
-    - 경매방 생성
-    - 경매방 참여
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
