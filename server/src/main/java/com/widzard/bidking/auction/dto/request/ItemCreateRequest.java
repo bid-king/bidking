@@ -1,6 +1,5 @@
 package com.widzard.bidking.auction.dto.request;
 
-import com.widzard.bidking.item.entity.ItemCategory;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 

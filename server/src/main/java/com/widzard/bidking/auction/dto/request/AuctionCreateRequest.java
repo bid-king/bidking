@@ -1,15 +1,7 @@
 package com.widzard.bidking.auction.dto.request;
 
-import com.widzard.bidking.auction.entity.AuctionRoom;
-import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
-import com.widzard.bidking.item.entity.Item;
-import com.widzard.bidking.item.entity.ItemCategory;
-import com.widzard.bidking.item.entity.ItemState;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;

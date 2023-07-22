@@ -3,12 +3,8 @@ package com.widzard.bidking.auction.entity;
 
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
-import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.member.entity.Member;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -71,7 +66,8 @@ public class AuctionRoom extends BaseEntity {
     }
 
     public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
-        AuctionRoomTradeState auctionRoomTradeState, AuctionRoomType auctionRoomType, LocalDateTime startedAt) {
+        AuctionRoomTradeState auctionRoomTradeState, AuctionRoomType auctionRoomType,
+        LocalDateTime startedAt) {
         this.seller = seller;
         this.name = name;
         this.auctionRoomLiveState = auctionRoomLiveState;
