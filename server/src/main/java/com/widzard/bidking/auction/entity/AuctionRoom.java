@@ -14,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -39,9 +38,10 @@ public class AuctionRoom extends BaseEntity {
     @Column(name = "auction_room_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member seller; //
+    //TODO member 추가 후 주석 해제
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "member_id")
+//    private Member seller; //
 
     private String name; //(방이름)
 
@@ -61,18 +61,20 @@ public class AuctionRoom extends BaseEntity {
     private Image image; // (썸네일)
 
 
-    public void setImage(Image image) {
-        this.image = image;
-    }
-
+    //TODO member 추가 후 주석 해제
+//    public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
     public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
         AuctionRoomTradeState auctionRoomTradeState, AuctionRoomType auctionRoomType,
         LocalDateTime startedAt) {
-        this.seller = seller;
+//        this.seller = seller;//TODO member 추가 후 주석 해제
         this.name = name;
         this.auctionRoomLiveState = auctionRoomLiveState;
         this.auctionRoomTradeState = auctionRoomTradeState;
         this.auctionRoomType = auctionRoomType;
         this.startedAt = startedAt;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }

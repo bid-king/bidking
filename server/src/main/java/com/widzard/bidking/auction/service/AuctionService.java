@@ -6,7 +6,7 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.member.entity.Member;
 
 public interface AuctionService {
-
+//TODO 삭제예정
 //    public AuctionRoom createAuctionRoom(AuctionCreateRequest auctionCreateRequest);
 
     public AuctionRoom readAuctionRoom(Long id);

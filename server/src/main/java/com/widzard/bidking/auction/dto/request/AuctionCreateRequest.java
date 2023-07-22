@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.dto.request;
 
 import com.widzard.bidking.auction.entity.AuctionRoomType;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
@@ -25,7 +26,7 @@ public class AuctionCreateRequest {
     private Boolean deliveryRulesChecked; // 배송 규정 확인 여부
 
     @Valid
-    private List<ItemCreateRequest> itemList; // 상품 리스트
+    private List<ItemCreateRequest> itemList = new ArrayList<>(); // 상품 리스트
 
     public AuctionCreateRequest() {
     }
