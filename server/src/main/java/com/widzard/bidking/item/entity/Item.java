@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,10 +59,10 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image;// (대표이미지)
 
-    public void setAuctionRoom(AuctionRoom auctionRoom) {
-        this.auctionRoom = auctionRoom;
-        auctionRoom.getItemList().add(this);
-    }
+//    public void setAuctionRoom(AuctionRoom auctionRoom) {
+//        this.auctionRoom = auctionRoom;
+//        auctionRoom.getItemList().add(this);
+//    }
 
     public void setItemCategory(ItemCategory itemCategory) {
         this.itemCategory = itemCategory;
