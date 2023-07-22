@@ -47,7 +47,6 @@ public class AuctionServiceImpl implements AuctionService {
         Address tempAddress = new Address("asd", "asd", "asd");
         Member tempMember = Member.builder()
             .id(1L)
-            .email("asd")
             .address(tempAddress)
             .memberRole(MemberRole.USER)
             .nickname("asd")

@@ -4,12 +4,15 @@ package com.widzard.bidking.member.entity;
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
+import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -19,6 +22,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Entity
@@ -33,7 +37,11 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id; // 객체상 쓸 것
 
-    private String name;
+    @Column(unique = true, nullable = false)
+    private String userId; // 유저 아이디
+
+    @Column(nullable = false)
+    private String password; // 유저 패스워드
 
     private String nickname; //( 닉네임 )
 
@@ -41,8 +49,6 @@ public class Member extends BaseEntity {
 
     @Embedded
     private Address address; //( 기본배송지 )
-
-    private String email; //( 메일 )
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
@@ -54,4 +60,14 @@ public class Member extends BaseEntity {
     private MemberRole memberRole; //(역할)
 
     private int penalty;
+
+    public static Member createMember(MemberFormRequest request, String encodedPassword) {
+        return Member.builder()
+            .userId(request.getUserId())
+            .password(encodedPassword)
+            .address(request.getAddress())
+            .phoneNumber(request.getPhoneNumber())
+            .memberRole(MemberRole.USER)
+            .build();
+    }
 }
