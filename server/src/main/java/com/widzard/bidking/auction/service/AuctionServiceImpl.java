@@ -9,12 +9,10 @@ import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.image.entity.repository.ImageRepository;
-import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.entity.MemberRole;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,13 +46,10 @@ public class AuctionServiceImpl implements AuctionService {
 
         Address tempAddress = new Address("asd", "asd", "asd");
         Member tempMember = Member.builder()
-            .birth("asd123")
-
             .id(1L)
             .email("asd")
             .address(tempAddress)
             .memberRole(MemberRole.USER)
-            .gender("asd")
             .nickname("asd")
             .phoneNumber("asd")
             .available(true)
