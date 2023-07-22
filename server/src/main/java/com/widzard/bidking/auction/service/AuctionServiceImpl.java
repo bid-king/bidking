@@ -48,25 +48,23 @@ public class AuctionServiceImpl implements AuctionService {
 
         Address tempAddress = new Address("asd", "asd", "asd");
         Member tempMember = Member.builder()
-            .birth("asd123")
-
             .id(1L)
             .email("asd")
             .address(tempAddress)
             .memberRole(MemberRole.USER)
-            .gender("asd")
             .nickname("asd")
             .phoneNumber("asd")
             .available(true)
             .build();
 
-        Image tempImage = Image.builder()
-            .id(1L)
-            .fileName("asd.jpg")
-            .filePath("asd/asd")
-//            .member(tempMember)
-            .build();
-        tempImage = imageRepository.save(tempImage);
+        //이미지는 이후에 작업하기로함
+//        Image tempImage = Image.builder()
+//            .id(1L)
+//            .fileName("asd.jpg")
+//            .filePath("asd/asd")
+////            .member(tempMember)
+//            .build();
+//        tempImage = imageRepository.save(tempImage);
 
         AuctionRoom auctionRoom = AuctionRoom.builder()
 //TODO 경매방 판매자 id받아오기
