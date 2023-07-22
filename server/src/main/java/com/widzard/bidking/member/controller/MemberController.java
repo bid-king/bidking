@@ -33,7 +33,6 @@ public class MemberController {
     public ResponseEntity<MemberCheckResponse> checkUserId(@RequestBody @Valid UserIdRequest request) {
         boolean isDuplicated = memberService.checkUserId(request.getUserId());
         return new ResponseEntity<>(MemberCheckResponse.from(isDuplicated), HttpStatus.OK);
-
     }
 
     @GetMapping("/login")
@@ -44,9 +43,6 @@ public class MemberController {
     public ResponseEntity<String> logout() {
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
-
-    // 비밀 번호 찾기
-
 
 
 }
