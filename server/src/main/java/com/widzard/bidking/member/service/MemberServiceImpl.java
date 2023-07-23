@@ -1,8 +1,8 @@
-package com.widzard.bidking.member.repository;
+package com.widzard.bidking.member.service;
 
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
-import com.widzard.bidking.member.service.MemberService;
+import com.widzard.bidking.member.repository.MemberRepository;
 import com.widzard.bidking.order.entity.OrderState;
 import com.widzard.bidking.order.repository.OrderRepository;
 import java.util.HashMap;
