@@ -25,4 +25,11 @@ public class MemberController {
         return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
     }
 
+    // TODO: 로그인 된 유저 필요
+    @GetMapping("/dashboard/seller")
+    public ResponseEntity<DashboardResponse> getSellerDashboard(Long memberId) {
+        HashMap<String, Integer> dashboard = memberService.getSellerDashboard(memberId);
+        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
+        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
+    }
 }

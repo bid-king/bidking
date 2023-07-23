@@ -6,4 +6,6 @@ public interface MemberService {
 
     HashMap<String, Integer> getUserDashboard(Long userId);
 
+    HashMap<String, Integer> getSellerDashboard(Long userId);
+
 }
