@@ -3,7 +3,6 @@ package com.widzard.bidking.config;
 import com.widzard.bidking.global.security.JwtAuthenticationFilter;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -45,17 +43,19 @@ public class SecurityConfig {
             .formLogin().disable() // 토큰 사용하므로 form login disable
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
         http.authorizeRequests()
-            .antMatchers("/api/v1/members/login", "/api/v1/members/logout",
+            .antMatchers(
+                "/api/v1/members/login",
+                "/api/v1/members/logout",
                 "/api/v1/members/check/**",
-                "/api/v1/members/signup", "/api/v1/items/categories").permitAll()
+                "/api/v1/members/signup",
+                "/api/v1/items/categories"
+            ).permitAll()
             .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
             .anyRequest().authenticated()
             .and()
-            .logout()
-            .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/members/logout"))
-            .and()
-            .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

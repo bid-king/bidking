@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -19,6 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenService tokenService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -42,29 +48,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // jwt 토큰 검증 및 토큰으로부터 유저 정보 (UserId) 받아오기
         userId = tokenService.extractUsername(jwt);
-        log.info("Token is valid...");
+        // 미인증 상태이며 토큰 내 유저 정보가 존재할 때 db에서 user details를 가져와 체크
+        if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+            // 토큰 검증
+            if (tokenService.isTokenValid(jwt, userDetails)) {
+                // 토큰이 유효하면 UsernamePasswordAuthenticationToken 생성
+                log.info("Token is valid...");
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.getAuthorities()
+                );
+                authentication.setDetails(
+                    new WebAuthenticationDetailsSource().buildDetails(request));
 
+                // security context holder에 인증 정보 기록
+                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                securityContext.setAuthentication(authentication);
+                SecurityContextHolder.setContext(securityContext);
+            }
+            filterChain.doFilter(request, response);
+        }
 
-
-
-        ////////////////////////////////////////
-//        String token = parseBearerToken(request);
-//        log.info("JwtAuthenticationFilter is runnig...");
-//        if (token != null && !token.equalsIgnoreCase("null")) {
-//            Claims claims = tokenService.validateAndGetClaims(token);
-//            log.info("token is valid...");
-//
-//            AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-//                "userId",
-//                null,
-//                AuthorityUtils.NO_AUTHORITIES
-//            );
-//            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-//            securityContext.setAuthentication(authentication);
-//            SecurityContextHolder.setContext(securityContext);
-//            filterChain.doFilter(request, response);
-//        }
     }
 
     private String parseBearerToken(HttpServletRequest request) {
