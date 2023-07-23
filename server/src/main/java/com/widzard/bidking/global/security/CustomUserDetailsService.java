@@ -1,6 +1,7 @@
 package com.widzard.bidking.global.security;
 
 import com.widzard.bidking.member.entity.Member;
+import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,8 +21,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         return memberRepository.findByUserId(userId)
-            .orElseThrow(() -> new UsernameNotFoundException(
-                "loadUserByUsername Exception: User not found."
-            ));
+            .orElseThrow(MemberNotFoundException::new);
     }
 }

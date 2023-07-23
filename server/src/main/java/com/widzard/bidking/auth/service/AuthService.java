@@ -6,4 +6,6 @@ import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 public interface AuthService {
 
     JwtToken login(MemberLoginRequest request);
+
+    void updateRefreshToken(String userId, String refreshToken);
 }

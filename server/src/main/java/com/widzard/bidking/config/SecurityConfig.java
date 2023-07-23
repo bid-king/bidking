@@ -1,6 +1,6 @@
 package com.widzard.bidking.config;
 
-import com.widzard.bidking.global.security.JwtAuthenticationFilter;
+import com.widzard.bidking.global.security.CustomAuthorizationFilter;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +31,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CustomAuthorizationFilter customAuthorizationFilter;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -55,7 +56,7 @@ public class SecurityConfig {
             .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
             .anyRequest().authenticated()
             .and()
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
