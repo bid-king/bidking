@@ -1,24 +1,33 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import colors from '../../design/colors';
+import { HTMLAttributes } from 'react';
 
-interface Props {
-  inputType?: 'text' | 'email';
+interface Props extends HTMLAttributes<HTMLInputElement> {
+  id?: string;
+  inputType?: 'text' | 'email' | 'password';
   theme?: 'light' | 'dark';
   shape?: 'square' | 'round';
   placeholder: string;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function Input({
+  id,
   inputType = 'text',
   placeholder = 'placeholder를 입력하세요',
   theme = 'light',
   shape = 'square',
+  value,
+  onChange,
 }: Props) {
   return (
     <input
+      id={id}
       type={inputType}
       placeholder={placeholder}
+      value={value}
       css={{
         width: '100%',
         height: '2rem',
@@ -29,6 +38,7 @@ export function Input({
         ...THEME_VARIENT[theme],
         ...SHAPE_VARIENT[shape],
       }}
+      onChange={onChange}
     />
   );
 }

@@ -7,11 +7,18 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   btnType?: 'confirm' | 'warn' | 'progress' | 'ok';
   activated?: 0 | 1;
   label?: string;
+  type?: 'submit' | 'button' | 'reset';
 }
 
-export function ConfirmButton({ btnType = 'confirm', activated = 1, label = '안녕 나는 확인버튼이야' }: Props) {
+export function ConfirmButton({
+  type = 'button',
+  btnType = 'confirm',
+  activated = 1,
+  label = '안녕 나는 확인버튼이야',
+}: Props) {
   return (
     <button
+      type={type}
       css={{
         cursor: 'pointer',
         width: '100%',
