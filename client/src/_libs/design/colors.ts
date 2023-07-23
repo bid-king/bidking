@@ -28,4 +28,5 @@ export default {
   backgroundDark: '#16161D',
   backgroundDark2: '#33333C',
   backgroundDark3: '#55555F',
+  disabled: '#D9D9D9',
 };

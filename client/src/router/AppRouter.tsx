@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { Main } from '../pages/Main';
 import { Login } from '../pages/Login';
+import { SignUp } from '../pages/SignUp';
 import { MyPage } from '../pages/MyPage';
 import { Purchased } from '../pages/Purchased';
 import { Detail } from '../pages/Detail';
@@ -23,6 +24,7 @@ export function AppRouter() {
       <Route element={<Layout />}>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/mypage/:name" element={<MyPage />} />
         <Route path="/purchased" element={<Purchased />} />
         <Route path="/detail/:auctionId" element={<Detail />} />

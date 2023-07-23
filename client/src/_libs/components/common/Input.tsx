@@ -5,7 +5,7 @@ import { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLInputElement> {
   id?: string;
-  inputType?: 'text' | 'email' | 'password';
+  inputType?: string;
   theme?: 'light' | 'dark';
   shape?: 'square' | 'round';
   placeholder: string;
