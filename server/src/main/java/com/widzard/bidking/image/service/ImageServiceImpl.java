@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class ImageServiceImpl implements ImageService {
 
     private final AmazonS3 amazonS3;
@@ -55,7 +55,7 @@ public class ImageServiceImpl implements ImageService {
             imagePathList.add(imagePath);
             Image image = Image.builder()
                 .filePath(imagePath)
-//                .fileName() 필요 없을듯?
+//                .fileName()
                 .build();
             imageRepository.save(image);
         }
