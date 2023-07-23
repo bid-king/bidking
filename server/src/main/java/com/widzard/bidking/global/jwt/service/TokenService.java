@@ -27,14 +27,14 @@ public class TokenService {
     /*
      * subject에 저장된 userId 가져오는 메서드
      */
-    public String extractUserId(String token) {
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     /*
      * jwt 토큰 유효성 검증 및 토큰 기반으로 유저 claim 가져오는 메서드
      */
-    public Claims validateAndGetClaims(String token) {
+    public Claims extractAllClaims(String token) {
         try {
             return Jwts.parserBuilder()
                 .setSigningKey(getKey())
@@ -50,9 +50,35 @@ public class TokenService {
      * 단일 claim 정보 가져오는 메서드
      */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = validateAndGetClaims(token);
+        final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+
+    /*
+     * 토큰 검증 메서드
+     *
+     * 1. 토큰 내 유저 정보 일치 여부
+     * 2. 토큰 만료 기간 검증
+     */
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && isTokenNotExpired(token));
+    }
+
+    /*
+     * 토큰 만료 기간 검증 메서드
+     */
+    private boolean isTokenNotExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    /*
+     * 토큰에 기록된 만료기간 추출 메서드
+     */
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
 
     /*
      * Extra Claims 없이 User Details만을 이용하여 token을 생성하는 메서드
@@ -80,6 +106,9 @@ public class TokenService {
             .compact();
     }
 
+    /*
+     * jwt 시크릿키 받아오는 메서드
+     */
 
     private Key getKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
