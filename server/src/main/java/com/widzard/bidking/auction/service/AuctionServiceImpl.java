@@ -3,6 +3,7 @@ package com.widzard.bidking.auction.service;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
+import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
@@ -92,6 +93,11 @@ public class AuctionServiceImpl implements AuctionService {
         return AuctionCreateResponse.builder()
             .id(savedAuctionRoom.getId())
             .build();
+    }
+
+    @Override
+    public AuctionRoomResponse readAuctionRoom(Member tempMember, String auctionId) {
+        return null;
     }
 
 
