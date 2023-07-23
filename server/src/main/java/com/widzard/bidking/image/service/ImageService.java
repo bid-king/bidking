@@ -14,4 +14,6 @@ public interface ImageService {
 
     public Image uploadImage(MultipartFile multipartFile, String domain) throws IOException;
 
+    public void deleteImage(String fileName,String domain);
+
 }
