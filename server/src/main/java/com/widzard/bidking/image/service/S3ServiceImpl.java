@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
-public class ImageServiceImpl implements ImageService {
+public class S3ServiceImpl implements ImageService {
 
     private final AmazonS3 amazonS3;
     private final ImageRepository imageRepository;
@@ -30,13 +30,15 @@ public class ImageServiceImpl implements ImageService {
     private String bucket;
 
     @Override
-    public List<String> uploadImageList(MultipartFile[] multipartFileList) throws IOException {
-        List<String> imagePathList = new ArrayList<>();
+    public List<Image> uploadImageList(MultipartFile[] multipartFileList, String domain)
+        throws IOException {
+        List<Image> imageList = new ArrayList<>();
 
         for (MultipartFile multipartFile : multipartFileList) {
 
             String originalName =
-                UUID.randomUUID() + "_" + multipartFile.getOriginalFilename(); // 파일 이름
+                domain + "/" + UUID.randomUUID() + "_"
+                    + multipartFile.getOriginalFilename(); // 파일 이름
             long size = multipartFile.getSize(); // 파일 크기
 
             ObjectMetadata objectMetaData = new ObjectMetadata();
@@ -52,19 +54,23 @@ public class ImageServiceImpl implements ImageService {
 
             String imagePath = amazonS3.getUrl(bucket, originalName)
                 .toString(); // 접근가능한 URL
-            imagePathList.add(imagePath);
+
             Image image = Image.builder()
                 .filePath(imagePath)
-//                .fileName()
+                .fileName(originalName)
                 .build();
+
             imageRepository.save(image);
+
+            imageList.add(image);
         }
-        return imagePathList;
+        return imageList;
     }
 
     @Override
-    public String uploadImage(MultipartFile multipartFile) throws IOException {
-        String originalName = UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
+    public Image uploadImage(MultipartFile multipartFile, String domain) throws IOException {
+        String originalName =
+            domain + "/" + UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
@@ -73,12 +79,12 @@ public class ImageServiceImpl implements ImageService {
         amazonS3.putObject(bucket, originalName, multipartFile.getInputStream(),
             metadata);
         String imagePath = amazonS3.getUrl(bucket, originalName).toString();
+
         Image image = Image.builder()
             .filePath(imagePath)
-//                .fileName() 필요 없을듯?
+            .fileName(originalName)
             .build();
         imageRepository.save(image);
-
-        return imagePath;
+        return image;
     }
 }
