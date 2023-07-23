@@ -16,5 +16,6 @@ export const Primary: Story = {
     label: '안녕?',
     btnType: 'ok',
     activated: 1,
+    type: 'button',
   },
 };
