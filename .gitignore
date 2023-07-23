@@ -28,7 +28,7 @@ out/
 .idea
 .idea/misc.xml
 .idea/vcs.xml
-**/src/main/resources/.env
+
 
 ### NetBeans ###
 /nbproject/private/
