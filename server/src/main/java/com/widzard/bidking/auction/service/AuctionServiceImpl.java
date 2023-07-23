@@ -18,6 +18,7 @@ import com.widzard.bidking.member.entity.Member;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,8 +97,32 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public AuctionRoomResponse readAuctionRoom(Member tempMember, String auctionId) {
-        return null;
+    public AuctionRoomResponse readAuctionRoom(Member tempMember, Long auctionId) {
+
+        Optional<AuctionRoom> auctionRoomOptional = auctionRoomRepository.findById(auctionId);
+        if (auctionRoomOptional.isEmpty()) {
+            throw new AuctionRoomNotFoundException();
+        }
+        AuctionRoom auctionRoom = auctionRoomOptional.get();
+        List<Item> itemList = itemRepository.findItemsByAuctionId(auctionId);
+
+        AuctionRoomResponse result = AuctionRoomResponse.builder()
+            .id(auctionRoom.getId())
+//            .sellerId(auctionRoom.getSeller.getId()) //TODO member 추가 후 주석 해제
+            .auctionRoomLiveState(auctionRoom.getAuctionRoomLiveState())
+//            .auctionRoomUrl(auctionRoom.getAuctionRoomURL)//TODO auctionRoomURL 추가 후 추가
+            .name(auctionRoom.getName())
+            .startedAt(auctionRoom.getStartedAt())
+            .auctionRoomType(auctionRoom.getAuctionRoomType())
+//            .imageURL(auctionRoom.getImage()) //TODO 이미지 추가 된 후 추가
+            .itemList(itemList.stream()
+                .map(item -> {
+                    item.toDTO();
+                })
+                .collect(Collectors.toList()))
+            .build();
+
+        return results;
     }
 
 

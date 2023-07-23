@@ -11,5 +11,5 @@ public interface AuctionService {
     AuctionCreateResponse createAuctionRoom(Member member,
         AuctionCreateRequest auctionCreateRequest);
 
-    AuctionRoomResponse readAuctionRoom(Member tempMember, String auctionId);
+    AuctionRoomResponse readAuctionRoom(Member tempMember, Long auctionId);
 }

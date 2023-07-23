@@ -61,7 +61,7 @@ public class AuctionController {
 
 
     @GetMapping("/{auctionId}")
-    public ResponseEntity<AuctionRoomResponse> readAuction(@PathVariable String auctionId) {
+    public ResponseEntity<AuctionRoomResponse> readAuction(@PathVariable Long auctionId) {
         // TODO 테스트용 멤버 (구현후 추가)
         Address tempAddress = new Address("asd", "asd", "asd");
         Member tempMember = Member.builder()

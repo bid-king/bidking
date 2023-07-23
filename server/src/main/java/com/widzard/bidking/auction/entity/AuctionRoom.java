@@ -3,7 +3,6 @@ package com.widzard.bidking.auction.entity;
 
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
-import com.widzard.bidking.member.entity.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,7 +62,7 @@ public class AuctionRoom extends BaseEntity {
     @Builder
     //TODO member 추가 후 주석 해제
 //    public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
-    public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
+    public AuctionRoom(String name, AuctionRoomLiveState auctionRoomLiveState,
         AuctionRoomTradeState auctionRoomTradeState, AuctionRoomType auctionRoomType,
         LocalDateTime startedAt) {
 //        this.seller = seller;//TODO member 추가 후 주석 해제
