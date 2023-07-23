@@ -5,6 +5,8 @@ import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
+import java.util.Collection;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -22,6 +24,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Getter
 @Entity
@@ -29,7 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
-public class Member extends BaseEntity {
+public class Member extends BaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,5 +76,39 @@ public class Member extends BaseEntity {
             .memberRole(MemberRole.USER)
             .available(true)
             .build();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(memberRole.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return userId;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
