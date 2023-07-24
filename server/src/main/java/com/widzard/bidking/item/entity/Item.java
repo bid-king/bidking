@@ -72,5 +72,5 @@ public class Item extends BaseEntity {
             .itemCategory(itemCategory)
             .ordering(ordering)
             .build();
-
+    }
 }

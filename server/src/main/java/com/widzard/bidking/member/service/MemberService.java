@@ -3,6 +3,7 @@ package com.widzard.bidking.member.service;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.entity.Member;
+import java.util.Optional;
 
 public interface MemberService {
 
@@ -15,5 +16,7 @@ public interface MemberService {
     String login(MemberLoginRequest request);
 
     void certifiedPhoneNumber(String phoneNumber, String cerNum);
+
+    Member getUserDetail(Long userId);
 
 }
