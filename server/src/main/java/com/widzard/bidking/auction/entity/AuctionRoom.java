@@ -4,6 +4,7 @@ package com.widzard.bidking.auction.entity;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.entity.Item;
+import com.widzard.bidking.member.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -40,9 +42,9 @@ public class AuctionRoom extends BaseEntity {
     private Long id;
 
     //TODO member 추가 후 주석 해제
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private Member seller; //
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member seller; //
 
     private String name; //(방이름)
 

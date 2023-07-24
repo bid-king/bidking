@@ -25,6 +25,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         "AND a.auctionRoomTradeState IN :tradeState " +
         "AND o.orderState IN :orderState " +
         "GROUP BY o.orderState")
+
     List<Object[]> countOrdersByState(@Param("member") Member member,
         @Param("liveState") List<AuctionRoomLiveState> liveState,
         @Param("tradeState") List<AuctionRoomTradeState> tradeState,

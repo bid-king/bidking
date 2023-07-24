@@ -13,6 +13,8 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +37,7 @@ public class AuctionController {
     // TODO token으로 user 정보 받아야 함. (login check: 본인인증 된 유저)
     @PostMapping
     public ResponseEntity<AuctionCreateResponse> createAuction(
+        @AuthenticationPrincipal Member member,
         @RequestBody @Valid AuctionCreateRequest auctionCreateRequest,
         BindingResult bindingResult) {
 
@@ -48,6 +51,8 @@ public class AuctionController {
             .phoneNumber("asd")
             .available(true)
             .build();
+
+        System.out.println("member = " + member);
 
         if (bindingResult.hasErrors()) {
             throw new InvalidAuctionRoomRequestException();

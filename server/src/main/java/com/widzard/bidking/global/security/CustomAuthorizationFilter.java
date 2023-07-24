@@ -41,7 +41,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         // Authorization header 및 Bearer 형식 체크
         final String authHeader = request.getHeader("Authorization");
-        log.info("authHeader: ", authHeader);
+        log.info("authHeader: " + authHeader);
         if (authHeader == null || !authHeader.startsWith(TOKEN_HEADER_PREFIX)) {
             log.info("Authorization header가 없거나 grant type 형식이 맞지 않습니다.");
             filterChain.doFilter(request, response);
@@ -54,7 +54,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         // jwt 토큰 검증 및 토큰으로부터 유저 정보 (UserId) 받아오기
         userId = tokenProvider.extractUsername(jwt);
-        log.info("extract userId from jwt", userId);
+        log.info("{}, extract userId from jwt", userId);
 
         // 미인증 상태이며 토큰 내 유저 정보가 존재할 때 db에서 user details를 가져와 체크
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {

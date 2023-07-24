@@ -48,7 +48,6 @@ public class SecurityConfig {
 
         http.authorizeRequests()
             .antMatchers(
-                "/login",
                 "/api/v1/members/login",
                 "/api/v1/members/logout",
                 "/api/v1/members/check/**",

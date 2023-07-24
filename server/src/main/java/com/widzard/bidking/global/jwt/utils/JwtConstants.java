@@ -15,11 +15,9 @@ public class JwtConstants {
     public static final long RT_EXP_TIME = 7 * DAY; // 리프레시 토큰 만료 시간
 
     // Secret
-    @Value("${jwt_secret}")
-    public static String JWT_SECRET;
+    public static final String JWT_SECRET = "53AMNLEWN4320732094870938DHFLKH32087YD0S887F09824309R09DSKFHLH32098409";
 
-    @Value("${jwt_issuer}")
-    public static String ISSUER;
+    public static final String ISSUER = "ydajeong7@gmail.com";
 
     // Header
     public static final String AT_HEADER = "access_token";
