@@ -3,11 +3,8 @@ package com.widzard.bidking.item.entity;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.global.entity.BaseEntity;
-<<<<<<< HEAD
 import com.widzard.bidking.image.entity.Image;
-=======
 import com.widzard.bidking.order.entity.OrderItem;
->>>>>>> feat/be/auction-read
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -62,12 +59,10 @@ public class Item extends BaseEntity {
 
     private int ordering;// (순서)
 
-<<<<<<< HEAD
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image image;// (대표이미지)
-=======
->>>>>>> feat/be/auction-read
+
 
     public static Item create(
         AuctionRoom auctionRoom,
