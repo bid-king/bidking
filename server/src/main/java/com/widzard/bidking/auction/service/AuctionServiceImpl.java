@@ -2,7 +2,6 @@ package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
-import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
@@ -49,7 +48,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Transactional
     @Override
-    public AuctionCreateResponse createAuctionRoom(Member member, AuctionCreateRequest request) {
+    public AuctionRoom createAuctionRoom(Member member, AuctionCreateRequest request) {
 
         //시작시간 예외 로직
         LocalDateTime now = LocalDateTime.now();
@@ -93,9 +92,10 @@ public class AuctionServiceImpl implements AuctionService {
                 itemRepository.save(item);
             }
         );
-        return AuctionCreateResponse.builder()
-            .id(savedAuctionRoom.getId())
-            .build();
+        return savedAuctionRoom;
+//        return AuctionCreateResponse.builder()
+//            .id(savedAuctionRoom.getId())
+//            .build();
     }
 
     @Override

@@ -54,9 +54,9 @@ public class AuctionController {
             throw new InvalidAuctionRoomRequestException();
         }
 
-        AuctionCreateResponse response = auctionService.createAuctionRoom(tempMember,
+        AuctionRoom auctionRoom = auctionService.createAuctionRoom(tempMember,
             auctionCreateRequest);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(AuctionCreateResponse.create(auctionRoom), HttpStatus.OK);
 
     }
 
