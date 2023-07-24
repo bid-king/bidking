@@ -46,6 +46,21 @@ public class SecurityConfig {
         return http.build();
     }
 
+//    @Bean//개발용 임시 security config
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable();
+//        http.authorizeRequests()
+//            .anyRequest().permitAll()
+//            .and()
+//            .formLogin()
+//            .loginPage("/api/v1/oauth/login")
+//            .and()
+//            .oauth2Login()
+//            .loginPage("/api/v1/oauth/login");
+//
+//        return http.build();
+//    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
