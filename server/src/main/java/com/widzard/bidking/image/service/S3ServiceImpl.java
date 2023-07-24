@@ -36,9 +36,8 @@ public class S3ServiceImpl implements ImageService {
 
         for (MultipartFile multipartFile : multipartFileList) {
 
-            String fileName =
-                domain + "/" + UUID.randomUUID() + "_"
-                    + multipartFile.getOriginalFilename(); // 파일 이름
+            String fileName = domain + "/" + UUID.randomUUID() + "_"
+                + multipartFile.getOriginalFilename(); // 파일 이름
             long size = multipartFile.getSize(); // 파일 크기
 
             ObjectMetadata objectMetaData = new ObjectMetadata();
@@ -48,17 +47,12 @@ public class S3ServiceImpl implements ImageService {
             // S3에 업로드
             amazonS3.putObject(
                 new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(),
-                    objectMetaData)
-                    .withCannedAcl(CannedAccessControlList.PublicRead)
-            );
+                    objectMetaData).withCannedAcl(CannedAccessControlList.PublicRead));
 
-            String imagePath = amazonS3.getUrl(bucket, fileName)
-                .toString(); // 접근가능한 URL
+            String imagePath = amazonS3.getUrl(bucket, fileName).toString(); // 접근가능한 URL
 
-            Image image = Image.builder()
-                .filePath(imagePath)
-                .fileName(multipartFile.getOriginalFilename())
-                .build();
+            Image image = Image.builder().filePath(imagePath)
+                .fileName(multipartFile.getOriginalFilename()).build();
 
             imageRepository.save(image);
 
@@ -76,21 +70,18 @@ public class S3ServiceImpl implements ImageService {
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
 
-        amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(),
-            metadata);
+        amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
         String imagePath = amazonS3.getUrl(bucket, fileName).toString();
 
-        Image image = Image.builder()
-            .filePath(imagePath)
-            .fileName(multipartFile.getOriginalFilename())
-            .build();
+        Image image = Image.builder().filePath(imagePath)
+            .fileName(multipartFile.getOriginalFilename()).build();
         imageRepository.save(image);
         return image;
     }
 
     @Override
-    public void deleteImage(String fileName,String domain) {
-        fileName = domain+"/"+fileName;
+    public void deleteImage(String fileName, String domain) {
+        fileName = domain + "/" + fileName;
         amazonS3.deleteObject(bucket, fileName);
 
         imageRepository.deleteByFileName(fileName);
