@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "image")
 public class Image extends BaseEntity {
@@ -27,9 +29,11 @@ public class Image extends BaseEntity {
     @Column(name = "image_id")
     private Long id;
 
-    private String fileName;
+    @Column(nullable = false)
+    private String fileName; // asd.jpg
 
-    private String filePath;
+    @Column(nullable = false)
+    private String filePath; // https: S3 주소/domain
 
 
 }
