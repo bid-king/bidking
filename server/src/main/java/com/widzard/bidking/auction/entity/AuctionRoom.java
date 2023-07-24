@@ -3,10 +3,8 @@ package com.widzard.bidking.auction.entity;
 
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
-import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.member.entity.Member;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,8 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -30,7 +26,6 @@ import lombok.ToString;
 
 @Getter
 @Entity
-@Builder
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -42,9 +37,10 @@ public class AuctionRoom extends BaseEntity {
     @Column(name = "auction_room_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member seller; //
+    //TODO member 추가 후 주석 해제
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "member_id")
+//    private Member seller; //
 
     private String name; //(방이름)
 
@@ -57,11 +53,25 @@ public class AuctionRoom extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AuctionRoomType auctionRoomType; // (경매방식)
 
+    private LocalDateTime startedAt; //경매방 시작시간
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image image; // (썸네일)
 
-    public void setImage(Image image) {
-        this.image = image;
+
+    @Builder
+    //TODO member 추가 후 주석 해제
+//    public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
+    public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
+        AuctionRoomTradeState auctionRoomTradeState, AuctionRoomType auctionRoomType,
+        LocalDateTime startedAt) {
+//        this.seller = seller;//TODO member 추가 후 주석 해제
+        this.name = name;
+        this.auctionRoomLiveState = auctionRoomLiveState;
+        this.auctionRoomTradeState = auctionRoomTradeState;
+        this.auctionRoomType = auctionRoomType;
+        this.startedAt = startedAt;
     }
+
 }
