@@ -1,10 +1,17 @@
 package com.widzard.bidking.member.service;
 
+import com.widzard.bidking.global.jwt.service.TokenService;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
+import com.widzard.bidking.member.dto.request.MemberLoginRequest;
+import com.widzard.bidking.member.dto.response.MemberLoginResponse;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberDuplicatedException;
 import com.widzard.bidking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final AuthenticationManagerBuilder managerBuilder;
+    private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
 
     /*
@@ -44,6 +53,7 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsByNickname(nickname);
     }
 
+
     /*
      * 기존 회원 정보 확인
      * 유저 아이디 및 닉네임을 unique한 값으로 지정하였기 때문에 존재 여부로 이미 존재하는 회원인지를 판단하는 메서드
@@ -53,5 +63,20 @@ public class MemberServiceImpl implements MemberService {
         if (checkUserId(request.getUserId()) || checkNickname(request.getNickname())) {
             throw new MemberDuplicatedException();
         }
+    }
+
+    /*
+     * 로그인 인증 (JWT)
+     */
+    @Override
+    public String login(MemberLoginRequest request) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(request.getUserId(), request.getPassword());
+        Authentication authentication = managerBuilder.getObject()
+            .authenticate(authenticationToken);
+
+        String accessToken = tokenService.generateAccessToken(
+            (UserDetails) authentication.getPrincipal());
+        return accessToken;
     }
 }

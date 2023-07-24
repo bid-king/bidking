@@ -1,6 +1,8 @@
 package com.widzard.bidking.member.controller;
 
+import com.widzard.bidking.member.dto.response.MemberLoginResponse;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
+import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.dto.request.UserIdRequest;
 import com.widzard.bidking.member.dto.request.UserNicknameRequest;
 import com.widzard.bidking.member.dto.response.MemberCheckResponse;
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +42,17 @@ public class MemberController {
     public ResponseEntity<MemberCheckResponse> checkNickname(@RequestBody @Valid UserNicknameRequest request) {
         boolean isDuplicated = memberService.checkNickname(request.getNickname());
         return new ResponseEntity<>(MemberCheckResponse.from(isDuplicated), HttpStatus.OK);
+    }
+
+    @GetMapping("/login")
+    public ResponseEntity<MemberLoginResponse> login(@RequestBody @Valid MemberLoginRequest request) {
+        String token = memberService.login(request);
+        return new ResponseEntity<>(MemberLoginResponse.from(token), HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
 }
