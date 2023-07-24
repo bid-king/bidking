@@ -1,12 +1,6 @@
 package com.widzard.bidking.member.service;
 
 import com.widzard.bidking.auction.exception.SendingMessageFailureException;
-import java.util.HashMap;
-import lombok.extern.slf4j.Slf4j;
-import net.nurigo.java_sdk.api.Message;
-import net.nurigo.java_sdk.exceptions.CoolsmsException;
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import com.widzard.bidking.global.jwt.service.TokenProvider;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
@@ -14,12 +8,15 @@ import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberDuplicatedException;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
+import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,5 +112,10 @@ public class MemberServiceImpl implements MemberService {
             log.error(String.valueOf(e.getCode()));
             throw new SendingMessageFailureException();
         }
+    }
+
+    @Override
+    public Member getUserDetail(Long userId) {
+        return memberRepository.findById(userId).orElseThrow(MemberNotFoundException::new);
     }
 }
