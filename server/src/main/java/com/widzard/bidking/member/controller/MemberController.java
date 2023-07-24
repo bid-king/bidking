@@ -11,6 +11,7 @@ import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.service.MemberService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/members")
@@ -44,15 +46,22 @@ public class MemberController {
         return new ResponseEntity<>(MemberCheckResponse.from(isDuplicated), HttpStatus.OK);
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<MemberLoginResponse> login(@RequestBody @Valid MemberLoginRequest request) {
         String token = memberService.login(request);
         return new ResponseEntity<>(MemberLoginResponse.from(token), HttpStatus.OK);
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
+
+    // 로그인 한 사람만 들어가는 테스트
+    @PostMapping("/test")
+    public ResponseEntity<String> authTest() {
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+    // admin만 들어갈 수 있는 테스트
 
 }

@@ -5,8 +5,10 @@ import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberDuplicatedException;
+import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -52,6 +54,16 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsByNickname(nickname);
     }
 
+    @Override
+    public String login(MemberLoginRequest request) {
+        Member member = memberRepository.findByUserId(request.getUserId())
+            .orElseThrow(MemberNotFoundException::new);
+        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
+            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        }
+        return tokenProvider.generateAccessToken(member);
+    }
+
 
     /*
      * 기존 회원 정보 확인
@@ -67,15 +79,15 @@ public class MemberServiceImpl implements MemberService {
     /*
      * 로그인 인증 (JWT)
      */
-    @Override
-    public String login(MemberLoginRequest request) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(request.getUserId(), request.getPassword());
-        Authentication authentication = managerBuilder.getObject()
-            .authenticate(authenticationToken);
-
-        String accessToken = tokenProvider.generateAccessToken(
-            (UserDetails) authentication.getPrincipal());
-        return accessToken;
-    }
+//    @Override
+//    public String login(MemberLoginRequest request) {
+//        UsernamePasswordAuthenticationToken authenticationToken =
+//            new UsernamePasswordAuthenticationToken(request.getUserId(), request.getPassword());
+//        Authentication authentication = managerBuilder.getObject()
+//            .authenticate(authenticationToken);
+//
+//        String accessToken = tokenProvider.generateAccessToken(
+//            (UserDetails) authentication.getPrincipal());
+//        return accessToken;
+//    }
 }

@@ -1,5 +1,11 @@
 package com.widzard.bidking.global.jwt.service;
 
+import static com.widzard.bidking.global.jwt.utils.JwtConstants.AT_EXP_TIME;
+import static com.widzard.bidking.global.jwt.utils.JwtConstants.ISSUER;
+import static com.widzard.bidking.global.jwt.utils.JwtConstants.JWT_SECRET;
+import static com.widzard.bidking.global.jwt.utils.JwtConstants.RT_EXP_TIME;
+import static com.widzard.bidking.global.jwt.utils.JwtConstants.SIGNATURE_ALGORITHM;
+
 import com.widzard.bidking.global.jwt.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
@@ -16,12 +22,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TokenProvider {
-
-    private static final SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS256;
-    protected static final String SECRET_KEY = "53AMNLEWN4320732094870938DHFLKH32087YD0S887F09824309R09DSKFHLH32098409"; //TODO System.getenv("JWT_SECRET")
-    protected static final String issuer = "ydajeong7@gmail.com";
-    private static final long ACCESS_TOKEN_DURATION = 2 * 60_000; // 2 minutes
-    private static final long REFRESH_TOKEN_DURATION = 1_210_000_000;
 
     /*
      * subject에 저장된 userId 가져오는 메서드
@@ -79,32 +79,32 @@ public class TokenProvider {
     }
 
 
-
     /*
      * Extra Claims 없이 User Details을 이용하여 access token을 생성하는 메서드
      */
     public String generateAccessToken(UserDetails userDetails) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + ACCESS_TOKEN_DURATION);
+        Date validity = new Date(now.getTime() + AT_EXP_TIME);
 
         return Jwts
             .builder()
             .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-            .setIssuer(issuer)
+            .setIssuer(ISSUER)
             .setIssuedAt(now)
             .setExpiration(validity)
             .setSubject(userDetails.getUsername())
             .claim("userId", userDetails.getUsername())
+            .claim("role", userDetails.getAuthorities())
             .signWith(getKey(), SIGNATURE_ALGORITHM)
             .compact();
     }
 
     /*
-     * refresh token 생성
+     * refresh token 생성 (현재 적용x)
      */
     public String generateRefreshToken() {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + REFRESH_TOKEN_DURATION);
+        Date validity = new Date(now.getTime() + RT_EXP_TIME);
 
         return Jwts.builder()
             .setIssuedAt(now)
@@ -118,7 +118,7 @@ public class TokenProvider {
      */
 
     private Key getKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET));
     }
 
 

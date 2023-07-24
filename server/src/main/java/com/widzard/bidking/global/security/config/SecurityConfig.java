@@ -1,16 +1,19 @@
 package com.widzard.bidking.global.security.config;
 
 import com.widzard.bidking.global.security.CustomAuthorizationFilter;
+import com.widzard.bidking.global.security.CustomUserDetailsService;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -33,7 +36,6 @@ public class SecurityConfig {
 
     private final CustomAuthorizationFilter customAuthorizationFilter;
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -41,14 +43,14 @@ public class SecurityConfig {
             .and()
             .csrf().disable()
             .httpBasic().disable() // 토큰 사용하므로 basic disable
-            .formLogin().disable() // 토큰 사용하므로 form login disable
             .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // jwt 사용 (세션 사용x)
 
         http.authorizeRequests()
             .antMatchers(
-                "/api/v1/auth/login",
-                "/api/v1/auth/logout",
+                "/login",
+                "/api/v1/members/login",
+                "/api/v1/members/logout",
                 "/api/v1/members/check/**",
                 "/api/v1/members/signup",
                 "/api/v1/items/categories"
@@ -60,10 +62,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -80,5 +78,11 @@ public class SecurityConfig {
 
         return source;
     }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
 }

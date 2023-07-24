@@ -13,5 +13,6 @@ public interface MemberService {
     boolean checkNickname(String nickname);
 
     String login(MemberLoginRequest request);
+
 }
 

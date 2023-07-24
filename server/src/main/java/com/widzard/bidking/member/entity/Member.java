@@ -68,7 +68,7 @@ public class Member extends BaseEntity implements UserDetails {
     private MemberRole memberRole; // 역할
 
     private int penalty;
-    private String refreshToken;
+
 
     public static Member createMember(MemberFormRequest request, String encodedPassword) {
         return Member.builder()
@@ -115,9 +115,5 @@ public class Member extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 }

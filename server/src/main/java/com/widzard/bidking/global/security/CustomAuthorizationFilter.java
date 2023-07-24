@@ -1,6 +1,9 @@
 package com.widzard.bidking.global.security;
 
+import static com.widzard.bidking.global.jwt.utils.JwtConstants.TOKEN_HEADER_PREFIX;
+
 import com.widzard.bidking.global.jwt.service.TokenProvider;
+import com.widzard.bidking.member.entity.MemberRole;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -13,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -37,7 +41,9 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         // Authorization header 및 Bearer 형식 체크
         final String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        log.info("authHeader: ", authHeader);
+        if (authHeader == null || !authHeader.startsWith(TOKEN_HEADER_PREFIX)) {
+            log.info("Authorization header가 없거나 grant type 형식이 맞지 않습니다.");
             filterChain.doFilter(request, response);
             return;
         }
@@ -48,6 +54,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         // jwt 토큰 검증 및 토큰으로부터 유저 정보 (UserId) 받아오기
         userId = tokenProvider.extractUsername(jwt);
+        log.info("extract userId from jwt", userId);
+
         // 미인증 상태이며 토큰 내 유저 정보가 존재할 때 db에서 user details를 가져와 체크
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
@@ -56,28 +64,20 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 // 토큰이 유효하면 UsernamePasswordAuthenticationToken 생성
                 log.info("Token is valid...");
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails,
+                    userId,
                     null,
                     userDetails.getAuthorities()
                 );
+
                 authentication.setDetails(
-                    new WebAuthenticationDetailsSource().buildDetails(request));
+                    new WebAuthenticationDetailsSource().buildDetails(request)
+                );
 
                 // security context holder에 인증 정보 기록
-                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-                securityContext.setAuthentication(authentication);
-                SecurityContextHolder.setContext(securityContext);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                filterChain.doFilter(request, response);
             }
         }
-        filterChain.doFilter(request, response);
 
-    }
-
-    private String parseBearerToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
     }
 }

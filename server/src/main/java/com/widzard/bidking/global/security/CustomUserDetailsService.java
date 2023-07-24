@@ -4,23 +4,20 @@ import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-/*
- * UserDetailsService 구현체
- */
-@Service
+@Slf4j
+@Component
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-
     private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        return memberRepository.findByUserId(userId)
-            .orElseThrow(MemberNotFoundException::new);
+    public Member loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.info("loadUserByUsername **** userId: ", username);
+        return memberRepository.findByUserId(username).orElseThrow(MemberNotFoundException::new);
     }
 }
