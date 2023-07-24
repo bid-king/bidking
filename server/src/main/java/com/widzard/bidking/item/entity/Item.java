@@ -3,6 +3,7 @@ package com.widzard.bidking.item.entity;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.global.entity.BaseEntity;
+import com.widzard.bidking.order.entity.OrderItem;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,19 +14,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+//@ToString
 @Table(name = "item")
 public class Item extends BaseEntity {
 
@@ -36,6 +37,7 @@ public class Item extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_room_id")
+    //TODO 양방향 연관관계 도우미 매핑 메소드 생성
     private AuctionRoom auctionRoom;// (경매방코드)
 
     private Long startPrice;// (시작가)
@@ -51,8 +53,11 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "item_category_id")
     private ItemCategory itemCategory;//(카테고리)
 
+    @OneToOne(mappedBy = "item")
+    private OrderItem orderItem;
+
     private int ordering;// (순서)
-    
+
 
     public static Item create(
         AuctionRoom auctionRoom,
@@ -71,8 +76,6 @@ public class Item extends BaseEntity {
             .itemCategory(itemCategory)
             .ordering(ordering)
             .build();
-
-
     }
 
 }

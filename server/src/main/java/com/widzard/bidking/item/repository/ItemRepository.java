@@ -10,4 +10,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     @Query("SELECT i from Item i WHERE i.auctionRoom.id = :auctionId")
     List<Item> findItemsByAuctionId(@Param("auctionId") Long auctionId);
+
+    //TODO item delete시 마지막 1개는 못지우도록 구현
 }

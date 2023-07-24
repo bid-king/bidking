@@ -30,7 +30,17 @@ public enum ErrorCode {
     AUCTION_START_TIME_ERROR(HttpStatus.BAD_REQUEST, "AUCTION_START_TIME_ERROR", "경매방 시작시간 에러입니다."),
     INVALID_AUCTION_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "INVALID_AUCTION_REQUEST_ERROR",
         "올바르지 않은 입력값입니다."),
-    ;
+
+    /*
+     * Auction
+     */
+    AUCTION_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "AUCTION_ROOM_NOT_FOUND", "존재하지 않는 경매방입니다."),
+
+    /*
+     * Item
+     */
+    Empty_Item_List(HttpStatus.NOT_FOUND, "EMPTY_ITEM_LIST", "아이템이 없습니다."),
+    ITEM_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_CATEGORY_NOT_FOUND", "카테고리가 없습니다.");
 
     private final HttpStatus status;
     private final String code;

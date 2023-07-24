@@ -3,22 +3,24 @@ package com.widzard.bidking.auction.service;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
-import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
+import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.image.entity.repository.ImageRepository;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
+import com.widzard.bidking.item.exception.EmptyItemListException;
+import com.widzard.bidking.item.exception.ItemCategoryNotFoundException;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,28 +62,28 @@ public class AuctionServiceImpl implements AuctionService {
         AuctionRoom auctionRoom = AuctionRoom.builder()
 //            .seller(member)//TODO member 추가 후 주석 해제
             .name(request.getAuctionTitle())
+            .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
             .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
             .auctionRoomType(request.getAuctionRoomType())
-            .startedAt(TimeUtility.toLocalDateTime(request.getStartedAt()))
+            .startedAt(request.getStartedAt())
             .build();
 
         AuctionRoom savedAuctionRoom = auctionRoomRepository.save(auctionRoom);
         List<ItemCreateRequest> itemCreateRequestList = request.getItemList();
 
         if (itemCreateRequestList == null || itemCreateRequestList.size() == 0) {
-            throw new RuntimeException("아이템이 하나도 없습니다");//TODO EmptyItemListException 추가 후 주석 해제
+            throw new EmptyItemListException();
         }
         itemCreateRequestList.forEach(
             r -> {
                 Optional<ItemCategory> itemCategoryOptional = itemCategoryRepository.findById(
                     r.getItemCategory());
                 if (itemCategoryOptional.isEmpty()) {
-                    //TODO ItemNotFoundException으로 변경
-                    throw new RuntimeException("ItemNotFoundException");
+                    throw new ItemCategoryNotFoundException();
                 }
                 ItemCategory itemCategory = itemCategoryOptional.get();
                 Item item = Item.create(
-                    auctionRoom,
+                    savedAuctionRoom,
                     r.getStartPrice(),
                     r.getName(),
                     r.getDescription(),
@@ -97,33 +99,15 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public AuctionRoomResponse readAuctionRoom(Member tempMember, Long auctionId) {
+    public AuctionRoom readAuctionRoom(Member tempMember, Long auctionId) {
 
         Optional<AuctionRoom> auctionRoomOptional = auctionRoomRepository.findById(auctionId);
         if (auctionRoomOptional.isEmpty()) {
             throw new AuctionRoomNotFoundException();
         }
         AuctionRoom auctionRoom = auctionRoomOptional.get();
-        List<Item> itemList = itemRepository.findItemsByAuctionId(auctionId);
 
-        AuctionRoomResponse result = AuctionRoomResponse.builder()
-            .id(auctionRoom.getId())
-//            .sellerId(auctionRoom.getSeller.getId()) //TODO member 추가 후 주석 해제
-            .auctionRoomLiveState(auctionRoom.getAuctionRoomLiveState())
-//            .auctionRoomUrl(auctionRoom.getAuctionRoomURL)//TODO auctionRoomURL 추가 후 추가
-            .name(auctionRoom.getName())
-            .startedAt(auctionRoom.getStartedAt())
-            .auctionRoomType(auctionRoom.getAuctionRoomType())
-//            .imageURL(auctionRoom.getImage()) //TODO 이미지 추가 된 후 추가
-            .itemList(itemList.stream()
-                .map(item -> {
-                    item.toDTO();
-                })
-                .collect(Collectors.toList()))
-            .build();
-
-        return results;
+        return auctionRoom;
     }
-
 
 }

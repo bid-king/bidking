@@ -3,6 +3,7 @@ package com.widzard.bidking.auction.controller;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
+import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.exception.InvalidAuctionRoomRequestException;
 import com.widzard.bidking.auction.service.AuctionService;
 import com.widzard.bidking.global.entity.Address;
@@ -55,7 +56,7 @@ public class AuctionController {
 
         AuctionCreateResponse response = auctionService.createAuctionRoom(tempMember,
             auctionCreateRequest);
-        return new ResponseEntity<AuctionCreateResponse>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
 
@@ -74,9 +75,11 @@ public class AuctionController {
             .available(true)
             .build();
 
-        AuctionRoomResponse auctionRoomResponse = auctionService.readAuctionRoom(tempMember,
+        AuctionRoom auctionRoom = auctionService.readAuctionRoom(tempMember,
             auctionId);
-        return new ResponseEntity<>(auctionRoomResponse, HttpStatus.OK);
+
+        AuctionRoomResponse response = AuctionRoomResponse.create(auctionRoom);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }
