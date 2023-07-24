@@ -55,6 +55,10 @@ public class Item extends BaseEntity {
 
     private int ordering;// (순서)
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image image;// (대표이미지)
+
     public static Item create(
         AuctionRoom auctionRoom,
         Long startPrice,

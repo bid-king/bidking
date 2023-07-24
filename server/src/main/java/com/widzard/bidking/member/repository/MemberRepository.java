@@ -1,6 +1,5 @@
 package com.widzard.bidking.member.repository;
 
-import com.fasterxml.jackson.annotation.OptBoolean;
 import com.widzard.bidking.member.entity.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

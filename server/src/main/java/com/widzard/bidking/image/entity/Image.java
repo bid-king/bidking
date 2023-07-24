@@ -22,6 +22,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "image")
+@Builder
+@AllArgsConstructor
 public class Image extends BaseEntity {
 
     @Id

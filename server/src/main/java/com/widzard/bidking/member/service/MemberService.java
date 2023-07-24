@@ -3,7 +3,7 @@ package com.widzard.bidking.member.service;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.entity.Member;
-import java.util.Optional;
+import java.util.HashMap;
 
 public interface MemberService {
 
@@ -18,5 +18,9 @@ public interface MemberService {
     void certifiedPhoneNumber(String phoneNumber, String cerNum);
 
     Member getUserDetail(Long userId);
+
+    HashMap<String, Integer> getUserDashboard(Long userId);
+
+    HashMap<String, Integer> getSellerDashboard(Long userId);
 
 }

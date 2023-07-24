@@ -4,6 +4,7 @@ import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.dto.request.UserIdRequest;
 import com.widzard.bidking.member.dto.request.UserNicknameRequest;
+import com.widzard.bidking.member.dto.response.DashboardResponse;
 import com.widzard.bidking.member.dto.response.MemberCheckResponse;
 import com.widzard.bidking.member.dto.response.MemberCreateResponse;
 import com.widzard.bidking.member.dto.response.MemberInfoResponse;
@@ -11,6 +12,7 @@ import com.widzard.bidking.member.dto.response.MemberLoginResponse;
 import com.widzard.bidking.member.dto.response.MemberPhoneVerificationResponse;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.service.MemberService;
+import java.util.HashMap;
 import java.util.Random;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -91,5 +93,21 @@ public class MemberController {
         Member member = memberService.getUserDetail(memberId);
         MemberInfoResponse response = MemberInfoResponse.createResponse(member);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // TODO: 로그인 된 유저 필요
+    @GetMapping("/dashboard")
+    public ResponseEntity<DashboardResponse> getUserDashboard(Long memberId) {
+        HashMap<String, Integer> dashboard = memberService.getUserDashboard(memberId);
+        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
+        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
+    }
+
+    // TODO: 로그인 된 유저 필요
+    @GetMapping("/dashboard/seller")
+    public ResponseEntity<DashboardResponse> getSellerDashboard(Long memberId) {
+        HashMap<String, Integer> dashboard = memberService.getSellerDashboard(memberId);
+        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
+        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
     }
 }

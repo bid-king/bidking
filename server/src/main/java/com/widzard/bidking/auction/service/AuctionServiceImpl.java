@@ -7,13 +7,16 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
+import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.global.util.TimeUtility;
+import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.image.entity.repository.ImageRepository;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
+import com.widzard.bidking.member.entity.MemberRole;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -54,6 +57,24 @@ public class AuctionServiceImpl implements AuctionService {
         }
         //TODO ItemCategory 테스트용
         itemCategoryRepository.save(new ItemCategory(0L, "전자기기"));
+
+        Address tempAddress = new Address("asd", "asd", "asd");
+        Member tempMember = Member.builder()
+            .id(1L)
+            .address(tempAddress)
+            .memberRole(MemberRole.USER)
+            .nickname("asd")
+            .phoneNumber("asd")
+            .available(true)
+            .build();
+
+        Image tempImage = Image.builder()
+            .id(1L)
+            .fileName("asd.jpg")
+            .filePath("asd/asd")
+//            .member(tempMember)
+            .build();
+        tempImage = imageRepository.save(tempImage);
 
         AuctionRoom auctionRoom = AuctionRoom.builder()
 //            .seller(member)//TODO member 추가 후 주석 해제
