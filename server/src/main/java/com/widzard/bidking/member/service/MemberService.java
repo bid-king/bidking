@@ -14,5 +14,6 @@ public interface MemberService {
 
     String login(MemberLoginRequest request);
 
-}
+    void certifiedPhoneNumber(String phoneNumber, String cerNum);
 
+}

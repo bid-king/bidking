@@ -38,3 +38,5 @@ out/
 
 ### VS id ###
 .vsid/
+
+env.properties

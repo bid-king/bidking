@@ -23,6 +23,10 @@ public enum ErrorCode {
      */
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "존재하지 않는 회원입니다."),
 
+    /*
+     * validation
+     */
+    SENDING_MESSAGE_FAILURE(HttpStatus.CONFLICT, "SENDING_MESSAGE_FAILURE", "메세지 전송에 실패했습니다."),
 
     /*
      * Member
@@ -37,7 +41,6 @@ public enum ErrorCode {
     private final HttpStatus status;
     private final String code;
     private final String message;
-
 
     ErrorCode(HttpStatus status, String code, String message) {
         this.status = status;

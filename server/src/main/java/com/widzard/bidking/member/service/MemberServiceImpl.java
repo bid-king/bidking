@@ -1,5 +1,12 @@
 package com.widzard.bidking.member.service;
 
+import com.widzard.bidking.auction.exception.SendingMessageFailureException;
+import java.util.HashMap;
+import lombok.extern.slf4j.Slf4j;
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import com.widzard.bidking.global.jwt.service.TokenProvider;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
@@ -17,14 +24,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
+
+    private static final String MSG_TYPE = "SMS";
+
+    @Value("${coolsms.api_key}")
+    private String API_KEY;
+
+    @Value("${coolsms.api_secret}")
+    private String API_SECRET;
+
+    @Value("${coolsms.from}")
+    private String FROM;
 
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder managerBuilder;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
+
 
     /*
      * 회원 가입
@@ -76,18 +96,24 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    /*
-     * 로그인 인증 (JWT)
-     */
-//    @Override
-//    public String login(MemberLoginRequest request) {
-//        UsernamePasswordAuthenticationToken authenticationToken =
-//            new UsernamePasswordAuthenticationToken(request.getUserId(), request.getPassword());
-//        Authentication authentication = managerBuilder.getObject()
-//            .authenticate(authenticationToken);
-//
-//        String accessToken = tokenProvider.generateAccessToken(
-//            (UserDetails) authentication.getPrincipal());
-//        return accessToken;
-//    }
+    @Override
+    public void certifiedPhoneNumber(String phoneNumber, String cerNum) {
+        Message coolsms = new Message(API_KEY, API_SECRET);
+
+        // 4 params(to, from, type, text) are mandatory. must be filled
+        HashMap<String, String> params = new HashMap<>();
+        params.put("to", phoneNumber);
+        params.put("from", FROM);
+        params.put("type", MSG_TYPE);
+        params.put("text", "[입찰왕] 인증번호는 [" + cerNum + "] 입니다.");
+
+        try {
+            JSONObject sendObj = coolsms.send(params);
+            log.info(sendObj.toString());
+        } catch (CoolsmsException e) {
+            log.error(e.getMessage());
+            log.error(String.valueOf(e.getCode()));
+            throw new SendingMessageFailureException();
+        }
+    }
 }
