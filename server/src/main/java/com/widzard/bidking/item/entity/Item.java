@@ -3,6 +3,7 @@ package com.widzard.bidking.item.entity;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.global.entity.BaseEntity;
+import com.widzard.bidking.image.entity.Image;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,7 +54,6 @@ public class Item extends BaseEntity {
     private ItemCategory itemCategory;//(카테고리)
 
     private int ordering;// (순서)
-    
 
     public static Item create(
         AuctionRoom auctionRoom,
@@ -71,8 +72,5 @@ public class Item extends BaseEntity {
             .itemCategory(itemCategory)
             .ordering(ordering)
             .build();
-
-
-    }
 
 }

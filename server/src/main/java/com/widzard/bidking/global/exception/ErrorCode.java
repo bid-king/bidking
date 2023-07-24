@@ -34,7 +34,9 @@ public enum ErrorCode {
     AUCTION_START_TIME_ERROR(HttpStatus.BAD_REQUEST, "AUCTION_START_TIME_ERROR", "경매방 시작시간 에러입니다."),
     INVALID_AUCTION_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "INVALID_AUCTION_REQUEST_ERROR",
         "올바르지 않은 입력값입니다."),
-    ;
+    MEMBER_DUPLICATED(HttpStatus.BAD_REQUEST, "AlREADY_JOINED_MEMBER", "이미 존재하는 회원입니다."),
+    INVALID_TOKEN(HttpStatus.FORBIDDEN, "INVALID_TOKEN", "유효하지 않은 토큰입니다."),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "SC_FORBIDDEN", "해당 자원에 대한 권한이 없습니다.");
 
     private final HttpStatus status;
     private final String code;
