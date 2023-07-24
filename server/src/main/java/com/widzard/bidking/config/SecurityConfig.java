@@ -15,7 +15,7 @@ public class SecurityConfig {
 
     /*
     로그인 인증이 필요 없는 경우
-    - 로그인, 회원가입, 카테고리 리스트
+    - 로그인, 회원가  입, 카테고리 리스트
     - 경매 진행 예정, 경매 진행 중 리스트
 
     로그인 인증이 필요함
@@ -45,7 +45,8 @@ public class SecurityConfig {
 
         return http.build();
     }
-//
+
+    //
 //    @Bean//개발용 임시 security config
 //    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 //        http.csrf().disable();
