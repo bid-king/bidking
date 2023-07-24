@@ -9,10 +9,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "image")
@@ -26,5 +30,6 @@ public class Image extends BaseEntity {
     private String fileName;
 
     private String filePath;
+
 
 }
