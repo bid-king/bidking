@@ -18,22 +18,37 @@ export function useSignUp() {
   const [isIdDuplicated, setIsIdDuplicated] = useState(false);
   const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
 
+  const API_URL = 'http://70.12.247.202:8080';
+
+  // const checkIdDuplication = async (userId: string) => {
+  //   if (userId) {
+  //     try {
+  //       const data = await member.idValidate({ userId });
+  //       setIsIdDuplicated(data.duplicated);
+  //       console.log(data.duplicated);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // };
+
   const checkIdDuplication = async (userId: string) => {
     if (userId) {
-      try {
-        const data = await member.idValidate({ userId });
-        setIsIdDuplicated(data.duplicated);
-        console.log(data.duplicated);
-      } catch (err) {
-        console.log(err);
-      }
+      axios
+        .post(`${API_URL}/api/v1/members/check/userId`, { userId })
+        .then(res => {
+          setIsIdDuplicated(res.data.duplicated);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   };
 
   const checkNicknameDuplication = async (nickname: string) => {
-    if (userId) {
+    if (nickname) {
       axios
-        .post(`${API_URL}/api/v1/members/check/userId`, { nickname })
+        .post(`${API_URL}/api/v1/members/check/nickname`, { nickname })
         .then(res => {
           setIsNicknameDuplicated(res.data.duplicated);
           console.log(res.data.duplicated);
