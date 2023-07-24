@@ -1,4 +1,4 @@
-package com.widzard.bidking.item.entity.repository;
+package com.widzard.bidking.item.repository;
 
 import com.widzard.bidking.item.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
