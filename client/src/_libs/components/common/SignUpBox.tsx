@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
-import { HTMLAttributes } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text } from './Text';
 import colors from '../../design/colors';
 import { Spacing } from './Spacing';
@@ -8,72 +7,34 @@ import { Input } from './Input';
 import { ConfirmButton } from './ConfirmButton';
 import { SignUpInput } from './SignUpInput';
 import { Link } from 'react-router-dom';
+import { useSignUp } from '../hooks/useSignUp';
 
 // interface Props extends HTMLAttributes<HTMLDivElement> {}
 
 export function SignUpBox() {
-  const [step, setStep] = useState(0);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [address, setAddress] = useState('');
-
-  const [isEmailValid, setEmailValid] = useState(false);
-  const [isPhoneValid, setPhoneValid] = useState(false);
-
-  // 이메일 유효성 체크
-  useEffect(() => {
-    const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-    setEmailValid(emailRegex.test(email));
-  }, [email]);
-
-  // 핸드폰번호 유효성 체크(변경 가능)
-  useEffect(() => {
-    const phoneRegex = /^\d{10,11}$/;
-    setPhoneValid(phoneRegex.test(phoneNumber));
-  }, [phoneNumber]);
-
-  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handlePasswordConfirmationChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPasswordConfirmation(e.target.value);
-  };
-
-  const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPhoneNumber(e.target.value);
-  };
-
-  const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAddress(e.target.value);
-  };
-
-  const handleNextStep = (e: FormEvent) => {
-    e.preventDefault();
-    if (step === 0 && isEmailValid) {
-      setStep(prevStep => prevStep + 1);
-    } else if (step === 1) {
-      setStep(prevStep => prevStep + 1);
-    } else if (step === 2) {
-      setStep(prevStep => prevStep + 1);
-    } else if (step === 3 && isPhoneValid) {
-      setStep(prevStep => prevStep + 1);
-    } else if (step === 4 && address !== '') {
-      // 서버로 AJAX 요청
-      console.log({
-        email,
-        password,
-        phoneNumber,
-        address,
-      });
-    }
-  };
+  const {
+    step,
+    handleNextStep,
+    handleUserIdChange,
+    handlePasswordChange,
+    handlePasswordConfirmationChange,
+    handlePhoneChange,
+    handleAddressChange,
+    password,
+    passwordConfirmation,
+    address,
+    isVerificationVisible,
+    isButtonDisabled,
+    requestVerification,
+    requestCerificated,
+    userId,
+    isIdDuplicated,
+    handleUserIdBlur,
+    nickname,
+    handleNicknameChange,
+    handleNicknameBlur,
+    handleUserNameChange,
+  } = useSignUp();
 
   return (
     <form
@@ -95,29 +56,62 @@ export function SignUpBox() {
           padding: '0.5rem',
         }}
       >
-        {step === 0 && (
+        {step === 'userName' && (
           <>
             <SignUpInput
-              onChange={handleEmailChange}
-              className="email"
-              inputTitle="이메일을 입력해주세요"
-              inputId="email-signup-input"
-              inputType="email"
+              onChange={handleUserNameChange}
+              className="userName"
+              inputTitle="이름을 입력해주세요"
+              inputId="userName-signup-input"
+              inputType="userName"
             />
-            {!isEmailValid && (
+            <ConfirmButton onClick={handleNextStep} label="다음" />
+          </>
+        )}
+        {step === 'nickname' && (
+          <>
+            <SignUpInput
+              onChange={handleNicknameChange}
+              onBlur={handleNicknameBlur}
+              className="nickname"
+              inputTitle="닉네임을 입력해주세요"
+              inputId="nickname-signup-input"
+              inputType="nickname"
+            />
+            {isIdDuplicated && (
               <>
-                <ConfirmButton btnType="disabled" label="다음" />
+                <Text type="bold" content="아이디가 중복되었습니다." />
+                <Spacing rem="1" />
               </>
             )}
-            {isEmailValid && (
+
+            {nickname === '' && <ConfirmButton btnType="disabled" label="다음" />}
+            {nickname !== '' && <ConfirmButton onClick={handleNextStep} label="다음" />}
+          </>
+        )}
+        {step === 'id' && (
+          <>
+            <SignUpInput
+              onChange={handleUserIdChange}
+              onBlur={handleUserIdBlur}
+              className="userId"
+              inputTitle="아이디를 입력해주세요"
+              inputId="userId-signup-input"
+              inputType="userId"
+            />
+            {isIdDuplicated && (
               <>
-                <ConfirmButton onClick={handleNextStep} label="다음" />
+                <Text type="bold" content="아이디가 중복되었습니다." />
+                <Spacing rem="1" />
               </>
             )}
+
+            {userId === '' && <ConfirmButton btnType="disabled" label="다음" />}
+            {userId !== '' && <ConfirmButton onClick={handleNextStep} label="다음" />}
           </>
         )}
 
-        {step === 1 && (
+        {step === 'password' && (
           <>
             <SignUpInput
               onChange={handlePasswordChange}
@@ -130,7 +124,7 @@ export function SignUpBox() {
           </>
         )}
 
-        {step === 2 && (
+        {step === 'password-again' && (
           <>
             <SignUpInput
               onChange={handlePasswordConfirmationChange}
@@ -139,40 +133,62 @@ export function SignUpBox() {
               inputId="password-again-signup-input"
               inputType="password"
             />
-            {password !== passwordConfirmation && (
-              <>
-                <ConfirmButton btnType="disabled" label="다음" />
-              </>
-            )}
-            {password === passwordConfirmation && (
-              <>
-                <ConfirmButton onClick={handleNextStep} label="다음" />
-              </>
-            )}
+            {password !== passwordConfirmation && <ConfirmButton btnType="disabled" label="다음" />}
+            {password === passwordConfirmation && <ConfirmButton onClick={handleNextStep} label="다음" />}
           </>
         )}
 
-        {step === 3 && (
+        {step === 'phone-number' && (
           <>
             <div className="phone-nubmer">
-              <label htmlFor="phone-nubmer-signup-input">
-                <Text type="bold" content="본인인증을 진행할게요" />
-              </label>
+              <Text type="bold" content="본인인증을 진행할게요" />
               <Spacing rem="1" />
-              <Input id="phone-nubmer-signup-input" onChange={handlePhoneChange} placeholder="" />
+              <div
+                css={{
+                  display: 'flex',
+                }}
+              >
+                <div
+                  css={{
+                    width: '80rem',
+                  }}
+                >
+                  <Input id="phone-nubmer-signup-input" onChange={handlePhoneChange} placeholder="" />
+                </div>
+                <Spacing rem="3" dir="h" />
+                <Spacing rem="2" />
+
+                <ConfirmButton btnType="certification" onClick={requestVerification} label="인증번호 전송" />
+              </div>
+              {isVerificationVisible && (
+                <>
+                  <Spacing rem="1" />
+                  <div
+                    css={{
+                      display: 'flex',
+                    }}
+                  >
+                    <div
+                      css={{
+                        width: '120rem',
+                      }}
+                    >
+                      <Input id="phone-nubmer-signup-input" onChange={handlePhoneChange} placeholder="" />
+                    </div>
+                    <Spacing rem="3" dir="h" />
+                    <ConfirmButton btnType="certification" onClick={requestCerificated} label="인증" />
+                  </div>
+                </>
+              )}
             </div>
             <Spacing rem="2" />
-            {!isPhoneValid && (
-              <>
-                <Text type="bold" content="유효한 전화번호를 입력해주세요." />
-                <Spacing rem="2" />
-              </>
-            )}
-            <ConfirmButton onClick={handleNextStep} label="다음" />
+            {isButtonDisabled && <ConfirmButton btnType="disabled" label="다음" />}
+
+            {!isButtonDisabled && <ConfirmButton onClick={handleNextStep} label="다음" />}
           </>
         )}
 
-        {step === 4 && (
+        {step === 'address' && (
           <>
             <SignUpInput
               onChange={handleAddressChange}

@@ -11,6 +11,7 @@ interface Props extends HTMLAttributes<HTMLInputElement> {
   placeholder: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export function Input({
@@ -21,6 +22,7 @@ export function Input({
   shape = 'square',
   value,
   onChange,
+  onBlur,
 }: Props) {
   return (
     <input
@@ -30,7 +32,7 @@ export function Input({
       value={value}
       css={{
         width: '100%',
-        height: '2rem',
+        height: '2.5rem',
         paddingLeft: '1rem',
         paddingRight: '1rem',
         fontWeight: 700,
@@ -39,6 +41,7 @@ export function Input({
         ...SHAPE_VARIENT[shape],
       }}
       onChange={onChange}
+      onBlur={onBlur}
     />
   );
 }

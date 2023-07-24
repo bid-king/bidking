@@ -12,6 +12,7 @@ interface Props {
   inputPlaceholder?: string;
   inputType?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export function SignUpInput({
@@ -21,6 +22,7 @@ export function SignUpInput({
   inputPlaceholder = '',
   inputType = 'text',
   onChange,
+  onBlur,
 }: Props) {
   return (
     <>
@@ -29,7 +31,7 @@ export function SignUpInput({
           <Text type="bold" content={inputTitle} />
         </label>
         <Spacing rem="1" />
-        <Input id={inputId} onChange={onChange} placeholder={inputPlaceholder} inputType={inputType} />
+        <Input id={inputId} onChange={onChange} onBlur={onBlur} placeholder={inputPlaceholder} inputType={inputType} />
       </div>
       <Spacing rem="2" />
     </>
