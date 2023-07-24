@@ -1,5 +1,6 @@
 package com.widzard.bidking.member.service;
 
+import com.widzard.bidking.auction.exception.SendingMessageFailureException;
 import java.util.HashMap;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
@@ -40,6 +41,7 @@ public class MemberServiceImpl implements MemberService {
         } catch (CoolsmsException e) {
             log.error(e.getMessage());
             log.error(String.valueOf(e.getCode()));
+            throw new SendingMessageFailureException();
         }
     }
 }
