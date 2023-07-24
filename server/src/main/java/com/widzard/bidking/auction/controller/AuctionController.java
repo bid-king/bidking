@@ -37,7 +37,7 @@ public class AuctionController {
     // TODO token으로 user 정보 받아야 함. (login check: 본인인증 된 유저)
     @PostMapping
     public ResponseEntity<AuctionCreateResponse> createAuction(
-        @AuthenticationPrincipal Member member,
+        @AuthenticationPrincipal UserDetails member,
         @RequestBody @Valid AuctionCreateRequest auctionCreateRequest,
         BindingResult bindingResult) {
 
@@ -52,7 +52,9 @@ public class AuctionController {
             .available(true)
             .build();
 
-        System.out.println("member = " + member);
+        System.out.println("member = " + member.getUsername());
+        System.out.println("member = " + member.getPassword());
+        System.out.println("member = " + member.getAuthorities());
 
         if (bindingResult.hasErrors()) {
             throw new InvalidAuctionRoomRequestException();

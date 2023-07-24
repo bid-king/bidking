@@ -18,7 +18,7 @@ public class ControllerAdvice {
      */
     @ExceptionHandler(CustomBaseException.class)
     protected ResponseEntity<ErrorResponse> handle(CustomBaseException e) {
-        log.error("Business CustomException: ", e);
+        log.error("Business CustomException: {}", e);
         return createErrorResponseEntity(e.getErrorCode());
     }
 
@@ -28,7 +28,7 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handle(Exception e) {
         e.printStackTrace();
-        log.error("Exception: ", e);
+        log.error("Exception: {}", e);
         return createErrorResponseEntity(ErrorCode.INTERNAL_SERVER_ERROR);
     }
 
@@ -37,7 +37,7 @@ public class ControllerAdvice {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<ErrorResponse> handle(HttpRequestMethodNotSupportedException e) {
-        log.error("HttpRequestMethodNotSupportedException: ", e);
+        log.error("HttpRequestMethodNotSupportedException: {}", e);
         return createErrorResponseEntity(ErrorCode.METHOD_NOT_ALLOWED);
     }
 
@@ -47,7 +47,7 @@ public class ControllerAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handle404(NoHandlerFoundException e) {
-        log.error("NoHandlerFoundException: ", e);
+        log.error("NoHandlerFoundException: {}", e);
         return createErrorResponseEntity(ErrorCode.NOT_FOUND);
     }
 
