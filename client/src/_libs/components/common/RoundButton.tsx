@@ -10,7 +10,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   activated?: 0 | 1;
 }
 
-export function RoundButton({ variant = 'confirm', size = 'small', label = '로그인', activated = 1 }: Props) {
+export function RoundButton({ variant = 'confirm', label = '로그인', activated = 1 }: Props) {
   return (
     <button
       type="button"
@@ -18,11 +18,11 @@ export function RoundButton({ variant = 'confirm', size = 'small', label = '로�
         cursor: 'pointer',
         borderRadius: '2.25rem',
         transition: 'filter 0.3s',
-        paddingLeft: '1rem',
-        paddingRight: '1rem',
+        height: '3rem',
+        padding: '0 1.5rem 0 1.5rem',
         fontWeight: '600',
+        fontSize: '1.1rem',
         ...TYPE_VARIANTS[variant],
-        ...SIZE_VARIANTS[size],
         ...IS_ACTIVATED[activated],
       }}
     >
@@ -45,15 +45,6 @@ const TYPE_VARIANTS = {
     '&:hover': {
       filter: 'brightness(0.9)',
     },
-  },
-};
-
-const SIZE_VARIANTS = {
-  small: {
-    height: '2rem',
-  },
-  medium: {
-    height: '3rem',
   },
 };
 

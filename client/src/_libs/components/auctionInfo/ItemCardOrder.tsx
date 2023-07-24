@@ -117,7 +117,7 @@ export function ItemCardOrder({
             width: '50%',
           }}
         >
-          <Text content={'판매자 '} />
+          <Text content={'판매자 '} css={{ fontSize: '3rem' }} />
           <Text type="bold" content={item.sellerName} />
         </div>
         <div>

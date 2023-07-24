@@ -1,4 +1,4 @@
-import { http } from './_http';
+import { http } from '../_libs/util/http';
 
 export default {
   get: () => http.get('/api/v1/orders'),

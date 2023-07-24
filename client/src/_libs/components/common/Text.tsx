@@ -39,3 +39,12 @@ const FONT_TYPE = {
     fontSize: '1rem',
   },
 };
+
+const THEME_VARIANT = {
+  light: {
+    color: colors.black,
+  },
+  dark: {
+    color: colors.white,
+  },
+};
