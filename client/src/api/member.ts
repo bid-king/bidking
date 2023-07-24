@@ -1,15 +1,20 @@
 import { http } from '../_libs/util/http';
 
+const API_URL = 'http://70.12.247.202:8080';
+
 export default {
-  get: (memberId: number) => http.get(`/api/v1/members/${memberId}`),
+  get: (memberId: number) => http.get(`${API_URL}/api/v1/members/${memberId}`),
   //회원정보조회
-  put: (memberId: number, data: MemberUpdateRequest) => http.put(`/api/v1/members/${memberId}`, data),
+  put: (memberId: number, data: MemberUpdateRequest) => http.put(`${API_URL}/api/v1/members/${memberId}`, data),
   //회원정보수정
-  delete: (memberId: number) => http.delete(`/api/v1/members/${memberId}`), //회원탈퇴
+  delete: (memberId: number) => http.delete(`${API_URL}/api/v1/members/${memberId}`), //회원탈퇴
   //회원탈퇴
-  isDuplicated: (data: MemberNicknameDuplicateRequest) => http.post('/api/v1/members/check/nickname', data),
+  idValidate: (data: MemberIdDuplicateRequest) => http.post(`${API_URL}/api/v1/members/check/nickname`, data),
+  nicknameValidate: (data: MemberNicknameDuplicateRequest) =>
+    http.post(`${API_URL}/api/v1/members/check/nickname`, data),
+
   //닉네임 중복검사, 중복이면 true
-  login: (socialType: 'google' | 'kakao') => http.post(`/api/v1/oauth/${socialType}`),
+  login: (socialType: 'google' | 'kakao') => http.post(`${API_URL}/api/v1/oauth/${socialType}`),
   logout: () => http.post('/api/v1/logout'),
   //로그인 및 로그아웃, oAuth 관련
 };
@@ -25,5 +30,9 @@ interface MemberUpdateRequest {
 }
 
 interface MemberNicknameDuplicateRequest {
-  memeberNickname: string;
+  duplicated: string;
+}
+
+interface MemberIdDuplicateRequest {
+  userId: string;
 }

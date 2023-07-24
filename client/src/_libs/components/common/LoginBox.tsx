@@ -6,6 +6,7 @@ import colors from '../../design/colors';
 import { Spacing } from './Spacing';
 import { Input } from './Input';
 import { ConfirmButton } from './ConfirmButton';
+import { Link } from 'react-router-dom';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {}
 
@@ -78,7 +79,9 @@ export function LoginBox() {
           }}
         >
           <Text type="p" content="아이디/비밀번호 찾기" />
-          <Text type="bold" content="아직 가입하지 않았어요" />
+          <Link to={'/signup'}>
+            <Text type="bold" content="아직 가입하지 않았어요" />
+          </Link>
         </div>
       </div>
     </form>

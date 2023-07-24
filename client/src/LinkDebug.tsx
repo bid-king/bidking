@@ -13,6 +13,9 @@ export function LinkDebug() {
             <Link to="/login">Login</Link>
           </li>
           <li>
+            <Link to="/signup">SignUp</Link>
+          </li>
+          <li>
             <Link to="/mypage/user123">MyPage</Link>
           </li>
           <li>
