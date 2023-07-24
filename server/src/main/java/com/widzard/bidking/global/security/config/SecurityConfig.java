@@ -1,4 +1,4 @@
-package com.widzard.bidking.config;
+package com.widzard.bidking.global.security.config;
 
 import com.widzard.bidking.global.security.CustomAuthorizationFilter;
 import java.util.Arrays;
