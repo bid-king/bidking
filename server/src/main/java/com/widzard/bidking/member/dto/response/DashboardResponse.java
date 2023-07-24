@@ -17,7 +17,7 @@ public class DashboardResponse {
 
     private int paymentWaiting;
     private int deliveryWaiting;
-    private int orderCanceled;
+    private int penalty;
 
     public static DashboardResponse createDashboard(HashMap<String, Integer> dashboard) {
         return DashboardResponse.builder()
@@ -27,7 +27,7 @@ public class DashboardResponse {
             .deliveryWaiting(
                 Optional.ofNullable(dashboard.get(OrderState.DELIVERY_WAITING.toString()))
                     .orElse(0))
-            .orderCanceled(Optional.ofNullable(dashboard.get(OrderState.ORDER_CANCELED.toString()))
+            .penalty(Optional.ofNullable(dashboard.get("penalty"))
                 .orElse(0))
             .build();
     }

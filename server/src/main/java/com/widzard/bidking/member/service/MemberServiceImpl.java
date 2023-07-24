@@ -22,8 +22,9 @@ public class MemberServiceImpl implements MemberService {
         AuctionRoomTradeState.IN_PROGRESS,
         AuctionRoomTradeState.ALL_COMPLETED);
     private static final List<OrderState> ORDER_STATE = List.of(OrderState.PAYMENT_WAITING,
-        OrderState.DELIVERY_WAITING, OrderState.ORDER_CANCELED);
+        OrderState.DELIVERY_WAITING);
 
+    private static final String PENALTY = "penalty";
 
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
@@ -43,9 +44,11 @@ public class MemberServiceImpl implements MemberService {
             OrderState.DELIVERY_WAITING);
         dashboardResult.put(OrderState.DELIVERY_WAITING.toString(), deliveryWaiting);
 
-        int orderCanceled = orderRepository.countByOrdererAndOrderState(member,
-            OrderState.ORDER_CANCELED);
-        dashboardResult.put(OrderState.ORDER_CANCELED.toString(), orderCanceled);
+        dashboardResult.put(PENALTY, member.getPenalty());
+
+//        int orderCanceled = orderRepository.countByOrdererAndOrderState(member,
+//            OrderState.ORDER_CANCELED);
+//        dashboardResult.put(OrderState.ORDER_CANCELED.toString(), orderCanceled);
 
         return dashboardResult;
     }
@@ -64,6 +67,7 @@ public class MemberServiceImpl implements MemberService {
         for (Object[] obj : dashboard) {
             dashboardResult.put(obj[0].toString(), Integer.valueOf(obj[1].toString()));
         }
+        dashboardResult.put(PENALTY, member.getPenalty());
 
         return dashboardResult;
     }

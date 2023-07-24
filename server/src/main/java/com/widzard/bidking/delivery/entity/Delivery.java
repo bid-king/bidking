@@ -2,7 +2,6 @@ package com.widzard.bidking.delivery.entity;
 
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.global.entity.BaseEntity;
-import com.widzard.bidking.order.entity.Order;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -28,10 +27,6 @@ public class Delivery extends BaseEntity {
     @Column(name = "delivery_id")
     private Long id; //
 
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-
     @Embedded
     private Address address; //
 
@@ -44,5 +39,5 @@ public class Delivery extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_id")
     private Invoice invoice;
-    
+
 }
