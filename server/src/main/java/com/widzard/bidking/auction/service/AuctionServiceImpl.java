@@ -2,9 +2,10 @@ package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
-import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
+import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.global.entity.Address;
@@ -13,6 +14,8 @@ import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.image.entity.repository.ImageRepository;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
+import com.widzard.bidking.item.exception.EmptyItemListException;
+import com.widzard.bidking.item.exception.ItemCategoryNotFoundException;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
@@ -48,7 +51,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Transactional
     @Override
-    public AuctionCreateResponse createAuctionRoom(Member member, AuctionCreateRequest request) {
+    public AuctionRoom createAuctionRoom(Member member, AuctionCreateRequest request) {
 
         //시작시간 예외 로직
         LocalDateTime now = LocalDateTime.now();
@@ -79,28 +82,28 @@ public class AuctionServiceImpl implements AuctionService {
         AuctionRoom auctionRoom = AuctionRoom.builder()
 //            .seller(member)//TODO member 추가 후 주석 해제
             .name(request.getAuctionTitle())
+            .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
             .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
             .auctionRoomType(request.getAuctionRoomType())
-            .startedAt(TimeUtility.toLocalDateTime(request.getStartedAt()))
+            .startedAt(request.getStartedAt())
             .build();
 
         AuctionRoom savedAuctionRoom = auctionRoomRepository.save(auctionRoom);
         List<ItemCreateRequest> itemCreateRequestList = request.getItemList();
 
         if (itemCreateRequestList == null || itemCreateRequestList.size() == 0) {
-            throw new RuntimeException("아이템이 하나도 없습니다");//TODO EmptyItemListException 추가 후 주석 해제
+            throw new EmptyItemListException();
         }
         itemCreateRequestList.forEach(
             r -> {
                 Optional<ItemCategory> itemCategoryOptional = itemCategoryRepository.findById(
                     r.getItemCategory());
                 if (itemCategoryOptional.isEmpty()) {
-                    //TODO ItemNotFoundException으로 변경
-                    throw new RuntimeException("ItemNotFoundException");
+                    throw new ItemCategoryNotFoundException();
                 }
                 ItemCategory itemCategory = itemCategoryOptional.get();
                 Item item = Item.create(
-                    auctionRoom,
+                    savedAuctionRoom,
                     r.getStartPrice(),
                     r.getName(),
                     r.getDescription(),
@@ -110,10 +113,22 @@ public class AuctionServiceImpl implements AuctionService {
                 itemRepository.save(item);
             }
         );
-        return AuctionCreateResponse.builder()
-            .id(savedAuctionRoom.getId())
-            .build();
+        return savedAuctionRoom;
+//        return AuctionCreateResponse.builder()
+//            .id(savedAuctionRoom.getId())
+//            .build();
     }
 
+    @Override
+    public AuctionRoom readAuctionRoom(Member tempMember, Long auctionId) {
+
+        Optional<AuctionRoom> auctionRoomOptional = auctionRoomRepository.findById(auctionId);
+        if (auctionRoomOptional.isEmpty()) {
+            throw new AuctionRoomNotFoundException();
+        }
+        AuctionRoom auctionRoom = auctionRoomOptional.get();
+
+        return auctionRoom;
+    }
 
 }

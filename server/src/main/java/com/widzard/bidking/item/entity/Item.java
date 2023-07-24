@@ -3,7 +3,11 @@ package com.widzard.bidking.item.entity;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.global.entity.BaseEntity;
+<<<<<<< HEAD
 import com.widzard.bidking.image.entity.Image;
+=======
+import com.widzard.bidking.order.entity.OrderItem;
+>>>>>>> feat/be/auction-read
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,14 +24,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Getter
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+//@ToString
 @Table(name = "item")
 public class Item extends BaseEntity {
 
@@ -38,6 +41,7 @@ public class Item extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_room_id")
+    //TODO 양방향 연관관계 도우미 매핑 메소드 생성
     private AuctionRoom auctionRoom;// (경매방코드)
 
     private Long startPrice;// (시작가)
@@ -53,11 +57,17 @@ public class Item extends BaseEntity {
     @JoinColumn(name = "item_category_id")
     private ItemCategory itemCategory;//(카테고리)
 
+    @OneToOne(mappedBy = "item")
+    private OrderItem orderItem;
+
     private int ordering;// (순서)
 
+<<<<<<< HEAD
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private Image image;// (대표이미지)
+=======
+>>>>>>> feat/be/auction-read
 
     public static Item create(
         AuctionRoom auctionRoom,

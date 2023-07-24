@@ -36,7 +36,18 @@ public enum ErrorCode {
         "올바르지 않은 입력값입니다."),
     MEMBER_DUPLICATED(HttpStatus.BAD_REQUEST, "AlREADY_JOINED_MEMBER", "이미 존재하는 회원입니다."),
     INVALID_TOKEN(HttpStatus.FORBIDDEN, "INVALID_TOKEN", "유효하지 않은 토큰입니다."),
-    FORBIDDEN(HttpStatus.FORBIDDEN, "SC_FORBIDDEN", "해당 자원에 대한 권한이 없습니다.");
+    FORBIDDEN(HttpStatus.FORBIDDEN, "SC_FORBIDDEN", "해당 자원에 대한 권한이 없습니다."),
+
+    /*
+     * Auction
+     */
+    AUCTION_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "AUCTION_ROOM_NOT_FOUND", "존재하지 않는 경매방입니다."),
+
+    /*
+     * Item
+     */
+    Empty_Item_List(HttpStatus.NOT_FOUND, "EMPTY_ITEM_LIST", "아이템이 없습니다."),
+    ITEM_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_CATEGORY_NOT_FOUND", "카테고리가 없습니다.");
 
     private final HttpStatus status;
     private final String code;
