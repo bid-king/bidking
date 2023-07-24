@@ -10,15 +10,57 @@ export function useSignUp() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [address, setAddress] = useState('');
+  const [certificateCode, setCertificateCode] = useState('');
+  const [street, setStreet] = useState('');
+  const [details, setDetails] = useState('');
+  const [zipCode, setZipCode] = useState('');
   const [isPhoneValid, setPhoneValid] = useState(false);
   const [isVerificationVisible, setVerificationVisible] = useState(false);
   const [isRequestCerificated, setRequestCerificated] = useState(false);
   const [isButtonDisabled, setButtonDisabled] = useState(true);
   const [isIdDuplicated, setIsIdDuplicated] = useState(false);
   const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
+  const [isSuccess, setSuccess] = useState(false);
 
   const API_URL = 'http://70.12.247.202:8080';
+
+  const handleNextStep = (e: FormEvent) => {
+    e.preventDefault();
+    if (step === 'userName' && userName !== '') {
+      setStep('nickname');
+    } else if (step === 'nickname' && nickname !== '' && !isNicknameDuplicated) {
+      setStep('id');
+    } else if (step === 'id' && userId !== '' && !isIdDuplicated) {
+      setStep('password');
+    } else if (step === 'password') {
+      setStep('password-again');
+    } else if (step === 'password-again' && password === passwordConfirmation) {
+      setStep('phone-number');
+    } else if (step === 'phone-number' && isRequestCerificated) {
+      setStep('address');
+    } else if (step === 'address' && street !== '' && details !== '' && zipCode !== '') {
+      axios
+        .post(`${API_URL}/api/v1/members/signup`, {
+          userId: userId,
+          password: password,
+          name: userName,
+          nickname: nickname,
+          phoneNumber: phoneNumber,
+          address: {
+            street: street,
+            details: details,
+            zipCode: zipCode,
+          },
+        })
+        .then(res => {
+          console.log(res.data);
+          setSuccess(true);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
 
   // const checkIdDuplication = async (userId: string) => {
   //   if (userId) {
@@ -59,13 +101,24 @@ export function useSignUp() {
     }
   };
 
+  // 인증번호 요청 함수
+  const requestVerification = () => {
+    setVerificationVisible(true);
+  };
+
+  // 인증번호 확인 함수
+  const requestCerificated = () => {
+    // certificateCode
+    setRequestCerificated(true);
+  };
+
   // 핸드폰번호 유효성 체크(변경 가능)
   useEffect(() => {
     const phoneRegex = /^\d{10,11}$/;
     setPhoneValid(phoneRegex.test(phoneNumber));
   }, [phoneNumber]);
 
-  // 휻대폰 본인인증 버튼 활성화 체크
+  // 휴대폰 본인인증 버튼 활성화 체크
   useEffect(() => {
     if (isRequestCerificated && isVerificationVisible && isPhoneValid) {
       setButtonDisabled(false);
@@ -74,6 +127,7 @@ export function useSignUp() {
     }
   }, [isRequestCerificated, isVerificationVisible, isPhoneValid]);
 
+  // 인풋값 관리
   const handleUserNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value.trim());
   };
@@ -105,55 +159,20 @@ export function useSignUp() {
     setPhoneNumber(e.target.value.trim());
   };
 
-  const handleAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAddress(e.target.value.trim());
+  const handleCertificateCode = (e: ChangeEvent<HTMLInputElement>) => {
+    setCertificateCode(e.target.value.trim());
   };
 
-  const handleNextStep = (e: FormEvent) => {
-    e.preventDefault();
-    if (step === 'userName' && userName !== '') {
-      setStep('nickname');
-    } else if (step === 'nickname' && nickname !== '' && !isNicknameDuplicated) {
-      setStep('id');
-    } else if (step === 'id' && userId !== '' && !isIdDuplicated) {
-      setStep('password');
-    } else if (step === 'password') {
-      setStep('password-again');
-    } else if (step === 'password-again' && password === passwordConfirmation) {
-      setStep('phone-number');
-    } else if (step === 'phone-number' && isPhoneValid) {
-      setStep('address');
-    } else if (step === 'address' && address !== '') {
-      axios
-        .post(`${API_URL}/api/v1/members/signup`, {
-          userId: userId,
-          password: password,
-          name: userName,
-          nickname: nickname,
-          phoneNumber: phoneNumber,
-          address: {
-            street: '광교호수로 15',
-            details: '주소 상세 설명',
-            zipCode: '32423',
-          },
-        })
-        .then(res => {
-          console.log(res.data);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
+  const handleStreetChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setStreet(e.target.value.trim());
   };
 
-  // 인증번호 요청 함수
-  const requestVerification = () => {
-    setVerificationVisible(true);
+  const handleDetailsChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDetails(e.target.value.trim());
   };
 
-  // 인증번호 확인 함수
-  const requestCerificated = () => {
-    setRequestCerificated(true);
+  const handleZipCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setZipCode(e.target.value.trim());
   };
 
   return {
@@ -163,11 +182,15 @@ export function useSignUp() {
     handlePasswordChange,
     handlePasswordConfirmationChange,
     handlePhoneChange,
-    handleAddressChange,
+    street,
+    details,
+    zipCode,
     isPhoneValid,
     password,
     passwordConfirmation,
-    address,
+    handleStreetChange,
+    handleDetailsChange,
+    handleZipCodeChange,
     isVerificationVisible,
     isRequestCerificated,
     isButtonDisabled,
@@ -180,5 +203,7 @@ export function useSignUp() {
     handleNicknameChange,
     handleNicknameBlur,
     handleUserNameChange,
+    handleCertificateCode,
+    isSuccess,
   };
 }
