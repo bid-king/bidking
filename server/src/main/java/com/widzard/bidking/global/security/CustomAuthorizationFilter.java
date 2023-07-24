@@ -1,6 +1,6 @@
 package com.widzard.bidking.global.security;
 
-import com.widzard.bidking.global.jwt.service.TokenService;
+import com.widzard.bidking.global.jwt.service.TokenProvider;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,7 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
-    private final TokenService tokenService;
+    private final TokenProvider tokenProvider;
     private final CustomUserDetailsService userDetailsService;
 
     @Override
@@ -47,12 +47,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         log.info("JwtAuthenticationFilter is runnig... Token parsing Completed.");
 
         // jwt 토큰 검증 및 토큰으로부터 유저 정보 (UserId) 받아오기
-        userId = tokenService.extractUsername(jwt);
+        userId = tokenProvider.extractUsername(jwt);
         // 미인증 상태이며 토큰 내 유저 정보가 존재할 때 db에서 user details를 가져와 체크
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
             // 토큰 검증
-            if (tokenService.isTokenValid(jwt, userDetails)) {
+            if (tokenProvider.isTokenValid(jwt, userDetails)) {
                 // 토큰이 유효하면 UsernamePasswordAuthenticationToken 생성
                 log.info("Token is valid...");
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

@@ -1,9 +1,8 @@
 package com.widzard.bidking.member.service;
 
-import com.widzard.bidking.global.jwt.service.TokenService;
+import com.widzard.bidking.global.jwt.service.TokenProvider;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
-import com.widzard.bidking.member.dto.response.MemberLoginResponse;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberDuplicatedException;
 import com.widzard.bidking.member.repository.MemberRepository;
@@ -22,7 +21,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder managerBuilder;
-    private final TokenService tokenService;
+    private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
 
     /*
@@ -75,7 +74,7 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication = managerBuilder.getObject()
             .authenticate(authenticationToken);
 
-        String accessToken = tokenService.generateAccessToken(
+        String accessToken = tokenProvider.generateAccessToken(
             (UserDetails) authentication.getPrincipal());
         return accessToken;
     }

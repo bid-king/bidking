@@ -4,7 +4,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.widzard.bidking.auth.service.AuthService;
-import com.widzard.bidking.global.jwt.service.TokenService;
+import com.widzard.bidking.global.jwt.service.TokenProvider;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     private static final String AT_HEADER = "access_token";
     private static final String RT_HEADER = "refresh_token";
-    private final TokenService tokenService;
+    private final TokenProvider tokenProvider;
     private final AuthService authService;
 
     @Override
@@ -32,8 +32,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
         Member member = (Member) authentication.getPrincipal();
 
-        String accessToken = tokenService.generateAccessToken(member);
-        String refreshToken = tokenService.generateRefreshToken();
+        String accessToken = tokenProvider.generateAccessToken(member);
+        String refreshToken = tokenProvider.generateRefreshToken();
 
         // Refresh Token DB 저장
         authService.updateRefreshToken(member.getUserId(), refreshToken);
