@@ -15,10 +15,10 @@ public class ItemDto {
 
     private Long itemId;
     private String itemName;
-    private String category;//TODO ENum
+    private String category;
     private Long startPrice;
-    private String itemState;//TODO ENum
-    private String itemImage;
+    private String itemState;
+    private String itemImageUrl;
     private String itemDescription;
     private int itemOrdering;
     private LocalDateTime successTime;
@@ -27,7 +27,7 @@ public class ItemDto {
     private Long successMemberId;
     private String deliveryAddress;
     private String deliveryMsg;
-//    private invoiceDto invoice;//TODO invoice 구현 후
+//    private invoiceDto invoice; //TODO invoice 구현 후
 
 
     public static ItemDto create(Item item) {
@@ -35,11 +35,9 @@ public class ItemDto {
             .itemId(item.getId())
             .itemName(item.getName())
             .category(item.getItemCategory().getName())
-//            .category(item.getItemCategory())
             .startPrice(item.getStartPrice())
             .itemState(item.getItemState().name())
-//            .itemState(item.getItemState())
-//            .itemImage(item.getItemImage) TODO image 구현 후 지정
+            .itemImageUrl(item.getImage().getFilePath())
             .itemDescription(item.getDescription())
             .itemOrdering(item.getOrdering())
 //            .successTime(item.getOrderItem().getCreatedAt()) TODO orderItem 구현 후 지정

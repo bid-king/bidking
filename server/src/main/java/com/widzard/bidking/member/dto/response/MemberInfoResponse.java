@@ -14,25 +14,32 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberInfoResponse {
 
-    private String name;
+    private String userId;
 
     private String nickname;
 
     private String phoneNumber;
 
-    private String email;
-
     private Address address;
 
-    private ImageResponse image;
+    private String imageUrl;
 
-    public static MemberInfoResponse createResponse(Member member) {
+    private int penalty;
+
+    public static MemberInfoResponse from(Member member) {
+        String imgPath;
+        if (member.getImage() == null) {
+            imgPath = "";
+        } else {
+            imgPath = member.getImage().getFilePath();
+        }
+
         return MemberInfoResponse.builder()
-            .name(member.getName())
+            .userId(member.getUserId())
             .nickname(member.getNickname())
             .phoneNumber(member.getPhoneNumber())
             .address(member.getAddress())
-            .image(ImageResponse.createResponse(member.getImage()))
+            .imageUrl(imgPath)
             .build();
     }
 }

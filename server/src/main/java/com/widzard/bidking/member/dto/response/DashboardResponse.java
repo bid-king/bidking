@@ -19,7 +19,7 @@ public class DashboardResponse {
     private int deliveryWaiting;
     private int penalty;
 
-    public static DashboardResponse createDashboard(HashMap<String, Integer> dashboard) {
+    public static DashboardResponse from(HashMap<String, Integer> dashboard) {
         return DashboardResponse.builder()
             .paymentWaiting(
                 Optional.ofNullable(dashboard.get(OrderState.PAYMENT_WAITING.toString()))

@@ -4,12 +4,13 @@ package com.widzard.bidking.auction.service;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.member.entity.Member;
+import java.io.IOException;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface AuctionService {
 
-    //TODO 머지 후 엔티티 리턴 방식으로 변경
-    AuctionRoom createAuctionRoom(Member member,
-        AuctionCreateRequest auctionCreateRequest);
+    AuctionRoom readAuctionRoom(Long auctionId);
 
-    AuctionRoom readAuctionRoom(Member tempMember, Long auctionId);
+    AuctionRoom createAuctionRoom(Member member, AuctionCreateRequest auctionCreateRequest, MultipartFile auctionRoomImg, MultipartFile[] itemImgs)
+        throws IOException;
 }

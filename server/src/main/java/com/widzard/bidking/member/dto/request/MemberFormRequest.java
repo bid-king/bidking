@@ -15,16 +15,12 @@ public class MemberFormRequest {
     @Length(min = 8, max = 16, message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.")
     private String password; // 유저 패스워드
 
-    @NotBlank(message = "이름을 입력해주세요.")
-    private String name;
-
     @NotBlank(message = "닉네임을 입력해주세요.")
     private String nickname;
-
 
     @NotBlank(message = "휴대폰 본인 인증을 위해 휴대폰 번호를 입력해주세요.")
     private String phoneNumber; //( 핸드폰 번호 )
 
-    private Address address; //( 기본배송지 )
+    private Address address; // ( 기본배송지 )
 
 }

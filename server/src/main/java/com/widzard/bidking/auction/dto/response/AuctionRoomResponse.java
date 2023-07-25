@@ -20,14 +20,13 @@ public class AuctionRoomResponse {
 
     private Long id;//(경매방 id)
 
-    // TODO 멤버 구현 후 추가
     private Long sellerId; //(판매자 Member id)
 
     private String name; //(방이름)
 
     private String auctionRoomLiveState; // (라이브 상태)
 
-    //TODO auction room url 추가되면 추가
+    //TODO open vidu auction room url 추가되면 추가
     private String auctionRoomUrl; //(auction room id)
 
     private String auctionRoomTradeState; //(거래 상태)
@@ -41,24 +40,24 @@ public class AuctionRoomResponse {
     private List<ItemDto> itemList = new ArrayList<>();
 
 
-    public static AuctionRoomResponse create(AuctionRoom auctionRoom) {
+    public static AuctionRoomResponse from(AuctionRoom auctionRoom) {
         List<ItemDto> itemDtoList = auctionRoom.getItemList().stream()
-            .map(item -> ItemDto.create(item))
+            .map(ItemDto::create)
             .collect(Collectors.toList());
-        
+
         AuctionRoomResponse result = AuctionRoomResponse.builder()
+//            .auctionRoomUrl(auctionRoom.getAuctionRoomURL)
             .id(auctionRoom.getId())
-//            .sellerId(auctionRoom.getSeller.getId()) //TODO member 추가 후 주석 해제
+            .sellerId(auctionRoom.getSeller().getId())
             .auctionRoomLiveState(auctionRoom.getAuctionRoomLiveState().name())
             .auctionRoomTradeState(auctionRoom.getAuctionRoomTradeState().name())
-//            .auctionRoomUrl(auctionRoom.getAuctionRoomURL)//TODO auctionRoomURL 추가 후 추가
             .name(auctionRoom.getName())
             .startedAt(auctionRoom.getStartedAt())
             .auctionRoomType(auctionRoom.getAuctionRoomType().name())
-//            .imageURL(auctionRoom.getImage()) //TODO 이미지 추가 된 후 추가
+            .imageURL(auctionRoom.getImage().getFilePath())
             .itemList(itemDtoList)
-
             .build();
+
         return result;
     }
 }

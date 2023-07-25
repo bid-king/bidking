@@ -28,7 +28,10 @@ public class Image extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String fileName; // asd.jpg
+    private String originalFileName; // asd.jpg
+
+    @Column(nullable = false, unique = true)
+    private String fileName;
 
     @Column(nullable = false)
     private String filePath; // https: S3 주소/domain

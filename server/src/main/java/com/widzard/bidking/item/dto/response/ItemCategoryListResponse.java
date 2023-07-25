@@ -17,7 +17,7 @@ public class ItemCategoryListResponse {
 
     List<ItemCategoryResponse> categoryList = new ArrayList<>();
 
-    public static ItemCategoryListResponse createResponse(List<ItemCategory> itemCategoryList) {
+    public static ItemCategoryListResponse from(List<ItemCategory> itemCategoryList) {
         ItemCategoryListResponse itemCategoryListResponse = new ItemCategoryListResponse();
         for (ItemCategory itemCategory : itemCategoryList) {
             itemCategoryListResponse.add(ItemCategoryResponse.createResponse(itemCategory));

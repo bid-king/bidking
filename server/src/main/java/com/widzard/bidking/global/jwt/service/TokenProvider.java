@@ -1,8 +1,6 @@
 package com.widzard.bidking.global.jwt.service;
 
 import static com.widzard.bidking.global.jwt.utils.JwtConstants.AT_EXP_TIME;
-import static com.widzard.bidking.global.jwt.utils.JwtConstants.ISSUER;
-import static com.widzard.bidking.global.jwt.utils.JwtConstants.JWT_SECRET;
 import static com.widzard.bidking.global.jwt.utils.JwtConstants.RT_EXP_TIME;
 import static com.widzard.bidking.global.jwt.utils.JwtConstants.SIGNATURE_ALGORITHM;
 
@@ -11,7 +9,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
@@ -25,6 +22,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class TokenProvider {
+
+    // Secret
+    @Value("${jwt_secret}")
+    private String JWT_SECRET;
+
+    @Value("${jwt_issuer}")
+    private String ISSUER;
 
     /*
      * subject에 저장된 userId 가져오는 메서드
@@ -64,13 +68,14 @@ public class TokenProvider {
      */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && isTokenNotExpired(token));
+        return (username.equals(userDetails.getUsername()) && isTokenExpired(token));
     }
 
     /*
      * 토큰 만료 기간 검증 메서드
      */
-    private boolean isTokenNotExpired(String token) {
+    public boolean isTokenExpired(String token) {
+        log.info("{}", extractExpiration(token));
         return extractExpiration(token).before(new Date());
     }
 

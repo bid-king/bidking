@@ -9,11 +9,11 @@ public interface ImageService {
 
 
     //파일 리스트 업로드
-    public List<Image> uploadImageList(MultipartFile[] multipartFileList, String domain)
+    List<Image> uploadImageList(MultipartFile[] multipartFileList)
         throws IOException;
 
-    public Image uploadImage(MultipartFile multipartFile, String domain) throws IOException;
+    Image uploadImage(MultipartFile multipartFile) throws IOException;
 
-    public void deleteImage(String fileName,String domain);
+    void deleteImage(String fileName);
 
 }

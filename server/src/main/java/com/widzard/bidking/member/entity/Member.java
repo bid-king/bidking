@@ -47,9 +47,6 @@ public class Member extends BaseEntity implements UserDetails {
     private String userId; // 유저 아이디
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private String password; // 유저 패스워드
 
     @Column(unique = true, nullable = false)
@@ -75,7 +72,6 @@ public class Member extends BaseEntity implements UserDetails {
     public static Member createMember(MemberFormRequest request, String encodedPassword) {
         return Member.builder()
             .userId(request.getUserId())
-            .name(request.getName())
             .nickname(request.getNickname())
             .password(encodedPassword)
             .address(request.getAddress())

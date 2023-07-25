@@ -2,6 +2,7 @@ package com.widzard.bidking.member.controller;
 
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
+import com.widzard.bidking.member.dto.request.MemberPhoneVerificationRequest;
 import com.widzard.bidking.member.dto.request.UserIdRequest;
 import com.widzard.bidking.member.dto.request.UserNicknameRequest;
 import com.widzard.bidking.member.dto.response.DashboardResponse;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -35,14 +35,16 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @ResponseBody
     @PostMapping("/check/phoneNumber")
-    public ResponseEntity<MemberPhoneVerificationResponse> sendOne(String phoneNumber) {
+    public ResponseEntity<MemberPhoneVerificationResponse> sendOne(
+        @RequestBody MemberPhoneVerificationRequest request
+    ) {
         String cerNum = makeRandomNumber();
-        memberService.certifiedPhoneNumber(phoneNumber, cerNum);
-        MemberPhoneVerificationResponse response = MemberPhoneVerificationResponse.createResponse(
-            cerNum);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        memberService.certifiedPhoneNumber(request.getPhoneNumber(), cerNum);
+        return new ResponseEntity<>(
+            MemberPhoneVerificationResponse.from(cerNum),
+            HttpStatus.OK
+        );
     }
 
     @PostMapping("/signup")
@@ -78,36 +80,31 @@ public class MemberController {
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
-    private String makeRandomNumber() {
-        Random rand = new Random();
-        String numStr = "";
-        for (int i = 0; i < 4; i++) {
-            String ran = Integer.toString(rand.nextInt(10));
-            numStr += ran;
-        }
-        return numStr;
-    }
 
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberInfoResponse> getUserDetail(@PathVariable Long memberId) {
         Member member = memberService.getUserDetail(memberId);
-        MemberInfoResponse response = MemberInfoResponse.createResponse(member);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(MemberInfoResponse.from(member), HttpStatus.OK);
     }
-
-    // TODO: 로그인 된 유저 필요
-    @GetMapping("/dashboard")
-    public ResponseEntity<DashboardResponse> getUserDashboard(Long memberId) {
+    @GetMapping("/{memberId}/dashboard")
+    public ResponseEntity<DashboardResponse> getUserDashboard(@PathVariable Long memberId) {
         HashMap<String, Integer> dashboard = memberService.getUserDashboard(memberId);
-        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
-        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
+        return new ResponseEntity<>(DashboardResponse.from(dashboard), HttpStatus.OK);
     }
 
-    // TODO: 로그인 된 유저 필요
-    @GetMapping("/dashboard/seller")
-    public ResponseEntity<DashboardResponse> getSellerDashboard(Long memberId) {
+    @GetMapping("/{memberId}/dashboard/seller")
+    public ResponseEntity<DashboardResponse> getSellerDashboard(@PathVariable Long memberId) {
         HashMap<String, Integer> dashboard = memberService.getSellerDashboard(memberId);
-        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
-        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
+        return new ResponseEntity<>(DashboardResponse.from(dashboard), HttpStatus.OK);
+    }
+
+    private String makeRandomNumber() {
+        Random rand = new Random();
+        StringBuilder numStr = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            String ran = Integer.toString(rand.nextInt(10));
+            numStr.append(ran);
+        }
+        return numStr.toString();
     }
 }

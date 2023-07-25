@@ -3,132 +3,106 @@ package com.widzard.bidking.auction.service;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
-import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
-import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
-import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.image.entity.Image;
-import com.widzard.bidking.image.entity.repository.ImageRepository;
+import com.widzard.bidking.image.service.ImageService;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.item.exception.EmptyItemListException;
-import com.widzard.bidking.item.exception.ItemCategoryNotFoundException;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
-import com.widzard.bidking.member.entity.MemberRole;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
 public class AuctionServiceImpl implements AuctionService {
 
     private final AuctionRoomRepository auctionRoomRepository;
     private final ItemRepository itemRepository;
     private final ItemCategoryRepository itemCategoryRepository;
-    private final ImageRepository imageRepository;
-
-
-    public AuctionServiceImpl(AuctionRoomRepository auctionRoomRepository,
-        ItemRepository itemRepository, ItemCategoryRepository itemCategoryRepository,
-        ImageRepository imageRepository
-    ) {
-        this.auctionRoomRepository = auctionRoomRepository;
-        this.itemRepository = itemRepository;
-        this.itemCategoryRepository = itemCategoryRepository;
-        this.imageRepository = imageRepository;
-    }
+    private final ImageService imageService;
 
 
     @Transactional
     @Override
-    public AuctionRoom createAuctionRoom(Member member, AuctionCreateRequest request) {
+    public AuctionRoom createAuctionRoom(
+        Member seller,
+        AuctionCreateRequest request,
+        MultipartFile auctionRoomImg,
+        MultipartFile[] itemImgs
+    )
+        throws IOException {
 
-        //시작시간 예외 로직
+        //시작시간 예외 검증
         LocalDateTime now = LocalDateTime.now();
         if (TimeUtility.toLocalDateTime(request.getStartedAt()).isBefore(now.plusHours(1))) {
             throw new AuctionStartTimeInvalidException();
         }
-        //TODO ItemCategory 테스트용
-        itemCategoryRepository.save(new ItemCategory(0L, "전자기기"));
 
-        Address tempAddress = new Address("asd", "asd", "asd");
-        Member tempMember = Member.builder()
-            .id(1L)
-            .address(tempAddress)
-            .memberRole(MemberRole.USER)
-            .nickname("asd")
-            .phoneNumber("asd")
-            .available(true)
-            .build();
-
-        Image tempImage = Image.builder()
-            .id(1L)
-            .fileName("asd.jpg")
-            .filePath("asd/asd")
-//            .member(tempMember)
-            .build();
-        tempImage = imageRepository.save(tempImage);
-
-        AuctionRoom auctionRoom = AuctionRoom.builder()
-//            .seller(member)//TODO member 추가 후 주석 해제
-            .name(request.getAuctionTitle())
-            .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
-            .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
-            .auctionRoomType(request.getAuctionRoomType())
-            .startedAt(request.getStartedAt())
-            .build();
-
-        AuctionRoom savedAuctionRoom = auctionRoomRepository.save(auctionRoom);
+        // 아이템 검증
         List<ItemCreateRequest> itemCreateRequestList = request.getItemList();
-
-        if (itemCreateRequestList == null || itemCreateRequestList.size() == 0) {
+        if (itemCreateRequestList.isEmpty()) {
             throw new EmptyItemListException();
         }
-        itemCreateRequestList.forEach(
-            r -> {
-                Optional<ItemCategory> itemCategoryOptional = itemCategoryRepository.findById(
-                    r.getItemCategory());
-                if (itemCategoryOptional.isEmpty()) {
-                    throw new ItemCategoryNotFoundException();
-                }
-                ItemCategory itemCategory = itemCategoryOptional.get();
-                Item item = Item.create(
-                    savedAuctionRoom,
-                    r.getStartPrice(),
-                    r.getName(),
-                    r.getDescription(),
-                    itemCategory,
-                    r.getOrdering()
-                );
-                itemRepository.save(item);
-            }
+
+        // 이미지 수 검증
+        if (request.getItemList().size() != itemImgs.length) {
+            throw new RuntimeException("이미지 수 부족");
+        }
+
+        // 경매방 이미지, 경매방 생성
+        Image savedAuctionRoomImg = imageService.uploadImage(auctionRoomImg);
+        AuctionRoom auctionRoom = AuctionRoom.createAuctionRoom(
+            request.getAuctionTitle(),
+            seller,
+            request.getAuctionRoomType(),
+            request.getStartedAt(),
+            savedAuctionRoomImg
         );
+        AuctionRoom savedAuctionRoom = auctionRoomRepository.save(auctionRoom);
+
+        // TODO 최적화 고민하기
+        for (int i = 0; i < itemImgs.length; i++) {
+            MultipartFile img = itemImgs[i];
+            Image image = imageService.uploadImage(img);
+            ItemCreateRequest itemCreateRequest = itemCreateRequestList.get(i);
+            ItemCategory itemCategory = itemCategoryRepository.findById(
+                itemCreateRequest.getItemCategory()).orElseThrow(RuntimeException::new);
+
+            itemRepository.save(
+                Item.create(
+                    auctionRoom,
+                    itemCreateRequest.getStartPrice(),
+                    itemCreateRequest.getName(),
+                    itemCreateRequest.getDescription(),
+                    itemCategory,
+                    itemCreateRequest.getOrdering(),
+                    image
+                )
+            );
+        }
+
         return savedAuctionRoom;
-//        return AuctionCreateResponse.builder()
-//            .id(savedAuctionRoom.getId())
-//            .build();
     }
 
     @Override
-    public AuctionRoom readAuctionRoom(Member tempMember, Long auctionId) {
+    public AuctionRoom readAuctionRoom(Long auctionId) {
 
-        Optional<AuctionRoom> auctionRoomOptional = auctionRoomRepository.findById(auctionId);
-        if (auctionRoomOptional.isEmpty()) {
-            throw new AuctionRoomNotFoundException();
-        }
-        AuctionRoom auctionRoom = auctionRoomOptional.get();
-
-        return auctionRoom;
+        return auctionRoomRepository.findById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
     }
 
 }

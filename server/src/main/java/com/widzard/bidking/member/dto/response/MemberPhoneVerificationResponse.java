@@ -12,7 +12,7 @@ public class MemberPhoneVerificationResponse {
 
     private String certifiedNumber;
 
-    public static MemberPhoneVerificationResponse createResponse(String certifiedNumber) {
+    public static MemberPhoneVerificationResponse from(String certifiedNumber) {
         return new MemberPhoneVerificationResponse(certifiedNumber);
     }
 }
