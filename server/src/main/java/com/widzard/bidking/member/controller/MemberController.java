@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -102,6 +103,12 @@ public class MemberController {
     public ResponseEntity<DashboardResponse> getSellerDashboard(@PathVariable Long memberId) {
         HashMap<String, Integer> dashboard = memberService.getSellerDashboard(memberId);
         return new ResponseEntity<>(DashboardResponse.from(dashboard), HttpStatus.OK);
+    }
+    
+    @DeleteMapping("/{memberId}")
+    public ResponseEntity<?> deleteAccount(@PathVariable Long memberId) {
+        memberService.deleteMember(memberId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private String makeRandomNumber() {

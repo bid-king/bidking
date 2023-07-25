@@ -173,4 +173,12 @@ public class MemberServiceImpl implements MemberService {
 
         return dashboardResult;
     }
+
+    @Override
+    public void deleteMember(Long userId) {
+        Member member = memberRepository.findById(userId)
+            .orElseThrow(() -> new MemberNotFoundException());
+        member.changeToUnavailable();
+        memberRepository.save(member);
+    }
 }

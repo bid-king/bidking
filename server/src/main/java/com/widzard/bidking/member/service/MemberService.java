@@ -25,4 +25,6 @@ public interface MemberService {
 
     HashMap<String, Integer> getSellerDashboard(Long userId);
 
+    void deleteMember(Long userId);
+
 }

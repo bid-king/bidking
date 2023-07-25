@@ -95,6 +95,7 @@ public class Member extends BaseEntity implements UserDetails {
     public String getPassword() {
         return password;
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -113,5 +114,9 @@ public class Member extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void changeToUnavailable() {
+        this.available = false;
     }
 }
