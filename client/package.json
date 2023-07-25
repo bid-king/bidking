@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "@types/redux-persist": "^4.3.1",
     "axios": "^1.4.0",
     "emotion-normalize": "^11.0.1",
     "react": "^18.2.0",
@@ -13,6 +14,8 @@
     "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1",
+    "redux": "^4.2.1",
+    "redux-persist": "^6.0.0",
     "typescript": "^4.9.5"
   },
   "scripts": {

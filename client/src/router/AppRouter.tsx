@@ -15,7 +15,6 @@ import { SellerCreateAuction } from '../pages/SellerCreateAuction';
 import { SellerDetail } from '../pages/SellerDetail';
 import { Layout } from '../pages/Layout';
 import { SellerLayout } from '../pages/SellerLayout';
-import { LoginLoading } from '../pages/LoginLoading';
 
 export function AppRouter() {
   return (
@@ -40,7 +39,6 @@ export function AppRouter() {
       {/* 네브바가 안들어가는 페이지 및 판매페이지 */}
       <Route path="/seller/auction/:auctionId" element={<SellerAuction />} />
       <Route path="/auction/:auctionId" element={<Auction />} />
-      <Route path="/login/loading" element={<LoginLoading />} />
     </Routes>
   );
 }
