@@ -100,11 +100,11 @@ public class MemberController {
 
     private String makeRandomNumber() {
         Random rand = new Random();
-        String numStr = "";
+        StringBuilder numStr = new StringBuilder();
         for (int i = 0; i < 4; i++) {
             String ran = Integer.toString(rand.nextInt(10));
-            numStr += ran;
+            numStr.append(ran);
         }
-        return numStr;
+        return numStr.toString();
     }
 }

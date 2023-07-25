@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public interface MemberService {
 
-    Member signup(MemberFormRequest entity);
+    Member signup(MemberFormRequest request);
 
     boolean checkUserId(String userId);
 
