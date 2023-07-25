@@ -7,25 +7,13 @@ import { Spacing } from './Spacing';
 import { Input } from './Input';
 import { ConfirmButton } from './ConfirmButton';
 import { Link } from 'react-router-dom';
+import { useLogin } from '../hooks/useLogin';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {}
+// interface Props extends HTMLAttributes<HTMLDivElement> {}
 
 export function LoginBox() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  function handleEmailChange(e: ChangeEvent<HTMLInputElement>) {
-    setEmail(e.target.value);
-  }
-
-  function handlePasswordChange(e: ChangeEvent<HTMLInputElement>) {
-    setPassword(e.target.value);
-  }
-
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    console.log(`Email: ${email}, Password: ${password}`);
-  }
+  const { userId, password, handleUserIdChange, handlePasswordChange, handleSubmit, errorMessage, isErrorOccured } =
+    useLogin();
 
   return (
     <form
@@ -46,12 +34,12 @@ export function LoginBox() {
           padding: '0.5rem',
         }}
       >
-        <div className="email">
-          <label htmlFor="email-input">
-            <Text type="bold" content="이메일" />
+        <div className="userId">
+          <label htmlFor="userId-input">
+            <Text type="bold" content="아이디" />
           </label>
           <Spacing rem="1" />
-          <Input id="email-input" placeholder="" inputType="email" value={email} onChange={handleEmailChange} />
+          <Input id="userId-input" placeholder="" inputType="userId" value={userId} onChange={handleUserIdChange} />
         </div>
         <Spacing rem="2" />
         <div className="password">
@@ -69,6 +57,12 @@ export function LoginBox() {
           />
         </div>
         <Spacing rem="2" />
+        {isErrorOccured && (
+          <>
+            <Text type="bold" content={errorMessage} />
+            <Spacing rem="1" />
+          </>
+        )}
         <ConfirmButton type="submit" label="로그인" />
         <Spacing rem="2" />
         <div

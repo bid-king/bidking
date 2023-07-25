@@ -5021,6 +5021,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/redux-persist@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "@types/redux-persist@npm:4.3.1"
+  dependencies:
+    redux-persist: "*"
+  checksum: 0b4518fd8a38ddf4538c7f7141323ea81f8b5918df1ce2ba35c609b71b0766a23c8d4ab1bcfb5021b8b3546f2365670b33ff5de870f40f72c65e8c45a47ef1b1
+  languageName: node
+  linkType: hard
+
 "@types/resolve@npm:1.17.1":
   version: 1.17.1
   resolution: "@types/resolve@npm:1.17.1"
@@ -6991,6 +7000,7 @@ __metadata:
     "@types/react-dom": ^18.2.6
     "@types/react-redux": ^7.1.25
     "@types/react-router-dom": ^5.3.3
+    "@types/redux-persist": ^4.3.1
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
     axios: ^1.4.0
@@ -7007,6 +7017,8 @@ __metadata:
     react-redux: ^8.1.1
     react-router-dom: ^6.14.1
     react-scripts: 5.0.1
+    redux: ^4.2.1
+    redux-persist: ^6.0.0
     storybook: ^7.0.26
     typescript: ^4.9.5
     webpack: ^5.88.1
@@ -14968,6 +14980,15 @@ __metadata:
     indent-string: ^4.0.0
     strip-indent: ^3.0.0
   checksum: fa1ef20404a2d399235e83cc80bd55a956642e37dd197b4b612ba7327bf87fa32745aeb4a1634b2bab25467164ab4ed9c15be2c307923dd08b0fe7c52431ae6b
+  languageName: node
+  linkType: hard
+
+"redux-persist@npm:*, redux-persist@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "redux-persist@npm:6.0.0"
+  peerDependencies:
+    redux: ">4.0.0"
+  checksum: edaf10dbf17351ce8058d0802357adae8665b3a1ff39371834e37838ddbe1a79cccbc717b8ba54acb5307651ccf51d0f7dc1cbc8dbae0726ff952d11ef61c6b8
   languageName: node
   linkType: hard
 
