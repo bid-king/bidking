@@ -21,8 +21,9 @@ export function useSignUp() {
   const [isIdDuplicated, setIsIdDuplicated] = useState(false);
   const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
+  const [certifiedNumber, setCertifiedNumber] = useState('');
 
-  const API_URL = 'http://70.12.247.202:8080';
+  const API_URL = 'http://70.12.247.172:8080';
 
   const handleNextStep = (e: FormEvent) => {
     e.preventDefault();
@@ -53,7 +54,6 @@ export function useSignUp() {
           },
         })
         .then(res => {
-          console.log(res.data);
           setSuccess(true);
         })
         .catch(err => {
@@ -103,13 +103,26 @@ export function useSignUp() {
 
   // 인증번호 요청 함수
   const requestVerification = () => {
-    setVerificationVisible(true);
+    if (phoneNumber && isPhoneValid) {
+      axios
+        .post(`${API_URL}/api/v1/members/check/phoneNumber`, { phoneNumber })
+        .then(res => {
+          setCertifiedNumber(res.data.certifiedNumber);
+          setVerificationVisible(true);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   };
 
   // 인증번호 확인 함수
   const requestCerificated = () => {
-    // certificateCode
-    setRequestCerificated(true);
+    if (certificateCode) {
+      if (certificateCode === certifiedNumber) {
+        setRequestCerificated(true);
+      }
+    }
   };
 
   // 핸드폰번호 유효성 체크(변경 가능)
@@ -198,6 +211,7 @@ export function useSignUp() {
     requestCerificated,
     userId,
     isIdDuplicated,
+    isNicknameDuplicated,
     handleUserIdBlur,
     nickname,
     handleNicknameChange,

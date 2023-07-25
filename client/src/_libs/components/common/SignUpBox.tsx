@@ -42,6 +42,7 @@ export function SignUpBox() {
     handleUserNameChange,
     handleCertificateCode,
     isSuccess,
+    isNicknameDuplicated,
   } = useSignUp();
 
   return (
@@ -88,9 +89,9 @@ export function SignUpBox() {
                   inputId="nickname-signup-input"
                   inputType="nickname"
                 />
-                {isIdDuplicated && (
+                {isNicknameDuplicated && (
                   <>
-                    <Text type="bold" content="아이디가 중복되었습니다." />
+                    <Text type="bold" content="닉네임이 중복되었습니다." />
                     <Spacing rem="1" />
                   </>
                 )}
