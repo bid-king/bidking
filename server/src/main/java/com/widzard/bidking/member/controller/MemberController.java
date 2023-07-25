@@ -20,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,9 +41,10 @@ public class MemberController {
     ) {
         String cerNum = makeRandomNumber();
         memberService.certifiedPhoneNumber(request.getPhoneNumber(), cerNum);
-        MemberPhoneVerificationResponse response = MemberPhoneVerificationResponse.createResponse(
-            cerNum);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(
+            MemberPhoneVerificationResponse.from(cerNum),
+            HttpStatus.OK
+        );
     }
 
     @PostMapping("/signup")
@@ -85,20 +84,18 @@ public class MemberController {
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberInfoResponse> getUserDetail(@PathVariable Long memberId) {
         Member member = memberService.getUserDetail(memberId);
-        return new ResponseEntity<>(MemberInfoResponse.createResponse(member), HttpStatus.OK);
+        return new ResponseEntity<>(MemberInfoResponse.from(member), HttpStatus.OK);
     }
     @GetMapping("/{memberId}/dashboard")
     public ResponseEntity<DashboardResponse> getUserDashboard(@PathVariable Long memberId) {
         HashMap<String, Integer> dashboard = memberService.getUserDashboard(memberId);
-        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
-        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
+        return new ResponseEntity<>(DashboardResponse.from(dashboard), HttpStatus.OK);
     }
 
     @GetMapping("/{memberId}/dashboard/seller")
     public ResponseEntity<DashboardResponse> getSellerDashboard(@PathVariable Long memberId) {
         HashMap<String, Integer> dashboard = memberService.getSellerDashboard(memberId);
-        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
-        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
+        return new ResponseEntity<>(DashboardResponse.from(dashboard), HttpStatus.OK);
     }
 
     private String makeRandomNumber() {

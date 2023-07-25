@@ -16,7 +16,7 @@ public class AuctionCreateResponse {
 
     private Long id; // 생성된 경매방 고유번호
 
-    public static AuctionCreateResponse create(AuctionRoom auctionRoom) {
+    public static AuctionCreateResponse from(AuctionRoom auctionRoom) {
         return AuctionCreateResponse.builder()
             .id(auctionRoom.getId())
             .build();

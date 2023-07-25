@@ -5,7 +5,6 @@ import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.service.AuctionService;
-import com.widzard.bidking.image.service.ImageService;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import javax.validation.Valid;
@@ -40,7 +39,7 @@ public class AuctionController {
     ) throws IOException {
         AuctionRoom auctionRoom = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImgs);
-        return new ResponseEntity<>(AuctionCreateResponse.create(auctionRoom), HttpStatus.OK);
+        return new ResponseEntity<>(AuctionCreateResponse.from(auctionRoom), HttpStatus.OK);
     }
 
     @GetMapping("/{auctionId}")
@@ -48,6 +47,6 @@ public class AuctionController {
         @PathVariable Long auctionId
     ) {
         AuctionRoom auctionRoom = auctionService.readAuctionRoom(auctionId);
-        return new ResponseEntity<>(AuctionRoomResponse.create(auctionRoom), HttpStatus.OK);
+        return new ResponseEntity<>(AuctionRoomResponse.from(auctionRoom), HttpStatus.OK);
     }
 }

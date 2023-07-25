@@ -21,6 +21,6 @@ public class ItemCategoryController {
     @GetMapping("/categories")
     public ResponseEntity<ItemCategoryListResponse> getCategoryList() {
         List<ItemCategory> categoryList = itemCategoryService.getCategoryList();
-        return new ResponseEntity<>(ItemCategoryListResponse.createResponse(categoryList), HttpStatus.OK);
+        return new ResponseEntity<>(ItemCategoryListResponse.from(categoryList), HttpStatus.OK);
     }
 }
