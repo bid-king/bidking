@@ -1,7 +1,9 @@
 package com.widzard.bidking.member.dto.response;
 
 import com.widzard.bidking.global.entity.Address;
+import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.member.entity.Member;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,12 +29,9 @@ public class MemberInfoResponse {
     private int penalty;
 
     public static MemberInfoResponse from(Member member) {
-        String imgPath;
-        if (member.getImage() == null) {
-            imgPath = "";
-        } else {
-            imgPath = member.getImage().getFilePath();
-        }
+        String imgPath = Optional.ofNullable(member.getImage())
+            .map(Image::getFilePath)
+            .orElse("");
 
         return MemberInfoResponse.builder()
             .userId(member.getUserId())
