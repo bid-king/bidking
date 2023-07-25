@@ -42,22 +42,17 @@ public class MemberServiceImpl implements MemberService {
     private static final String PENALTY = "penalty";
 
     private static final String MSG_TYPE = "SMS";
-
-    @Value("${coolsms.api_key}")
-    private String API_KEY;
-
-    @Value("${coolsms.api_secret}")
-    private String API_SECRET;
-
-    @Value("${coolsms.from}")
-    private String FROM;
-
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
     private final AuthenticationManagerBuilder managerBuilder;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
-
+    @Value("${coolsms.api_key}")
+    private String API_KEY;
+    @Value("${coolsms.api_secret}")
+    private String API_SECRET;
+    @Value("${coolsms.from}")
+    private String FROM;
 
     /*
      * 회원 가입
@@ -85,6 +80,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean checkNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
+    }
+
+    @Override
+    public boolean checkPhoneNumber(String phoneNumber) {
+        return memberRepository.existsByPhoneNumber(phoneNumber);
     }
 
     @Override
