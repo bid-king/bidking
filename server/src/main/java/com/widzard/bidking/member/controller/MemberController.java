@@ -2,6 +2,7 @@ package com.widzard.bidking.member.controller;
 
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
+import com.widzard.bidking.member.dto.request.MemberPhoneVerificationRequest;
 import com.widzard.bidking.member.dto.request.UserIdRequest;
 import com.widzard.bidking.member.dto.request.UserNicknameRequest;
 import com.widzard.bidking.member.dto.response.DashboardResponse;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -35,11 +35,11 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @ResponseBody
     @PostMapping("/check/phoneNumber")
-    public ResponseEntity<MemberPhoneVerificationResponse> sendOne(String phoneNumber) {
+    public ResponseEntity<MemberPhoneVerificationResponse> sendOne(
+        @RequestBody MemberPhoneVerificationRequest request) {
         String cerNum = makeRandomNumber();
-        memberService.certifiedPhoneNumber(phoneNumber, cerNum);
+        memberService.certifiedPhoneNumber(request.getPhoneNumber(), cerNum);
         MemberPhoneVerificationResponse response = MemberPhoneVerificationResponse.createResponse(
             cerNum);
         return new ResponseEntity<>(response, HttpStatus.OK);
