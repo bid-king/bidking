@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../../../design/colors';
-import { bidPriceParse } from '../../../util/bidPriceParse';
+import colors from '../../design/colors';
 import { useBidPrice } from '../../hooks/useBidPrice';
+import { bidPriceParse } from '../../util/bidPriceParse';
 import { BidComma } from './BidComma';
 import { BidNumber } from './BidNumber';
 

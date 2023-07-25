@@ -32,7 +32,7 @@ export function NavBar({ theme = 'light' }: Props) {
           alignItems: 'center',
         }}
       >
-        <div>
+        <div className="logo">
           <Link to={'/'}>
             <img
               css={{
@@ -50,7 +50,11 @@ export function NavBar({ theme = 'light' }: Props) {
             marginRight: '1.5rem',
           }}
         >
-          {theme === 'light' ? <Text type="h3" content="판매" /> : null}
+          {theme === 'dark' && (
+            <div css={{ color: colors.white }}>
+              <Text type="h3" content="판매" />
+            </div>
+          )}
         </div>
         <div
           css={{
@@ -64,7 +68,7 @@ export function NavBar({ theme = 'light' }: Props) {
             },
           }}
         >
-          <Input shape="round" theme="light" placeholder="경매방을 검색하세요" />
+          <Input shape="round" theme={theme} placeholder="경매방을 검색하세요" />
         </div>
         <div>
           <RoundButton label="검색" />
@@ -78,6 +82,16 @@ export function NavBar({ theme = 'light' }: Props) {
           alignItems: 'center',
         }}
       >
+        {theme === 'light' && (
+          <Link
+            css={{
+              marginRight: '1.5rem',
+            }}
+            to={'/seller'}
+          >
+            판매
+          </Link>
+        )}
         <Link
           css={{
             marginRight: '1.5rem',
