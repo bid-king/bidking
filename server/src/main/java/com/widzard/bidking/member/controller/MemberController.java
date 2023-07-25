@@ -37,7 +37,8 @@ public class MemberController {
 
     @PostMapping("/check/phoneNumber")
     public ResponseEntity<MemberPhoneVerificationResponse> sendOne(
-        @RequestBody MemberPhoneVerificationRequest request) {
+        @RequestBody MemberPhoneVerificationRequest request
+    ) {
         String cerNum = makeRandomNumber();
         memberService.certifiedPhoneNumber(request.getPhoneNumber(), cerNum);
         MemberPhoneVerificationResponse response = MemberPhoneVerificationResponse.createResponse(

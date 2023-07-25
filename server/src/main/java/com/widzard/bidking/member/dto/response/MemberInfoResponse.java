@@ -28,7 +28,6 @@ public class MemberInfoResponse {
 
     public static MemberInfoResponse createResponse(Member member) {
         return MemberInfoResponse.builder()
-            .name(member.getName())
             .nickname(member.getNickname())
             .phoneNumber(member.getPhoneNumber())
             .address(member.getAddress())
