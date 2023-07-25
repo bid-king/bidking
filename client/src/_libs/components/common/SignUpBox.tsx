@@ -5,7 +5,6 @@ import colors from '../../design/colors';
 import { Spacing } from './Spacing';
 import { Input } from './Input';
 import { ConfirmButton } from './ConfirmButton';
-import { SignUpInput } from './SignUpInput';
 import { Link } from 'react-router-dom';
 import { useSignUp } from '../hooks/useSignUp';
 
@@ -69,26 +68,40 @@ export function SignUpBox() {
           >
             {step === 'userName' && (
               <>
-                <SignUpInput
-                  onChange={handleUserNameChange}
-                  className="userName"
-                  inputTitle="이름을 입력해주세요"
-                  inputId="userName-signup-input"
-                  inputType="userName"
-                />
+                <div className="userName">
+                  <label htmlFor="userName-signup-input">
+                    <Text type="bold" content="이름을 입력해주세요" />
+                  </label>
+                  <Spacing rem="1" />
+                  <Input
+                    id="userName-signup-input"
+                    onChange={handleUserNameChange}
+                    placeholder=""
+                    inputType="userName"
+                  />
+                </div>
+                <Spacing rem="2" />
+
                 <ConfirmButton onClick={handleNextStep} label="다음" />
               </>
             )}
             {step === 'nickname' && (
               <>
-                <SignUpInput
-                  onChange={handleNicknameChange}
-                  onBlur={handleNicknameBlur}
-                  className="nickname"
-                  inputTitle="닉네임을 입력해주세요"
-                  inputId="nickname-signup-input"
-                  inputType="nickname"
-                />
+                <div className="nickname">
+                  <label htmlFor="nickname-signup-input">
+                    <Text type="bold" content="닉네임을 입력해주세요" />
+                  </label>
+                  <Spacing rem="1" />
+                  <Input
+                    id="nickname-signup-input"
+                    onChange={handleNicknameChange}
+                    onBlur={handleNicknameBlur}
+                    placeholder=""
+                    inputType="nickname"
+                  />
+                </div>
+                <Spacing rem="2" />
+
                 {isNicknameDuplicated && (
                   <>
                     <Text type="bold" content="닉네임이 중복되었습니다." />
@@ -102,14 +115,21 @@ export function SignUpBox() {
             )}
             {step === 'id' && (
               <>
-                <SignUpInput
-                  onChange={handleUserIdChange}
-                  onBlur={handleUserIdBlur}
-                  className="userId"
-                  inputTitle="아이디를 입력해주세요"
-                  inputId="userId-signup-input"
-                  inputType="userId"
-                />
+                <div className="userId">
+                  <label htmlFor="userId-signup-input">
+                    <Text type="bold" content="아이디를 입력해주세요" />
+                  </label>
+                  <Spacing rem="1" />
+                  <Input
+                    id="userId-signup-input"
+                    onChange={handleUserIdChange}
+                    onBlur={handleUserIdBlur}
+                    placeholder=""
+                    inputType="userId"
+                  />
+                </div>
+                <Spacing rem="2" />
+
                 {isIdDuplicated && (
                   <>
                     <Text type="bold" content="아이디가 중복되었습니다." />
@@ -124,26 +144,39 @@ export function SignUpBox() {
 
             {step === 'password' && (
               <>
-                <SignUpInput
-                  onChange={handlePasswordChange}
-                  className="password"
-                  inputTitle="비밀번호를 입력해주세요"
-                  inputId="password-signup-input"
-                  inputType="password"
-                />
+                <div className="password">
+                  <label htmlFor="password-signup-input">
+                    <Text type="bold" content="비밀번호를 입력해주세요" />
+                  </label>
+                  <Spacing rem="1" />
+                  <Input
+                    id="password-signup-input"
+                    onChange={handlePasswordChange}
+                    placeholder=""
+                    inputType="password"
+                  />
+                </div>
+                <Spacing rem="2" />
                 <ConfirmButton onClick={handleNextStep} label="다음" />
               </>
             )}
 
             {step === 'password-again' && (
               <>
-                <SignUpInput
-                  onChange={handlePasswordConfirmationChange}
-                  className="password-again"
-                  inputTitle="비밀번호를 다시 한 번 입력해주세요"
-                  inputId="password-again-signup-input"
-                  inputType="password"
-                />
+                <div className="password-again">
+                  <label htmlFor="password-again-signup-input">
+                    <Text type="bold" content="비밀번호를 다시 한 번 입력해주세요" />
+                  </label>
+                  <Spacing rem="1" />
+                  <Input
+                    id="password-again-signup-input"
+                    onChange={handlePasswordConfirmationChange}
+                    placeholder=""
+                    inputType="password"
+                  />
+                </div>
+                <Spacing rem="2" />
+
                 {password !== passwordConfirmation && <ConfirmButton btnType="disabled" label="다음" />}
                 {password === passwordConfirmation && <ConfirmButton onClick={handleNextStep} label="다음" />}
               </>
@@ -201,24 +234,33 @@ export function SignUpBox() {
 
             {step === 'address' && (
               <>
-                <SignUpInput
-                  onChange={handleStreetChange}
-                  className="address"
-                  inputTitle="주소를 입력해주세요"
-                  inputId="street-signup-input"
-                />
-                <SignUpInput
-                  onChange={handleDetailsChange}
-                  className="address-details"
-                  inputTitle="상세 주소를 입력해주세요"
-                  inputId="details-signup-input"
-                />
-                <SignUpInput
-                  onChange={handleZipCodeChange}
-                  className="zip-code"
-                  inputTitle="우편번호를 입력해주세요"
-                  inputId="zip-code-signup-input"
-                />
+                <div className="address">
+                  <label htmlFor="street-signup-input">
+                    <Text type="bold" content="주소를 입력해주세요" />
+                  </label>
+                  <Spacing rem="1" />
+                  <Input id="street-signup-input" onChange={handleStreetChange} placeholder="" />
+                </div>
+                <Spacing rem="2" />
+
+                <div className="address-details">
+                  <label htmlFor="details-signup-input">
+                    <Text type="bold" content="상세 주소를 입력해주세요" />
+                  </label>
+                  <Spacing rem="1" />
+                  <Input id="details-signup-input" onChange={handleDetailsChange} placeholder="" />
+                </div>
+                <Spacing rem="2" />
+
+                <div className="zip-code">
+                  <label htmlFor="zip-code-signup-input">
+                    <Text type="bold" content="우편번호를 입력해주세요" />
+                  </label>
+                  <Spacing rem="1" />
+                  <Input id="zip-code-signup-input" onChange={handleZipCodeChange} placeholder="" />
+                </div>
+                <Spacing rem="2" />
+
                 {(street === '' || details === '' || zipCode === '') && (
                   <>
                     <ConfirmButton btnType="disabled" label="완료" />
