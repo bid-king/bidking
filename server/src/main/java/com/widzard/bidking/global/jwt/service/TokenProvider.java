@@ -1,8 +1,6 @@
 package com.widzard.bidking.global.jwt.service;
 
 import static com.widzard.bidking.global.jwt.utils.JwtConstants.AT_EXP_TIME;
-import static com.widzard.bidking.global.jwt.utils.JwtConstants.ISSUER;
-import static com.widzard.bidking.global.jwt.utils.JwtConstants.JWT_SECRET;
 import static com.widzard.bidking.global.jwt.utils.JwtConstants.RT_EXP_TIME;
 import static com.widzard.bidking.global.jwt.utils.JwtConstants.SIGNATURE_ALGORITHM;
 
@@ -17,12 +15,20 @@ import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 public class TokenProvider {
+
+    // Secret
+    @Value("${jwt_secret}")
+    private String JWT_SECRET;
+
+    @Value("${jwt_issuer}")
+    private String ISSUER;
 
     /*
      * subject에 저장된 userId 가져오는 메서드
