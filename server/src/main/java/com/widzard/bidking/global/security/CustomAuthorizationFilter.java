@@ -3,7 +3,6 @@ package com.widzard.bidking.global.security;
 import static com.widzard.bidking.global.jwt.utils.JwtConstants.TOKEN_HEADER_PREFIX;
 
 import com.widzard.bidking.global.jwt.service.TokenProvider;
-import io.jsonwebtoken.Claims;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

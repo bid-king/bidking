@@ -85,8 +85,7 @@ public class MemberController {
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberInfoResponse> getUserDetail(@PathVariable Long memberId) {
         Member member = memberService.getUserDetail(memberId);
-        MemberInfoResponse response = MemberInfoResponse.createResponse(member);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(MemberInfoResponse.createResponse(member), HttpStatus.OK);
     }
     @GetMapping("/{memberId}/dashboard")
     public ResponseEntity<DashboardResponse> getUserDashboard(@PathVariable Long memberId) {

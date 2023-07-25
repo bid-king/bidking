@@ -2,7 +2,6 @@ package com.widzard.bidking.auction.dto.response;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.item.dto.ItemDto;
-import com.widzard.bidking.item.entity.Item;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
