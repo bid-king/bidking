@@ -2,17 +2,17 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { Main } from '../pages/Main';
-import { Login } from '../pages/Login';
-import { SignUp } from '../pages/SignUp';
-import { MyPage } from '../pages/MyPage';
-import { Purchased } from '../pages/Purchased';
-import { Detail } from '../pages/Detail';
+import { Login } from '../pages/Login/Login';
+import { SignUp } from '../pages/Signup/SignUp';
+import { MyPage } from '../pages/MyPage/MyPage';
+import { Purchased } from '../pages/Purchased/Purchased';
+import { Detail } from '../pages/Detail/Detail';
 
-import { Seller } from '../pages/Seller';
-import { Auction } from '../pages/Auction';
-import { SellerAuction } from '../pages/SellerAuction';
-import { SellerCreateAuction } from '../pages/SellerCreateAuction';
-import { SellerDetail } from '../pages/SellerDetail';
+import { Seller } from '../pages/Seller/Seller';
+import { Auction } from '../pages/Auction/Auction';
+import { SellerAuction } from '../pages/SellerAuction/SellerAuction';
+import { SellerCreateAuction } from '../pages/SellerCreateAuction/SellerCreateAuction';
+import { SellerDetail } from '../pages/SellerDetail/SellerDetail';
 import { Layout } from '../pages/Layout';
 import { SellerLayout } from '../pages/SellerLayout';
 

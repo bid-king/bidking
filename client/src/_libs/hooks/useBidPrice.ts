@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { bidPriceParse } from '../../util/bidPriceParse';
+import { bidPriceParse } from '../util/bidPriceParse';
 
 export function useBidPrice(): [string[], string, string, Error | null] {
   const [prev, setPrev] = useState<string>('0');

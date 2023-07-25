@@ -1,8 +1,8 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import member from '../../../api/member';
-import { useAppDispatch } from '../../../store/hooks';
-import { getUserInformation } from '../../../store/slices/userSlice';
+import member from '../../api/member';
+import { useAppDispatch } from '../../store/hooks';
+import { getUserInformation } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export function useLogin() {

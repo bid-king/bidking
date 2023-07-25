@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../../../design/colors';
+import colors from '../../design/colors';
 
 export function BidComma() {
   return (

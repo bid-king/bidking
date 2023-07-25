@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect } from 'react';
-import { SignUpBox } from '../_libs/components/common/SignUpBox';
+import { SignUpBox } from './SignUpBox';
 
 export function SignUp() {
   return (

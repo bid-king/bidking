@@ -1,6 +1,5 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
-import member from '../../../api/member';
 
 export function useSignUp() {
   const [step, setStep] = useState('userName');

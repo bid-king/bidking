@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { HTMLAttributes } from 'react';
-import { Text } from './Text';
-import colors from '../../design/colors';
-import { Spacing } from './Spacing';
-import { Input } from './Input';
-import { ConfirmButton } from './ConfirmButton';
+import colors from '../../_libs/design/colors';
 import { Link } from 'react-router-dom';
-import { useLogin } from '../hooks/useLogin';
+import { Text } from '../../_libs/components/common/Text';
+import { Spacing } from '../../_libs/components/common/Spacing';
+import { Input } from '../../_libs/components/common/Input';
+import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
+import { useLogin } from '../../_libs/hooks/useLogin';
 
 // interface Props extends HTMLAttributes<HTMLDivElement> {}
 

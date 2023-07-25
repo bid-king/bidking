@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect } from 'react';
 // import { KakaoButton } from '../_libs/components/common/KakaoButton';
-import { LoginBox } from '../_libs/components/common/LoginBox';
+import { LoginBox } from './LoginBox';
 
 export function Login() {
   return (
