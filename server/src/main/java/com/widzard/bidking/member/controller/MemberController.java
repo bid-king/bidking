@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,6 +81,27 @@ public class MemberController {
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MemberInfoResponse> getUserDetail(@PathVariable Long memberId) {
+        Member member = memberService.getUserDetail(memberId);
+        MemberInfoResponse response = MemberInfoResponse.createResponse(member);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/{memberId}/dashboard")
+    public ResponseEntity<DashboardResponse> getUserDashboard(@PathVariable Long memberId) {
+        HashMap<String, Integer> dashboard = memberService.getUserDashboard(memberId);
+        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
+        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/{memberId}/dashboard/seller")
+    public ResponseEntity<DashboardResponse> getSellerDashboard(@PathVariable Long memberId) {
+        HashMap<String, Integer> dashboard = memberService.getSellerDashboard(memberId);
+        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
+        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
+    }
+
     private String makeRandomNumber() {
         Random rand = new Random();
         String numStr = "";
@@ -87,28 +110,5 @@ public class MemberController {
             numStr += ran;
         }
         return numStr;
-    }
-
-    @GetMapping("/{memberId}")
-    public ResponseEntity<MemberInfoResponse> getUserDetail(@PathVariable Long memberId) {
-        Member member = memberService.getUserDetail(memberId);
-        MemberInfoResponse response = MemberInfoResponse.createResponse(member);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    // TODO: 로그인 된 유저 필요
-    @GetMapping("/dashboard")
-    public ResponseEntity<DashboardResponse> getUserDashboard(Long memberId) {
-        HashMap<String, Integer> dashboard = memberService.getUserDashboard(memberId);
-        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
-        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
-    }
-
-    // TODO: 로그인 된 유저 필요
-    @GetMapping("/dashboard/seller")
-    public ResponseEntity<DashboardResponse> getSellerDashboard(Long memberId) {
-        HashMap<String, Integer> dashboard = memberService.getSellerDashboard(memberId);
-        DashboardResponse dashboardResponse = DashboardResponse.createDashboard(dashboard);
-        return new ResponseEntity<>(dashboardResponse, HttpStatus.OK);
     }
 }

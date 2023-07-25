@@ -27,10 +27,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-
+@Builder
 @Getter
 @Entity
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "auction_room")
@@ -67,18 +66,28 @@ public class AuctionRoom extends BaseEntity {
     private List<Item> itemList = new ArrayList<>();
 
 
-    @Builder
-    //TODO member 추가 후 주석 해제
-//    public AuctionRoom(Member seller, String name, AuctionRoomLiveState auctionRoomLiveState,
-    public AuctionRoom(String name, AuctionRoomLiveState auctionRoomLiveState,
-        AuctionRoomTradeState auctionRoomTradeState, AuctionRoomType auctionRoomType,
-        String startedAt) {
-//        this.seller = seller;//TODO member 추가 후 주석 해제
-        this.name = name;
-        this.auctionRoomLiveState = auctionRoomLiveState;
-        this.auctionRoomTradeState = auctionRoomTradeState;
-        this.auctionRoomType = auctionRoomType;
-        this.startedAt = startedAt;
+    public void addItem(Item item) {
+        this.itemList.add(item);
+        item.setAuctionRoom(this);
     }
+    public static AuctionRoom createAuctionRoom (
+        String name,
+        Member seller,
+        AuctionRoomType auctionRoomType,
+        String startedAt,
+        Image auctionRoomImg
+    ) {
+        return AuctionRoom.builder()
+            .seller(seller)
+            .name(name)
+            .auctionRoomType(auctionRoomType)
+            .auctionRoomTradeState(AuctionRoomTradeState.BEFORE_PROGRESS)
+            .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
+            .startedAt(startedAt)
+            .image(auctionRoomImg)
+            .build();
+    }
+
+
 
 }

@@ -42,7 +42,7 @@ public class ControllerAdvice {
     }
 
     /*
-     *404예외처리 핸들러
+     *404 예외처리 핸들러
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -50,6 +50,8 @@ public class ControllerAdvice {
         log.error("NoHandlerFoundException: {}", e);
         return createErrorResponseEntity(ErrorCode.NOT_FOUND);
     }
+
+    // 401, 403, valid TODO
 
     private ResponseEntity<ErrorResponse> createErrorResponseEntity(ErrorCode errorCode) {
         return new ResponseEntity<>(ErrorResponse.of(errorCode), errorCode.getStatus());

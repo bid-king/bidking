@@ -70,7 +70,8 @@ public class Item extends BaseEntity {
         String name,
         String description,
         ItemCategory itemCategory,
-        int ordering
+        int ordering,
+        Image itemImg
     ) {
         return Item.builder()
             .auctionRoom(auctionRoom)
@@ -80,6 +81,11 @@ public class Item extends BaseEntity {
             .itemState(ItemState.PRE_AUCTION)
             .itemCategory(itemCategory)
             .ordering(ordering)
+            .image(itemImg)
             .build();
+    }
+    public void setAuctionRoom(AuctionRoom auctionRoom) {
+        this.auctionRoom = auctionRoom;
+        auctionRoom.getItemList().add(this);
     }
 }

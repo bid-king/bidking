@@ -23,21 +23,23 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class S3ServiceImpl implements ImageService {
 
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
     private final AmazonS3 amazonS3;
     private final ImageRepository imageRepository;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
-
     @Override
-    public List<Image> uploadImageList(MultipartFile[] multipartFileList, String domain)
+    public List<Image> uploadImageList(MultipartFile[] multipartFileList)
         throws IOException {
         List<Image> imageList = new ArrayList<>();
 
         for (MultipartFile multipartFile : multipartFileList) {
 
-            String fileName = domain + "/" + UUID.randomUUID() + "_"
-                + multipartFile.getOriginalFilename(); // 파일 이름
+            String originalFilename = multipartFile.getOriginalFilename();
+            String fileName = UUID.randomUUID() + "_" + originalFilename; // 파일 이름
+
+            log.info("original file name: {}", originalFilename);
+
             long size = multipartFile.getSize(); // 파일 크기
 
             ObjectMetadata objectMetaData = new ObjectMetadata();
@@ -46,13 +48,21 @@ public class S3ServiceImpl implements ImageService {
 
             // S3에 업로드
             amazonS3.putObject(
-                new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(),
-                    objectMetaData).withCannedAcl(CannedAccessControlList.PublicRead));
+                new PutObjectRequest(
+                    bucket,
+                    fileName,
+                    multipartFile.getInputStream(),
+                    objectMetaData
+                ).withCannedAcl(CannedAccessControlList.PublicRead)
+            );
 
             String imagePath = amazonS3.getUrl(bucket, fileName).toString(); // 접근가능한 URL
 
-            Image image = Image.builder().filePath(imagePath)
-                .fileName(multipartFile.getOriginalFilename()).build();
+            Image image = Image.builder()
+                .filePath(imagePath)
+                .originalFileName(originalFilename)
+                .fileName(fileName)
+                .build();
 
             imageRepository.save(image);
 
@@ -62,9 +72,9 @@ public class S3ServiceImpl implements ImageService {
     }
 
     @Override
-    public Image uploadImage(MultipartFile multipartFile, String domain) throws IOException {
-        String fileName =
-            domain + "/" + UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
+    public Image uploadImage(MultipartFile multipartFile) throws IOException {
+        String originalFilename = multipartFile.getOriginalFilename();
+        String fileName = UUID.randomUUID() + "_" + originalFilename;
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
@@ -73,17 +83,19 @@ public class S3ServiceImpl implements ImageService {
         amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
         String imagePath = amazonS3.getUrl(bucket, fileName).toString();
 
-        Image image = Image.builder().filePath(imagePath)
-            .fileName(multipartFile.getOriginalFilename()).build();
+        Image image = Image.builder()
+            .originalFileName(originalFilename)
+            .fileName(fileName)
+            .filePath(imagePath)
+            .build();
+
         imageRepository.save(image);
         return image;
     }
 
     @Override
-    public void deleteImage(String fileName, String domain) {
-        fileName = domain + "/" + fileName;
+    public void deleteImage(String fileName) {
         amazonS3.deleteObject(bucket, fileName);
-
         imageRepository.deleteByFileName(fileName);
     }
 }

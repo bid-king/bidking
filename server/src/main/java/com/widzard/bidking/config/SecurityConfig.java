@@ -1,4 +1,4 @@
-package com.widzard.bidking.global.security.config;
+package com.widzard.bidking.config;
 
 import com.widzard.bidking.global.security.CustomAuthorizationFilter;
 import com.widzard.bidking.global.security.CustomUserDetailsService;
@@ -52,7 +52,8 @@ public class SecurityConfig {
                 "/api/v1/members/logout",
                 "/api/v1/members/check/**",
                 "/api/v1/members/signup",
-                "/api/v1/items/categories"
+                "/api/v1/items/categories",
+                "/api/v1/auctions/**"
             ).permitAll()
             .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
             .anyRequest().authenticated()

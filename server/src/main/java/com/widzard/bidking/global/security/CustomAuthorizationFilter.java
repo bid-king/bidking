@@ -55,10 +55,6 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         // 미인증 상태이며 토큰 내 유저 정보가 존재할 때 db에서 user details를 가져와 체크
         UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
-        log.info("userDetails getUsername: {}", userDetails.getUsername());
-        log.info("userDetails getAuthorities: {}", userDetails.getAuthorities());
-        log.info("userDetails getPassword: {}", userDetails.getPassword());
-
 
         // 토큰 검증
         if (!tokenProvider.isTokenExpired(jwt)) {
