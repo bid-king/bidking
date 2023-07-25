@@ -6,6 +6,7 @@ import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
+import com.widzard.bidking.auction.exception.EmptyThumbnailException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.image.entity.Image;
