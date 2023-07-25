@@ -7,6 +7,7 @@ import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import java.util.Collection;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -57,7 +58,7 @@ public class Member extends BaseEntity implements UserDetails {
     @Embedded
     private Address address; // 기본배송지
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private Image image; // 프로필 사진
 
