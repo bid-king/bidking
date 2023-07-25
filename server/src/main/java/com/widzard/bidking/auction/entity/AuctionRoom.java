@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.entity;
 
 
+import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.entity.Item;
@@ -88,5 +89,12 @@ public class AuctionRoom extends BaseEntity {
     }
 
 
+
+    public void update(AuctionUpdateRequest req) {
+        this.name = req.getAuctionTitle();
+        this.startedAt = req.getStartedAt();
+        this.auctionRoomType = req.getAuctionRoomType();
+        this.image = req.getImage();
+    }
 
 }
