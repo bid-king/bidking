@@ -20,7 +20,6 @@ import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -58,7 +57,7 @@ public class AuctionServiceImpl implements AuctionService {
 
         // 아이템 검증
         List<ItemCreateRequest> itemCreateRequestList = request.getItemList();
-        if (itemCreateRequestList.isEmpty()) {
+        if (itemCreateRequestList == null || itemCreateRequestList.isEmpty()) {
             throw new EmptyItemListException();
         }
 
@@ -113,7 +112,8 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     @Transactional
     public AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req) {
-        AuctionRoom auctionRoom =auctionRoomRepository.findById(auctionId).orElseThrow(AuctionRoomNotFoundException::new);
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
         auctionRoom.update(req);//req의 필드로 auctionRoom 변경
         auctionRoomRepository.save(auctionRoom);
         validAuctionRoom(auctionRoom);//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일
