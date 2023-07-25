@@ -40,17 +40,21 @@ public class MemberServiceImpl implements MemberService {
         OrderState.DELIVERY_WAITING);
 
     private static final String PENALTY = "penalty";
-
     private static final String MSG_TYPE = "SMS";
+
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
+
     private final AuthenticationManagerBuilder managerBuilder;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
+
     @Value("${coolsms.api_key}")
     private String API_KEY;
+
     @Value("${coolsms.api_secret}")
     private String API_SECRET;
+
     @Value("${coolsms.from}")
     private String FROM;
 
@@ -91,9 +95,7 @@ public class MemberServiceImpl implements MemberService {
     public String login(MemberLoginRequest request) {
         Member member = memberRepository.findByUserId(request.getUserId())
             .orElseThrow(MemberNotFoundException::new);
-        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
-        }
+        comparePassword(request.getPassword(), member.getPassword());
         return tokenProvider.generateAccessToken(member);
     }
 
@@ -180,5 +182,11 @@ public class MemberServiceImpl implements MemberService {
             .orElseThrow(() -> new MemberNotFoundException());
         member.changeToUnavailable();
         memberRepository.save(member);
+    }
+
+    private void comparePassword(String rawPassword, String encodedPassword) {
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        }
     }
 }

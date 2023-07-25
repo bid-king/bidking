@@ -2,8 +2,11 @@ package com.widzard.bidking.member.service;
 
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
+import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
 import com.widzard.bidking.member.entity.Member;
+import java.io.IOException;
 import java.util.HashMap;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
 
@@ -24,6 +27,9 @@ public interface MemberService {
     HashMap<String, Integer> getUserDashboard(Long userId);
 
     HashMap<String, Integer> getSellerDashboard(Long userId);
+
+    void updateMember(Long memberId, MemberUpdateRequest request, MultipartFile image)
+        throws IOException;
 
     void deleteMember(Long userId);
 

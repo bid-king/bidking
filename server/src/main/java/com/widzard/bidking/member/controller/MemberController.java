@@ -3,6 +3,7 @@ package com.widzard.bidking.member.controller;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.dto.request.MemberPhoneVerificationRequest;
+import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
 import com.widzard.bidking.member.dto.request.UserIdRequest;
 import com.widzard.bidking.member.dto.request.UserNicknameRequest;
 import com.widzard.bidking.member.dto.response.DashboardResponse;
@@ -14,6 +15,7 @@ import com.widzard.bidking.member.dto.response.MemberPhoneVerificationResponse;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.PhoneNumberDuplicatedException;
 import com.widzard.bidking.member.service.MemberService;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
 import javax.validation.Valid;
@@ -25,9 +27,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -104,7 +109,15 @@ public class MemberController {
         HashMap<String, Integer> dashboard = memberService.getSellerDashboard(memberId);
         return new ResponseEntity<>(DashboardResponse.from(dashboard), HttpStatus.OK);
     }
-    
+
+    @PutMapping("/{memberId}")
+    public ResponseEntity<?> updateMember(@PathVariable Long memberId,
+        @RequestBody MemberUpdateRequest request,
+        @RequestPart("image") MultipartFile image) throws IOException {
+        memberService.updateMember(memberId, request, image);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @DeleteMapping("/{memberId}")
     public ResponseEntity<?> deleteAccount(@PathVariable Long memberId) {
         memberService.deleteMember(memberId);
