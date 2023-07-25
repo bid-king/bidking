@@ -12,6 +12,7 @@ import com.widzard.bidking.member.dto.response.MemberInfoResponse;
 import com.widzard.bidking.member.dto.response.MemberLoginResponse;
 import com.widzard.bidking.member.dto.response.MemberPhoneVerificationResponse;
 import com.widzard.bidking.member.entity.Member;
+import com.widzard.bidking.member.exception.PhoneNumberDuplicatedException;
 import com.widzard.bidking.member.service.MemberService;
 import java.util.HashMap;
 import java.util.Random;
@@ -39,6 +40,10 @@ public class MemberController {
     public ResponseEntity<MemberPhoneVerificationResponse> sendOne(
         @RequestBody MemberPhoneVerificationRequest request
     ) {
+        if (memberService.checkPhoneNumber(request.getPhoneNumber())) {
+            throw new PhoneNumberDuplicatedException();
+        }
+
         String cerNum = makeRandomNumber();
         memberService.certifiedPhoneNumber(request.getPhoneNumber(), cerNum);
         return new ResponseEntity<>(
@@ -86,6 +91,7 @@ public class MemberController {
         Member member = memberService.getUserDetail(memberId);
         return new ResponseEntity<>(MemberInfoResponse.from(member), HttpStatus.OK);
     }
+
     @GetMapping("/{memberId}/dashboard")
     public ResponseEntity<DashboardResponse> getUserDashboard(@PathVariable Long memberId) {
         HashMap<String, Integer> dashboard = memberService.getUserDashboard(memberId);

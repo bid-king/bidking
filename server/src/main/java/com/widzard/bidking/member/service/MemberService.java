@@ -13,6 +13,8 @@ public interface MemberService {
 
     boolean checkNickname(String nickname);
 
+    boolean checkPhoneNumber(String phoneNumber);
+
     String login(MemberLoginRequest request);
 
     void certifiedPhoneNumber(String phoneNumber, String cerNum);
