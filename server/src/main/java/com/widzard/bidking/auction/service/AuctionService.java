@@ -2,6 +2,7 @@ package com.widzard.bidking.auction.service;
 
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
+import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
