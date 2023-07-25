@@ -18,7 +18,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByPhoneNumber(String phoneNumber);
 
-    Optional<Member> findByUserId(String userId);
+    @Query("select m from Member m where m.userId = :userId and m.available = true ")
+    Optional<Member> findByUserId(@Param("userId") String userId);
 
     @Query("select m from Member m where m.id = :memberId and m.available = true ")
     Optional<Member> findById(@Param("memberId") Long memberId);
