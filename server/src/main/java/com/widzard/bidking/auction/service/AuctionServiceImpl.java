@@ -105,4 +105,38 @@ public class AuctionServiceImpl implements AuctionService {
             .orElseThrow(AuctionRoomNotFoundException::new);
     }
 
+
+    @Override
+    public AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req) {
+        Optional<AuctionRoom> auctionRoomOptional = auctionRoomRepository.findById(auctionId);
+        if (auctionRoomOptional.isEmpty()) {
+            throw new AuctionRoomNotFoundException();
+        }
+        AuctionRoom auctionRoom = auctionRoomOptional.get();
+        auctionRoom.update(req);//req의 필드로 auctionRoom 변경
+
+        auctionRoomRepository.save(auctionRoom);
+        validAuctionRoom(auctionRoom);//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일
+        return auctionRoom;
+    }
+
+    //도우미 함수
+    private void validAuctionRoom(AuctionRoom auctionRoom) {
+        //아이템 갯수
+        List<Item> itemList = auctionRoom.getItemList();
+        if (itemList == null || itemList.size() == 0) {
+            throw new EmptyItemListException();
+        }
+        //시작시간
+        LocalDateTime now = LocalDateTime.now();
+        if (TimeUtility.toLocalDateTime(auctionRoom.getStartedAt()).isBefore(now.plusHours(1))) {
+            throw new AuctionStartTimeInvalidException();
+        }
+        //썸네일유무
+        if (auctionRoom.getImage() == null) {
+            throw new EmptyThumbnailException();
+        }
+        //
+    }
+
 }
