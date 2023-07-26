@@ -64,12 +64,9 @@ public class AuctionRoom extends BaseEntity {
     @OneToMany(mappedBy = "auctionRoom")
     private List<Item> itemList = new ArrayList<>();
 
+    private boolean isSessionCreated;
 
-    public void addItem(Item item) {
-        this.itemList.add(item);
-        item.setAuctionRoom(this);
-    }
-    public static AuctionRoom createAuctionRoom (
+    public static AuctionRoom createAuctionRoom(
         String name,
         Member seller,
         AuctionRoomType auctionRoomType,
@@ -84,9 +81,25 @@ public class AuctionRoom extends BaseEntity {
             .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
             .startedAt(startedAt)
             .image(auctionRoomImg)
+            .isSessionCreated(false)
             .build();
     }
 
+    public void addItem(Item item) {
+        this.itemList.add(item);
+        item.setAuctionRoom(this);
+    }
+    
+    public void changeLiveState(AuctionRoomLiveState state) {
+        this.auctionRoomLiveState = state;
+    }
 
+    public void changeTradeState(AuctionRoomTradeState state) {
+        this.auctionRoomTradeState = state;
+    }
+
+    public void changeIsSessionCreated(boolean state) {
+        this.isSessionCreated = state;
+    }
 
 }

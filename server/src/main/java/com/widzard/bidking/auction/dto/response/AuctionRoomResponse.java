@@ -26,9 +26,8 @@ public class AuctionRoomResponse {
 
     private String auctionRoomLiveState; // (라이브 상태)
 
-    //TODO open vidu auction room url 추가되면 추가
-    private String auctionRoomUrl; //(auction room id)
-
+    private String auctionRoomSesion;
+    
     private String auctionRoomTradeState; //(거래 상태)
 
     private String auctionRoomType; // (경매방식)
