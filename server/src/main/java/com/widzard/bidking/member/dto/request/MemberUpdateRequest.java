@@ -1,6 +1,7 @@
 package com.widzard.bidking.member.dto.request;
 
 import com.widzard.bidking.global.entity.Address;
+import com.widzard.bidking.global.validation.NotEmptyIfPresent;
 import com.widzard.bidking.image.entity.Image;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ public class MemberUpdateRequest {
     @Length(min = 8, max = 16, message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.")
     private String oldPassword;
 
-    @NotNull(message = "비밀번호를 입력해주세요")
+    @NotEmptyIfPresent(message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.")
     private String newPassword;
 
     @NotNull(message = "아이디를 입력해주세요.")
