@@ -66,6 +66,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-prettier", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:8.8.0"],\
             ["eslint-plugin-react", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:7.32.2"],\
             ["eslint-plugin-storybook", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:0.6.12"],\
+            ["openvidu-browser", "npm:2.28.0"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:18.2.0"],\
@@ -12743,6 +12744,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-prettier", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:8.8.0"],\
             ["eslint-plugin-react", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:7.32.2"],\
             ["eslint-plugin-storybook", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:0.6.12"],\
+            ["openvidu-browser", "npm:2.28.0"],\
             ["prop-types", "npm:15.8.1"],\
             ["react", "npm:18.2.0"],\
             ["react-dom", "virtual:67bccc7d0bcfa1230f52b04f252953235f3247e8df364142a4b7724e7369b822323dc3148cf3825512a8c0b70e04e7501cbd67f5ac8193999d7bc7a9f219cccb#npm:18.2.0"],\
@@ -15794,6 +15796,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["freeice", [\
+        ["npm:2.2.2", {\
+          "packageLocation": "./.yarn/cache/freeice-npm-2.2.2-1a8e4b796e-4645cb6efc.zip/node_modules/freeice/",\
+          "packageDependencies": [\
+            ["freeice", "npm:2.2.2"],\
+            ["normalice", "npm:1.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["fresh", [\
         ["npm:0.5.2", {\
           "packageLocation": "./.yarn/cache/fresh-npm-0.5.2-ad2bb4c0a2-13ea8b08f9.zip/node_modules/fresh/",\
@@ -16321,6 +16333,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["source-map", "npm:0.6.1"],\
             ["uglify-js", "npm:3.17.4"],\
             ["wordwrap", "npm:1.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["hark", [\
+        ["npm:1.2.3", {\
+          "packageLocation": "./.yarn/cache/hark-npm-1.2.3-131e0d87a1-34ee034011.zip/node_modules/hark/",\
+          "packageDependencies": [\
+            ["hark", "npm:1.2.3"],\
+            ["wildemitter", "npm:1.2.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -18430,6 +18452,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["jsnlog", [\
+        ["npm:2.30.0", {\
+          "packageLocation": "./.yarn/cache/jsnlog-npm-2.30.0-a271fb3d2c-d19883b771.zip/node_modules/jsnlog/",\
+          "packageDependencies": [\
+            ["jsnlog", "npm:2.30.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["json-parse-even-better-errors", [\
         ["npm:2.3.1", {\
           "packageLocation": "./.yarn/cache/json-parse-even-better-errors-npm-2.3.1-144d62256e-798ed4cf33.zip/node_modules/json-parse-even-better-errors/",\
@@ -19058,6 +19089,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mime", "npm:2.6.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:3.0.0", {\
+          "packageLocation": "./.yarn/cache/mime-npm-3.0.0-8d911e4c06-f43f9b7bfa.zip/node_modules/mime/",\
+          "packageDependencies": [\
+            ["mime", "npm:3.0.0"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["mime-db", [\
@@ -19514,6 +19552,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["normalice", [\
+        ["npm:1.0.1", {\
+          "packageLocation": "./.yarn/cache/normalice-npm-1.0.1-fb1af045d0-1ce4699865.zip/node_modules/normalice/",\
+          "packageDependencies": [\
+            ["normalice", "npm:1.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["normalize-package-data", [\
         ["npm:2.5.0", {\
           "packageLocation": "./.yarn/cache/normalize-package-data-npm-2.5.0-af0345deed-7999112efc.zip/node_modules/normalize-package-data/",\
@@ -19819,6 +19866,25 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["define-lazy-prop", "npm:2.0.0"],\
             ["is-docker", "npm:2.2.1"],\
             ["is-wsl", "npm:2.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["openvidu-browser", [\
+        ["npm:2.28.0", {\
+          "packageLocation": "./.yarn/cache/openvidu-browser-npm-2.28.0-cb3c60ac05-fe191d5f9f.zip/node_modules/openvidu-browser/",\
+          "packageDependencies": [\
+            ["openvidu-browser", "npm:2.28.0"],\
+            ["events", "npm:3.3.0"],\
+            ["freeice", "npm:2.2.2"],\
+            ["hark", "npm:1.2.3"],\
+            ["inherits", "npm:2.0.4"],\
+            ["jsnlog", "npm:2.30.0"],\
+            ["mime", "npm:3.0.0"],\
+            ["platform", "npm:1.3.6"],\
+            ["semver", "npm:7.3.8"],\
+            ["uuid", "npm:9.0.0"],\
+            ["wolfy87-eventemitter", "npm:5.2.9"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -20235,6 +20301,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["pkg-up", "npm:3.1.0"],\
             ["find-up", "npm:3.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["platform", [\
+        ["npm:1.3.6", {\
+          "packageLocation": "./.yarn/cache/platform-npm-1.3.6-8c3cef9352-6f472a09c6.zip/node_modules/platform/",\
+          "packageDependencies": [\
+            ["platform", "npm:1.3.6"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -23561,6 +23636,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
+        ["npm:7.3.8", {\
+          "packageLocation": "./.yarn/cache/semver-npm-7.3.8-25a996cb4f-ba9c7cbbf2.zip/node_modules/semver/",\
+          "packageDependencies": [\
+            ["semver", "npm:7.3.8"],\
+            ["lru-cache", "npm:6.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:7.5.4", {\
           "packageLocation": "./.yarn/cache/semver-npm-7.5.4-c4ad957fcd-12d8ad952f.zip/node_modules/semver/",\
           "packageDependencies": [\
@@ -25981,6 +26064,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["wide-align", "npm:1.1.5"],\
             ["string-width", "npm:4.2.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["wildemitter", [\
+        ["npm:1.2.1", {\
+          "packageLocation": "./.yarn/cache/wildemitter-npm-1.2.1-4724a2b39c-3f1cc144b1.zip/node_modules/wildemitter/",\
+          "packageDependencies": [\
+            ["wildemitter", "npm:1.2.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["wolfy87-eventemitter", [\
+        ["npm:5.2.9", {\
+          "packageLocation": "./.yarn/cache/wolfy87-eventemitter-npm-5.2.9-b8937a672d-753b03fb87.zip/node_modules/wolfy87-eventemitter/",\
+          "packageDependencies": [\
+            ["wolfy87-eventemitter", "npm:5.2.9"]\
           ],\
           "linkType": "HARD"\
         }]\
