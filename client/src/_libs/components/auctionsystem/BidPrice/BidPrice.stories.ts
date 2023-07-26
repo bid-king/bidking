@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { DetailBox } from './DetailBox';
+import { BidPrice } from './BidPrice';
 
 const meta = {
-  title: 'Detail/DetailBox',
-  component: DetailBox,
+  title: 'Auction/System/BidPrice',
+  component: BidPrice,
   argTypes: {},
-} satisfies Meta<typeof DetailBox>;
+} satisfies Meta<typeof BidPrice>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    title: '이건 경매제목입니다.',
+    align: 'center',
     theme: 'light',
   },
 };

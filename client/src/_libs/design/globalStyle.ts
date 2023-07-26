@@ -15,6 +15,12 @@ export const globalStyle = css`
   body {
     font-size: 1.1rem;
   }
+  input,
+  textarea,
+  button {
+    font-family: 'Pretendard';
+    font-size: '1rem';
+  }
   *,
   *::before,
   *::after {
@@ -39,10 +45,10 @@ export const globalStyle = css`
   }
   @font-face {
     font-family: 'Pretendard';
-    font-weight: 900;
+    font-weight: 600;
     font-display: swap;
-    src: url('/fonts/Pretendard-Black.subset.woff2') format('woff2'),
-      url('/fonts/Pretendard-Black.subset.woff') format('woff');
+    src: url('/fonts/Pretendard-SemiBold.subset.woff2') format('woff2'),
+      url('/fonts/Pretendard-SemiBold.subset.woff') format('woff');
   }
   @font-face {
     font-family: 'Pretendard';
