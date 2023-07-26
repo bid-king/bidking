@@ -4,8 +4,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.widzard.bidking.image.dto.ImageModifyDto;
 import com.widzard.bidking.image.entity.Image;
-import com.widzard.bidking.image.entity.repository.ImageRepository;
+import com.widzard.bidking.image.repository.ImageRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +92,30 @@ public class S3ServiceImpl implements ImageService {
             .build();
 
         imageRepository.save(image);
+        return image;
+    }
+
+    @Override
+    public Image modifyImage(MultipartFile multipartFile, Long imageId) throws IOException {
+        //S3업로드
+        String originalFilename = multipartFile.getOriginalFilename();
+        String fileName = UUID.randomUUID() + "_" + originalFilename;
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(multipartFile.getSize());
+        metadata.setContentType(multipartFile.getContentType());
+
+        amazonS3.putObject(bucket, fileName, multipartFile.getInputStream(), metadata);
+        String imagePath = amazonS3.getUrl(bucket, fileName).toString();
+
+        //table 업데이트
+        Image image = imageRepository.findById(imageId).orElseThrow(RuntimeException::new);
+
+        //S3 이미지 삭제
+        amazonS3.deleteObject(bucket, image.getFileName());
+
+        image.modify(new ImageModifyDto(originalFilename, fileName, imagePath));
+
         return image;
     }
 
