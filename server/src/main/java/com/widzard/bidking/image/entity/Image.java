@@ -2,6 +2,7 @@ package com.widzard.bidking.image.entity;
 
 
 import com.widzard.bidking.global.entity.BaseEntity;
+import com.widzard.bidking.image.dto.ImageModifyDto;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +35,11 @@ public class Image extends BaseEntity {
     private String fileName;
 
     @Column(nullable = false)
-    private String filePath; // https: S3 주소/domain
+    private String filePath; // https: S3 주소
 
-
+    public void modify(ImageModifyDto imageModifyDto){
+        this.originalFileName = imageModifyDto.getOriginalFileName();
+        this.fileName = imageModifyDto.getFileName();
+        this.filePath = imageModifyDto.getFilePath();
+    }
 }
