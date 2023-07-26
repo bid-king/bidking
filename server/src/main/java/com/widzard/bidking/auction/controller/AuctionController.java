@@ -60,7 +60,7 @@ public class AuctionController {
         @PathVariable Long auctionId,
         @RequestPart(name = "auctionRoomImg") MultipartFile auctionRoomImg,
         @RequestPart(name = "itemImgs") MultipartFile[] itemImgs
-    ) {
+    ) throws IOException {
         auctionService.updateAuctionRoom(auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

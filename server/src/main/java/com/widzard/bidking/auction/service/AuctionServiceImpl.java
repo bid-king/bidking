@@ -121,7 +121,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     @Transactional
     public AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req,
-        MultipartFile auctionRoomImg, MultipartFile[] itemImgs) {
+        MultipartFile auctionRoomImg, MultipartFile[] itemImgs) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
         //auctionRoom 기본자료형 필드 업데이트
@@ -130,7 +130,7 @@ public class AuctionServiceImpl implements AuctionService {
         //경매썸네일 변경 요청 존재
         if (!auctionRoomImg.isEmpty()) {
             Image auctionImage = auctionRoom.getImage();
-            imageService.modifyImage(auctionImage, auctionImage.getId());
+            imageService.modifyImage(auctionRoomImg, auctionImage.getId());
         }
 
         //아이템 리스트 업데이트

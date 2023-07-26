@@ -8,7 +8,7 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.image.entity.Image;
-import com.widzard.bidking.image.entity.repository.ImageRepository;
+import com.widzard.bidking.image.repository.ImageRepository;
 import com.widzard.bidking.item.dto.ItemCategoryDto;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
@@ -61,6 +61,20 @@ class AuctionServiceImplTest {
         new MockMultipartFile("mockItemFileName2", "mockItemOriginalFilename2",
             "mockItemFileContentType2", "mockItemFileBytes2".getBytes())
     };
+
+
+    //업데이트용 목업객체 대입
+    //목업 - 옥션룸 썸네일
+    private MultipartFile auctionRoomImg2 = new MockMultipartFile("changeDmockFileName",
+        "changeDmockOriginalFileName", "mockFileContentType", "mockFileBytes".getBytes());
+    //목업 - 아이템 썸네일 (아이템2개)
+    private MultipartFile[] itemImg2 = new MockMultipartFile[]{
+        new MockMultipartFile("changeDmockItemFileName1", "changeDmockItemOriginalFilename1",
+            "mockItemFileContentType1", "mockItemFileBytes1".getBytes()),
+        new MockMultipartFile("changeDmockItemFileName2", "changeDmockItemOriginalFilename2",
+            "mockItemFileContentType2", "mockItemFileBytes2".getBytes())
+    };
+
 
     //옥션룸 생성요청(BeforeEach에서 초기화)
     private AuctionCreateRequest auctionCreateRequest;
@@ -182,7 +196,8 @@ class AuctionServiceImplTest {
             .itemList(itemUpdateRequestList)
             .build();
         log.info("before changed = {}", find);
-        AuctionRoom auctionRoom = auctionService.updateAuctionRoom(find.getId(), req);
+        AuctionRoom auctionRoom = auctionService.updateAuctionRoom(find.getId(), req,
+            auctionRoomImg2, itemImg2);
         log.info("after changed = {}", find);
 
         Assertions.assertEquals(auctionRoom.getAuctionRoomType(), AuctionRoomType.REVERSE);

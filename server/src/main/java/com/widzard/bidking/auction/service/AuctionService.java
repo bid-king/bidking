@@ -17,5 +17,5 @@ public interface AuctionService {
         throws IOException;
 
     AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req,
-        MultipartFile auctionRoomImg, MultipartFile[] itemImgs);
+        MultipartFile auctionRoomImg, MultipartFile[] itemImgs) throws IOException;
 }
