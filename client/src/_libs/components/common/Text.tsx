@@ -23,8 +23,8 @@ const FONT_TYPE = {
     fontWeight: '700',
   },
   h1: {
-    fontWeight: '900',
-    fontSize: '2rem',
+    fontWeight: '600',
+    fontSize: '1.75rem',
   },
   h2: {
     fontWeight: '700',

@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { NavBarModal } from './NavBarModal';
+import { Timer } from './Timer';
 
 const meta = {
-  title: 'Layout/NavBarModal',
-  component: NavBarModal,
+  title: 'Auction/System/Timer',
+  component: Timer,
   argTypes: {},
-} satisfies Meta<typeof NavBarModal>;
+} satisfies Meta<typeof Timer>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: {},
+  args: { theme: 'light' },
 };

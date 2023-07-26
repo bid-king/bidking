@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ChatMessage } from './ChatMessage';
 
 const meta = {
-  title: 'Auction/ChatMessage',
+  title: 'Auction/CRUD/ChatMessage',
   component: ChatMessage,
   argTypes: {},
 } satisfies Meta<typeof ChatMessage>;
