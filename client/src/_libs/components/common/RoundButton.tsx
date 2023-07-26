@@ -18,10 +18,9 @@ export function RoundButton({ variant = 'confirm', label = '로그인', activate
         cursor: 'pointer',
         borderRadius: '2.25rem',
         transition: 'filter 0.3s',
-        height: '3rem',
+        height: '2.5rem',
         padding: '0 1.5rem 0 1.5rem',
-        fontWeight: '600',
-        fontSize: '1.1rem',
+        fontSize: '1rem',
         ...TYPE_VARIANTS[variant],
         ...IS_ACTIVATED[activated],
       }}

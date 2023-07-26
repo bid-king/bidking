@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   myWidth?: string;
   myHeight?: string;
 }
-export function ProfileImage({ imgSrc = '/image/profile.png', myWidth = '3.375rem', myHeight = '3.375rem' }: Props) {
+export function ProfileImage({ imgSrc = '/image/profile.png', myWidth = '100%', myHeight = '100%' }: Props) {
   return (
     <img
       src={imgSrc}
