@@ -32,10 +32,12 @@ export function Input({
       value={value}
       css={{
         width: '100%',
-        height: '2.5rem',
+        height: '3rem',
+        fontSize: '1.15rem',
         paddingLeft: '1rem',
         paddingRight: '1rem',
-        fontWeight: 700,
+        fontWeight: 600,
+        letterSpacing: '0.05rem',
         outline: 'none',
         ...THEME_VARIENT[theme],
         ...SHAPE_VARIENT[shape],
@@ -48,15 +50,15 @@ export function Input({
 
 const THEME_VARIENT = {
   light: {
-    backgroundColor: colors.backgroundLight2,
-    border: `1px solid ${colors.grey}`,
+    backgroundColor: colors.backgroundLight,
+    border: '1px solid transparent',
     color: colors.black,
   },
   dark: {
     backgroundColor: colors.backgroundDark3,
-    border: `1px solid ${colors.backgroundDark3}`,
+    border: '1px solid transparent',
     color: colors.white,
-    '::placeholder': { color: colors.lightgrey },
+    '::placeholder': { color: colors.whitegrey },
   },
 };
 
@@ -65,6 +67,6 @@ const SHAPE_VARIENT = {
     borderRadius: '2rem',
   },
   square: {
-    borderRadius: '8px',
+    borderRadius: '1rem',
   },
 };

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ChatRoom } from './ChatRoom';
 
 const meta = {
-  title: 'Auction/ChatRoom',
+  title: 'Auction/CRUD/ChatRoom',
   component: ChatRoom,
   argTypes: {},
 } satisfies Meta<typeof ChatRoom>;

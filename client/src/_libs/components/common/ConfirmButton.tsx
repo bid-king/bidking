@@ -25,11 +25,12 @@ export function ConfirmButton({
       css={{
         cursor: 'pointer',
         width: '100%',
-        height: '2.5rem',
+        height: '3rem',
         border: 'none',
         outline: 'none',
-        borderRadius: '0.5rem',
+        borderRadius: '1rem',
         fontWeight: '600',
+        fontSize: '1.15rem',
         transition: 'filter 0.3s',
         '&:hover': {
           filter: 'brightness(0.9)',
