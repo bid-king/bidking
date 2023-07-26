@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.controller;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
+import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
@@ -17,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuctionController {
 
     private final AuctionService auctionService;
-
+    
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<AuctionCreateResponse> createAuction(
         @AuthenticationPrincipal Member member,
@@ -44,9 +46,23 @@ public class AuctionController {
 
     @GetMapping("/{auctionId}")
     public ResponseEntity<AuctionRoomResponse> readAuction(
+        @AuthenticationPrincipal Member member,
         @PathVariable Long auctionId
     ) {
         AuctionRoom auctionRoom = auctionService.readAuctionRoom(auctionId);
         return new ResponseEntity<>(AuctionRoomResponse.from(auctionRoom), HttpStatus.OK);
     }
+
+    @PutMapping("/{auctionId}")
+    public ResponseEntity updateAuction(
+        @AuthenticationPrincipal Member member,
+        @RequestPart @Valid AuctionUpdateRequest auctionUpdateRequest,
+        @PathVariable Long auctionId,
+        @RequestPart(name = "auctionRoomImg") MultipartFile auctionRoomImg,
+        @RequestPart(name = "itemImgs") MultipartFile[] itemImgs
+    ) {
+        auctionService.updateAuctionRoom(auctionId, auctionUpdateRequest);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 }

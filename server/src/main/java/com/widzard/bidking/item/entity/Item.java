@@ -1,6 +1,7 @@
 package com.widzard.bidking.item.entity;
 
 
+import com.widzard.bidking.auction.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
@@ -65,7 +66,7 @@ public class Item extends BaseEntity {
 
 
     public static Item create(
-        AuctionRoom auctionRoom,
+//        AuctionRoom auctionRoom,
         Long startPrice,
         String name,
         String description,
@@ -74,7 +75,7 @@ public class Item extends BaseEntity {
         Image itemImg
     ) {
         return Item.builder()
-            .auctionRoom(auctionRoom)
+//            .auctionRoom(auctionRoom)
             .startPrice(startPrice)
             .name(name)
             .description(description)
@@ -84,8 +85,40 @@ public class Item extends BaseEntity {
             .image(itemImg)
             .build();
     }
+
     public void setAuctionRoom(AuctionRoom auctionRoom) {
         this.auctionRoom = auctionRoom;
         auctionRoom.getItemList().add(this);
+    }
+
+    public void update(ItemUpdateRequest updateRequest, ItemCategory itemCategory) {
+
+        //TODO 카테고리 별도 수정 필요
+        this.itemCategory = itemCategory;
+        this.name = updateRequest.getItemName();
+        this.ordering = updateRequest.getItemOrdering();
+        this.startPrice = updateRequest.getStartPrice();
+        this.description = updateRequest.getDescription();
+
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        return sb.append("\ngetId")
+            .append(this.getId())
+            .append("\ngetDescription")
+            .append(this.getDescription())
+            .append("\ngetName")
+            .append(this.getName())
+            .append("\ngetStartPrice")
+            .append(this.getStartPrice())
+            .append("\ngetAuctionRoom")
+            .append(this.getAuctionRoom().getId())
+            .append("\ngetItemCategory")
+            .append(this.getItemCategory().getName())
+            .append("\nthis.getItemState()")
+            .append(this.getItemState())
+            .toString();
     }
 }

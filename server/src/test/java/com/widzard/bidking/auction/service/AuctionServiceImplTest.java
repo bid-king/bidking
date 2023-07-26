@@ -3,11 +3,14 @@ package com.widzard.bidking.auction.service;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
+import com.widzard.bidking.auction.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.image.entity.repository.ImageRepository;
+import com.widzard.bidking.item.dto.ItemCategoryDto;
+import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.member.entity.Member;
@@ -46,6 +49,7 @@ class AuctionServiceImplTest {
     //테스트용 전역객체 공간 시작
     private Member member;
     private ItemCategory itemCategory;
+    private ItemCategory itemCategory2;
     //목업객체 대입
     //목업 - 옥션룸 썸네일
     private MultipartFile auctionRoomImg = new MockMultipartFile("mockFileName",
@@ -71,6 +75,10 @@ class AuctionServiceImplTest {
             .name("전자기기")
             .build();
         itemCategoryRepository.save(itemCategory);
+        itemCategory2 = ItemCategory.builder()
+            .name("전기")
+            .build();
+        itemCategoryRepository.save(itemCategory2);
 
         //기본이미지 - 아래 Member에서 Cascade로 영속화
         Image image = Image.builder()
@@ -101,9 +109,9 @@ class AuctionServiceImplTest {
             .build();
         ItemCreateRequest itemReq2 = ItemCreateRequest.builder()
             .itemCategory(itemCategory.getId())
-            .description("테스트용 아이템 설명1")
+            .description("테스트용 아이템 설명2")
             .ordering(2)
-            .name("테스트용 아이템1")
+            .name("테스트용 아이템2")
             .startPrice(10L)
             .build();
 
@@ -122,9 +130,11 @@ class AuctionServiceImplTest {
 
     @Test
     void createAuctionRoom() throws IOException {
+        log.info("auctionCreateRequest.itemlist() = {} ", auctionCreateRequest.getItemList());
         AuctionRoom auctionRoom = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImg);
-        log.info("생성된 옥션룸 = {}", auctionRoom.toString());
+        log.info("created auctionRoom's itemList = {}", auctionRoom.getItemList());
+        log.info("생성된 옥션룸 = {}", auctionRoom.getName());
     }
 
     @Test
@@ -132,24 +142,56 @@ class AuctionServiceImplTest {
         AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImg);
         AuctionRoom find = auctionService.readAuctionRoom(create.getId());
+
         Assertions.assertEquals(create, find);
 
     }
 
     @Test
     void updateAuctionRoom() throws IOException {
+
         AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImg);
         AuctionRoom find = auctionService.readAuctionRoom(create.getId());
+        log.info("create == find {}", create == find);
+        find.getItemList().forEach(item -> {
+            log.info("yayaho {}", item.toString());
+        });
+        //auctionRoom에 있는 itemList를 이용해서 임시 itemUpdateRequest 객체 생성
+        List<ItemUpdateRequest> itemUpdateRequestList = new ArrayList<>();
+        List<Item> itemList = create.getItemList();
+        itemList.forEach(item -> {
+            log.info("inserting id is {}", item.getId());
+            ItemUpdateRequest req = ItemUpdateRequest.builder()
+                .id(item.getId())
+                .itemName(item.getName() + "changed")
+                .itemOrdering(item.getOrdering())
+                .itemCategory(ItemCategoryDto.create(itemCategory2))//TODO 카테고리 따로
+                .description(item.getDescription())
+                .startPrice(item.getStartPrice())
+                .build();
+            itemUpdateRequestList.add(req);
+        });
+
         AuctionUpdateRequest req = AuctionUpdateRequest.builder()
             .auctionRoomType(AuctionRoomType.REVERSE)
             .deliveryRulesChecked(true)
             .auctionTitle("changed title")
             .itemPermissionChecked(true)
             .startedAt("2023-12-12 00:00:00")
+            .itemList(itemUpdateRequestList)
             .build();
         log.info("before changed = {}", find);
-        auctionService.updateAuctionRoom(find.getId(), req);
+        AuctionRoom auctionRoom = auctionService.updateAuctionRoom(find.getId(), req);
         log.info("after changed = {}", find);
+
+        Assertions.assertEquals(auctionRoom.getAuctionRoomType(), AuctionRoomType.REVERSE);
+        auctionRoom.getItemList().forEach(item -> {
+            Assertions.assertTrue(item.getName().contains("changed"));
+        });
     }
+
+    //TODO itemList를 빈 리스트로 update 요청시 아이템 에러 발생
+
+    //TODO 시작시간을 현재시간 1시간 이내로 설정시 시간 에러 발생
 }

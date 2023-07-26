@@ -15,6 +15,8 @@ import com.widzard.bidking.image.service.ImageService;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.item.exception.EmptyItemListException;
+import com.widzard.bidking.item.exception.ItemCategoryNotFoundException;
+import com.widzard.bidking.item.exception.ItemNotFoundException;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
@@ -83,22 +85,28 @@ public class AuctionServiceImpl implements AuctionService {
             MultipartFile img = itemImgs[i];
             Image image = imageService.uploadImage(img);
             ItemCreateRequest itemCreateRequest = itemCreateRequestList.get(i);
+            log.info("itemCreateRequest == {}", itemCreateRequest);
             ItemCategory itemCategory = itemCategoryRepository.findById(
                 itemCreateRequest.getItemCategory()).orElseThrow(RuntimeException::new);
 
-            itemRepository.save(
-                Item.create(
-                    auctionRoom,
-                    itemCreateRequest.getStartPrice(),
-                    itemCreateRequest.getName(),
-                    itemCreateRequest.getDescription(),
-                    itemCategory,
-                    itemCreateRequest.getOrdering(),
-                    image
-                )
+            //Item 생성이 안되는 듯 하여 확인
+            Item item = Item.create(
+//                auctionRoom,
+                itemCreateRequest.getStartPrice(),
+                itemCreateRequest.getName(),
+                itemCreateRequest.getDescription(),
+                itemCategory,
+                itemCreateRequest.getOrdering(),
+                image
             );
+            log.info("확인용 id = {}", item);
+            itemRepository.save(item);
+            auctionRoom.addItem(item);
+            log.info("아이템에서 옭션룸 {}", item.getAuctionRoom().getName());
         }
 
+        log.info("TEST true {}", auctionRoom == savedAuctionRoom);
+        log.info("NUll 시작 추정 0지점 = {}", auctionRoom.getItemList());
         return savedAuctionRoom;
     }
 
@@ -120,9 +128,16 @@ public class AuctionServiceImpl implements AuctionService {
 
         //아이템 리스트 업데이트
         List<ItemUpdateRequest> itemUpdateRequestList = req.getItemList();
+        log.info("itemUpdatearequestList.size = {}", itemUpdateRequestList.size());
         for (ItemUpdateRequest updateRequest : itemUpdateRequestList) {
-            Long id = updateRequest.getId();
-            Item item =
+            Long itemId = updateRequest.getId();
+            log.info("item null start point {}", itemId);
+            Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+            ItemCategory category = itemCategoryRepository.findById(
+                updateRequest.getItemCategory().getId()).orElseThrow(
+                ItemCategoryNotFoundException::new);
+            item.update(updateRequest, category);
+            log.info("updateRequest.getItemCategory() {}", updateRequest.getItemCategory());
         }
 
         validAuctionRoom(auctionRoom);//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일

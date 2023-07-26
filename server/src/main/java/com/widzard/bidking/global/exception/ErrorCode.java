@@ -53,7 +53,7 @@ public enum ErrorCode {
      * Image
      */
     EMPTY_THUMBNAIL_EXCEPTION(HttpStatus.NOT_FOUND, "EMPTY_THUMBNAIL_EXCEPTION", "썸네일이 없습니다."),
-    ;
+    ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_NOT_FOUND", "아이템이 없습니다.");
     private final HttpStatus status;
     private final String code;
     private final String message;

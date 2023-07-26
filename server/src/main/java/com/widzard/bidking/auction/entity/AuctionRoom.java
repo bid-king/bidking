@@ -8,6 +8,7 @@ import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.member.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,6 +27,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Builder
 @Getter
@@ -33,6 +36,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "auction_room")
+@Slf4j
+@ToString
 public class AuctionRoom extends BaseEntity {
 
     @Id
@@ -62,7 +67,7 @@ public class AuctionRoom extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image; // (썸네일)
 
-    @OneToMany(mappedBy = "auctionRoom")
+    @OneToMany(mappedBy = "auctionRoom", cascade = CascadeType.ALL)
     private List<Item> itemList = new ArrayList<>();
 
     public static AuctionRoom createAuctionRoom(
@@ -80,11 +85,12 @@ public class AuctionRoom extends BaseEntity {
             .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
             .startedAt(startedAt)
             .image(auctionRoomImg)
+            .itemList(new ArrayList<>())
             .build();
     }
 
     public void addItem(Item item) {
-        this.itemList.add(item);
+//        this.itemList.add(item);
         item.setAuctionRoom(this);
     }
 
@@ -96,16 +102,28 @@ public class AuctionRoom extends BaseEntity {
 
     }
 
-    @Override
-    public String toString() {
-        return new StringBuffer()
-            .append(this.id + "\n")
-            .append(this.seller + "\n")
-            .append(this.name + "\n")
-            .append(this.auctionRoomType + "\n")
-            .append(this.auctionRoomLiveState + "\n")
-            .append(this.auctionRoomTradeState + "\n")
-            .append(this.startedAt + "\n").toString();
-    }
+//    @Override
+//    public String toString() {
+//        StringBuffer sb = new StringBuffer();
+//        sb
+//            .append(this.id + "\n")
+//            .append(this.seller + "\n")
+//            .append(this.name + "\n")
+//            .append(this.auctionRoomType + "\n")
+//            .append(this.auctionRoomLiveState + "\n")
+//            .append(this.auctionRoomTradeState + "\n")
+//            .append(this.startedAt + "\n")
+//            .append(this.getItemList().size())
+//        ;
+////        log.info("auctionRoom itemList = {}", itemList);//TODO 여기서 null임
+////        this.itemList.forEach(item -> {
+////            sb.append(item.getName())
+////                .append(item.getItemState())
+////                .append(item.getAuctionRoom().getName())
+////                .append(item.getStartPrice())
+////                .append(item.getDescription());
+////        });
+//        return sb.toString();
+//    }
 
 }
