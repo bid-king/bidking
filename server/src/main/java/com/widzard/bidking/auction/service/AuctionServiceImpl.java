@@ -120,11 +120,18 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     @Transactional
-    public AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req) {
+    public AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req,
+        MultipartFile auctionRoomImg, MultipartFile[] itemImgs) {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
         //auctionRoom 기본자료형 필드 업데이트
         auctionRoom.update(req);
+
+        //경매썸네일 변경 요청 존재
+        if (!auctionRoomImg.isEmpty()) {
+            Image auctionImage = auctionRoom.getImage();
+            imageService.modifyImage(auctionImage, auctionImage.getId());
+        }
 
         //아이템 리스트 업데이트
         List<ItemUpdateRequest> itemUpdateRequestList = req.getItemList();
@@ -138,6 +145,20 @@ public class AuctionServiceImpl implements AuctionService {
                 ItemCategoryNotFoundException::new);
             item.update(updateRequest, category);
             log.info("updateRequest.getItemCategory() {}", updateRequest.getItemCategory());
+        }
+
+        //아읻템 이미지 업데이트
+//        itemImgs에서 null(isEmpty())이면 냅둬야한다(노변경)
+        for (int i = 0; i < itemImgs.length; i++) {
+            MultipartFile curFileImg = itemImgs[i];
+
+            if (curFileImg.isEmpty()) {
+                continue;
+            }
+
+            //썸네일 변경 신청한 아이템
+            Item curItem = auctionRoom.getItemList().get(i);
+            imageService.modifyImage(curFileImg, curItem.getImage().getId());
         }
 
         validAuctionRoom(auctionRoom);//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일

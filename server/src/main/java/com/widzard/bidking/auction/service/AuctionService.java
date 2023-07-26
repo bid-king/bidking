@@ -12,8 +12,10 @@ public interface AuctionService {
 
     AuctionRoom readAuctionRoom(Long auctionId);
 
-    AuctionRoom createAuctionRoom(Member member, AuctionCreateRequest auctionCreateRequest, MultipartFile auctionRoomImg, MultipartFile[] itemImgs)
+    AuctionRoom createAuctionRoom(Member member, AuctionCreateRequest auctionCreateRequest,
+        MultipartFile auctionRoomImg, MultipartFile[] itemImgs)
         throws IOException;
 
-    AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req);
+    AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req,
+        MultipartFile auctionRoomImg, MultipartFile[] itemImgs);
 }

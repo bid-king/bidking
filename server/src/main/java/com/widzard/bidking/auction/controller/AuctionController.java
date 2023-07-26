@@ -31,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuctionController {
 
     private final AuctionService auctionService;
-    
+
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<AuctionCreateResponse> createAuction(
         @AuthenticationPrincipal Member member,
@@ -61,7 +61,7 @@ public class AuctionController {
         @RequestPart(name = "auctionRoomImg") MultipartFile auctionRoomImg,
         @RequestPart(name = "itemImgs") MultipartFile[] itemImgs
     ) {
-        auctionService.updateAuctionRoom(auctionId, auctionUpdateRequest);
+        auctionService.updateAuctionRoom(auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

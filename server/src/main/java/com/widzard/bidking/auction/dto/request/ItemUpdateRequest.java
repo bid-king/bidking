@@ -18,8 +18,5 @@ public class ItemUpdateRequest {
     private String description;
     private int itemOrdering;
     private ImageDto imageDto;
-
-    //TODO image 확실시 되면 구현
-//    private ImageDto imageDto
 //    private InvoiceDto invoice; //TODO invoice 구현 후
 }
