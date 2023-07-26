@@ -23,10 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional
 public class S3ServiceImpl implements ImageService {
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
     private final AmazonS3 amazonS3;
     private final ImageRepository imageRepository;
+    
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     @Override
     public List<Image> uploadImageList(MultipartFile[] multipartFileList)
@@ -94,8 +95,8 @@ public class S3ServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteImage(String fileName) {
-        amazonS3.deleteObject(bucket, fileName);
-        imageRepository.deleteByFileName(fileName);
+    public void deleteImage(Image image) {
+        amazonS3.deleteObject(bucket, image.getFileName());
+        imageRepository.deleteById(image.getId());
     }
 }
