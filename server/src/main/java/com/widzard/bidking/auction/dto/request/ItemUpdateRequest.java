@@ -1,5 +1,6 @@
 package com.widzard.bidking.auction.dto.request;
 
+import com.widzard.bidking.image.dto.ImageDto;
 import com.widzard.bidking.item.dto.ItemCategoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ public class ItemUpdateRequest {
     private Long startPrice;
     private String description;
     private int itemOrdering;
+    private ImageDto imageDto;
 
     //TODO image 확실시 되면 구현
 //    private ImageDto imageDto
