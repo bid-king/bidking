@@ -95,6 +95,11 @@ public class S3ServiceImpl implements ImageService {
     }
 
     @Override
+    public Image modifyImage(MultipartFile multipartFile, Long imageId) throws IOException {
+        return null;
+    }
+
+    @Override
     public void deleteImage(Image image) {
         amazonS3.deleteObject(bucket, image.getFileName());
         imageRepository.deleteById(image.getId());
