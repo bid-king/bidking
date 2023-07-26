@@ -3,6 +3,7 @@ package com.widzard.bidking.auction.service;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
+import com.widzard.bidking.auction.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
@@ -114,8 +115,16 @@ public class AuctionServiceImpl implements AuctionService {
     public AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req) {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
-        auctionRoom.update(req);//req의 필드로 auctionRoom 변경
-        auctionRoomRepository.save(auctionRoom);
+        //auctionRoom 기본자료형 필드 업데이트
+        auctionRoom.update(req);
+
+        //아이템 리스트 업데이트
+        List<ItemUpdateRequest> itemUpdateRequestList = req.getItemList();
+        for (ItemUpdateRequest updateRequest : itemUpdateRequestList) {
+            Long id = updateRequest.getId();
+            Item item =
+        }
+
         validAuctionRoom(auctionRoom);//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일
         return auctionRoom;
     }

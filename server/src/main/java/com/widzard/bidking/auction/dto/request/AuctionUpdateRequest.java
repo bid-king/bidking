@@ -1,16 +1,19 @@
 package com.widzard.bidking.auction.dto.request;
 
 import com.widzard.bidking.auction.entity.AuctionRoomType;
-import com.widzard.bidking.image.entity.Image;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class AuctionUpdateRequest {
 
     @NotBlank(message = "경매방 제목을 입력하세요")
@@ -22,8 +25,9 @@ public class AuctionUpdateRequest {
     @NotNull(message = "경매 방식을 선택하세요")
     private AuctionRoomType auctionRoomType; //경매 방식
 
-    @NotNull(message = "경매 썸네일을 등록하세요")
-    private Image image; //경매 방식
+    //TODO 이미지 업데이트 어떻게 되는지 확인 후 수정
+//    @NotNull(message = "경매 썸네일을 등록하세요")
+//    private ImageDto image; //이미지
 
     @AssertTrue(message = "금지 품목 규정 확인 여부를 체크하세요")
     private Boolean itemPermissionChecked; // 금지 품목 규정 확인 여부
@@ -32,7 +36,5 @@ public class AuctionUpdateRequest {
     private Boolean deliveryRulesChecked; // 배송 규정 확인 여부
 
     @Valid
-    private List<ItemCreateRequest> itemList = new ArrayList<>(); // 상품 리스트
-
-
+    private List<ItemUpdateRequest> itemList = new ArrayList<>(); // 상품 리스트
 }

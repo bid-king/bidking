@@ -65,12 +65,7 @@ public class AuctionRoom extends BaseEntity {
     @OneToMany(mappedBy = "auctionRoom")
     private List<Item> itemList = new ArrayList<>();
 
-
-    public void addItem(Item item) {
-        this.itemList.add(item);
-        item.setAuctionRoom(this);
-    }
-    public static AuctionRoom createAuctionRoom (
+    public static AuctionRoom createAuctionRoom(
         String name,
         Member seller,
         AuctionRoomType auctionRoomType,
@@ -88,13 +83,29 @@ public class AuctionRoom extends BaseEntity {
             .build();
     }
 
-
+    public void addItem(Item item) {
+        this.itemList.add(item);
+        item.setAuctionRoom(this);
+    }
 
     public void update(AuctionUpdateRequest req) {
         this.name = req.getAuctionTitle();
         this.startedAt = req.getStartedAt();
         this.auctionRoomType = req.getAuctionRoomType();
-        this.image = req.getImage();
+//        updateImg(req.getImageDto());
+
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuffer()
+            .append(this.id + "\n")
+            .append(this.seller + "\n")
+            .append(this.name + "\n")
+            .append(this.auctionRoomType + "\n")
+            .append(this.auctionRoomLiveState + "\n")
+            .append(this.auctionRoomTradeState + "\n")
+            .append(this.startedAt + "\n").toString();
     }
 
 }
