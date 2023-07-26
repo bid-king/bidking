@@ -5,6 +5,7 @@ import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
+import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.Column;
@@ -81,7 +82,18 @@ public class Member extends BaseEntity implements UserDetails {
             .build();
     }
 
+    public void updateItem(MemberUpdateRequest request, String encodedPassword, Image image) {
+        this.password = encodedPassword;
+        this.nickname = request.getNickname();
+        this.phoneNumber = request.getPhoneNumber();
+        this.address = request.getAddress();
+        if (image != null) {
+            this.image = image;
+        }
+    }
+
     @Override
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(memberRole.name()));
     }

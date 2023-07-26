@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -110,10 +111,11 @@ public class MemberController {
         return new ResponseEntity<>(DashboardResponse.from(dashboard), HttpStatus.OK);
     }
 
-    @PutMapping("/{memberId}")
+    @PutMapping(value = "/{memberId}", consumes = {MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> updateMember(@PathVariable Long memberId,
-        @RequestBody MemberUpdateRequest request,
-        @RequestPart("image") MultipartFile image) throws IOException {
+        @RequestPart(name = "request") @Valid MemberUpdateRequest request,
+        @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
         memberService.updateMember(memberId, request, image);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

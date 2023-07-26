@@ -4,14 +4,18 @@ import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.SendingMessageFailureException;
 import com.widzard.bidking.global.jwt.service.TokenProvider;
+import com.widzard.bidking.image.entity.Image;
+import com.widzard.bidking.image.service.ImageService;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
+import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberDuplicatedException;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
 import com.widzard.bidking.order.entity.OrderState;
 import com.widzard.bidking.order.repository.OrderRepository;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +25,10 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -42,10 +46,11 @@ public class MemberServiceImpl implements MemberService {
     private static final String PENALTY = "penalty";
     private static final String MSG_TYPE = "SMS";
 
+    private final ImageService imageService;
+
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
 
-    private final AuthenticationManagerBuilder managerBuilder;
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -174,6 +179,30 @@ public class MemberServiceImpl implements MemberService {
         dashboardResult.put(PENALTY, member.getPenalty());
 
         return dashboardResult;
+    }
+
+    @Override
+    @Transactional
+    public void updateMember(Long memberId, MemberUpdateRequest request, MultipartFile image)
+        throws IOException {
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new MemberNotFoundException());
+        comparePassword(request.getOldPassword(), member.getPassword());
+
+        String newPassword = request.getNewPassword();
+        if (newPassword.isBlank()) {
+            newPassword = request.getOldPassword();
+        }
+
+        Image savedImage = null;
+        if (image != null) {
+            if (member.getImage() != null) {
+                imageService.deleteImage(member.getImage());
+            }
+            savedImage = imageService.uploadImage(image);
+        }
+
+        member.updateItem(request, passwordEncoder.encode(newPassword), savedImage);
     }
 
     @Override
