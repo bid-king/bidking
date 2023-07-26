@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../../design/colors';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   n: number;
@@ -12,27 +11,29 @@ export function BidNumber({ n, o }: Props) {
     <div
       css={{
         // border: '1px solid black',
-        width: '1.8rem',
+        width: n === 1 ? '1.4rem' : '1.8rem',
         height: '3rem',
         textAlign: 'center',
-        fontWeight: '700',
+        fontWeight: '600',
         fontFeatureSettings: '"tnum"',
-        letterSpacing: '-0.1rem',
         fontSize: '3rem',
         overflow: 'hidden',
         position: 'relative',
         lineHeight: '3rem',
+        background: 'transparent',
+        transition: 'width 0.2s ease-out',
       }}
     >
       <div
         css={{
           height: '10em',
+          background: 'transparent',
           position: 'absolute',
           top: 0,
-          left: '-0.125rem',
+          left: n === 1 ? '-0.35rem' : '-0.125rem',
           transform: `translateY(-${n}em)`,
-          transition: 'transform 0.125s ease-out',
-          transitionDelay: `${0.01 * o}s`,
+          transition: 'transform 0.2s ease-in-out, left 0.2s',
+          transitionDelay: `${0.02 * o}s`,
         }}
       >
         <ul>

@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { BidPrice } from './BidPrice';
-import bid from '../static/bid.jpg';
 
 const meta = {
-  title: 'Auction/BidPrice',
+  title: 'Auction/System/BidPrice',
   component: BidPrice,
   argTypes: {},
 } satisfies Meta<typeof BidPrice>;
@@ -15,5 +14,6 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     align: 'center',
+    theme: 'light',
   },
 };
