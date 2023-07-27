@@ -14,10 +14,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
-public class AuctionCreateRequest {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class AuctionUpdateRequest {
 
     @NotBlank(message = "경매방 제목을 입력하세요")
     private String auctionTitle; //경매방 제목
@@ -28,6 +28,10 @@ public class AuctionCreateRequest {
     @NotNull(message = "경매 방식을 선택하세요")
     private AuctionRoomType auctionRoomType; //경매 방식
 
+
+    @NotNull(message = "경매 썸네일을 등록하세요")
+    private String imageUrl; //이미지
+
     @AssertTrue(message = "금지 품목 규정 확인 여부를 체크하세요")
     private Boolean itemPermissionChecked; // 금지 품목 규정 확인 여부
 
@@ -35,7 +39,5 @@ public class AuctionCreateRequest {
     private Boolean deliveryRulesChecked; // 배송 규정 확인 여부
 
     @Valid
-    private List<ItemCreateRequest> itemList = new ArrayList<>(); // 상품 리스트
-
-
+    private List<ItemUpdateRequest> itemList = new ArrayList<>(); // 상품 리스트
 }

@@ -1,12 +1,14 @@
 package com.widzard.bidking.auction.entity;
 
 
+import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.member.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,6 +27,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Builder
 @Getter
@@ -32,6 +36,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "auction_room")
+@Slf4j
+@ToString
 public class AuctionRoom extends BaseEntity {
 
     @Id
@@ -39,7 +45,6 @@ public class AuctionRoom extends BaseEntity {
     @Column(name = "auction_room_id")
     private Long id;
 
-    //TODO member 추가 후 주석 해제
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member seller; //
@@ -61,7 +66,7 @@ public class AuctionRoom extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image; // (썸네일)
 
-    @OneToMany(mappedBy = "auctionRoom")
+    @OneToMany(mappedBy = "auctionRoom", cascade = CascadeType.ALL)
     private List<Item> itemList = new ArrayList<>();
 
     private boolean isSessionCreated;
@@ -81,13 +86,20 @@ public class AuctionRoom extends BaseEntity {
             .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
             .startedAt(startedAt)
             .image(auctionRoomImg)
+            .itemList(new ArrayList<>())
             .isSessionCreated(false)
             .build();
     }
 
     public void addItem(Item item) {
-        this.itemList.add(item);
         item.setAuctionRoom(this);
+    }
+
+    public void update(AuctionUpdateRequest req) {
+        this.name = req.getAuctionTitle();
+        this.startedAt = req.getStartedAt();
+        this.auctionRoomType = req.getAuctionRoomType();
+//        updateImg(req.getImageDto());
     }
     
     public void changeLiveState(AuctionRoomLiveState state) {

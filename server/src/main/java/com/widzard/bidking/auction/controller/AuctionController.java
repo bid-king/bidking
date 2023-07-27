@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.controller;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
+import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
@@ -50,4 +51,17 @@ public class AuctionController {
         AuctionRoom auctionRoom = auctionService.readAuctionRoom(auctionId);
         return new ResponseEntity<>(AuctionRoomResponse.from(auctionRoom), HttpStatus.OK);
     }
+
+    //    @PutMapping("/{auctionId}") TODO 이관용 merge를위해 임시 주석처리함
+    public ResponseEntity updateAuction(
+        @AuthenticationPrincipal Member member,
+        @RequestPart @Valid AuctionUpdateRequest auctionUpdateRequest,
+        @PathVariable Long auctionId,
+        @RequestPart(name = "auctionRoomImg") MultipartFile auctionRoomImg,
+        @RequestPart(name = "itemImgs") MultipartFile[] itemImgs
+    ) throws IOException {
+        auctionService.updateAuctionRoom(auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 }
