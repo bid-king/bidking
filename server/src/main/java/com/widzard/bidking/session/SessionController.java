@@ -55,7 +55,7 @@ public class SessionController {
     }
 
     @PostMapping("/create-session/{auctionRoomId}")
-    public ResponseEntity<JSONObject> createSession(
+    public ResponseEntity<?> createSession(
         @AuthenticationPrincipal Member member,
         @PathVariable Long auctionRoomId) {
         /*
@@ -123,7 +123,10 @@ public class SessionController {
 
             showMap();
 
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            SessionCreateResponse response = SessionCreateResponse.from(auctionRoom,
+                session.getSessionId(), auctionRoom.getSeller());
+
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
 //        } catch (OpenViduJavaClientException e) {
 //            throw new RuntimeException(e);
 //        } catch (OpenViduHttpException e) {
