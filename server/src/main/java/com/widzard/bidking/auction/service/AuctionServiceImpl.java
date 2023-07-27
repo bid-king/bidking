@@ -100,7 +100,6 @@ public class AuctionServiceImpl implements AuctionService {
                 itemCreateRequest.getOrdering(),
                 image
             );
-            log.info("확인용 id = {}", item);
             itemRepository.save(item);
             auctionRoom.addItem(item);
             log.info("아이템에서 옭션룸 {}", item.getAuctionRoom().getName());
@@ -138,12 +137,33 @@ public class AuctionServiceImpl implements AuctionService {
             imageService.modifyImage(auctionRoomImg, auctionImage.getId());
         }
 
-        //아이템 리스트 업데이트
+        //옥션룸 신규 아이템 리스트
         List<ItemUpdateRequest> itemUpdateRequestList = req.getItemList();
-        log.info("itemUpdatearequestList.size = {}", itemUpdateRequestList.size());
+        HashSet<Long> set = new HashSet<>();
+        for (int i = 0; i < itemUpdateRequestList.size(); i++) {
+            set.add(itemUpdateRequestList.get(i).getId());
+        }
+        log.info("set{} ", set);
+
+        //옥션룸의 기존 아이템리스트
+        List<Item> itemList = auctionRoom.getItemList();
+        for (int i = 0; i < itemList.size(); i++) {
+            Item cur = itemList.get(i);
+            log.info("cur get id is {}", cur.getId());
+            //수정한 아이템에 없으면 삭제
+            if (!set.contains(cur.getId())) {
+                log.info("not contains");
+                auctionRoom.removeItem(cur);
+                log.info("delete complete");
+            }
+        }
 
         for (int i = 0; i < itemUpdateRequestList.size(); i++) {
+            int curOrdering = i + 1;
+
             ItemUpdateRequest updateRequest = itemUpdateRequestList.get(i);
+            updateRequest.setOrdering(curOrdering);
+
             Long itemId = updateRequest.getId();
             if (itemId == null) {
                 //최초등록객체
@@ -151,13 +171,13 @@ public class AuctionServiceImpl implements AuctionService {
                 ItemCategory itemCategory = itemCategoryRepository.findById(
                         updateRequest.getItemCategoryId())
                     .orElseThrow(ItemCategoryNotFoundException::new);
+                //TODO imageService.uploadImage(itemImgs[i])에서 itemImgs[i]가 null이어도 들어가나 확인
                 Image image = imageService.uploadImage(itemImgs[i]);
                 Item item = Item.create(updateRequest.getStartPrice(), updateRequest.getItemName()
-                    , updateRequest.getDescription(), itemCategory, updateRequest.getOrdering(),
+                    , updateRequest.getDescription(), itemCategory, curOrdering,
                     image);
                 itemRepository.save(item);
                 item.registAuctionRoom(auctionRoom);
-
                 continue;
             }
             Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
@@ -173,26 +193,6 @@ public class AuctionServiceImpl implements AuctionService {
             }
             //썸네일 변경 신청한 아이템
             imageService.modifyImage(curFileImg, item.getImage().getId());
-        }
-        //수정후남아있는 아이템 아이디를 set에 지정
-        HashSet<Long> set = new HashSet<>();
-        for (int i = 0; i < itemUpdateRequestList.size(); i++) {
-            set.add(itemUpdateRequestList.get(i).getId());
-        }
-        log.info("set{} ", set);
-
-        //수정전 옥션룸의 아이템리스트
-        List<Item> itemList = auctionRoom.getItemList();
-        for (int i = 0; i < itemList.size(); i++) {
-            Item cur = itemList.get(i);
-            log.info("cur get id is {}", cur.getId());
-            //수정한 아이템에 없으면 삭제
-            if (!set.contains((Long) cur.getId())) {
-                log.info("not contains");
-                auctionRoom.removeItem(cur);
-//                itemRepository.delete(cur);
-                log.info("delete complete");
-            }
         }
 
         validAuctionRoom(auctionRoom);//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일

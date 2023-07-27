@@ -58,6 +58,7 @@ public class Item extends BaseEntity {
     @OneToOne(mappedBy = "item")
     private OrderItem orderItem;
 
+    
     private int ordering;// (순서)
 
     @OneToOne(fetch = FetchType.LAZY)
