@@ -18,6 +18,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,7 +53,7 @@ public class AuctionController {
         return new ResponseEntity<>(AuctionRoomResponse.from(auctionRoom), HttpStatus.OK);
     }
 
-    //    @PutMapping("/{auctionId}") TODO 이관용 merge를위해 임시 주석처리함
+        @PutMapping("/{auctionId}")
     public ResponseEntity updateAuction(
         @AuthenticationPrincipal Member member,
         @RequestPart @Valid AuctionUpdateRequest auctionUpdateRequest,
