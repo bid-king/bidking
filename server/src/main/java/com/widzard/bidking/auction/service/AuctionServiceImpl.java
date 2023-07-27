@@ -145,6 +145,8 @@ public class AuctionServiceImpl implements AuctionService {
             //기존 아이템이 신규 아이템 리스트에 없으면 삭제
             if (!set.contains(cur.getId())) {
                 auctionRoom.removeItem(cur);
+                itemList = auctionRoom.getItemList();
+                i--;
             }
         }
 
