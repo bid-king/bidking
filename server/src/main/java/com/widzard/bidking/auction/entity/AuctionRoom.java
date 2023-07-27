@@ -45,7 +45,6 @@ public class AuctionRoom extends BaseEntity {
     @Column(name = "auction_room_id")
     private Long id;
 
-    //TODO member 추가 후 주석 해제
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member seller; //
@@ -70,6 +69,8 @@ public class AuctionRoom extends BaseEntity {
     @OneToMany(mappedBy = "auctionRoom", cascade = CascadeType.ALL)
     private List<Item> itemList = new ArrayList<>();
 
+    private boolean isSessionCreated;
+
     public static AuctionRoom createAuctionRoom(
         String name,
         Member seller,
@@ -86,11 +87,11 @@ public class AuctionRoom extends BaseEntity {
             .startedAt(startedAt)
             .image(auctionRoomImg)
             .itemList(new ArrayList<>())
+            .isSessionCreated(false)
             .build();
     }
 
     public void addItem(Item item) {
-//        this.itemList.add(item);
         item.setAuctionRoom(this);
     }
 
@@ -99,31 +100,18 @@ public class AuctionRoom extends BaseEntity {
         this.startedAt = req.getStartedAt();
         this.auctionRoomType = req.getAuctionRoomType();
 //        updateImg(req.getImageDto());
-
+    }
+    
+    public void changeLiveState(AuctionRoomLiveState state) {
+        this.auctionRoomLiveState = state;
     }
 
-//    @Override
-//    public String toString() {
-//        StringBuffer sb = new StringBuffer();
-//        sb
-//            .append(this.id + "\n")
-//            .append(this.seller + "\n")
-//            .append(this.name + "\n")
-//            .append(this.auctionRoomType + "\n")
-//            .append(this.auctionRoomLiveState + "\n")
-//            .append(this.auctionRoomTradeState + "\n")
-//            .append(this.startedAt + "\n")
-//            .append(this.getItemList().size())
-//        ;
-////        log.info("auctionRoom itemList = {}", itemList);//TODO 여기서 null임
-////        this.itemList.forEach(item -> {
-////            sb.append(item.getName())
-////                .append(item.getItemState())
-////                .append(item.getAuctionRoom().getName())
-////                .append(item.getStartPrice())
-////                .append(item.getDescription());
-////        });
-//        return sb.toString();
-//    }
+    public void changeTradeState(AuctionRoomTradeState state) {
+        this.auctionRoomTradeState = state;
+    }
+
+    public void changeIsSessionCreated(boolean state) {
+        this.isSessionCreated = state;
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.widzard.bidking.auction.dto.response;
+package com.widzard.bidking.session;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.item.dto.ItemDto;
@@ -8,17 +8,15 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 
 @AllArgsConstructor
 @Builder
-@Slf4j
 @Getter
-@Setter
-public class AuctionRoomResponse {
+public class SessionCreateResponse {
 
     private Long id;//(경매방 id)
+    
+    private String auctionRoomSession;
 
     private Long sellerId; //(판매자 Member id)
 
@@ -41,13 +39,14 @@ public class AuctionRoomResponse {
     private List<ItemDto> itemList = new ArrayList<>();
 
 
-    public static AuctionRoomResponse from(AuctionRoom auctionRoom) {
+    public static SessionCreateResponse from(AuctionRoom auctionRoom, String auctionRoomSession) {
         List<ItemDto> itemDtoList = auctionRoom.getItemList().stream()
             .map(ItemDto::create)
             .collect(Collectors.toList());
 
-        AuctionRoomResponse result = AuctionRoomResponse.builder()
+        SessionCreateResponse result = SessionCreateResponse.builder()
             .id(auctionRoom.getId())
+            .auctionRoomSession(auctionRoomSession)
             .sellerId(auctionRoom.getSeller().getId())
             .sellerNickname(auctionRoom.getSeller().getNickname())
             .auctionRoomLiveState(auctionRoom.getAuctionRoomLiveState().name())
@@ -61,4 +60,5 @@ public class AuctionRoomResponse {
 
         return result;
     }
+
 }

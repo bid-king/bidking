@@ -70,7 +70,6 @@ public class Member extends BaseEntity implements UserDetails {
 
     private int penalty;
 
-
     public static Member createMember(MemberFormRequest request, String encodedPassword) {
         return Member.builder()
             .userId(request.getUserId())
@@ -131,5 +130,20 @@ public class Member extends BaseEntity implements UserDetails {
 
     public void changeToUnavailable() {
         this.available = false;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof Member)) {
+            return false;
+        }
+        Member otherCourse = (Member) other;
+        return (otherCourse.id == this.id);
     }
 }
