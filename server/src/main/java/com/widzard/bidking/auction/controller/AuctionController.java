@@ -44,6 +44,7 @@ public class AuctionController {
 
     @GetMapping("/{auctionId}")
     public ResponseEntity<AuctionRoomResponse> readAuction(
+        @AuthenticationPrincipal Member member,
         @PathVariable Long auctionId
     ) {
         AuctionRoom auctionRoom = auctionService.readAuctionRoom(auctionId);
