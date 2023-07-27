@@ -53,7 +53,7 @@ public class AuctionController {
         return new ResponseEntity<>(AuctionRoomResponse.from(auctionRoom), HttpStatus.OK);
     }
 
-        @PutMapping("/{auctionId}")
+    @PutMapping("/{auctionId}")
     public ResponseEntity updateAuction(
         @AuthenticationPrincipal Member member,
         @RequestPart @Valid AuctionUpdateRequest auctionUpdateRequest,

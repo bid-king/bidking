@@ -145,13 +145,26 @@ public class AuctionServiceImpl implements AuctionService {
         for (int i = 0; i < itemUpdateRequestList.size(); i++) {
             ItemUpdateRequest updateRequest = itemUpdateRequestList.get(i);
             Long itemId = updateRequest.getId();
-            log.info("item null start point {}", itemId);
+            if (itemId == null) {
+                //최초등록객체
+                log.info("최초등록객체");
+                ItemCategory itemCategory = itemCategoryRepository.findById(
+                        updateRequest.getItemCategoryId())
+                    .orElseThrow(ItemCategoryNotFoundException::new);
+                Image image = imageService.uploadImage(itemImgs[i]);
+                Item item = Item.create(updateRequest.getStartPrice(), updateRequest.getItemName()
+                    , updateRequest.getDescription(), itemCategory, updateRequest.getOrdering(),
+                    image);
+                itemRepository.save(item);
+                item.registAuctionRoom(auctionRoom);
+
+                continue;
+            }
             Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
             ItemCategory category = itemCategoryRepository.findById(
                 updateRequest.getItemCategoryId()).orElseThrow(
                 ItemCategoryNotFoundException::new);
             item.update(updateRequest, category);
-            log.info("updateRequest.getItemCategoryId() {}", updateRequest.getItemCategoryId());
 
             //변경썸네일
             MultipartFile curFileImg = itemImgs[i];
