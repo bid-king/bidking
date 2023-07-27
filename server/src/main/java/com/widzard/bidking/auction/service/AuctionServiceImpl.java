@@ -141,10 +141,10 @@ public class AuctionServiceImpl implements AuctionService {
             log.info("item null start point {}", itemId);
             Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
             ItemCategory category = itemCategoryRepository.findById(
-                updateRequest.getItemCategory().getId()).orElseThrow(
+                updateRequest.getItemCategoryId()).orElseThrow(
                 ItemCategoryNotFoundException::new);
             item.update(updateRequest, category);
-            log.info("updateRequest.getItemCategory() {}", updateRequest.getItemCategory());
+            log.info("updateRequest.getItemCategoryId() {}", updateRequest.getItemCategoryId());
         }
 
         //아읻템 이미지 업데이트
