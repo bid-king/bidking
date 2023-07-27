@@ -8,6 +8,7 @@ interface Props extends HTMLAttributes<HTMLInputElement> {
   inputType?: string;
   theme?: 'light' | 'dark';
   shape?: 'square' | 'round';
+  size?: 'small' | 'large';
   placeholder: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -18,6 +19,7 @@ export function Input({
   id,
   inputType = 'text',
   placeholder = 'placeholder를 입력하세요',
+  size = 'large',
   theme = 'light',
   shape = 'square',
   value,
@@ -32,8 +34,7 @@ export function Input({
       value={value}
       css={{
         width: '100%',
-        height: '3rem',
-        fontSize: '1.15rem',
+
         paddingLeft: '1rem',
         paddingRight: '1rem',
         fontWeight: 600,
@@ -41,6 +42,7 @@ export function Input({
         outline: 'none',
         ...THEME_VARIENT[theme],
         ...SHAPE_VARIENT[shape],
+        ...SIZE_VARIENT[size],
       }}
       onChange={onChange}
       onBlur={onBlur}
@@ -68,5 +70,16 @@ const SHAPE_VARIENT = {
   },
   square: {
     borderRadius: '1rem',
+  },
+};
+
+const SIZE_VARIENT = {
+  small: {
+    height: '2rem',
+    fontSize: '0.9rem',
+  },
+  large: {
+    height: '3rem',
+    fontSize: '1.15rem',
   },
 };

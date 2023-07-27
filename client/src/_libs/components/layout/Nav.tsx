@@ -13,19 +13,20 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
 }
 
-export function NavBar({ theme = 'light' }: Props) {
+export function Nav({ theme = 'light' }: Props) {
   const breakpoints = [576, 768, 992, 1200];
   const mq = breakpoints.map(bp => `@media (min-width: ${bp}px)`);
   return (
     <nav
       css={{
         display: 'flex',
-        justifyContent: 'space-between',
+        height: '3rem',
         alignItems: 'center',
-        padding: '10px',
+        padding: '0.5rem 0 0.5rem 0',
         ...THEME_VARIANTS[theme],
       }}
     >
+      <Spacing rem="2" dir="h" />
       <div
         css={{
           display: 'flex',
@@ -33,83 +34,51 @@ export function NavBar({ theme = 'light' }: Props) {
         }}
       >
         <div className="logo">
-          <Link to={'/'}>
-            <img
-              css={{
-                width: '4rem',
-                height: '4rem',
-              }}
-              src="/image/logo/logo_light.png"
-              alt=""
-            />
-          </Link>
+          <Link to={'/'}>입찰왕</Link>
         </div>
-        <div
-          css={{
-            marginLeft: '1.5rem',
-            marginRight: '1.5rem',
-          }}
-        >
+
+        <div>
           {theme === 'dark' && (
             <div css={{ color: colors.white }}>
               <Text type="h3" content="판매" />
             </div>
           )}
         </div>
-        <div
-          css={{
-            marginRight: '1.5rem',
-            // 미디어 쿼리 사용설정만 해놓음 적용 x
-            [mq[3]]: {
-              width: '934px',
-            },
-            [mq[2]]: {
-              width: '600px',
-            },
-          }}
-        >
-          <Input shape="round" theme={theme} placeholder="경매방을 검색하세요" />
-        </div>
-        <div>
-          <RoundButton label="검색" />
+        <Spacing rem="1" dir="h" />
+        <div css={{ display: 'flex' }}>
+          <div>
+            <Input shape="round" theme={theme} placeholder="경매방을 검색하세요" size="small" />
+          </div>
+          <Spacing rem="0.5" dir="h" />
+          <div>
+            <RoundButton label="검색" size="small" />
+          </div>
         </div>
       </div>
-
+      <Spacing rem="1" dir="h" />
       <div
         css={{
+          position: 'absolute',
+          right: '0',
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',
         }}
       >
         {theme === 'light' && (
-          <Link
-            css={{
-              marginRight: '1.5rem',
-            }}
-            to={'/seller'}
-          >
-            판매
+          <Link to={'/seller'}>
+            <RoundButton label="판매" size="small" variant="white" />
           </Link>
         )}
-        <Link
-          css={{
-            marginRight: '1.5rem',
-          }}
-          to={'/mypage/:name'}
-        >
-          내 경매
+        <Spacing rem="0.5" dir="h" />
+        <Link css={{}} to={'/mypage/:name'}>
+          <RoundButton label="내 경매" size="small" variant="white" />
         </Link>
-        <div
-          css={{
-            marginRight: '1.5rem',
-          }}
-        >
-          <img src={`/image/Bell_${theme}.png`} alt="bell" />
-        </div>
-        <div>
-          <ProfileImage />
-        </div>
+        <Spacing rem="1" dir="h" />
+        <img src={`/image/Bell_${theme}.png`} alt="bell" />
+        <Spacing rem="1" dir="h" />
+        <ProfileImage />
+        <Spacing rem="2" dir="h" />
       </div>
     </nav>
   );
@@ -117,7 +86,7 @@ export function NavBar({ theme = 'light' }: Props) {
 
 const THEME_VARIANTS = {
   light: {
-    backgroundColor: colors.backgroundLight,
+    backgroundColor: colors.backgroundLight2,
   },
   dark: {
     backgroundColor: colors.backgroundDark,

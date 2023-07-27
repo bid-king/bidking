@@ -3,18 +3,17 @@ import React from 'react';
 import { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  imgSrc?: string;
-  myWidth?: string;
-  myHeight?: string;
+  src?: string;
+  rem?: number;
 }
-export function ProfileImage({ imgSrc = '/image/profile.png', myWidth = '3.375rem', myHeight = '3.375rem' }: Props) {
+export function ProfileImage({ src = '/image/profile.png', rem = 2 }: Props) {
   return (
     <img
-      src={imgSrc}
+      src={src}
       css={{
         borderRadius: '100%',
-        width: `${myWidth}`,
-        height: `${myHeight}`,
+        width: `${rem}rem`,
+        height: `${rem}rem`,
       }}
     />
   );
