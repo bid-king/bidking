@@ -22,6 +22,7 @@ import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -120,8 +121,12 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     @Transactional
-    public AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req,
-        MultipartFile auctionRoomImg, MultipartFile[] itemImgs) throws IOException {
+    public AuctionRoom updateAuctionRoom(
+        Long auctionId,
+        AuctionUpdateRequest req,
+        MultipartFile auctionRoomImg,
+        MultipartFile[] itemImgs
+    ) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
         //auctionRoom 기본자료형 필드 업데이트
@@ -136,7 +141,9 @@ public class AuctionServiceImpl implements AuctionService {
         //아이템 리스트 업데이트
         List<ItemUpdateRequest> itemUpdateRequestList = req.getItemList();
         log.info("itemUpdatearequestList.size = {}", itemUpdateRequestList.size());
-        for (ItemUpdateRequest updateRequest : itemUpdateRequestList) {
+
+        for (int i = 0; i < itemUpdateRequestList.size(); i++) {
+            ItemUpdateRequest updateRequest = itemUpdateRequestList.get(i);
             Long itemId = updateRequest.getId();
             log.info("item null start point {}", itemId);
             Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
@@ -145,20 +152,34 @@ public class AuctionServiceImpl implements AuctionService {
                 ItemCategoryNotFoundException::new);
             item.update(updateRequest, category);
             log.info("updateRequest.getItemCategoryId() {}", updateRequest.getItemCategoryId());
-        }
 
-        //아읻템 이미지 업데이트
-//        itemImgs에서 null(isEmpty())이면 냅둬야한다(노변경)
-        for (int i = 0; i < itemImgs.length; i++) {
+            //변경썸네일
             MultipartFile curFileImg = itemImgs[i];
-
             if (curFileImg.isEmpty()) {
                 continue;
             }
-
             //썸네일 변경 신청한 아이템
-            Item curItem = auctionRoom.getItemList().get(i);
-            imageService.modifyImage(curFileImg, curItem.getImage().getId());
+            imageService.modifyImage(curFileImg, item.getImage().getId());
+        }
+        //수정후남아있는 아이템 아이디를 set에 지정
+        HashSet<Long> set = new HashSet<>();
+        for (int i = 0; i < itemUpdateRequestList.size(); i++) {
+            set.add(itemUpdateRequestList.get(i).getId());
+        }
+        log.info("set{} ", set);
+
+        //수정전 옥션룸의 아이템리스트
+        List<Item> itemList = auctionRoom.getItemList();
+        for (int i = 0; i < itemList.size(); i++) {
+            Item cur = itemList.get(i);
+            log.info("cur get id is {}", cur.getId());
+            //수정한 아이템에 없으면 삭제
+            if (!set.contains((Long) cur.getId())) {
+                log.info("not contains");
+                auctionRoom.removeItem(cur);
+//                itemRepository.delete(cur);
+                log.info("delete complete");
+            }
         }
 
         validAuctionRoom(auctionRoom);//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일

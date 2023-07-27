@@ -18,7 +18,7 @@ public class ItemUpdateRequest {
     private Long itemCategoryId;
     private Long startPrice;
     private String description;
-    private int itemOrdering;
+    private int ordering;
     private ImageDto imageDto;
 //    private InvoiceDto invoice; //TODO invoice 구현 후
 }

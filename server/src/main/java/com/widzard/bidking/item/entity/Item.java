@@ -86,9 +86,8 @@ public class Item extends BaseEntity {
             .build();
     }
 
-    public void setAuctionRoom(AuctionRoom auctionRoom) {
+    public void registAuctionRoom(AuctionRoom auctionRoom) {
         this.auctionRoom = auctionRoom;
-        auctionRoom.getItemList().add(this);
     }
 
     public void update(ItemUpdateRequest updateRequest, ItemCategory itemCategory) {
@@ -96,7 +95,7 @@ public class Item extends BaseEntity {
         //TODO 카테고리 별도 수정 필요
         this.itemCategory = itemCategory;
         this.name = updateRequest.getItemName();
-        this.ordering = updateRequest.getItemOrdering();
+        this.ordering = updateRequest.getOrdering();
         this.startPrice = updateRequest.getStartPrice();
         this.description = updateRequest.getDescription();
 

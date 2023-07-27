@@ -9,7 +9,6 @@ import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.image.repository.ImageRepository;
-import com.widzard.bidking.item.dto.ItemCategoryDto;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
@@ -179,8 +178,8 @@ class AuctionServiceImplTest {
             ItemUpdateRequest req = ItemUpdateRequest.builder()
                 .id(item.getId())
                 .itemName(item.getName() + "changed")
-                .itemOrdering(item.getOrdering())
-                .itemCategory(ItemCategoryDto.create(itemCategory2))//TODO 카테고리 따로
+                .ordering(item.getOrdering())
+                .itemCategoryId(itemCategory2.getId())//TODO 카테고리 따로
                 .description(item.getDescription())
                 .startPrice(item.getStartPrice())
                 .build();
