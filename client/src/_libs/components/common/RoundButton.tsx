@@ -5,12 +5,12 @@ import { ButtonHTMLAttributes } from 'react';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'confirm' | 'white';
-  size?: 'small' | 'medium';
+  size?: 'small' | 'large';
   label: string;
   activated?: 0 | 1;
 }
 
-export function RoundButton({ variant = 'confirm', label = '로그인', activated = 1 }: Props) {
+export function RoundButton({ variant = 'confirm', label = '로그인', size = 'large' }: Props) {
   return (
     <button
       type="button"
@@ -18,12 +18,10 @@ export function RoundButton({ variant = 'confirm', label = '로그인', activate
         cursor: 'pointer',
         borderRadius: '2.25rem',
         transition: 'filter 0.3s',
-        height: '3rem',
-        padding: '0 1.5rem 0 1.5rem',
         fontWeight: '600',
-        fontSize: '1.1rem',
+
         ...TYPE_VARIANTS[variant],
-        ...IS_ACTIVATED[activated],
+        ...SIZE_VARIANT[size],
       }}
     >
       {label}
@@ -48,7 +46,15 @@ const TYPE_VARIANTS = {
   },
 };
 
-const IS_ACTIVATED = {
-  0: {},
-  1: {},
+const SIZE_VARIANT = {
+  small: {
+    height: '2rem',
+    padding: '0 1rem 0 1rem',
+    fontSize: '0.9rem',
+  },
+  large: {
+    height: '3rem',
+    padding: '0 1.5rem 0 1.5rem',
+    fontSize: '1.1rem',
+  },
 };

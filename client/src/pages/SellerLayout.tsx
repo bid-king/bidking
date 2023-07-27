@@ -1,11 +1,11 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { NavBar } from '../_libs/components/layout/NavBar';
+import { Nav } from '../_libs/components/layout/Nav';
 
 export function SellerLayout() {
   return (
     <div>
-      <NavBar theme="dark" />
+      <Nav theme="dark" />
       <Outlet />
     </div>
   );

@@ -12,8 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    imgSrc: '/image/profile.png',
-    myWidth: '3.375rem',
-    myHeight: '3.375rem',
+    src: '/image/profile.png',
+    rem: 2,
   },
 };
