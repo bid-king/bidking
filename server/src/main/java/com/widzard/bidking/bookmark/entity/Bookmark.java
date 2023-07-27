@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +23,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "bookmark")
+@Builder
+@AllArgsConstructor
 public class Bookmark extends BaseEntity {
 
     @Id
@@ -37,4 +41,16 @@ public class Bookmark extends BaseEntity {
     private AuctionRoom auctionRoom;
 
     private boolean isAdded;
+
+    public static Bookmark createBookmark(Member member, AuctionRoom auctionRoom) {
+        return Bookmark.builder()
+            .member(member)
+            .auctionRoom(auctionRoom)
+            .isAdded(true)
+            .build();
+    }
+
+    public void changeStatus() {
+        this.isAdded = !this.isAdded;
+    }
 }
