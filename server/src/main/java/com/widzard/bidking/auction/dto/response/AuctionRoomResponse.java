@@ -29,7 +29,7 @@ public class AuctionRoomResponse {
     private String auctionRoomLiveState; // (라이브 상태)
 
     private String auctionRoomSesion;
-    
+
     private String auctionRoomTradeState; //(거래 상태)
 
     private String auctionRoomType; // (경매방식)
@@ -47,7 +47,6 @@ public class AuctionRoomResponse {
             .collect(Collectors.toList());
 
         AuctionRoomResponse result = AuctionRoomResponse.builder()
-//            .auctionRoomUrl(auctionRoom.getAuctionRoomURL)
             .id(auctionRoom.getId())
             .sellerId(auctionRoom.getSeller().getId())
             .sellerNickname(auctionRoom.getSeller().getNickname())

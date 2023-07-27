@@ -124,7 +124,7 @@ public class SessionController {
             showMap();
 
             SessionCreateResponse response = SessionCreateResponse.from(auctionRoom,
-                session.getSessionId(), auctionRoom.getSeller());
+                session.getSessionId());
 
             return new ResponseEntity<>(response, HttpStatus.CREATED);
 //        } catch (OpenViduJavaClientException e) {
