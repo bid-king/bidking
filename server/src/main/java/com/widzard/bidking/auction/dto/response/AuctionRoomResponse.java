@@ -22,6 +22,8 @@ public class AuctionRoomResponse {
 
     private Long sellerId; //(판매자 Member id)
 
+    private String sellerNickname;//판매자 닉네임
+
     private String name; //(방이름)
 
     private String auctionRoomLiveState; // (라이브 상태)
@@ -48,6 +50,7 @@ public class AuctionRoomResponse {
 //            .auctionRoomUrl(auctionRoom.getAuctionRoomURL)
             .id(auctionRoom.getId())
             .sellerId(auctionRoom.getSeller().getId())
+            .sellerNickname(auctionRoom.getSeller().getNickname())
             .auctionRoomLiveState(auctionRoom.getAuctionRoomLiveState().name())
             .auctionRoomTradeState(auctionRoom.getAuctionRoomTradeState().name())
             .name(auctionRoom.getName())
