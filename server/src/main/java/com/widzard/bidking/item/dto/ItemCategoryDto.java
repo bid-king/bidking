@@ -1,13 +1,16 @@
 package com.widzard.bidking.item.dto;
 
 import com.widzard.bidking.item.entity.ItemCategory;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemCategoryDto {
 
     private Long id;

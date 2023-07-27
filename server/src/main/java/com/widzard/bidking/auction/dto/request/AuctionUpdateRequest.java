@@ -7,13 +7,16 @@ import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionUpdateRequest {
 
     @NotBlank(message = "경매방 제목을 입력하세요")
@@ -25,7 +28,7 @@ public class AuctionUpdateRequest {
     @NotNull(message = "경매 방식을 선택하세요")
     private AuctionRoomType auctionRoomType; //경매 방식
 
-    
+
     @NotNull(message = "경매 썸네일을 등록하세요")
     private String imageUrl; //이미지
 

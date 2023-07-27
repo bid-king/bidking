@@ -2,15 +2,18 @@ package com.widzard.bidking.item.dto;
 
 import com.widzard.bidking.item.entity.Item;
 import java.time.LocalDateTime;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @AllArgsConstructor
 @Builder
 @ToString
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemDto {
 
     private Long itemId;
