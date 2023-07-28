@@ -193,6 +193,11 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionRoom;
     }
 
+    @Override
+    public void deleteAuctionRoom(Long auctionId) {
+        auctionRoomRepository.deleteById(auctionId);
+    }
+
     //도우미 함수
     private void validAuctionRoom(AuctionRoom auctionRoom) {
         //아이템 갯수

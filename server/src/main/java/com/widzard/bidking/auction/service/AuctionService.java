@@ -18,4 +18,6 @@ public interface AuctionService {
 
     AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req,
         MultipartFile auctionRoomImg, MultipartFile[] itemImgs) throws IOException;
+
+    void deleteAuctionRoom(Long auctionId);
 }
