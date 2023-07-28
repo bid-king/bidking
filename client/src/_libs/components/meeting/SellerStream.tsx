@@ -1,6 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { OpenVidu, StreamManager } from 'openvidu-browser';
-import { useOpenvidu } from '../../hooks/useOpenvidu';
+import React, { useEffect } from 'react';
+import { useOpenviduSeller } from '../../hooks/useOpenviduSeller';
 import { useStream } from '../../hooks/useStream';
 
 interface SellerStreamProps {
@@ -9,8 +8,8 @@ interface SellerStreamProps {
   userType: 'seller';
 }
 
-const SellerStream: React.FC<SellerStreamProps> = ({ roomId, userId, userType = 'seller' }) => {
-  const { publisher, onChangeCameraStatus, onChangeMicStatus } = useOpenvidu(userId, roomId, userType);
+export function SellerStream({ roomId, userId, userType = 'seller' }: SellerStreamProps) {
+  const { publisher, onChangeCameraStatus, onChangeMicStatus } = useOpenviduSeller(userId, roomId);
 
   const { speaking, micStatus, videoStatus, videoRef } = useStream(publisher || undefined);
 
@@ -40,6 +39,4 @@ const SellerStream: React.FC<SellerStreamProps> = ({ roomId, userId, userType = 
       <button onClick={handleCameraToggle}>Toggle Camera</button>
     </div>
   );
-};
-
-export default SellerStream;
+}

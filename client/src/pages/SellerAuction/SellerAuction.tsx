@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import SellerStream from '../../_libs/components/meeting/SellerStream';
+import { SellerStream } from '../../_libs/components/meeting/SellerStream';
 
 export function SellerAuction() {
   const roomId = 123;

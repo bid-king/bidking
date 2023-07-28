@@ -1,18 +1,18 @@
 import axios from 'axios';
 
-const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
-// const OPENVIDU_SERVER_SECRET = 'bidking';
+// const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
+const OPENVIDU_SERVER_SECRET = 'bidking';
 
-const OPENVIDU_SERVER_URL = 'http://localhost:4443';
-// const OPENVIDU_SERVER_URL = 'https://i9a706.p.ssafy.io';
+// const OPENVIDU_SERVER_URL = 'http://localhost:4443';
+const OPENVIDU_SERVER_URL = 'https://i9a706.p.ssafy.io';
 
-export function getSellerToken(roomId: string): Promise<string> {
-  return createSession(roomId).then(roomId => createToken(roomId));
-}
+// export function getSellerToken(roomId: string): Promise<string> {
+//   return createSession(roomId).then(roomId => createToken(roomId));
+// }
 
-export function getBuyerToken(roomId: string): Promise<string> {
-  return createToken(roomId);
-}
+// export function getBuyerToken(roomId: string): Promise<string> {
+//   return createToken(roomId);
+// }
 
 export function getToken(roomId: string): Promise<string> {
   return createSession(roomId).then(roomId => createToken(roomId));

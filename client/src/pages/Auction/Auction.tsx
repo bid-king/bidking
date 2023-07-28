@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Buyer from '../../_libs/components/meeting/Buyer';
+import { BuyerStream } from '../../_libs/components/meeting/BuyerStream';
 
 export function Auction() {
   const roomId = 123;
@@ -9,7 +9,7 @@ export function Auction() {
   return (
     <div>
       (구매자)경매진행중 화면입니다.
-      <Buyer roomId={roomId} userId={userId} userType={userType} />
+      <BuyerStream roomId={roomId} userId={userId} userType={userType} />
     </div>
   );
 }

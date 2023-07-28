@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { StreamManager } from 'openvidu-browser';
-import { useOpenvidu } from '../../hooks/useOpenvidu';
+import { useOpenviduBuyer } from '../../hooks/useOpenviduBuyer';
 
 interface BuyerStreamProps {
   roomId: number;
@@ -8,8 +8,8 @@ interface BuyerStreamProps {
   userType: 'buyer';
 }
 
-const BuyerStream: React.FC<BuyerStreamProps> = ({ roomId, userId, userType = 'buyer' }) => {
-  const { streamList } = useOpenvidu(userId, roomId, userType);
+export function BuyerStream({ roomId, userId, userType = 'buyer' }: BuyerStreamProps) {
+  const { streamList } = useOpenviduBuyer(userId, roomId);
 
   const sellerStreamManager = streamList.find(stream => stream.userId !== userId)?.streamManager;
 
@@ -19,9 +19,9 @@ const BuyerStream: React.FC<BuyerStreamProps> = ({ roomId, userId, userType = 'b
       {sellerStreamManager && <Video streamManager={sellerStreamManager} />}
     </div>
   );
-};
+}
 
-const Video: React.FC<{ streamManager: StreamManager }> = ({ streamManager }) => {
+function Video({ streamManager }: { streamManager: StreamManager }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -31,6 +31,4 @@ const Video: React.FC<{ streamManager: StreamManager }> = ({ streamManager }) =>
   }, [streamManager]);
 
   return <video ref={videoRef} autoPlay={true} />;
-};
-
-export default BuyerStream;
+}
