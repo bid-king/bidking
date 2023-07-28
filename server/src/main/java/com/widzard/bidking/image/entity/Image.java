@@ -27,17 +27,15 @@ public class Image extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
     private Long id;
-
     @Column(nullable = false)
     private String originalFileName; // asd.jpg
-
     @Column(nullable = false, unique = true)
     private String fileName;
-
     @Column(nullable = false)
     private String filePath; // https: S3 주소
 
-    public void modify(ImageModifyDto imageModifyDto){
+
+    public void modify(ImageModifyDto imageModifyDto) {
         this.originalFileName = imageModifyDto.getOriginalFileName();
         this.fileName = imageModifyDto.getFileName();
         this.filePath = imageModifyDto.getFilePath();
