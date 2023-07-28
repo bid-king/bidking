@@ -41,6 +41,7 @@ public class AuctionRoomResponse {
     private List<ItemDto> itemList = new ArrayList<>();
 
 
+
     public static AuctionRoomResponse from(AuctionRoom auctionRoom) {
         List<ItemDto> itemDtoList = auctionRoom.getItemList().stream()
             .map(ItemDto::create)

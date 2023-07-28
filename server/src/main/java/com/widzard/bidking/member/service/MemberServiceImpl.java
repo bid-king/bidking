@@ -197,6 +197,7 @@ public class MemberServiceImpl implements MemberService {
         Image savedImage = null;
         if (image != null) {
             if (member.getImage() != null) {
+                // TODO: 있는 이미지 변경
                 imageService.deleteImage(member.getImage());
             }
             savedImage = imageService.uploadImage(image);
