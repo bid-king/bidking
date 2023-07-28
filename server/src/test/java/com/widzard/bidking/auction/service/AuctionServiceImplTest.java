@@ -9,7 +9,6 @@ import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.image.repository.ImageRepository;
-import com.widzard.bidking.item.dto.ItemCategoryDto;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
@@ -23,17 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Transactional
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Slf4j
 class AuctionServiceImplTest {
 
@@ -179,8 +175,8 @@ class AuctionServiceImplTest {
             ItemUpdateRequest req = ItemUpdateRequest.builder()
                 .id(item.getId())
                 .itemName(item.getName() + "changed")
-                .itemOrdering(item.getOrdering())
-                .itemCategory(ItemCategoryDto.create(itemCategory2))//TODO 카테고리 따로
+                .ordering(item.getOrdering())
+                .itemCategoryId(itemCategory2.getId())//TODO 카테고리 따로
                 .description(item.getDescription())
                 .startPrice(item.getStartPrice())
                 .build();

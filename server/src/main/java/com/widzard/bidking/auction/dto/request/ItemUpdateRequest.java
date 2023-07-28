@@ -1,12 +1,12 @@
 package com.widzard.bidking.auction.dto.request;
 
 import com.widzard.bidking.image.dto.ImageDto;
-import com.widzard.bidking.item.dto.ItemCategoryDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Builder
@@ -16,10 +16,11 @@ public class ItemUpdateRequest {
 
     private Long id;
     private String itemName;
-    private ItemCategoryDto itemCategory;
+    private Long itemCategoryId;
     private Long startPrice;
     private String description;
-    private int itemOrdering;
+    @Setter
+    private int ordering;
     private ImageDto imageDto;
 //    private InvoiceDto invoice; //TODO invoice 구현 후
 }

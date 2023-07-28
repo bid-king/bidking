@@ -22,6 +22,7 @@ import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -85,13 +86,10 @@ public class AuctionServiceImpl implements AuctionService {
             MultipartFile img = itemImgs[i];
             Image image = imageService.uploadImage(img);
             ItemCreateRequest itemCreateRequest = itemCreateRequestList.get(i);
-            log.info("itemCreateRequest == {}", itemCreateRequest);
             ItemCategory itemCategory = itemCategoryRepository.findById(
                 itemCreateRequest.getItemCategory()).orElseThrow(RuntimeException::new);
 
-            //Item 생성이 안되는 듯 하여 확인
             Item item = Item.create(
-//                auctionRoom,
                 itemCreateRequest.getStartPrice(),
                 itemCreateRequest.getName(),
                 itemCreateRequest.getDescription(),
@@ -99,14 +97,10 @@ public class AuctionServiceImpl implements AuctionService {
                 itemCreateRequest.getOrdering(),
                 image
             );
-            log.info("확인용 id = {}", item);
             itemRepository.save(item);
             auctionRoom.addItem(item);
-            log.info("아이템에서 옭션룸 {}", item.getAuctionRoom().getName());
         }
 
-        log.info("TEST true {}", auctionRoom == savedAuctionRoom);
-        log.info("NUll 시작 추정 0지점 = {}", auctionRoom.getItemList());
         return savedAuctionRoom;
     }
 
@@ -120,8 +114,12 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     @Transactional
-    public AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req,
-        MultipartFile auctionRoomImg, MultipartFile[] itemImgs) throws IOException {
+    public AuctionRoom updateAuctionRoom(
+        Long auctionId,
+        AuctionUpdateRequest req,
+        MultipartFile auctionRoomImg,
+        MultipartFile[] itemImgs
+    ) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
         //auctionRoom 기본자료형 필드 업데이트
@@ -133,32 +131,62 @@ public class AuctionServiceImpl implements AuctionService {
             imageService.modifyImage(auctionRoomImg, auctionImage.getId());
         }
 
-        //아이템 리스트 업데이트
+        //1. 옥션수정 - 아이템 삭제
+        //옥션룸 신규 아이템 리스트
         List<ItemUpdateRequest> itemUpdateRequestList = req.getItemList();
-        log.info("itemUpdatearequestList.size = {}", itemUpdateRequestList.size());
-        for (ItemUpdateRequest updateRequest : itemUpdateRequestList) {
-            Long itemId = updateRequest.getId();
-            log.info("item null start point {}", itemId);
-            Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
-            ItemCategory category = itemCategoryRepository.findById(
-                updateRequest.getItemCategory().getId()).orElseThrow(
-                ItemCategoryNotFoundException::new);
-            item.update(updateRequest, category);
-            log.info("updateRequest.getItemCategory() {}", updateRequest.getItemCategory());
+        HashSet<Long> set = new HashSet<>();
+        for (int i = 0; i < itemUpdateRequestList.size(); i++) {
+            set.add(itemUpdateRequestList.get(i).getId());
+        }
+        //옥션룸의 기존 아이템리스트
+        List<Item> itemList = auctionRoom.getItemList();
+        for (int i = 0; i < itemList.size(); i++) {
+            Item cur = itemList.get(i);
+            //기존 아이템이 신규 아이템 리스트에 없으면 삭제
+            if (!set.contains(cur.getId())) {
+                auctionRoom.removeItem(cur);
+                itemList = auctionRoom.getItemList();
+                i--;
+            }
         }
 
-        //아읻템 이미지 업데이트
-//        itemImgs에서 null(isEmpty())이면 냅둬야한다(노변경)
-        for (int i = 0; i < itemImgs.length; i++) {
-            MultipartFile curFileImg = itemImgs[i];
+        //2. 아이템 신규 등록, 기존 아이템 수정
+        for (int i = 0; i < itemUpdateRequestList.size(); i++) {
+            int curOrdering = i + 1;
 
+            ItemUpdateRequest updateRequest = itemUpdateRequestList.get(i);
+            updateRequest.setOrdering(curOrdering);
+
+            Long itemId = updateRequest.getId();
+            //2-1 아이템 신규 등록(신규 등록인 아이템은 아이디가 null)
+            if (itemId == null) {
+                ItemCategory itemCategory = itemCategoryRepository.findById(
+                        updateRequest.getItemCategoryId())
+                    .orElseThrow(ItemCategoryNotFoundException::new);
+                //TODO imageService.uploadImage(itemImgs[i])에서 itemImgs[i]가 null이어도 들어가나 확인
+                Image image = imageService.uploadImage(itemImgs[i]);
+                Item item = Item.create(updateRequest.getStartPrice(), updateRequest.getItemName()
+                    , updateRequest.getDescription(), itemCategory, curOrdering,
+                    image);
+                itemRepository.save(item);
+                item.registAuctionRoom(auctionRoom);
+                //아이템 신규 등록 완료
+                continue;
+            }
+            //2-2 아이템 수정
+            Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+            ItemCategory category = itemCategoryRepository.findById(
+                updateRequest.getItemCategoryId()).orElseThrow(
+                ItemCategoryNotFoundException::new);
+            item.update(updateRequest, category);
+
+            MultipartFile curFileImg = itemImgs[i];
+            //동일 인덱스의 사진이 null이면 썸네일 유지
             if (curFileImg.isEmpty()) {
                 continue;
             }
-
-            //썸네일 변경 신청한 아이템
-            Item curItem = auctionRoom.getItemList().get(i);
-            imageService.modifyImage(curFileImg, curItem.getImage().getId());
+            //썸네일 변경
+            imageService.modifyImage(curFileImg, item.getImage().getId());
         }
 
         validAuctionRoom(auctionRoom);//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일

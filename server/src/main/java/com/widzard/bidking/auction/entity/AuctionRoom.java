@@ -66,7 +66,7 @@ public class AuctionRoom extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image; // (썸네일)
 
-    @OneToMany(mappedBy = "auctionRoom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "auctionRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> itemList = new ArrayList<>();
 
     private boolean isSessionCreated;
@@ -92,7 +92,13 @@ public class AuctionRoom extends BaseEntity {
     }
 
     public void addItem(Item item) {
-        item.setAuctionRoom(this);
+        item.registAuctionRoom(this);
+        this.itemList.add(item);
+    }
+
+    public void removeItem(Item item) {
+        this.itemList.remove(item);
+        item.registAuctionRoom(null);
     }
 
     public void update(AuctionUpdateRequest req) {
@@ -101,7 +107,7 @@ public class AuctionRoom extends BaseEntity {
         this.auctionRoomType = req.getAuctionRoomType();
 //        updateImg(req.getImageDto());
     }
-    
+
     public void changeLiveState(AuctionRoomLiveState state) {
         this.auctionRoomLiveState = state;
     }
