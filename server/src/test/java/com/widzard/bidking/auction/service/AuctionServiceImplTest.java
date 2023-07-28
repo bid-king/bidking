@@ -2,8 +2,8 @@ package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
-import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
-import com.widzard.bidking.auction.dto.request.ItemUpdateRequest;
+import com.widzard.bidking.item.dto.request.ItemCreateRequest;
+import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.global.entity.Address;

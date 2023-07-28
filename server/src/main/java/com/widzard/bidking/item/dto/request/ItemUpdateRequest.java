@@ -1,4 +1,4 @@
-package com.widzard.bidking.auction.dto.request;
+package com.widzard.bidking.item.dto.request;
 
 import com.widzard.bidking.image.dto.ImageDto;
 import lombok.AccessLevel;
