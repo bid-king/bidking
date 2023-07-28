@@ -6,6 +6,7 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.order.entity.OrderItem;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -58,10 +59,10 @@ public class Item extends BaseEntity {
     @OneToOne(mappedBy = "item")
     private OrderItem orderItem;
 
-    
+
     private int ordering;// (순서)
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private Image image;// (대표이미지)
 
