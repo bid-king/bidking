@@ -196,6 +196,18 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     @Transactional
     public void deleteAuctionRoom(Long auctionId) {
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
+
+        //s3에 올라가있는 image byte stream 삭제를 겸해야 하므로 cascade만으로 처리 불가
+        //s3 옥션룸 썸네일 삭제
+        imageService.deleteImage(auctionRoom.getImage());
+        //s3 아이템 썸네일 삭제
+        List<Item> itemList = auctionRoom.getItemList();
+        for (int i = 0; i < itemList.size(); i++) {
+            Item curItem = itemList.get(i);
+            imageService.deleteImage(curItem.getImage());
+        }
         auctionRoomRepository.deleteById(auctionId);
     }
 

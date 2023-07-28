@@ -62,7 +62,7 @@ public class AuctionRoom extends BaseEntity {
 
     private String startedAt; //경매방 시작시간
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private Image image; // (썸네일)
 
