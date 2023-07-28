@@ -194,6 +194,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    @Transactional
     public void deleteAuctionRoom(Long auctionId) {
         auctionRoomRepository.deleteById(auctionId);
     }
