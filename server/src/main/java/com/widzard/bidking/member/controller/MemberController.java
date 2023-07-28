@@ -116,6 +116,8 @@ public class MemberController {
     public ResponseEntity<?> updateMember(@PathVariable Long memberId,
         @RequestPart(name = "request") @Valid MemberUpdateRequest request,
         @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+        log.info("requet = {}", request);
+
         memberService.updateMember(memberId, request, image);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

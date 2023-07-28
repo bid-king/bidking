@@ -54,7 +54,9 @@ public enum ErrorCode {
      * Image
      */
     EMPTY_THUMBNAIL_EXCEPTION(HttpStatus.NOT_FOUND, "EMPTY_THUMBNAIL_EXCEPTION", "썸네일이 없습니다."),
-    ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_NOT_FOUND", "아이템이 없습니다.");
+    ITEM_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_NOT_FOUND", "아이템이 없습니다."),
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "IMAGE_NOT_FOUND", "이미지가 없습니다"),
+    IMAGE_OPERATION_FAIL(HttpStatus.EXPECTATION_FAILED, "IMAGE_OPERATION_FAIL", "이미지 작업 실패");
     private final HttpStatus status;
     private final String code;
     private final String message;

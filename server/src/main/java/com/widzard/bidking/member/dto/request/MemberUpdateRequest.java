@@ -2,7 +2,6 @@ package com.widzard.bidking.member.dto.request;
 
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.global.validation.NotEmptyIfPresent;
-import com.widzard.bidking.image.entity.Image;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
@@ -26,5 +25,4 @@ public class MemberUpdateRequest {
 
     private Address address;
 
-    private Image image;
 }
