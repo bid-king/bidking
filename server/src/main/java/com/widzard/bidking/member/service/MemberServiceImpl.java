@@ -5,6 +5,7 @@ import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.SendingMessageFailureException;
 import com.widzard.bidking.global.jwt.service.TokenProvider;
 import com.widzard.bidking.image.entity.Image;
+import com.widzard.bidking.image.exception.ImageOperationFailException;
 import com.widzard.bidking.image.service.ImageService;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
@@ -195,13 +196,19 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Image savedImage = null;
+        //변경요청이 존재하는 경우
         if (image != null) {
+            //기존 프사 있는 경우
             if (member.getImage() != null) {
-                imageService.deleteImage(member.getImage());
+                savedImage = imageService.modifyImage(image, memberId);
+            } else {//기존 프사 없는 경우
+                savedImage = imageService.uploadImage(image);
             }
-            savedImage = imageService.uploadImage(image);
+            //변경요청이 있는데 변경된 이미지가 없음
+            if (savedImage == null) {
+                throw new ImageOperationFailException();
+            }
         }
-
         member.updateItem(request, passwordEncoder.encode(newPassword), savedImage);
     }
 
