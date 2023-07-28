@@ -1,41 +1,30 @@
-import { StreamManager } from 'openvidu-browser';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { Publisher } from 'openvidu-browser';
 
-export const useStream = (streamManager: StreamManager) => {
+export const useStream = (publisher: Publisher | undefined) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [speaking, setSpeaking] = useState(false);
-  const [micStatus, setMicStatus] = useState(streamManager.stream.audioActive);
-  const [videoStatus, setVideoStatus] = useState(streamManager.stream.videoActive);
+
+  // Initialize status states
+  const [speaking, setSpeaking] = useState<boolean>(false);
+  const [micStatus, setMicStatus] = useState<boolean>(false);
+  const [videoStatus, setVideoStatus] = useState<boolean>(false);
 
   useEffect(() => {
-    streamManager.addVideoElement(videoRef.current as HTMLVideoElement);
+    if (publisher) {
+      // Access the stream properties
+      const audioActive = publisher.stream.audioActive;
+      const videoActive = publisher.stream.videoActive;
 
-    streamManager.on('publisherStartSpeaking', event => {
-      if (event.streamId !== streamManager.stream.streamId) {
-        return;
-      }
-      setSpeaking(true);
-    });
-
-    streamManager.on('publisherStopSpeaking', event => {
-      if (event.streamId !== streamManager.stream.streamId) {
-        return;
-      }
+      // Update the status states
+      setMicStatus(audioActive);
+      setVideoStatus(videoActive);
+    } else {
+      // If publisher is undefined, reset the status states
       setSpeaking(false);
-    });
-
-    streamManager.on('streamPropertyChanged', event => {
-      if (event.stream.streamId !== streamManager.stream.streamId) {
-        return;
-      }
-
-      if (event.changedProperty === 'videoActive') {
-        setVideoStatus(event.newValue as boolean);
-      } else if (event.changedProperty === 'audioActive') {
-        setMicStatus(event.newValue as boolean);
-      }
-    });
-  });
+      setMicStatus(false);
+      setVideoStatus(false);
+    }
+  }, [publisher]);
 
   return {
     speaking,
