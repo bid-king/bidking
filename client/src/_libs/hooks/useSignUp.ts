@@ -1,5 +1,4 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
 import member from '../../api/member';
 
 export function useSignUp() {
@@ -24,8 +23,6 @@ export function useSignUp() {
   const [certifiedNumber, setCertifiedNumber] = useState('');
   const [isPhoneError, setIsPhoneError] = useState(false);
   const [phoneErrorMessage, setPhoneErrorMessage] = useState('');
-
-  const API_URL = 'http://70.12.247.172:5000';
 
   const handleNextStep = (e: FormEvent) => {
     e.preventDefault();

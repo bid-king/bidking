@@ -1,5 +1,5 @@
 import { OpenVidu, Publisher, StreamManager, Session } from 'openvidu-browser';
-import { getToken } from '../../api/openViduApi';
+import { getToken } from '../../api/openviduApi';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type StreamData = {
