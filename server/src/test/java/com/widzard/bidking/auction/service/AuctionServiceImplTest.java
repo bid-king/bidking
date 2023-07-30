@@ -324,8 +324,8 @@ class AuctionServiceImplTest {
         auctionListRequest = AuctionListRequest.builder()
             .categoryList(categoryList)
             .keyword("테스트")
-            .page(2)
-            .perPage(1)
+            .page(1)
+            .perPage(2)
             .build();
 
         //2번 카테고리를 갖는 옥션룸 요청
@@ -340,46 +340,22 @@ class AuctionServiceImplTest {
         AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
         AuctionRoom create1 = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
         AuctionRoom create2 = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
-        AuctionRoom find = auctionService.readAuctionRoom(create2.getId());
+        AuctionRoom find = auctionService.readAuctionRoom(create.getId());
         log.info("created auctionRoom's itemList = {}", find.getItemList());
 
         //전자 기기 & 테스트 검색
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
         log.info("searched auctionRoom's itemList = {}", auctionRoomList);
         log.info("auctionRoom's size={}",auctionRoomList.size());
-//        Assertions.assertEquals(auctionRoomList.get(0).getId(), find.getId());
+        Assertions.assertEquals(auctionRoomList.get(0).getId(), find.getId());
 
         //의류 & 테스트 검색
         List<AuctionRoom> auctionRoomList2 = auctionService.readAuctionRoomList(auctionListRequest2);
         log.info("searched auctionRoom's List2 = {}", auctionRoomList2);
 
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
-            AuctionRoom auctionRoom = auctionRoomList2.get(0); // 빈 리스트에서 요소를 가져오는 경우 예외 발생
+            AuctionRoom auctionRoom = auctionRoomList2.get(0);
         });
-
-//        //"테스트" 검색
-//        AuctionListRequest auctionListRequest3 = AuctionListRequest.builder()
-//            .keyword("테스트")
-//            .page(1)
-//            .perPage(1)
-//            .build();
-//
-//        List<AuctionRoom> auctionRoomList3 = auctionService.readAuctionRoomList(auctionListRequest3);
-//        log.info("searched auctionRoom's itemList3 = {}", auctionRoomList3.get(0).getItemList());
-//
-//        Assertions.assertNotEquals(auctionRoomList3,find);
-//
-//        //"aa" 검색
-//        AuctionListRequest auctionListRequest4 = AuctionListRequest.builder()
-//            .keyword("aa")
-//            .page(1)
-//            .perPage(1)
-//            .build();
-//
-//        List<AuctionRoom> auctionRoomList4 = auctionService.readAuctionRoomList(auctionListRequest4);
-//        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
-//            AuctionRoom auctionRoom = auctionRoomList4.get(0); // 빈 리스트에서 요소를 가져오는 경우 예외 발생
-//        });
     }
 
     //TODO itemList를 빈 리스트로 update 요청시 아이템 에러 발생
