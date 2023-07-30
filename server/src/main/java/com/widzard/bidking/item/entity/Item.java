@@ -99,7 +99,6 @@ public class Item extends BaseEntity {
         this.ordering = updateRequest.getOrdering();
         this.startPrice = updateRequest.getStartPrice();
         this.description = updateRequest.getDescription();
-
     }
 
     @Override
