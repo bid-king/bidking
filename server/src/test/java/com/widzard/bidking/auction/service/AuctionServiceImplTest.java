@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
+import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.item.dto.request.ItemCreateRequest;
 import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
@@ -74,6 +75,7 @@ class AuctionServiceImplTest {
 
     //옥션룸 생성요청(BeforeEach에서 초기화)
     private AuctionCreateRequest auctionCreateRequest;
+    private AuctionListRequest auctionListRequest;
 
     //테스트용 전역객체 공간 끝
 
@@ -86,7 +88,7 @@ class AuctionServiceImplTest {
             .build();
         itemCategoryRepository.save(itemCategory);
         itemCategory2 = ItemCategory.builder()
-            .name("전기")
+            .name("의류")
             .build();
         itemCategoryRepository.save(itemCategory2);
 
@@ -200,6 +202,29 @@ class AuctionServiceImplTest {
         auctionRoom.getItemList().forEach(item -> {
             Assertions.assertTrue(item.getName().contains("changed"));
         });
+    }
+
+    @Test
+    void readAuctionRoomList() throws IOException{
+        List<Long> categoryList = new ArrayList<>();
+        categoryList.add(1L);
+
+        //1번 카테고리를 갖는 옥션룸
+        auctionListRequest = AuctionListRequest.builder()
+            .categoryList(categoryList)
+            .page(1)
+            .perPage(1)
+            .build();
+
+        AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
+            auctionRoomImg, itemImg);
+        AuctionRoom find = auctionService.readAuctionRoom(create.getId());
+        log.info("created auctionRoom's itemList = {}", find.getItemList());
+
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
+        log.info("searched auctionRoom's itemList = {}", find.getItemList());
+
+        Assertions.assertEquals(auctionRoomList.get(0), find);
     }
 
     //TODO itemList를 빈 리스트로 update 요청시 아이템 에러 발생

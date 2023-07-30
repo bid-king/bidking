@@ -21,10 +21,15 @@ import lombok.NoArgsConstructor;
 public class AuctionResponse {
 
     private Long id; //옥션룸 id
+
     private String name; //옥션 제목
+
     private String imageUrl; //옥션 썸네일
+
     private String startedAt; //옥션 시작시간
+
     private AuctionRoomLiveState auctionRoomLiveState; //옥션 진행 상태
+
     private List<AuctionListItemDto> itemListDto = new ArrayList<>(); // 옥션 리스트 아이템 리스트
 
     public static AuctionResponse from(AuctionRoom auctionRoom){
