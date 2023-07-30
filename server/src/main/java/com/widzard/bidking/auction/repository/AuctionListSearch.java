@@ -15,26 +15,30 @@ public class AuctionListSearch {
     private final EntityManager entityManager;
 
     public List<AuctionRoom> findAllBySearchCondition(AuctionListRequest auctionListRequest) {
-        StringBuilder jpqlBuilder = new StringBuilder("select distinct a from AuctionRoom a");
+        StringBuilder jpqlBuilder = new StringBuilder("SELECT DISTINCT a FROM AuctionRoom a JOIN a.itemList i");
 
         // 카테고리 적용
         if (auctionListRequest.getCategoryList() != null && !auctionListRequest.getCategoryList().isEmpty()) {
-            jpqlBuilder.append(" join a.itemList i");
-            jpqlBuilder.append(" where i.itemCategory in :categoryList");
+            jpqlBuilder.append(" WHERE i.itemCategory IN :categoryList");
         }
 
         // 검색어 적용
         if (auctionListRequest.getKeyword() != null && !auctionListRequest.getKeyword().isEmpty()) {
             if (auctionListRequest.getCategoryList() != null && !auctionListRequest.getCategoryList().isEmpty()) {
-                jpqlBuilder.append(" and");
+                jpqlBuilder.append(" AND");
             } else {
-                jpqlBuilder.append(" where");
+                jpqlBuilder.append(" WHERE");
             }
-            jpqlBuilder.append(" (a.name like :keyword or a.itemList.name like :keyword or a.itemList.description like :keyword)");
+            jpqlBuilder.append(" (a.name LIKE :keyword OR i.name LIKE :keyword OR i.description LIKE :keyword)");
         }
 
-        // 내림차순 정렬
-        jpqlBuilder.append(" order by a.id desc");
+        // auctionRoomLiveState가 "OFF_LIVE"가 아닌 경우만 조회
+        jpqlBuilder.append(" AND a.auctionRoomLiveState <> 'OFF_LIVE'");
+
+        // 현재시간과 경매 시작시간의 차이 오름차순 정렬
+        jpqlBuilder.append(" ORDER BY FUNCTION('TIMESTAMPDIFF', SECOND, " +
+            "FUNCTION('TIMESTAMP', a.startedAt), " +
+            "CURRENT_TIMESTAMP()) ASC");
 
         TypedQuery<AuctionRoom> query = entityManager.createQuery(jpqlBuilder.toString(), AuctionRoom.class);
 
