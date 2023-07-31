@@ -17,7 +17,7 @@ export function BidPrice({ align = 'center', theme = 'light' }: Props) {
   // const [priceArr, prev, curr, err] = useBidPrice();
   const [priceArr, setPriceArr] = useState<string[]>(['0']);
   useEffect(() => {
-    setPriceArr(bidPriceParse('148300').split('')); //중간에 테스트할 숫자를 입력하고 테스트하면됩니다
+    setPriceArr(bidPriceParse('111111111').split('')); //중간에 테스트할 숫자를 입력하고 테스트하면됩니다
   }, [priceArr]);
   //여기까지를 주석 처리해야합니다.
   return (
