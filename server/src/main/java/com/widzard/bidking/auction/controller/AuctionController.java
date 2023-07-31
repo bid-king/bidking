@@ -123,7 +123,7 @@ public class AuctionController {
 
     @GetMapping("/seller/after-live")
     public ResponseEntity<List<AuctionResponse>> readAuctionAfterLive(
-        @AuthenticationPrincipal Member member){
+        @AuthenticationPrincipal Member member) {
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionAfterLive(member);
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList

@@ -256,10 +256,12 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public List<AuctionRoom> readAuctionAfterLive(Member member){
-        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllAfterLiveAuctionByMemberId(member);
+    public List<AuctionRoom> readAuctionAfterLive(Member member) {
+        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllAfterLiveAuctionByMemberId(
+            member);
         return auctionRoomList;
     }
+
     //도우미 함수
     private void validAuctionRoom(AuctionRoom auctionRoom) {
         //아이템 갯수
