@@ -60,8 +60,8 @@ public class AuctionServiceImpl implements AuctionService {
     public List<AuctionBookmarkResponse> readAuctionRoomListWithLoginStatus(
         AuctionListRequest auctionListRequest,
         Member member){
-        List<AuctionRoom> auctionRoomList = auctionListSearch.findAllBySearchConditionWithLoginStatus(
-            auctionListRequest, member);
+        List<AuctionRoom> auctionRoomList = auctionListSearch.findAllBySearchCondition(
+            auctionListRequest);
         List<AuctionBookmarkResponse> auctionBookmarkResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom: auctionRoomList
         ) {
