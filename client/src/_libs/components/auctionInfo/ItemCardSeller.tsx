@@ -6,50 +6,14 @@ import paymentState from '../../constants/paymentState';
 import { Input } from '../common/Input';
 import { Spacing } from '../common/Spacing';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  theme?: 'light' | 'dark';
-  item: {
-    itemId: string;
-    itemName: string;
-    category: string;
-    itemImage: string;
-    itemDescription: string;
-    itemOrdering: string;
-    paymentState: 'PAYMENT_WAITING' | 'PAYMENT_OK' | 'PAYMENT_CANCELED';
-    successTime: string;
-    successPrice: string;
-    successMemberNickname: string;
-    deliveryAddress: string;
-    deliveryMsg: string;
-    invoice: { courier: string; invoiceNumber: string };
-  };
-}
-
-export function ItemCardSeller({
-  theme = 'light',
-  item = {
-    itemId: '1',
-    itemName: '낙찰된 상품명',
-    category: '카테고리',
-    itemImage: 'img src',
-    itemDescription: '상품 설명',
-    itemOrdering: '1',
-    paymentState: 'PAYMENT_OK',
-    successTime: '2023-03-03 22:00:00',
-    successPrice: '4000',
-    successMemberNickname: '윤다정',
-    deliveryAddress: '서울시 우리 집',
-    deliveryMsg: '잘 보내주세요',
-    invoice: { courier: 'LOGEN', invoiceNumber: '1313242435354646' },
-  },
-}: Props) {
+export function ItemCardSeller({ theme = 'light', item }: Props) {
   const [detailDisplay, setDetailDisplay] = useState<boolean>(false);
   return (
     <div
       className="container"
       css={{
         ...THEME_VARIENT[theme],
-        ...BORDER_VARIENT[item.paymentState],
+        ...BORDER_VARIENT[item.orderState],
         display: 'flex',
         flexDirection: 'column',
         padding: '1rem',
@@ -65,7 +29,7 @@ export function ItemCardSeller({
         }}
       >
         <Text type="bold" content={'순번 ' + item.itemOrdering} />
-        <Text type="bold" content={paymentState[item.paymentState]} />
+        <Text type="bold" content={paymentState[item.orderState]} />
       </div>
       <Spacing rem="1" />
       <div className="cardBody-ItemName">
@@ -98,7 +62,7 @@ export function ItemCardSeller({
       <Spacing rem="1" />
       <div>
         <Text content={'배송정보'} />
-        {item.paymentState === 'PAYMENT_OK' && item.deliveryAddress.length > 0 ? (
+        {item.orderState === 'PAYMENT_OK' && item.deliveryAddress.length > 0 ? (
           <div
             css={{
               display: 'flex',
@@ -129,7 +93,7 @@ export function ItemCardSeller({
       >
         <div>
           <img
-            src={item.itemImage}
+            src={item.itemImageUrl}
             alt={item.itemDescription}
             css={{
               borderRadius: '1rem',
@@ -174,3 +138,22 @@ const BORDER_VARIENT = {
   PAYMENT_WAITING: {},
   PAYMENT_CANCELED: {},
 };
+
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  theme?: 'light' | 'dark';
+  item: {
+    itemId: string;
+    itemName: string;
+    category: string;
+    itemImageUrl: string;
+    itemDescription: string;
+    itemOrdering: string;
+    orderState: 'PAYMENT_WAITING' | 'PAYMENT_OK' | 'PAYMENT_CANCELED';
+    successTime: string;
+    successPrice: string;
+    successMemberNickname: string;
+    deliveryAddress: string;
+    deliveryMsg: string;
+    invoice: { courier: string; invoiceNumber: string };
+  };
+}
