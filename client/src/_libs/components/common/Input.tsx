@@ -37,7 +37,6 @@ export function Input({
         paddingLeft: '1rem',
         paddingRight: '1rem',
         fontWeight: 600,
-        letterSpacing: '0.05rem',
         outline: 'none',
         ...THEME_VARIENT[theme],
         ...SHAPE_VARIENT[shape],

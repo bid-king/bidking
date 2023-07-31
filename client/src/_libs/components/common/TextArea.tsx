@@ -33,12 +33,12 @@ const THEME_VARIENT = {
     backgroundColor: colors.backgroundLight2,
     border: `1px solid ${colors.grey}`,
     color: colors.black,
-    '::placeholder': { color: colors.grey, fontWeight: 700 },
+    '::placeholder': { color: colors.grey, fontWeight: 600 },
   },
   dark: {
     backgroundColor: colors.backgroundDark3,
     border: `1px solid ${colors.backgroundDark3}`,
     color: colors.white,
-    '::placeholder': { color: colors.lightgrey, fontWeight: 700 },
+    '::placeholder': { color: colors.lightgrey, fontWeight: 600 },
   },
 };
