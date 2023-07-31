@@ -32,5 +32,7 @@ public interface AuctionService {
 
     void deleteAuctionRoom(Long auctionId);
 
-    List<AuctionRoom> readAuctionAfterLive(Member member);
+    List<AuctionRoom> readAuctionOffLive(Member member);
+
+    List<AuctionRoom> readAuctionBeforeLive(Member member);
 }

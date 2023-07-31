@@ -256,8 +256,16 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public List<AuctionRoom> readAuctionAfterLive(Member member) {
-        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllAfterLiveAuctionByMemberId(
+    public List<AuctionRoom> readAuctionOffLive(Member member) {
+        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllOffLiveAuctionByMemberId(
+            member);
+        return auctionRoomList;
+
+    }
+
+    @Override
+    public List<AuctionRoom> readAuctionBeforeLive(Member member) {
+        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllBeforeLiveAuctionByMemberId(
             member);
         return auctionRoomList;
     }

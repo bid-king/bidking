@@ -13,6 +13,12 @@ public interface AuctionRoomRepository extends JpaRepository<AuctionRoom, Long> 
     @Query("select a from AuctionRoom a"
         + " where a.auctionRoomLiveState = 'OFF_LIVE'"
         + " AND a.seller = :member")
-    List<AuctionRoom> findAllAfterLiveAuctionByMemberId(
+    List<AuctionRoom> findAllOffLiveAuctionByMemberId(
+        @Param("member") Member member);
+
+    @Query("select a from AuctionRoom a"
+        + " where a.auctionRoomLiveState = 'BEFORE_LIVE'"
+        + " AND a.seller = :member")
+    List<AuctionRoom> findAllBeforeLiveAuctionByMemberId(
         @Param("member") Member member);
 }

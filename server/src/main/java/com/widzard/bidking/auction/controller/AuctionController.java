@@ -124,7 +124,19 @@ public class AuctionController {
     @GetMapping("/seller/after-live")
     public ResponseEntity<List<AuctionResponse>> readAuctionAfterLive(
         @AuthenticationPrincipal Member member) {
-        List<AuctionRoom> auctionRoomList = auctionService.readAuctionAfterLive(member);
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionOffLive(member);
+        List<AuctionResponse> auctionResponseList = new ArrayList<>();
+        for (AuctionRoom auctionRoom : auctionRoomList
+        ) {
+            auctionResponseList.add(AuctionResponse.from(auctionRoom));
+        }
+        return new ResponseEntity<List<AuctionResponse>>(auctionResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/seller/before-live")
+    public ResponseEntity<List<AuctionResponse>> readAuctionBeforeLive(
+        @AuthenticationPrincipal Member member) {
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionBeforeLive(member);
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
         ) {
