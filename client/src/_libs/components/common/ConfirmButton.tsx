@@ -3,11 +3,16 @@ import React, { MouseEvent } from 'react';
 import colors from '../../design/colors';
 import { ButtonHTMLAttributes } from 'react';
 
-export function ConfirmButton({ btnType = 'confirm', label = '안녕 나는 확인버튼이야', onClick }: Props) {
+export function ConfirmButton({
+  btnType = 'confirm',
+  label = '안녕 나는 확인버튼이야',
+  onClick,
+  type = 'button',
+}: Props) {
   return (
     <button
       onClick={onClick}
-      type="button"
+      type={type}
       css={{
         cursor: 'pointer',
         width: '100%',
@@ -56,4 +61,5 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   btnType?: 'confirm' | 'warn' | 'progress' | 'ok' | 'disabled' | 'certification';
   label?: string;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  type?: 'button' | 'submit';
 }

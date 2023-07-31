@@ -67,12 +67,12 @@ export function Nav({ theme = 'light' }: Props) {
       >
         {theme === 'light' && (
           <Link to={'/seller'}>
-            <RoundButton label="판매" size="small" variant="white" />
+            <RoundButton label="판매" size="small" color="white" />
           </Link>
         )}
         <Spacing rem="0.5" dir="h" />
         <Link css={{}} to={'/mypage/:name'}>
-          <RoundButton label="내 경매" size="small" variant="white" />
+          <RoundButton label="내 경매" size="small" color="white" />
         </Link>
         <Spacing rem="1" dir="h" />
         <img src={`/image/Bell_${theme}.png`} alt="bell" />

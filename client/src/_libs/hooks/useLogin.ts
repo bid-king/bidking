@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import member from '../../api/member';
 import { useAppDispatch } from '../../store/hooks';
 import { getUserInformation } from '../../store/slices/userSlice';
@@ -33,7 +33,7 @@ export function useLogin() {
         })
         .catch(err => {
           if (err) {
-            setErrorMessage(err.message);
+            setErrorMessage(err.response.data.message);
             setErrorOccured(true);
           }
         });
