@@ -1,5 +1,5 @@
 import Axios from 'axios';
-const API_URL = 'http://70.12.247.172:5000';
+const API_URL = 'http://localhost:5000';
 const BEARER_TOKEN = 'TOKEN';
 
 const httpAxios = Axios.create({

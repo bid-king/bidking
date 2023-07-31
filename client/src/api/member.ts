@@ -20,7 +20,6 @@ export default {
   signup: (
     userId: string,
     password: string,
-    name: string,
     nickname: string,
     phoneNumber: string,
     address: { street: string; details: string; zipCode: string }
@@ -28,7 +27,6 @@ export default {
     http.post<SignupResponse>('/api/v1/members/signup', {
       userId,
       password,
-      name,
       nickname,
       phoneNumber,
       address,

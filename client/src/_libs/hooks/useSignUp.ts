@@ -2,11 +2,11 @@ import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import member from '../../api/member';
 
 export function useSignUp() {
-  const [step, setStep] = useState('userName');
-  const [userName, setUserName] = useState('');
+  const [step, setStep] = useState('nickname');
   const [nickname, setNickname] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordValid, setPasswordValid] = useState(false);
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [certificateCode, setCertificateCode] = useState('');
@@ -26,9 +26,7 @@ export function useSignUp() {
 
   const handleNextStep = (e: FormEvent) => {
     e.preventDefault();
-    if (step === 'userName' && userName !== '') {
-      setStep('nickname');
-    } else if (step === 'nickname' && nickname !== '' && !isNicknameDuplicated) {
+    if (step === 'nickname' && nickname !== '' && !isNicknameDuplicated) {
       setStep('id');
     } else if (step === 'id' && userId !== '' && !isIdDuplicated) {
       setStep('password');
@@ -40,7 +38,7 @@ export function useSignUp() {
       setStep('address');
     } else if (step === 'address' && street !== '' && details !== '' && zipCode !== '') {
       member
-        .signup(userId, password, userName, nickname, phoneNumber, { street, details, zipCode })
+        .signup(userId, password, nickname, phoneNumber, { street, details, zipCode })
         .then(res => {
           setSuccess(true);
         })
@@ -102,6 +100,12 @@ export function useSignUp() {
     }
   };
 
+  // 비밀번호 유효성 체크
+  useEffect(() => {
+    const passwordRegex = /^.{8,16}$/;
+    setPasswordValid(passwordRegex.test(password));
+  }, [password]);
+
   // 핸드폰번호 유효성 체크(변경 가능)
   useEffect(() => {
     const phoneRegex = /^\d{10,11}$/;
@@ -118,9 +122,6 @@ export function useSignUp() {
   }, [isRequestCerificated, isVerificationVisible, isPhoneValid]);
 
   // 인풋값 관리
-  const handleUserNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserName(e.target.value.trim());
-  };
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value.trim());
   };
@@ -193,10 +194,10 @@ export function useSignUp() {
     nickname,
     handleNicknameChange,
     handleNicknameBlur,
-    handleUserNameChange,
     handleCertificateCode,
     isSuccess,
     isPhoneError,
     phoneErrorMessage,
+    isPasswordValid,
   };
 }

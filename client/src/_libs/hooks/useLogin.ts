@@ -33,7 +33,7 @@ export function useLogin() {
         })
         .catch(err => {
           if (err) {
-            setErrorMessage(err.message);
+            setErrorMessage(err.response.data.message);
             setErrorOccured(true);
           }
         });

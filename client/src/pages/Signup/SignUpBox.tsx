@@ -38,12 +38,12 @@ export function SignUpBox() {
     nickname,
     handleNicknameChange,
     handleNicknameBlur,
-    handleUserNameChange,
     handleCertificateCode,
     isSuccess,
     isNicknameDuplicated,
     isPhoneError,
     phoneErrorMessage,
+    isPasswordValid,
   } = useSignUp();
 
   return (
@@ -68,25 +68,6 @@ export function SignUpBox() {
               padding: '0.5rem',
             }}
           >
-            {step === 'userName' && (
-              <>
-                <div className="userName">
-                  <label htmlFor="userName-signup-input">
-                    <Text type="bold" content="이름을 입력해주세요" />
-                  </label>
-                  <Spacing rem="1" />
-                  <Input
-                    id="userName-signup-input"
-                    onChange={handleUserNameChange}
-                    placeholder=""
-                    inputType="userName"
-                  />
-                </div>
-                <Spacing rem="2" />
-
-                <ConfirmButton onClick={handleNextStep} label="다음" />
-              </>
-            )}
             {step === 'nickname' && (
               <>
                 <div className="nickname">
@@ -99,7 +80,7 @@ export function SignUpBox() {
                     onChange={handleNicknameChange}
                     onBlur={handleNicknameBlur}
                     placeholder=""
-                    inputType="nickname"
+                    inputType="text"
                   />
                 </div>
                 <Spacing rem="2" />
@@ -127,7 +108,7 @@ export function SignUpBox() {
                     onChange={handleUserIdChange}
                     onBlur={handleUserIdBlur}
                     placeholder=""
-                    inputType="userId"
+                    inputType="text"
                   />
                 </div>
                 <Spacing rem="2" />
@@ -159,7 +140,14 @@ export function SignUpBox() {
                   />
                 </div>
                 <Spacing rem="2" />
-                <ConfirmButton onClick={handleNextStep} label="다음" />
+                {!isPasswordValid && (
+                  <>
+                    <Text type="bold" content="비밀번호를 8자이상 16자이하로 입력해주세요" />
+                    <Spacing rem="1" />
+                  </>
+                )}
+                {!isPasswordValid && <ConfirmButton btnType="disabled" label="다음" />}
+                {isPasswordValid && <ConfirmButton onClick={handleNextStep} label="다음" />}
               </>
             )}
 
