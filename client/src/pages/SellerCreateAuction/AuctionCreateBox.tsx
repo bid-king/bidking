@@ -7,11 +7,23 @@ import { Input } from '../../_libs/components/common/Input';
 import { AuctionCreateCard } from '../../_libs/components/auctionCreate/AuctionCreateCard';
 import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import { QuestionModal } from '../../_libs/components/auctionCreate/QuestionModal';
+import { Checkbox } from '../../_libs/components/common/Checkbox';
 
-interface Props {}
+interface Item {
+  name: string;
+  itemCategory: string;
+  description: string;
+  startPrice: string;
+  ordering: number;
+  itemImg: string;
+}
 
 export function AuctionCreate() {
   const [image, setImage] = useState<File | null>(null);
+  const [auctionTitle, setAuctionTitle] = useState('');
+  const [startedAt, setStartedAt] = useState('');
+  const [auctionRoomType, setAuctionRoomType] = useState('');
+  const [checkboxState, setCheckboxState] = useState({ itemPermissionChecked: false, deliveryRulesChecked: false });
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -19,40 +31,34 @@ export function AuctionCreate() {
     }
   };
 
-  const [items, setItems] = useState<
-    Array<{
-      itemId: string;
-      itemName: string;
-      category: string;
-      itemImage: string;
-      itemDescription: string;
-      itemOrdering: string;
-    }>
-  >([
-    {
-      itemId: '1',
-      itemName: '낙찰된 상품명',
-      category: '카테고리',
-      itemImage: 'img src',
-      itemDescription: '상품 설명',
-      itemOrdering: '1',
-    },
-  ]);
+  const [itemList, setItemList] = useState<Item[]>([]);
 
   // 물품 추가 버튼 클릭 시 처리 함수
   const handleAddItem = () => {
-    // 임시로 새 item 데이터 생성. 실제로는 사용자의 입력을 받아와야 할 것입니다.
-    const newItem = {
-      itemId: `${items.length + 1}`, // items 배열의 길이를 이용하여 itemId 생성
-      itemName: '새로운 상품',
-      category: '새 카테고리',
-      itemImage: '새 img src',
-      itemDescription: '새 상품 설명',
-      itemOrdering: `${items.length + 1}`,
-    };
+    setItemList([
+      ...itemList,
+      {
+        name: '',
+        itemCategory: '',
+        description: '',
+        startPrice: '',
+        ordering: itemList.length + 1,
+        itemImg: '',
+      },
+    ]);
+  };
+  const handleItemChange = (index: number, newItem: Item) => {
+    const updatedItems = [...itemList];
+    updatedItems[index] = newItem;
+    setItemList(updatedItems);
+    console.log(itemList);
+  };
 
-    // setItems를 사용하여 items 배열에 newItem 추가
-    setItems([newItem, ...items]);
+  const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCheckboxState({
+      ...checkboxState,
+      [e.target.id]: e.target.checked,
+    });
   };
 
   return (
@@ -74,25 +80,25 @@ export function AuctionCreate() {
           padding: '0.5rem',
         }}
       >
-        <div className="title">
-          <label htmlFor="title-input">
+        <div className="auctionTitle">
+          <label htmlFor="auctionTitle-input">
             <Text type="bold" content="경매 제목을 입력하세요" />
           </label>
           <Spacing rem="1" />
-          <Input id="title-input" placeholder="" inputType="title" />
+          <Input id="auctionTitle-input" placeholder="" inputType="text" />
         </div>
         <Spacing rem="2" />
 
-        <div className="date">
-          <label htmlFor="date-input">
+        <div className="startedAt">
+          <label htmlFor="startedAt-input">
             <Text type="bold" content="경매 날짜와 시간을 선택하세요" />
           </label>
           <Spacing rem="1" />
-          <Input id="date-input" placeholder="" inputType="date" />
+          <Input id="startedAt-input" placeholder="" inputType="date" />
         </div>
         <Spacing rem="2" />
 
-        <div className="auction-method-check">
+        <div className="auctionRoomType">
           <div
             css={{
               display: 'flex',
@@ -155,6 +161,7 @@ export function AuctionCreate() {
           </div>
           <Spacing rem="1" />
           <div
+            className="itemPermissionChecked"
             css={{
               display: 'flex',
               color: colors.warn,
@@ -174,9 +181,21 @@ export function AuctionCreate() {
               />
             </div>
             <Spacing rem="1" dir="h" />
-            <input type="checkbox" name="" id="" />
+            <div
+              css={{
+                paddingTop: '0.5rem',
+              }}
+            >
+              <Checkbox
+                theme="light"
+                id="itemPermissionChecked"
+                value="itemPermissionChecked"
+                onChange={handleCheckboxChange}
+              />
+            </div>
           </div>
           <div
+            className="deliveryRulesChecked"
             css={{
               display: 'flex',
               color: colors.warn,
@@ -196,7 +215,18 @@ export function AuctionCreate() {
               />
             </div>
             <Spacing rem="1" dir="h" />
-            <input type="checkbox" name="" id="" />
+            <div
+              css={{
+                paddingTop: '0.5rem',
+              }}
+            >
+              <Checkbox
+                theme="light"
+                id="deliveryRulesChecked"
+                value="deliveryRulesChecked"
+                onChange={handleCheckboxChange}
+              />
+            </div>
           </div>
         </div>
 
@@ -211,13 +241,19 @@ export function AuctionCreate() {
         </div>
         <Spacing rem="2" />
 
-        {items.map(item => (
-          <div key={item.itemId}>
-            <AuctionCreateCard item={item} />
-            <Spacing rem="2" />
-          </div>
+        {itemList.map((item, index) => (
+          <AuctionCreateCard
+            key={index}
+            item={item}
+            onItemChange={(newItem: Item) => handleItemChange(index, newItem)}
+          />
         ))}
-        <ConfirmButton btnType="ok" label="경매등록" />
+        <Spacing rem="2" />
+        {checkboxState.itemPermissionChecked && checkboxState.deliveryRulesChecked ? (
+          <ConfirmButton btnType="confirm" label="경매등록" />
+        ) : (
+          <ConfirmButton btnType="disabled" label="경매등록" />
+        )}
       </div>
     </div>
   );

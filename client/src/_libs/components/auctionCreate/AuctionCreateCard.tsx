@@ -1,39 +1,69 @@
 /** @jsxImportSource @emotion/react */
-import React, { HTMLAttributes, useState, ChangeEvent } from 'react';
+import React, { HTMLAttributes, useState, ChangeEvent, useEffect } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
 import { Input } from '../common/Input';
 import { Spacing } from '../common/Spacing';
 import { TextArea } from '../common/TextArea';
 
+interface Item {
+  name: string;
+  itemCategory: string;
+  description: string;
+  startPrice: string;
+  ordering: number;
+  itemImg: string;
+}
+
 interface Props extends HTMLAttributes<HTMLDivElement> {
   item: {
-    itemId: string;
-    itemName: string;
-    category: string;
-    itemImage: string;
-    itemDescription: string;
-    itemOrdering: string;
+    name: string;
+    itemCategory: string;
+    description: string;
+    startPrice: string;
+    ordering: number;
+    itemImg: string;
   };
+  onItemChange: (item: Item) => void;
 }
 
 export function AuctionCreateCard({
   item = {
-    itemId: '1',
-    itemName: '낙찰된 상품명',
-    category: '카테고리',
-    itemImage: 'img src',
-    itemDescription: '상품 설명',
-    itemOrdering: '1',
+    name: '',
+    itemCategory: '',
+    itemImg: '',
+    description: '',
+    startPrice: '',
+    ordering: 1,
   },
+  onItemChange,
 }: Props) {
-  const [image, setImage] = useState<File | null>(null);
+  const [name, setName] = useState('');
+  const [itemCategory, setItemCategory] = useState('');
+  const [startPrice, setStartPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [itemImg, setItemImage] = useState<string>('');
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        // The file's text will be printed here
+        setItemImage(event?.target?.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
     }
   };
+
+  const handleItem = () => {
+    if (!name || !itemCategory || !startPrice || !description || !itemImg) {
+      alert('모든 필드를 입력해주세요!');
+    } else {
+      // console.log({ name, itemCategory, startPrice, description, itemImg, ordering: item.ordering });
+      onItemChange({ name, itemCategory, startPrice, description, itemImg, ordering: item.ordering });
+    }
+  };
+
   return (
     <div
       className="container"
@@ -47,6 +77,7 @@ export function AuctionCreateCard({
         borderRadius: '1rem',
       }}
     >
+      <button onClick={handleItem}>저장</button>
       <div
         className="cardHeader"
         css={{
@@ -55,22 +86,22 @@ export function AuctionCreateCard({
           justifyContent: 'space-between',
         }}
       >
-        <Text type="bold" content={'순번 ' + item.itemOrdering} />
+        <Text type="bold" content={'순번 ' + item.ordering} />
       </div>
       <Spacing rem="1" />
-      <div className="cardBody-ItemName">
-        <Input placeholder="물품명" />
+      <div className="cardBody-name">
+        <Input placeholder="물품명" onChange={e => setName(e.target.value)} />
       </div>
       <Spacing rem="1" />
 
       <div>
         <div>
-          <Input placeholder="카테고리" />
+          <Input placeholder="카테고리" onChange={e => setItemCategory(e.target.value)} />
         </div>
         <Spacing rem="1" />
 
         <div>
-          <Input placeholder="경매시작가" />
+          <Input placeholder="경매시작가" onChange={e => setStartPrice(e.target.value)} />
         </div>
         <Spacing rem="1" />
 
@@ -79,12 +110,11 @@ export function AuctionCreateCard({
           <Spacing rem="1" />
           <div>
             <input type="file" accept="image/*" onChange={handleImageChange} />
-            {image && <p>Selected image: {image.name}</p>}
+            {itemImg && <p>Selected image: {itemImg}</p>}
           </div>
         </div>
         <Spacing rem="1" />
-
-        <TextArea placeholder="물품 설명(500자 이내)" />
+        <TextArea placeholder="물품 설명(500자 이내)" onChange={e => setDescription(e.target.value)} />
       </div>
     </div>
   );

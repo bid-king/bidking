@@ -50,10 +50,9 @@ interface AuctionCreateRequest {
   auctionTitle: string;
   startedAt: string;
   auctionRoomType: 'GENERAL' | 'REVERSE';
-  image: File;
   itemPermissionChecked: boolean;
   deliveryRulesChecked: boolean;
-  item: [
+  itemList: [
     {
       name: string;
       itemCategory: number;
