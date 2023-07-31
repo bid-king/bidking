@@ -17,10 +17,6 @@ public class AuctionListRequest {
 
     private String keyword; // 검색어
 
-    private boolean isBookmarked; // 북마크 되어있나
-
-    private boolean inProgress; // 진행중인가
-
     @NotNull
     private int page; // 현재 페이지
 

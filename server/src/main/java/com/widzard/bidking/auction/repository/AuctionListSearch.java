@@ -35,10 +35,10 @@ public class AuctionListSearch {
         // auctionRoomLiveState가 "OFF_LIVE"가 아닌 경우만 조회
         jpqlBuilder.append(" AND a.auctionRoomLiveState <> 'OFF_LIVE'");
 
-        // 현재시간과 경매 시작시간의 차이 오름차순 정렬
+        // 경매 시작시간 - 현재 시간으로 오름차순
         jpqlBuilder.append(" ORDER BY FUNCTION('TIMESTAMPDIFF', SECOND, " +
-            "FUNCTION('TIMESTAMP', a.startedAt), " +
-            "CURRENT_TIMESTAMP()) ASC");
+            "CURRENT_TIMESTAMP(), " +
+            "FUNCTION('TIMESTAMP', a.startedAt)) ASC");
 
         TypedQuery<AuctionRoom> query = entityManager.createQuery(jpqlBuilder.toString(), AuctionRoom.class);
 
