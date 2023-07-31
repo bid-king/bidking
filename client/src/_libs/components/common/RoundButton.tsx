@@ -2,25 +2,18 @@
 import React from 'react';
 import colors from '../../design/colors';
 import { ButtonHTMLAttributes } from 'react';
+import { Icon } from './Icon';
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'confirm' | 'white';
-  size?: 'small' | 'large';
-  label: string;
-  activated?: 0 | 1;
-}
-
-export function RoundButton({ variant = 'confirm', label = '로그인', size = 'large' }: Props) {
+export function RoundButton({ color = 'confirm', label, size = 'large' }: Props) {
   return (
     <button
       type="button"
       css={{
         cursor: 'pointer',
         borderRadius: '2.25rem',
-        transition: 'filter 0.3s',
         fontWeight: '600',
-
-        ...TYPE_VARIANTS[variant],
+        width: 'auto',
+        ...COLOR_VARIANTS[color],
         ...SIZE_VARIANT[size],
       }}
     >
@@ -29,10 +22,18 @@ export function RoundButton({ variant = 'confirm', label = '로그인', size = '
   );
 }
 
-const TYPE_VARIANTS = {
+const COLOR_VARIANTS = {
   confirm: {
-    border: `1px solid ${colors.confirm}`,
+    border: '1px solid transparent',
     backgroundColor: colors.confirm,
+    '&:hover': {
+      filter: 'brightness(0.9)',
+    },
+  },
+  black: {
+    border: '1px solid transparent',
+    backgroundColor: colors.black,
+    color: colors.white,
     '&:hover': {
       filter: 'brightness(0.9)',
     },
@@ -58,3 +59,9 @@ const SIZE_VARIANT = {
     fontSize: '1.1rem',
   },
 };
+
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  color?: 'confirm' | 'black' | 'white';
+  size?: 'small' | 'large';
+  label: string;
+}
