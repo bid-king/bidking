@@ -1,13 +1,17 @@
 package com.widzard.bidking.auction.controller;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
+import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
+import com.widzard.bidking.auction.dto.response.AuctionResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.service.AuctionService;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +36,19 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuctionController {
 
     private final AuctionService auctionService;
+
+    @GetMapping
+    public ResponseEntity<List<AuctionResponse>> readAuctionList(
+        AuctionListRequest auctionListRequest
+    ){
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
+        List<AuctionResponse> auctionResponseList = new ArrayList<>();
+        for (AuctionRoom auctionRoom : auctionRoomList
+        ) {
+            auctionResponseList.add(AuctionResponse.from(auctionRoom));
+        }
+        return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
+    }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<AuctionCreateResponse> createAuction(

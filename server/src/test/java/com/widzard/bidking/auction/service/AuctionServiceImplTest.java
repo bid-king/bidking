@@ -1,9 +1,11 @@
 package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
+import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
-import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
-import com.widzard.bidking.auction.dto.request.ItemUpdateRequest;
+import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
+import com.widzard.bidking.item.dto.request.ItemCreateRequest;
+import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
 import com.widzard.bidking.global.entity.Address;
@@ -74,6 +76,8 @@ class AuctionServiceImplTest {
 
     //옥션룸 생성요청(BeforeEach에서 초기화)
     private AuctionCreateRequest auctionCreateRequest;
+    private AuctionListRequest auctionListRequest;
+    private AuctionListRequest auctionListRequest2;
 
     //테스트용 전역객체 공간 끝
 
@@ -86,7 +90,7 @@ class AuctionServiceImplTest {
             .build();
         itemCategoryRepository.save(itemCategory);
         itemCategory2 = ItemCategory.builder()
-            .name("전기")
+            .name("의류")
             .build();
         itemCategoryRepository.save(itemCategory2);
 
@@ -114,14 +118,14 @@ class AuctionServiceImplTest {
             .itemCategory(itemCategory.getId())
             .description("테스트용 아이템 설명1")
             .ordering(1)
-            .name("테스트용 아이템1")
+            .name("테스트용 아이템 이름1")
             .startPrice(0L)
             .build();
         ItemCreateRequest itemReq2 = ItemCreateRequest.builder()
             .itemCategory(itemCategory.getId())
             .description("테스트용 아이템 설명2")
             .ordering(2)
-            .name("테스트용 아이템2")
+            .name("테스트용 아이템 이름2")
             .startPrice(10L)
             .build();
 
@@ -200,6 +204,293 @@ class AuctionServiceImplTest {
         auctionRoom.getItemList().forEach(item -> {
             Assertions.assertTrue(item.getName().contains("changed"));
         });
+    }
+
+    @Test
+    void readAuctionRoomListByCategory() throws IOException{
+        List<ItemCategory> categoryList = new ArrayList<>();
+        ItemCategory itemCategory = ItemCategory.builder()
+            .id(1L)
+            .name("전자기기")
+            .build();
+        categoryList.add(itemCategory);
+
+        List<ItemCategory> categoryList2 = new ArrayList<>();
+        ItemCategory itemCategory2 = ItemCategory.builder()
+            .id(2L)
+            .name("의류")
+            .build();
+        categoryList2.add(itemCategory2);
+
+        //1번 카테고리를 갖는 옥션룸 요청
+        auctionListRequest = AuctionListRequest.builder()
+            .categoryList(categoryList)
+            .page(1)
+            .perPage(1)
+            .build();
+
+        //2번 카테고리를 갖는 옥션룸 요청
+        auctionListRequest2 = AuctionListRequest.builder()
+            .categoryList(categoryList2)
+            .page(1)
+            .perPage(1)
+            .build();
+
+        //생성
+        AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
+            auctionRoomImg, itemImg);
+        AuctionRoom find = auctionService.readAuctionRoom(create.getId());
+        log.info("created auctionRoom's itemList = {}", find.getItemList());
+
+        //전자 기기 검색
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
+        log.info("searched auctionRoom's itemList = {}", auctionRoomList.get(0).getItemList());
+
+        Assertions.assertEquals(auctionRoomList.get(0).getId(), find.getId());
+
+        //의류 검색
+        List<AuctionRoom> auctionRoomList2 = auctionService.readAuctionRoomList(auctionListRequest2);
+        log.info("searched auctionRoom's List2 = {}", auctionRoomList2);
+
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+            AuctionRoom auctionRoom = auctionRoomList2.get(0);
+        });
+
+    }
+
+    @Test
+    void readAuctionRoomListByKeyword() throws IOException{
+        List<ItemCategory> categoryList = new ArrayList<>();
+        ItemCategory itemCategory = ItemCategory.builder()
+            .id(1L)
+            .name("전자기기")
+            .build();
+        categoryList.add(itemCategory);
+
+        List<ItemCategory> categoryList2 = new ArrayList<>();
+        ItemCategory itemCategory2 = ItemCategory.builder()
+            .id(2L)
+            .name("의류")
+            .build();
+        categoryList2.add(itemCategory2);
+
+        //생성
+        AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
+            auctionRoomImg, itemImg);
+        AuctionRoom find = auctionService.readAuctionRoom(create.getId());
+        log.info("created auctionRoom's itemList = {}", find.getItemList());
+
+        //"테스트" 검색
+        AuctionListRequest auctionListRequest3 = AuctionListRequest.builder()
+            .keyword("테스트")
+            .page(1)
+            .perPage(1)
+            .build();
+
+        List<AuctionRoom> auctionRoomList3 = auctionService.readAuctionRoomList(auctionListRequest3);
+        log.info("searched auctionRoom's itemList3 = {}", auctionRoomList3.get(0).getItemList());
+
+        Assertions.assertNotEquals(auctionRoomList3,find);
+
+        //"aa" 검색
+        AuctionListRequest auctionListRequest4 = AuctionListRequest.builder()
+            .keyword("aa")
+            .page(1)
+            .perPage(1)
+            .build();
+
+        List<AuctionRoom> auctionRoomList4 = auctionService.readAuctionRoomList(auctionListRequest4);
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+            AuctionRoom auctionRoom = auctionRoomList4.get(0);
+        });
+    }
+
+    @Test
+    void readAuctionRoomListBySearchCondition() throws IOException{
+        List<ItemCategory> categoryList = new ArrayList<>();
+        ItemCategory itemCategory = ItemCategory.builder()
+            .id(1L)
+            .name("전자기기")
+            .build();
+        categoryList.add(itemCategory);
+
+        List<ItemCategory> categoryList2 = new ArrayList<>();
+        ItemCategory itemCategory2 = ItemCategory.builder()
+            .id(2L)
+            .name("의류")
+            .build();
+        categoryList2.add(itemCategory2);
+
+        //1번 카테고리를 갖는 옥션룸 요청
+        auctionListRequest = AuctionListRequest.builder()
+            .categoryList(categoryList)
+            .keyword("테스트")
+            .page(1)
+            .perPage(2)
+            .build();
+
+        //2번 카테고리를 갖는 옥션룸 요청
+        auctionListRequest2 = AuctionListRequest.builder()
+            .categoryList(categoryList2)
+            .keyword("테스트")
+            .page(1)
+            .perPage(1)
+            .build();
+
+        //생성
+        AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
+        AuctionRoom create1 = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
+        AuctionRoom create2 = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
+        AuctionRoom find = auctionService.readAuctionRoom(create.getId());
+        log.info("created auctionRoom's itemList = {}", find.getItemList());
+
+        //전자 기기 & 테스트 검색
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
+        log.info("searched auctionRoom's itemList = {}", auctionRoomList);
+        log.info("auctionRoom's size={}",auctionRoomList.size());
+        Assertions.assertEquals(auctionRoomList.get(0).getId(), find.getId());
+
+        //의류 & 테스트 검색
+        List<AuctionRoom> auctionRoomList2 = auctionService.readAuctionRoomList(auctionListRequest2);
+        log.info("searched auctionRoom's List2 = {}", auctionRoomList2);
+
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+            AuctionRoom auctionRoom = auctionRoomList2.get(0);
+        });
+    }
+
+    @Test
+    void readAuctionRoomListByLiveStatus() throws IOException{
+        List<ItemCategory> categoryList = new ArrayList<>();
+        ItemCategory itemCategory = ItemCategory.builder()
+            .id(1L)
+            .name("전자기기")
+            .build();
+        categoryList.add(itemCategory);
+
+        List<ItemCategory> categoryList2 = new ArrayList<>();
+        ItemCategory itemCategory2 = ItemCategory.builder()
+            .id(2L)
+            .name("의류")
+            .build();
+        categoryList2.add(itemCategory2);
+
+        //1번 카테고리를 갖는 옥션룸 요청
+        auctionListRequest = AuctionListRequest.builder()
+            .categoryList(categoryList)
+            .keyword("테스트")
+            .page(1)
+            .perPage(1)
+            .build();
+
+        //생성
+        AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
+        AuctionRoom find = auctionService.readAuctionRoom(create.getId());
+        //change live state
+        find.changeLiveState(AuctionRoomLiveState.OFF_LIVE);
+        log.info("created auctionRoom's itemList = {}", find.getItemList());
+
+
+        //전자 기기 & 테스트 검색
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
+        log.info("searched auctionRoom's itemList = {}", auctionRoomList);
+        log.info("auctionRoom's size={}",auctionRoomList.size());
+
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
+            AuctionRoom auctionRoom = auctionRoomList.get(0);
+        });
+    }
+
+    @Test
+    void readAuctionRoomListByItemNameAndItemDescription() throws IOException{
+        List<ItemCategory> categoryList = new ArrayList<>();
+        ItemCategory itemCategory = ItemCategory.builder()
+            .id(1L)
+            .name("전자기기")
+            .build();
+        categoryList.add(itemCategory);
+
+        //1번 카테고리를 갖는 옥션룸 요청
+        auctionListRequest = AuctionListRequest.builder()
+            .categoryList(categoryList)
+            .keyword("테스트")
+            .page(1)
+            .perPage(1)
+            .build();
+
+        AuctionListRequest auctionListRequest1 = AuctionListRequest.builder()
+            .categoryList(categoryList)
+            .keyword("설명")
+            .page(1)
+            .perPage(1)
+            .build();
+
+        AuctionListRequest auctionListRequest2 = AuctionListRequest.builder()
+            .categoryList(categoryList)
+            .keyword("이름")
+            .page(1)
+            .perPage(1)
+            .build();
+
+        //생성
+        AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
+        AuctionRoom find = auctionService.readAuctionRoom(create.getId());
+        log.info("created auctionRoom's itemList = {}", find.getItemList());
+
+
+        //전자 기기 & 테스트 검색 ( 옥션룸 제목 )
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
+        log.info("searched auctionRoom's itemList = {}", auctionRoomList);
+        log.info("auctionRoom's size={}",auctionRoomList.size());
+        Assertions.assertEquals(auctionRoomList.get(0).getId(), find.getId());
+
+        //전자 기기 & 테스트 검색 ( 옥션룸 제목 )
+        List<AuctionRoom> auctionRoomList1 = auctionService.readAuctionRoomList(auctionListRequest1);
+        log.info("searched auctionRoom's itemList = {}", auctionRoomList1);
+        log.info("auctionRoom's size={}",auctionRoomList1.size());
+        Assertions.assertEquals(auctionRoomList1.get(0).getId(), find.getId());
+
+        //전자 기기 & 테스트 검색 ( 옥션룸 제목 )
+        List<AuctionRoom> auctionRoomList2 = auctionService.readAuctionRoomList(auctionListRequest2);
+        log.info("searched auctionRoom's itemList = {}", auctionRoomList2);
+        log.info("auctionRoom's size={}",auctionRoomList2.size());
+        Assertions.assertEquals(auctionRoomList2.get(0).getId(), find.getId());
+    }
+
+    @Test
+    void readAuctionRoomListByStartTime() throws IOException{
+        List<ItemCategory> categoryList = new ArrayList<>();
+        ItemCategory itemCategory = ItemCategory.builder()
+            .id(1L)
+            .name("전자기기")
+            .build();
+        categoryList.add(itemCategory);
+
+        //1번 카테고리를 갖는 옥션룸 요청
+        auctionListRequest = AuctionListRequest.builder()
+            .categoryList(categoryList)
+            .keyword("테스트")
+            .page(1)
+            .perPage(3)
+            .build();
+
+
+        //생성
+        AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
+        AuctionRoom create1 = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
+        AuctionRoom create2 = auctionService.createAuctionRoom(member, auctionCreateRequest, auctionRoomImg, itemImg);
+        AuctionRoom find = auctionService.readAuctionRoom(create.getId());
+        log.info("created auctionRoom's itemList = {}", find.getItemList());
+
+        //chage startedAt (default : 2023-09-15 00:00:00)
+        create1.changeStartedAt("2023-09-14 00:00:00");
+        create2.changeStartedAt("2023-09-13 00:00:00");
+
+        //전자 기기 & 테스트 검색 ( 옥션룸 제목 )
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
+        log.info("searched auctionRoom's itemList = {}", auctionRoomList);
+        log.info("auctionRoom's size={}",auctionRoomList.size());
+//        Assertions.assertEquals(auctionRoomList.get(0).getId(), find.getId());
     }
 
     //TODO itemList를 빈 리스트로 update 요청시 아이템 에러 발생

@@ -120,4 +120,8 @@ public class AuctionRoom extends BaseEntity {
         this.isSessionCreated = state;
     }
 
+    public void changeStartedAt(String startedAt) {
+        this.startedAt = startedAt;
+    }
+
 }
