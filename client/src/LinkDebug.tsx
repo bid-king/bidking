@@ -22,7 +22,7 @@ export function LinkDebug() {
             <Link to="/purchased">구매내역</Link>
           </li>
           <li>
-            <Link to="/detail/abc123">경매상세화면</Link>
+            <Link to="/detail/123">경매상세화면</Link>
           </li>
           <li>
             <Link to="/seller/create-auction">경매방 생성</Link>
