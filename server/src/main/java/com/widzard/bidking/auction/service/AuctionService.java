@@ -15,9 +15,11 @@ public interface AuctionService {
 
     List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest);
 
-    List<AuctionBookmarkResponse> readAuctionRoomListWithLoginStatus(AuctionListRequest auctionListRequest, Member member);
+    List<AuctionBookmarkResponse> readAuctionRoomListWithLoginStatus(
+        AuctionListRequest auctionListRequest, Member member);
 
-    List<AuctionRoom> readAuctionRoomListOnlyBookmarked (AuctionListRequest auctionListRequest, Member member);
+    List<AuctionRoom> readAuctionRoomListOnlyBookmarked(AuctionListRequest auctionListRequest,
+        Member member);
 
     AuctionRoom readAuctionRoom(Long auctionId);
 

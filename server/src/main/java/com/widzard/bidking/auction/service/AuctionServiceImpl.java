@@ -52,26 +52,28 @@ public class AuctionServiceImpl implements AuctionService {
     private final BookmarkRepository bookmarkRepository;
 
     @Override
-    public  List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest){
+    public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
         return auctionListSearch.findAllBySearchCondition(auctionListRequest);
     }
 
     @Override
     public List<AuctionBookmarkResponse> readAuctionRoomListWithLoginStatus(
         AuctionListRequest auctionListRequest,
-        Member member){
+        Member member) {
         List<AuctionRoom> auctionRoomList = auctionListSearch.findAllBySearchCondition(
             auctionListRequest);
         List<AuctionBookmarkResponse> auctionBookmarkResponseList = new ArrayList<>();
-        for (AuctionRoom auctionRoom: auctionRoomList
+        for (AuctionRoom auctionRoom : auctionRoomList
         ) {
-            Optional<Bookmark> bookmark = bookmarkRepository.findBookmarkByMemberAndAuctionRoom(member,auctionRoom);
+            Optional<Bookmark> bookmark = bookmarkRepository.findBookmarkByMemberAndAuctionRoom(
+                member, auctionRoom);
 
-            if(bookmark.isPresent()){
-                auctionBookmarkResponseList.add(AuctionBookmarkResponse.from(auctionRoom,bookmark.get()
-                    .isAdded()));
-            }else{
-                auctionBookmarkResponseList.add(AuctionBookmarkResponse.from(auctionRoom,false));
+            if (bookmark.isPresent()) {
+                auctionBookmarkResponseList.add(
+                    AuctionBookmarkResponse.from(auctionRoom, bookmark.get()
+                        .isAdded()));
+            } else {
+                auctionBookmarkResponseList.add(AuctionBookmarkResponse.from(auctionRoom, false));
             }
         }
 
@@ -79,10 +81,10 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public  List<AuctionRoom> readAuctionRoomListOnlyBookmarked(
+    public List<AuctionRoom> readAuctionRoomListOnlyBookmarked(
         AuctionListRequest auctionListRequest,
-        Member member){
-        return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest,member);
+        Member member) {
+        return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest, member);
     }
 
     @Transactional

@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionBookmarkResponse {
+
     private Long id; //옥션룸 id
 
     private String name; //옥션 제목
@@ -32,7 +33,7 @@ public class AuctionBookmarkResponse {
 
     private List<AuctionListItemDto> itemListDto = new ArrayList<>(); // 옥션 리스트 아이템 리스트
 
-    public static AuctionBookmarkResponse from(AuctionRoom auctionRoom, boolean isAdded){
+    public static AuctionBookmarkResponse from(AuctionRoom auctionRoom, boolean isAdded) {
         List<AuctionListItemDto> itemList = auctionRoom.getItemList().stream()
             .map(AuctionListItemDto::create)
             .collect(Collectors.toList());

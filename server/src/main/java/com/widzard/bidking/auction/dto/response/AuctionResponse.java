@@ -32,7 +32,7 @@ public class AuctionResponse {
 
     private List<AuctionListItemDto> itemListDto = new ArrayList<>(); // 옥션 리스트 아이템 리스트
 
-    public static AuctionResponse from(AuctionRoom auctionRoom){
+    public static AuctionResponse from(AuctionRoom auctionRoom) {
         List<AuctionListItemDto> itemList = auctionRoom.getItemList().stream()
             .map(AuctionListItemDto::create)
             .collect(Collectors.toList());

@@ -42,7 +42,7 @@ public class AuctionController {
     @GetMapping
     public ResponseEntity<List<AuctionResponse>> readAuctionList(
         @RequestBody @Valid AuctionListRequest auctionListRequest
-    ){
+    ) {
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
@@ -56,8 +56,9 @@ public class AuctionController {
     public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListWithLoginStatus(
         @AuthenticationPrincipal Member member,
         @RequestBody @Valid AuctionListRequest auctionListRequest
-    ){
-        List<AuctionBookmarkResponse> auctionBookmarkResponseList = auctionService.readAuctionRoomListWithLoginStatus(auctionListRequest,member);
+    ) {
+        List<AuctionBookmarkResponse> auctionBookmarkResponseList = auctionService.readAuctionRoomListWithLoginStatus(
+            auctionListRequest, member);
 
         return new ResponseEntity<>(auctionBookmarkResponseList, HttpStatus.OK);
     }
@@ -66,12 +67,13 @@ public class AuctionController {
     public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListOnlyBookmarked(
         @AuthenticationPrincipal Member member,
         @RequestBody @Valid AuctionListRequest auctionListRequest
-    ){
-        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomListOnlyBookmarked(auctionListRequest, member);
+    ) {
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomListOnlyBookmarked(
+            auctionListRequest, member);
         List<AuctionBookmarkResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
         ) {
-            auctionResponseList.add(AuctionBookmarkResponse.from(auctionRoom,true));
+            auctionResponseList.add(AuctionBookmarkResponse.from(auctionRoom, true));
         }
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
