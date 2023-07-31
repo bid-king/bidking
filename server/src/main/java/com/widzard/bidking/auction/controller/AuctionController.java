@@ -43,9 +43,9 @@ public class AuctionController {
     ){
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
-        for (AuctionRoom a : auctionRoomList
+        for (AuctionRoom auctionRoom : auctionRoomList
         ) {
-            auctionResponseList.add(AuctionResponse.from(a));
+            auctionResponseList.add(AuctionResponse.from(auctionRoom));
         }
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
