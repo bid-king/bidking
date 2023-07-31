@@ -8,6 +8,7 @@ import { Input } from '../common/Input';
 import { RoundButton } from '../common/RoundButton';
 import { Link } from 'react-router-dom';
 import { ProfileImage } from '../common/ProfileImage';
+import { Icon } from '../common/Icon';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -23,7 +24,7 @@ export function Nav({ theme = 'light' }: Props) {
         height: '3rem',
         alignItems: 'center',
         padding: '0.5rem 0 0.5rem 0',
-        ...THEME_VARIANTS[theme],
+        ...THEME_VARIANT[theme],
       }}
     >
       <Spacing rem="2" dir="h" />
@@ -74,8 +75,8 @@ export function Nav({ theme = 'light' }: Props) {
         <Link css={{}} to={'/mypage/:name'}>
           <RoundButton label="내 경매" size="small" color="white" />
         </Link>
-        <Spacing rem="1" dir="h" />
-        <img src={`/image/Bell_${theme}.png`} alt="bell" />
+        <Spacing rem="2" dir="h" />
+        <Icon type="noti" color="black" rem="1.5" />
         <Spacing rem="1" dir="h" />
         <ProfileImage />
         <Spacing rem="2" dir="h" />
@@ -84,22 +85,12 @@ export function Nav({ theme = 'light' }: Props) {
   );
 }
 
-const THEME_VARIANTS = {
+const THEME_VARIANT = {
   light: {
-    backgroundColor: colors.backgroundLight2,
+    backgroundColor: colors.backgroundLight,
   },
   dark: {
     backgroundColor: colors.backgroundDark,
-    color: colors.white,
-  },
-};
-
-const SEARCH_VARIANTS = {
-  light: {
-    backgroundColor: colors.backgroundLight2,
-  },
-  dark: {
-    backgroundColor: colors.backgroundDark2,
     color: colors.white,
   },
 };
