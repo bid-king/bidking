@@ -34,7 +34,6 @@ export function Input({
       value={value}
       css={{
         width: '100%',
-
         paddingLeft: '1rem',
         paddingRight: '1rem',
         fontWeight: 600,
@@ -52,12 +51,12 @@ export function Input({
 
 const THEME_VARIENT = {
   light: {
-    backgroundColor: colors.backgroundLight,
+    backgroundColor: colors.backgroundLight3,
     border: '1px solid transparent',
     color: colors.black,
   },
   dark: {
-    backgroundColor: colors.backgroundDark3,
+    backgroundColor: colors.backgroundDark2,
     border: '1px solid transparent',
     color: colors.white,
     '::placeholder': { color: colors.whitegrey },
@@ -66,7 +65,7 @@ const THEME_VARIENT = {
 
 const SHAPE_VARIENT = {
   round: {
-    borderRadius: '2rem',
+    borderRadius: '3rem',
   },
   square: {
     borderRadius: '1rem',
@@ -80,6 +79,6 @@ const SIZE_VARIENT = {
   },
   large: {
     height: '3rem',
-    fontSize: '1.15rem',
+    fontSize: '1.1rem',
   },
 };
