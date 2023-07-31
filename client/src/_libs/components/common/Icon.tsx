@@ -3,13 +3,15 @@ import React from 'react';
 import colors from '../../design/colors';
 import { HTMLAttributes } from 'react';
 
-export function Icon({ type, color }: Props) {
+export function Icon({ type, color, rem = '1' }: Props) {
   return (
     <div
       css={{
-        display: 'inlineBlock',
         fill: COLOR_VARIANT[color],
-        width: 'auto',
+        svg: {
+          width: `${rem}rem`,
+          height: `${rem}rem`,
+        },
       }}
       dangerouslySetInnerHTML={{ __html: ICON_URL[type] }}
     />
@@ -21,6 +23,7 @@ const COLOR_VARIANT = {
   dark: colors.white,
   black: colors.black,
   white: colors.white,
+  lightgrey: colors.lightgrey,
   confirm: colors.confirm,
   warn: colors.warn,
   progress: colors.progress,
@@ -50,12 +53,13 @@ const ICON_URL = {
     '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m296-314-88-88 272-272 272 272-88 88-184-184-184 184Z"/></svg>',
   starFilled:
     '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m183-11 79-338L-1-577l346-29 135-319 135 319 346 29-263 228 79 338-297-180L183-11Z"/></svg>',
-  star: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m373-274 107-64 107 65-29-121 95-82-124-11-49-115-49 115-124 10 95 82-29 121ZM183-11l79-338L-1-577l346-29 135-319 135 319 346 29-263 228 79 338-297-180L183-11Zm297-416Z"/></svg>',
+  star: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m354-247 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-80l65-281L80-550l288-25 112-265 112 265 288 25-218 189 65 281-247-149L233-80Zm247-350Z"/></svg>',
   unable:
     '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="m256-168-88-88 224-224-224-224 88-88 224 224 224-224 88 88-224 224 224 224-88 88-224-224-224 224Z"/></svg>',
 };
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  color: 'light' | 'dark' | 'black' | 'white' | 'confirm' | 'warn' | 'progress' | 'ok';
+  color: 'light' | 'dark' | 'black' | 'white' | 'lightgrey' | 'confirm' | 'warn' | 'progress' | 'ok';
+  rem?: '1' | '1.25' | '1.5' | '2' | '3';
   type:
     | 'arrowRight'
     | 'check'
