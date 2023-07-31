@@ -143,7 +143,7 @@ export function AuctionCreate() {
             justifyContent: 'center',
           }}
         >
-          <RoundButton variant="white" size="large" label="물품 추가" />
+          <RoundButton color="white" size="large" label="물품 추가" />
           <ConfirmButton btnType="certification" />
         </div>
         <Spacing rem="2" />

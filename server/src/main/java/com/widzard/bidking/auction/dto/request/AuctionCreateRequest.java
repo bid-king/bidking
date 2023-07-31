@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.dto.request;
 
 import com.widzard.bidking.auction.entity.AuctionRoomType;
+import com.widzard.bidking.item.dto.request.ItemCreateRequest;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;

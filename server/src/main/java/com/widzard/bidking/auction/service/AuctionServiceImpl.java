@@ -1,9 +1,11 @@
 package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
+import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
-import com.widzard.bidking.auction.dto.request.ItemCreateRequest;
-import com.widzard.bidking.auction.dto.request.ItemUpdateRequest;
+import com.widzard.bidking.auction.repository.AuctionListSearch;
+import com.widzard.bidking.item.dto.request.ItemCreateRequest;
+import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
@@ -24,6 +26,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,10 +41,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuctionServiceImpl implements AuctionService {
 
     private final AuctionRoomRepository auctionRoomRepository;
+    private final AuctionListSearch auctionListSearch;
     private final ItemRepository itemRepository;
     private final ItemCategoryRepository itemCategoryRepository;
     private final ImageService imageService;
 
+    @Override
+    public  List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest){
+        return auctionListSearch.findAllBySearchCondition(auctionListRequest);
+    }
 
     @Transactional
     @Override

@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { HTMLAttributes } from 'react';
+import { Link } from 'react-router-dom';
 import colors from '../../design/colors';
+import { Text } from '../common/Text';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  theme?: 'light' | 'dark';
   title?: string;
   date?: string;
   items?: string[];
@@ -15,7 +16,6 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function AuctionList({
-  theme = 'light',
   title = '경매제목',
   date = '오늘 18:00',
   items = ['물품1', '물품2', '물품3', '물품4', '물품5', '물품6'],
@@ -26,77 +26,82 @@ export function AuctionList({
   return (
     <div
       css={{
-        width: '25.75rem',
-        height: '16.625rem',
-        borderRadius: '0.5rem',
+        width: '22%',
+        height: '13.5%',
+        minWidth: '22rem',
+        minHeight: '13.5rem',
+        borderRadius: '1.5rem',
         position: 'relative',
-        backgroundImage: `url(${img})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        transition: 'filter 0.3s',
-        '&:hover': {
-          backgroundImage: `url(${img})`,
-          filter: 'brightness(0.7)',
-        },
-        ...TYPE_VARAIANTS[theme],
+        cursor: 'pointer',
+        overflow: 'hidden',
       }}
     >
+      <img
+        src={img}
+        css={{
+          position: 'absolute',
+          width: 'inherit',
+          height: 'auto',
+          borderRadius: '1.5rem',
+          minWidth: '32rem',
+          transition: 'filter 0.15s',
+          '&:hover': {
+            filter: 'blur(0.25rem)',
+          },
+        }}
+        alt={title}
+      />
+
       <div
         css={{
+          bottom: '1.5rem',
+          left: '1.5rem',
+          position: 'absolute',
+          color: 'white',
+          filter: 'drop-shadow(0 0 0.5rem #000)',
+        }}
+      >
+        <Text type="h2" content={title} />
+        <Text type="h3" content={date} />
+        {items.map((item, index) => (
+          <Text key={index} content={index < 3 ? item : ''} />
+        ))}
+      </div>
+      <div
+        css={{
+          position: 'absolute',
           textAlign: 'center',
           width: '100%',
-          height: '3.5rem',
-          borderRadius: '0.5rem',
+          borderRadius: '1.5rem',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           ...TRADE_STATE[auctionRoomTradeState],
-          fontWeight: 'bold',
         }}
       >
-        {auctionRoomTradeState === 'ALL_COMPLETED' && '완료'}
-        {auctionRoomTradeState === 'IN_PROGRESS' && '결제/배송중'}
-        {auctionRoomTradeState === 'BEFORE_PROGRESS' && '결제대기'}
-      </div>
-      <div
-        css={{
-          bottom: '0',
-          position: 'absolute',
-          margin: '1rem',
-        }}
-      >
-        <p css={{ fontWeight: 'bold' }}>{title}</p>
-        <p>{date}</p>
-        {items.map((item, index) => (
-          <span key={index}>{index < 3 ? <>{item}, </> : null}</span>
-        ))}
+        {auctionRoomTradeState === 'ALL_COMPLETED' && '모든 절차가 끝났어요.'}
+        {auctionRoomTradeState === 'IN_PROGRESS' && '하나 이상의 물건이 배송중이에요.'}
+        {auctionRoomTradeState === 'BEFORE_PROGRESS' && '낙찰자가 아직 결제하지 않았어요.'}
       </div>
     </div>
   );
 }
 
-const TYPE_VARAIANTS = {
-  light: {
-    backgroundColor: colors.backgroundLight2,
-  },
-  dark: {
-    backgroundColor: colors.backgroundDark2,
-    color: colors.white,
-  },
-};
-
 const TRADE_STATE = {
   NONE: {},
   ALL_COMPLETED: {
-    backgroundColor: colors.ok,
-    color: `${colors.black}`,
+    height: '100%',
+    backgroundColor: colors.black,
+    opacity: '0.66',
+    color: `${colors.white}`,
   },
   IN_PROGRESS: {
+    height: '3rem',
     backgroundColor: colors.progress,
     color: `${colors.white}`,
   },
   BEFORE_PROGRESS: {
+    height: '3rem',
     backgroundColor: colors.confirm,
     color: `${colors.black}`,
   },

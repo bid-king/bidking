@@ -1,7 +1,7 @@
 package com.widzard.bidking.item.entity;
 
 
-import com.widzard.bidking.auction.dto.request.ItemUpdateRequest;
+import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
@@ -100,7 +100,6 @@ public class Item extends BaseEntity {
         this.ordering = updateRequest.getOrdering();
         this.startPrice = updateRequest.getStartPrice();
         this.description = updateRequest.getDescription();
-
     }
 
     @Override

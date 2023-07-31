@@ -1,4 +1,4 @@
-package com.widzard.bidking.auction.dto.request;
+package com.widzard.bidking.item.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

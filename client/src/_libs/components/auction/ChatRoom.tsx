@@ -4,6 +4,7 @@ import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { Input } from '../common/Input';
 import { RoundButton } from '../common/RoundButton';
+import { Spacing } from '../common/Spacing';
 import { ChatMessage } from './ChatMessage';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -16,7 +17,7 @@ export function ChatRoom({ theme = 'light', chatInput = 'light' }: Props) {
     <div
       css={{
         width: '100%',
-        height: '28.97rem',
+        height: '45vh',
         borderRadius: '1rem',
         padding: '1rem',
         position: 'relative',
@@ -29,23 +30,18 @@ export function ChatRoom({ theme = 'light', chatInput = 'light' }: Props) {
       <div
         className="inputArea"
         css={{
-          width: '100%',
-          left: '0.5rem',
+          width: 'calc(100% - 2rem)',
+          left: '1rem',
           bottom: '1rem',
           position: 'absolute',
           display: 'flex',
           justifyContent: 'center',
         }}
       >
-        <div
-          css={{
-            width: '100%',
-            marginRight: '1rem',
-            display: 'flex',
-          }}
-        >
-          <Input placeholder={`${CHAT_INTPUT[chatInput].chatPlaceHolder}`} shape="round" />
-          <RoundButton label={`${CHAT_INTPUT[chatInput].chatBtn}`} />
+        <div css={{ display: 'flex', width: '100%' }}>
+          <Input placeholder={`${CHAT_INPUT[chatInput].chatPlaceHolder}`} shape="round" size="small" />
+          <Spacing dir="h" rem="1" />
+          <RoundButton label={`${CHAT_INPUT[chatInput].chatBtn}`} size="small" />
         </div>
       </div>
     </div>
@@ -62,13 +58,13 @@ const THEME_VARIANTS = {
   },
 };
 
-const CHAT_INTPUT = {
+const CHAT_INPUT = {
   light: {
-    chatPlaceHolder: '채팅을 입력해주세요',
-    chatBtn: '입력',
+    chatPlaceHolder: '',
+    chatBtn: '➡',
   },
   dark: {
-    chatPlaceHolder: '공지를 입력해주세요',
+    chatPlaceHolder: '',
     chatBtn: '공지',
   },
 };
