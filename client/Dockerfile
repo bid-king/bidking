@@ -1,8 +1,7 @@
 FROM node:alpine as builder
 WORKDIR /app
 COPY ./ ./
-RUN yarn start
-RUN npm run build
+RUN yarn build
 
 FROM nginx
 EXPOSE 3000
