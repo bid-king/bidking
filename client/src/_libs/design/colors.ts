@@ -1,4 +1,4 @@
-const white = '#F4F4F4';
+const white = '#FFFFFF';
 const confirm = '#FBB708';
 const warn = '#DD3500';
 const progress = '#441CE4';
@@ -23,7 +23,7 @@ export default {
   //greys
   grey: '#666666',
   lightgrey: '#AAAAAA',
-  whitegrey: '#EEEEEE',
+  whitegrey: '#F4F4F4',
   backgroundLight: '#EFEFF3',
   backgroundLight2: '#FFFFFF',
   backgroundLight3: '#DEDEE4',
