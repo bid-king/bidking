@@ -31,4 +31,6 @@ public interface AuctionService {
         MultipartFile auctionRoomImg, MultipartFile[] itemImgs) throws IOException;
 
     void deleteAuctionRoom(Long auctionId);
+
+    List<AuctionRoom> readAuctionAfterLive(Member member);
 }

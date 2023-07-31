@@ -120,4 +120,16 @@ public class AuctionController {
         auctionService.deleteAuctionRoom(auctionId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/seller/after-live")
+    public ResponseEntity<List<AuctionResponse>> readAuctionAfterLive(
+        @AuthenticationPrincipal Member member){
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionAfterLive(member);
+        List<AuctionResponse> auctionResponseList = new ArrayList<>();
+        for (AuctionRoom auctionRoom : auctionRoomList
+        ) {
+            auctionResponseList.add(AuctionResponse.from(auctionRoom));
+        }
+        return new ResponseEntity<List<AuctionResponse>>(auctionResponseList, HttpStatus.OK);
+    }
 }
