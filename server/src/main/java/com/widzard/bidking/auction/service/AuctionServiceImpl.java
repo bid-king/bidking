@@ -3,7 +3,10 @@ package com.widzard.bidking.auction.service;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
+import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
+import com.widzard.bidking.bookmark.entity.Bookmark;
+import com.widzard.bidking.bookmark.repository.BookmarkRepository;
 import com.widzard.bidking.item.dto.request.ItemCreateRequest;
 import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
@@ -24,6 +27,7 @@ import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -45,10 +49,40 @@ public class AuctionServiceImpl implements AuctionService {
     private final ItemRepository itemRepository;
     private final ItemCategoryRepository itemCategoryRepository;
     private final ImageService imageService;
+    private final BookmarkRepository bookmarkRepository;
 
     @Override
     public  List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest){
         return auctionListSearch.findAllBySearchCondition(auctionListRequest);
+    }
+
+    @Override
+    public List<AuctionBookmarkResponse> readAuctionRoomListWithLoginStatus(
+        AuctionListRequest auctionListRequest,
+        Member member){
+        List<AuctionRoom> auctionRoomList = auctionListSearch.findAllBySearchConditionWithLoginStatus(
+            auctionListRequest, member);
+        List<AuctionBookmarkResponse> auctionBookmarkResponseList = new ArrayList<>();
+        for (AuctionRoom auctionRoom: auctionRoomList
+        ) {
+            Optional<Bookmark> bookmark = bookmarkRepository.findBookmarkByMemberAndAuctionRoom(member,auctionRoom);
+
+            if(bookmark.isPresent()){
+                auctionBookmarkResponseList.add(AuctionBookmarkResponse.from(auctionRoom,bookmark.get()
+                    .isAdded()));
+            }else{
+                auctionBookmarkResponseList.add(AuctionBookmarkResponse.from(auctionRoom,false));
+            }
+        }
+
+        return auctionBookmarkResponseList;
+    }
+
+    @Override
+    public  List<AuctionRoom> readAuctionRoomListOnlyBookmarked(
+        AuctionListRequest auctionListRequest,
+        Member member){
+        return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest,member);
     }
 
     @Transactional

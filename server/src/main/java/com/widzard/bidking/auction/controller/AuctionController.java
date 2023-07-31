@@ -3,6 +3,7 @@ package com.widzard.bidking.auction.controller;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
+import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,13 +41,37 @@ public class AuctionController {
 
     @GetMapping
     public ResponseEntity<List<AuctionResponse>> readAuctionList(
-        AuctionListRequest auctionListRequest
+        @RequestBody @Valid AuctionListRequest auctionListRequest
     ){
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
         ) {
             auctionResponseList.add(AuctionResponse.from(auctionRoom));
+        }
+        return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListWithLoginStatus(
+        @AuthenticationPrincipal Member member,
+        @RequestBody @Valid AuctionListRequest auctionListRequest
+    ){
+        List<AuctionBookmarkResponse> auctionBookmarkResponseList = auctionService.readAuctionRoomListWithLoginStatus(auctionListRequest,member);
+
+        return new ResponseEntity<>(auctionBookmarkResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/bookmarks")
+    public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListOnlyBookmarked(
+        @AuthenticationPrincipal Member member,
+        @RequestBody @Valid AuctionListRequest auctionListRequest
+    ){
+        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomListOnlyBookmarked(auctionListRequest, member);
+        List<AuctionBookmarkResponse> auctionResponseList = new ArrayList<>();
+        for (AuctionRoom auctionRoom : auctionRoomList
+        ) {
+            auctionResponseList.add(AuctionBookmarkResponse.from(auctionRoom,true));
         }
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }

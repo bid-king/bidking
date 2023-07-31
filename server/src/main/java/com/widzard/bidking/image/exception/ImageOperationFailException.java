@@ -12,6 +12,6 @@ public class ImageOperationFailException extends CustomBaseException {
     }
 
     public ImageOperationFailException() {
-        super(ErrorCode.IMAGE_OPERATION_FAIL_EXCEPTION);
+        super(ErrorCode.IMAGE_OPERATION_FAIL);
     }
 }
