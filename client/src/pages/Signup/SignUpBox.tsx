@@ -42,6 +42,8 @@ export function SignUpBox() {
     handleCertificateCode,
     isSuccess,
     isNicknameDuplicated,
+    isPhoneError,
+    phoneErrorMessage,
   } = useSignUp();
 
   return (
@@ -226,6 +228,13 @@ export function SignUpBox() {
                   )}
                 </div>
                 <Spacing rem="2" />
+                {isPhoneError && (
+                  <>
+                    <Text type="bold" content={phoneErrorMessage} />
+                    <Spacing rem="1" />
+                  </>
+                )}
+
                 {isButtonDisabled && <ConfirmButton btnType="disabled" label="다음" />}
 
                 {!isButtonDisabled && <ConfirmButton onClick={handleNextStep} label="다음" />}
