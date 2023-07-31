@@ -1,9 +1,9 @@
-const white = '#FFFFFF';
+const white = '#F4F4F4';
 const confirm = '#FBB708';
 const warn = '#DD3500';
 const progress = '#441CE4';
 const ok = '#20E9B9';
-const black = '#333333';
+const black = '#555555';
 
 export default {
   //Theme Colors
