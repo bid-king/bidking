@@ -15,7 +15,7 @@ export default {
   // logout: () => http.post('/api/v1/logout'),
   // //로그인 및 로그아웃, oAuth 관련
 
-  login: (userId: string, password: string) => http.post<LoginResponse>(`/api/v1/members/login`, { userId, password }),
+  login: (userId: string, password: string) => http.post<LoginResponse>('/api/v1/members/login', { userId, password }),
 
   signup: (
     userId: string,
@@ -25,7 +25,7 @@ export default {
     phoneNumber: string,
     address: { street: string; details: string; zipCode: string }
   ) =>
-    http.post<SignupResponse>(`/api/v1/members/signup`, {
+    http.post<SignupResponse>('/api/v1/members/signup', {
       userId,
       password,
       name,
@@ -35,11 +35,11 @@ export default {
     }),
 
   // res.data 에 접근하려 하면 AxiosResponse 타입 사용
-  idValidate: (userData: { userId: string }) => http.post<DuplicateResponce>(`/api/v1/members/check/userId`, userData),
+  idValidate: (userData: { userId: string }) => http.post<DuplicateResponce>('/api/v1/members/check/userId', userData),
   nicknameValidate: (nicknameData: { nickname: string }) =>
-    http.post<DuplicateResponce>(`/api/v1/members/check/nickname`, nicknameData),
+    http.post<DuplicateResponce>('/api/v1/members/check/nickname', nicknameData),
   phoneVerification: (phoneData: { phoneNumber: string }) =>
-    http.post<PhoneVerificationResponce>(`/api/v1/members/check/phoneNumber`, phoneData),
+    http.post<PhoneVerificationResponce>('/api/v1/members/check/phoneNumber', phoneData),
 };
 
 interface LoginResponse {
