@@ -138,7 +138,8 @@ public class AuctionServiceImpl implements AuctionService {
             Image image = imageService.uploadImage(img);
             ItemCreateRequest itemCreateRequest = itemCreateRequestList.get(i);
             ItemCategory itemCategory = itemCategoryRepository.findById(
-                itemCreateRequest.getItemCategory()).orElseThrow(RuntimeException::new);
+                    itemCreateRequest.getItemCategory())
+                .orElseThrow(ItemCategoryNotFoundException::new);
 
             Item item = Item.create(
                 itemCreateRequest.getStartPrice(),
