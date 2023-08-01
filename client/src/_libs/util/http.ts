@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import { useAppSelector } from '../../store/hooks';
 
 const API_URL = 'http://70.12.247.182:5000';
 
@@ -21,7 +20,7 @@ const httpsAxios = async () => {
   const BEARER_TOKEN = await getToken();
   return Axios.create({
     baseURL: API_URL,
-    headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+    headers: { Authorization: `Bearer ${BEARER_TOKEN}`, 'Content-Type': 'multipart/form-data' },
   });
 };
 

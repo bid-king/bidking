@@ -69,7 +69,6 @@ export interface MemberUpdateRequest {
   nickname: string;
   phoneNumber: string;
   address: Address;
-  image?: File; // or Blob, depending on how you're handling files
 }
 
 export interface MemberUpdateResponse {

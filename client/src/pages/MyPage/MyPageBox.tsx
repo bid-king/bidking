@@ -9,6 +9,8 @@ import member from '../../api/member';
 import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import colors from '../../_libs/design/colors';
 import { useAppSelector } from '../../store/hooks';
+import axios from 'axios';
+import { getToken } from '../../_libs/util/http';
 
 export function MyPageBox() {
   const [userId, setUserId] = useState('');
@@ -26,6 +28,10 @@ export function MyPageBox() {
   const [details, setDetails] = useState('');
   const [zipCode, setZipCode] = useState('');
   const isLogined = useAppSelector(state => state.user.isLogined);
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [phoneNumberErrorMessage, setPhoneNumberErrorMessage] = useState('');
+  const [image, setImage] = useState<File | null>(null);
 
   const requestVerification = () => {
     if (phoneNumber && isPhoneValid) {
@@ -65,7 +71,22 @@ export function MyPageBox() {
   }, [isPhoneValid, street, details, zipCode]);
 
   const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPhoneNumber(e.target.value.trim());
+    const newPhoneNumber = e.target.value.trim();
+    setPhoneNumber(newPhoneNumber);
+
+    if (newPhoneNumber.length < 10 || newPhoneNumber.length > 11) {
+      setPhoneNumberErrorMessage('폰 번호는 10자 이상 11자 이하이어야 합니다.');
+    } else {
+      setPhoneNumberErrorMessage('');
+    }
+  };
+
+  const handleOldPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setOldPassword(e.target.value.trim());
+  };
+
+  const handleNewPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewPassword(e.target.value.trim());
   };
 
   const handleCertificateCode = (e: ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +103,11 @@ export function MyPageBox() {
 
   const handleZipCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
     setZipCode(e.target.value.trim());
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImage = e.target.files ? e.target.files[0] : null;
+    setImage(selectedImage);
   };
 
   // const memberId = useAppSelector(state => state.user.memberId);
@@ -107,32 +133,35 @@ export function MyPageBox() {
 
   const memberUpdate = () => {
     if (memberId && isLogined) {
-      const data = {
-        request:{
-            oldPassword: "ssafy1234",
-            newPassword: "ssafy5678", // 변경 안하면 ""
-            nickname: "천사",
-            phoneNumber: "01023792142",
-            address: {
-              street: "광교호수로 15",
-                details: "주소 상세 설명",
-                zipCode: "32423"
-            }
-        }
-        image: null
-      
+      const data = new FormData();
+      data.append('oldPassword', oldPassword);
+      data.append('newPassword', newPassword);
+      data.append('nickname', nickname);
+      data.append('phoneNumber', phoneNumber);
+      data.append(
+        'address',
+        JSON.stringify({
+          street,
+          details,
+          zipCode,
+        })
+      );
+
+      if (image) {
+        data.append('profileImage', image);
       }
 
-      member
-        .put(memberId ,data)
-        .then(res => {
-          console.log(res)
-
+      axios
+        .put(`/api/members/${memberId}`, data, {
+          headers: {
+            Authorization: `Bearer ${getToken}`,
+            'Content-Type': 'multipart/form-data',
+          },
         })
-        .catch(err => {
-          console.log(err);
-        });
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
     }
+  };
 
   return (
     <div
@@ -147,6 +176,7 @@ export function MyPageBox() {
     >
       <div>
         <ProfileImage rem={4} />
+        <input type="file" onChange={handleImageChange} />
       </div>
       <div>
         <Text type="h1" content={nickname} />
@@ -160,7 +190,7 @@ export function MyPageBox() {
       </div>
       <Spacing rem="1" />
       <div className="phone-nubmer">
-        <Text type="bold" content="핸드폰 번호" />
+        <Label theme="light" value="핸드폰 번호" htmlFor="phone-nubmer-input" />
         <Spacing rem="1" />
         <div
           css={{
@@ -177,8 +207,13 @@ export function MyPageBox() {
           <Spacing rem="3" dir="h" />
           <Spacing rem="2" />
 
-          <ConfirmButton btnType="certification" onClick={requestVerification} label="인증" />
+          <ConfirmButton btnType="certification" onClick={requestVerification} label="인증번호전송" />
         </div>
+        {phoneNumberErrorMessage && (
+          <div>
+            <Text type="normal" content={phoneNumberErrorMessage} />
+          </div>
+        )}
         {isVerificationVisible && isPhoneValid && (
           <div>
             <Spacing rem="1" />
@@ -226,6 +261,32 @@ export function MyPageBox() {
         <Label theme="light" value="우편번호" htmlFor="zip-code-signup-input" />
         <Spacing rem="1" />
         <Input id="zip-code-signup-input" value={zipCode} onChange={handleZipCodeChange} placeholder="" />
+      </div>
+      <Spacing rem="2" />
+
+      <div className="old-password">
+        <Label theme="light" value="기존 비밀번호" htmlFor="old-password-input" />
+        <Spacing rem="1" />
+        <Input
+          id="old-password-input"
+          value={oldPassword}
+          onChange={handleOldPasswordChange}
+          placeholder=""
+          inputType="password"
+        />
+      </div>
+      <Spacing rem="2" />
+
+      <div className="new-password">
+        <Label theme="light" value="새 비밀번호" htmlFor="new-password-input" />
+        <Spacing rem="1" />
+        <Input
+          id="new-password-input"
+          value={newPassword}
+          onChange={handleNewPasswordChange}
+          placeholder=""
+          inputType="password"
+        />
       </div>
       <Spacing rem="2" />
 
