@@ -1,5 +1,10 @@
 import React from 'react';
+import { MyPageBox } from './MyPageBox';
 
 export function MyPage() {
-  return <div>마이페이지입니다.</div>;
+  return (
+    <div>
+      <MyPageBox />
+    </div>
+  );
 }

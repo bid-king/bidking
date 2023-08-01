@@ -28,7 +28,7 @@ export function useLogin() {
       member
         .login(userId, password)
         .then(res => {
-          dispatch(getUserInformation({ userId, accessToken: res.accessToken, isLogined: true }));
+          dispatch(getUserInformation({ memberId: res.memberId, accessToken: res.accessToken, isLogined: true }));
           navigate('/');
         })
         .catch(err => {
