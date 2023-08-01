@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.repository;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.member.entity.Member;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,14 +12,9 @@ import org.springframework.data.repository.query.Param;
 public interface AuctionRoomRepository extends JpaRepository<AuctionRoom, Long> {
 
     @Query("select a from AuctionRoom a"
-        + " where a.auctionRoomLiveState = 'OFF_LIVE'"
+        + " where a.auctionRoomLiveState = :state"
         + " AND a.seller = :member")
-    List<AuctionRoom> findAllOffLiveAuctionByMemberId(
-        @Param("member") Member member);
-
-    @Query("select a from AuctionRoom a"
-        + " where a.auctionRoomLiveState = 'BEFORE_LIVE'"
-        + " AND a.seller = :member")
-    List<AuctionRoom> findAllBeforeLiveAuctionByMemberId(
-        @Param("member") Member member);
+    List<AuctionRoom> findAllByAuctionRoomLiveStateAndSeller(
+        @Param("member") Member member,
+        @Param("state") AuctionRoomLiveState auctionRoomLiveState);
 }
