@@ -4,20 +4,21 @@ import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
-import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
-import com.widzard.bidking.auction.repository.AuctionListSearch;
-import com.widzard.bidking.bookmark.entity.Bookmark;
-import com.widzard.bidking.bookmark.repository.BookmarkRepository;
-import com.widzard.bidking.item.dto.request.ItemCreateRequest;
-import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.exception.EmptyThumbnailException;
+import com.widzard.bidking.auction.exception.ImageNotSufficientException;
+import com.widzard.bidking.auction.repository.AuctionListSearch;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
+import com.widzard.bidking.bookmark.entity.Bookmark;
+import com.widzard.bidking.bookmark.repository.BookmarkRepository;
 import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.image.service.ImageService;
+import com.widzard.bidking.item.dto.request.ItemCreateRequest;
+import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.item.exception.EmptyItemListException;
@@ -117,7 +118,7 @@ public class AuctionServiceImpl implements AuctionService {
 
         // 이미지 수 검증
         if (request.getItemList().size() != itemImgs.length) {
-            throw new RuntimeException("이미지 수 부족");
+            throw new ImageNotSufficientException();
         }
 
         // 경매방 이미지, 경매방 생성
