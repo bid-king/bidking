@@ -3,6 +3,7 @@ package com.widzard.bidking.auction.controller;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
+import com.widzard.bidking.auction.dto.response.AuctionBookmarkCountResponse;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionResponse;
@@ -72,6 +73,15 @@ public class AuctionController {
             auctionResponseList.add(AuctionBookmarkResponse.from(auctionRoom, true));
         }
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/bookmarks/count")
+    public ResponseEntity<AuctionBookmarkCountResponse> readBookmarkTotalCount(
+        @AuthenticationPrincipal Member member
+    ) {
+        return new ResponseEntity<AuctionBookmarkCountResponse>(
+            AuctionBookmarkCountResponse.from(auctionService.getTotalBookmarkCount(member)),
+            HttpStatus.ACCEPTED);
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})

@@ -88,6 +88,11 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest, member);
     }
 
+    @Override
+    public Long getTotalBookmarkCount(Member member) {
+        return bookmarkRepository.countBookmarkAllByMember(member);
+    }
+
     @Transactional
     @Override
     public AuctionRoom createAuctionRoom(
