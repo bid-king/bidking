@@ -43,12 +43,8 @@ public class AuctionController {
     public ResponseEntity<List<AuctionResponse>> readAuctionList(
         @RequestBody @Valid AuctionListRequest auctionListRequest
     ) {
-        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
-        List<AuctionResponse> auctionResponseList = new ArrayList<>();
-        for (AuctionRoom auctionRoom : auctionRoomList
-        ) {
-            auctionResponseList.add(AuctionResponse.from(auctionRoom));
-        }
+        List<AuctionResponse> auctionResponseList = getAuctionResponseList(
+            auctionService.readAuctionRoomList(auctionListRequest));
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
 
@@ -119,5 +115,30 @@ public class AuctionController {
     ) {
         auctionService.deleteAuctionRoom(auctionId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/seller/after-live")
+    public ResponseEntity<List<AuctionResponse>> readAuctionAfterLive(
+        @AuthenticationPrincipal Member member) {
+        List<AuctionResponse> auctionResponseList = getAuctionResponseList(
+            auctionService.readAuctionOffLive(member));
+        return new ResponseEntity<List<AuctionResponse>>(auctionResponseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/seller/before-live")
+    public ResponseEntity<List<AuctionResponse>> readAuctionBeforeLive(
+        @AuthenticationPrincipal Member member) {
+        List<AuctionResponse> auctionResponseList = getAuctionResponseList(
+            auctionService.readAuctionBeforeLive(member));
+        return new ResponseEntity<List<AuctionResponse>>(auctionResponseList, HttpStatus.OK);
+    }
+
+    private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
+        List<AuctionResponse> auctionResponseList = new ArrayList<>();
+        for (AuctionRoom auctionRoom : auctionRoomList
+        ) {
+            auctionResponseList.add(AuctionResponse.from(auctionRoom));
+        }
+        return auctionResponseList;
     }
 }

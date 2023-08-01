@@ -4,6 +4,7 @@ import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
+import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
 import com.widzard.bidking.bookmark.entity.Bookmark;
 import com.widzard.bidking.bookmark.repository.BookmarkRepository;
@@ -253,6 +254,21 @@ public class AuctionServiceImpl implements AuctionService {
             imageService.deleteImage(curItem.getImage());
         }
         auctionRoomRepository.deleteById(auctionId);
+    }
+
+    @Override
+    public List<AuctionRoom> readAuctionOffLive(Member member) {
+        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllByAuctionRoomLiveStateAndSeller(
+            member, AuctionRoomLiveState.OFF_LIVE);
+        return auctionRoomList;
+
+    }
+
+    @Override
+    public List<AuctionRoom> readAuctionBeforeLive(Member member) {
+        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllByAuctionRoomLiveStateAndSeller(
+            member, AuctionRoomLiveState.BEFORE_LIVE);
+        return auctionRoomList;
     }
 
     //도우미 함수
