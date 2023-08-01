@@ -3,6 +3,7 @@ package com.widzard.bidking.member.service;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
+import com.widzard.bidking.member.dto.response.AuthInfo;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public interface MemberService {
 
     boolean checkPhoneNumber(String phoneNumber);
 
-    String login(MemberLoginRequest request);
+    AuthInfo login(MemberLoginRequest request);
 
     void certifiedPhoneNumber(String phoneNumber, String cerNum);
 

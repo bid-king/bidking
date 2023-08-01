@@ -10,6 +10,7 @@ import com.widzard.bidking.image.service.ImageService;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
+import com.widzard.bidking.member.dto.response.AuthInfo;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberDuplicatedException;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
@@ -98,11 +99,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String login(MemberLoginRequest request) {
+    public AuthInfo login(MemberLoginRequest request) {
         Member member = memberRepository.findByUserId(request.getUserId())
             .orElseThrow(MemberNotFoundException::new);
         comparePassword(request.getPassword(), member.getPassword());
-        return tokenProvider.generateAccessToken(member);
+        String loginToken = tokenProvider.generateAccessToken(member);
+        return new AuthInfo(member.getId(), loginToken);
     }
 
 

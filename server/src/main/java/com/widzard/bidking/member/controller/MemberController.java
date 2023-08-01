@@ -6,6 +6,7 @@ import com.widzard.bidking.member.dto.request.MemberPhoneVerificationRequest;
 import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
 import com.widzard.bidking.member.dto.request.UserIdRequest;
 import com.widzard.bidking.member.dto.request.UserNicknameRequest;
+import com.widzard.bidking.member.dto.response.AuthInfo;
 import com.widzard.bidking.member.dto.response.DashboardResponse;
 import com.widzard.bidking.member.dto.response.MemberCheckResponse;
 import com.widzard.bidking.member.dto.response.MemberCreateResponse;
@@ -83,8 +84,8 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<MemberLoginResponse> login(
         @RequestBody @Valid MemberLoginRequest request) {
-        String token = memberService.login(request);
-        return new ResponseEntity<>(MemberLoginResponse.from(token), HttpStatus.OK);
+        AuthInfo loginInfo = memberService.login(request);
+        return new ResponseEntity<>(MemberLoginResponse.from(loginInfo), HttpStatus.OK);
     }
 
     @PostMapping("/logout")
