@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.widzard.bidking.image.dto.ImageModifyDto;
 import com.widzard.bidking.image.entity.Image;
+import com.widzard.bidking.image.exception.ImageNotFoundException;
 import com.widzard.bidking.image.repository.ImageRepository;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class S3ServiceImpl implements ImageService {
 
     private final AmazonS3 amazonS3;
     private final ImageRepository imageRepository;
-    
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -109,7 +110,7 @@ public class S3ServiceImpl implements ImageService {
         String imagePath = amazonS3.getUrl(bucket, fileName).toString();
 
         //table 업데이트
-        Image image = imageRepository.findById(imageId).orElseThrow(RuntimeException::new);
+        Image image = imageRepository.findById(imageId).orElseThrow(ImageNotFoundException::new);
 
         //S3 이미지 삭제
         amazonS3.deleteObject(bucket, image.getFileName());
