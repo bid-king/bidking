@@ -1,6 +1,7 @@
 package com.widzard.bidking.item.dto;
 
 import com.widzard.bidking.item.entity.Item;
+import com.widzard.bidking.order.entity.OrderState;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ItemDto {
+public class ItemSellerDto {
 
     private Long itemId;
 
@@ -44,11 +45,13 @@ public class ItemDto {
 
     private String deliveryMsg;
 
+    private OrderState orderState;
+
 //    private invoiceDto invoice; //TODO invoice 구현 후
 
 
-    public static ItemDto create(Item item) {
-        return ItemDto.builder()
+    public static ItemSellerDto create(Item item) {
+        return ItemSellerDto.builder()
             .itemId(item.getId())
             .itemName(item.getName())
             .category(item.getItemCategory().getName())

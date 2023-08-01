@@ -8,6 +8,7 @@ import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
+import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.service.AuctionService;
 import com.widzard.bidking.member.entity.Member;
@@ -116,7 +117,6 @@ public class AuctionController {
         auctionService.updateAuctionRoom(auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
-
 
     @DeleteMapping("/{auctionId}")
     public ResponseEntity deleteAuction(
