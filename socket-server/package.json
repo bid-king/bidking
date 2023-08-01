@@ -1,0 +1,39 @@
+{
+  "name": "bidking-socket",
+  "version": "1.0.0",
+  "description": "Bidking Socket Server",
+  "main": "app.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production PORT=8005 pm2 start app.js",
+    "dev": "nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A706"
+  },
+  "author": "Code Wizards",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "helmet": "^7.0.0",
+    "hpp": "^0.2.3",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.5.2",
+    "pm2": "^5.3.0",
+    "sanitize-html": "^2.11.0",
+    "sequelize": "^6.32.1",
+    "sequelize-cli": "^6.6.1",
+    "socket.io": "^4.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
