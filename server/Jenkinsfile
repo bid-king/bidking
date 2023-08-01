@@ -2,6 +2,12 @@ pipeline {
     agent any
   
     stages {
+        stage('Prepare') {
+            steps {
+                echo 'Preparing the environment...'
+                sh 'chmod +x ./gradlew'
+            }
+        }
         stage('Test') {
             steps {
                 sh "./gradlew clean test"
@@ -21,6 +27,12 @@ pipeline {
                       reportTitles: '', 
                       useWrapperFileDirectly: true])
                 }
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building the project...'
+                sh './gradlew clean build'
             }
         }
     }
