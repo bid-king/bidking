@@ -21,6 +21,8 @@ public interface AuctionService {
     List<AuctionRoom> readAuctionRoomListOnlyBookmarked(AuctionListRequest auctionListRequest,
         Member member);
 
+    Long getTotalBookmarkCount(Member member);
+
     AuctionRoom readAuctionRoom(Long auctionId);
 
     AuctionRoom createAuctionRoom(Member member, AuctionCreateRequest auctionCreateRequest,
@@ -35,4 +37,5 @@ public interface AuctionService {
     List<AuctionRoom> readAuctionOffLive(Member member);
 
     List<AuctionRoom> readAuctionBeforeLive(Member member);
+
 }
