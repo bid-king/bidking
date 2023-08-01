@@ -81,7 +81,7 @@ public class AuctionController {
     ) {
         return new ResponseEntity<AuctionBookmarkCountResponse>(
             AuctionBookmarkCountResponse.from(auctionService.getTotalBookmarkCount(member)),
-            HttpStatus.ACCEPTED);
+            HttpStatus.OK);
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
