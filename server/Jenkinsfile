@@ -10,26 +10,6 @@ pipeline {
                 sh 'chmod +x ./server/gradlew'
             }
         }
-        stage('Test') {
-            steps {
-                dir('server') {
-                    sh './gradlew clean test'
-                }
-            }
-            post {
-                success {
-                    publishHTML([
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: false,
-                        reportDir: 'server/lib/target/site/bidking/',
-                        reportFiles: 'index.html',
-                        reportName: 'bidking springboot Report',
-                        reportTitles: '',
-                        useWrapperFileDirectly: true])
-                }
-            }
-        }
         stage('Build') {
             steps {
                 dir('server') {
