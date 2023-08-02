@@ -4,9 +4,8 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                ls
-                cd server
-                ls
+                sh 'ls'
+                sh 'cd server && ls'
                 echo 'Hello World'
             }
         }
