@@ -40,15 +40,17 @@ export function ChatRoom({ theme = 'light', userType = 'order' }: Props) {
           justifyContent: 'center',
         }}
       >
-        <div css={{ width: '100%' }}>
-          <form>
-            <div css={{ display: 'flex', width: '100%', alignItems: 'center' }}>
-              <Input id="chat" placeholder="" shape="round" size="small" />
-              <Spacing rem="0.5" dir="h" />
-              <IconButton type="arrowRight" color="black" background="confirm" size="small" />
-            </div>
-          </form>
-        </div>
+        {userType === 'order' && (
+          <div css={{ width: '100%' }}>
+            <form>
+              <div css={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                <Input id="chat" placeholder="" shape="round" size="small" />
+                <Spacing rem="0.5" dir="h" />
+                <IconButton type="arrowRight" color="black" background="confirm" size="small" />
+              </div>
+            </form>
+          </div>
+        )}
       </div>
     </div>
   );

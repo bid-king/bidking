@@ -5,13 +5,7 @@ import { useOpenviduBuyer } from '../../hooks/useOpenviduBuyer';
 import { Text } from '../common/Text';
 import colors from '../../design/colors';
 
-interface BuyerStreamProps {
-  roomId: number;
-  userId: number;
-  userType: 'buyer';
-}
-
-export function BuyerStream({ roomId, userId, userType = 'buyer' }: BuyerStreamProps) {
+export function OrderStream({ auctionId, userId, userType = 'order' }: Props) {
   // const { streamList } = useOpenviduBuyer(userId, roomId);
   // const sellerStreamManager = streamList.find(stream => stream.userId !== userId)?.streamManager;
 
@@ -32,7 +26,9 @@ export function BuyerStream({ roomId, userId, userType = 'buyer' }: BuyerStreamP
           alignItems: 'center',
         }}
       >
-        <Text content={'인증된 사용자가 아닙니다.'} type="h2" />
+        <div>
+          <Text content={'인증된 사용자가 아닙니다.'} type="h2" />
+        </div>
       </div>
       {/* )} */}
     </div>
@@ -49,4 +45,10 @@ function Video({ streamManager }: { streamManager: StreamManager }) {
   }, [streamManager]);
 
   return <video ref={videoRef} autoPlay={true} />;
+}
+
+interface Props {
+  auctionId: number;
+  userId: number;
+  userType: 'order';
 }
