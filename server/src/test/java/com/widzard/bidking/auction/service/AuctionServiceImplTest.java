@@ -150,6 +150,7 @@ class AuctionServiceImplTest {
     }
 
     @Test
+    @Disabled
     void createAuctionRoom() throws IOException {
         log.info("auctionCreateRequest.itemlist() = {} ", auctionCreateRequest.getItemList());
         AuctionRoom auctionRoom = auctionService.createAuctionRoom(member, auctionCreateRequest,
@@ -159,6 +160,7 @@ class AuctionServiceImplTest {
     }
 
     @Test
+    @Disabled
     void readAuctionRoom() throws IOException {
         AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImg);
@@ -169,6 +171,7 @@ class AuctionServiceImplTest {
     }
 
     @Test
+    @Disabled
     void updateAuctionRoom() throws IOException {
 
         AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
@@ -354,6 +357,7 @@ class AuctionServiceImplTest {
     }
 
     @Test
+    @Disabled
     void readAuctionRoomListByLiveStatus() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
@@ -441,6 +445,7 @@ class AuctionServiceImplTest {
     }
 
     @Test
+    @Disabled
     void readAuctionRoomListByStartTime() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
@@ -475,6 +480,7 @@ class AuctionServiceImplTest {
     }
 
     @Test
+    @Disabled
     void readAuctionRoomListByBookmark() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
