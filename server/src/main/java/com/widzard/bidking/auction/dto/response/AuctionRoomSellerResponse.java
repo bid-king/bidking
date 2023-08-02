@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionRoomSellerResponse {
+
     private Long id;//(경매방 id)
 
     private Long sellerId; //(판매자 Member id)
@@ -37,7 +38,8 @@ public class AuctionRoomSellerResponse {
 
     private List<ItemSellerDto> itemList = new ArrayList<>();
 
-    public static AuctionRoomSellerResponse from(AuctionRoom auctionRoom, List<OrderItem> orderItemList ) {
+    public static AuctionRoomSellerResponse from(AuctionRoom auctionRoom,
+        List<OrderItem> orderItemList) {
         List<ItemSellerDto> itemSellerDtoList = orderItemList.stream()
             .map(ItemSellerDto::create)
             .collect(Collectors.toList());

@@ -147,8 +147,9 @@ public class AuctionController {
     public ResponseEntity<AuctionRoomSellerResponse> readAuctionRoomSeller(
         @AuthenticationPrincipal Member member,
         @PathVariable("auctionId") Long auctionId
-    ){
-        AuctionRoomSellerResponse auctionRoomSellerResponse = auctionService.readAuctionRoomSeller(member,auctionId);
+    ) {
+        AuctionRoomSellerResponse auctionRoomSellerResponse = auctionService.readAuctionRoomSeller(
+            member, auctionId);
         return new ResponseEntity<>(auctionRoomSellerResponse, HttpStatus.OK);
     }
 

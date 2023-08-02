@@ -284,11 +284,13 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId) {
-        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
+        AuctionRoom auctionRoom = auctionRoomRepository.findOffLiveById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
+        List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByAuctionRoom(
+            auctionRoom);
+        log.info("orderItemList = {}", orderItemList);
 
-
-        return AuctionRoomSellerResponse.from(auctionRoom);
+        return AuctionRoomSellerResponse.from(auctionRoom, orderItemList);
     }
 
     //도우미 함수
