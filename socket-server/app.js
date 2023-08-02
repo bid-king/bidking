@@ -11,20 +11,9 @@ dotenv.config();
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
 
-const { sequelize } = require('./models');
-
 const app = express();
 app.set('port', process.env.PORT || 8005);
 app.set('view engine', 'html');
-
-sequelize
-  .sync({ force: false })
-  .then(() => {
-    console.log('DB 연결 성공');
-  })
-  .catch(err => {
-    console.error(err);
-  });
 
 const sessionOption = {
   resave: false,
