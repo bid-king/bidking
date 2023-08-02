@@ -4,6 +4,7 @@ import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
+import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
@@ -27,6 +28,8 @@ import com.widzard.bidking.item.exception.ItemNotFoundException;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
+import com.widzard.bidking.orderItem.entity.OrderItem;
+import com.widzard.bidking.orderItem.repository.OrderItemRepository;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,6 +55,7 @@ public class AuctionServiceImpl implements AuctionService {
     private final ItemCategoryRepository itemCategoryRepository;
     private final ImageService imageService;
     private final BookmarkRepository bookmarkRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
@@ -276,6 +280,17 @@ public class AuctionServiceImpl implements AuctionService {
         List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllByAuctionRoomLiveStateAndSeller(
             member, AuctionRoomLiveState.BEFORE_LIVE);
         return auctionRoomList;
+    }
+
+    @Override
+    public AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId) {
+        AuctionRoom auctionRoom = auctionRoomRepository.findOffLiveById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
+        List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByAuctionRoom(
+            auctionRoom);
+        log.info("orderItemList = {}", orderItemList);
+
+        return AuctionRoomSellerResponse.from(auctionRoom, orderItemList);
     }
 
     //도우미 함수

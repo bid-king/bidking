@@ -1,7 +1,8 @@
 package com.widzard.bidking.auction.dto.response;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
-import com.widzard.bidking.item.dto.ItemDto;
+import com.widzard.bidking.item.dto.ItemSellerDto;
+import com.widzard.bidking.orderItem.entity.OrderItem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionRoomSellerResponse {
+
     private Long id;//(경매방 id)
 
     private Long sellerId; //(판매자 Member id)
@@ -34,11 +36,12 @@ public class AuctionRoomSellerResponse {
 
     private String auctionRoomSesion;
 
-    private List<ItemDto> itemList = new ArrayList<>();
+    private List<ItemSellerDto> itemList = new ArrayList<>();
 
-    public static AuctionRoomSellerResponse from(AuctionRoom auctionRoom) {
-        List<ItemDto> itemDtoList = auctionRoom.getItemList().stream()
-            .map(ItemDto::create)
+    public static AuctionRoomSellerResponse from(AuctionRoom auctionRoom,
+        List<OrderItem> orderItemList) {
+        List<ItemSellerDto> itemSellerDtoList = orderItemList.stream()
+            .map(ItemSellerDto::create)
             .collect(Collectors.toList());
 
         AuctionRoomSellerResponse result = AuctionRoomSellerResponse.builder()
@@ -50,7 +53,7 @@ public class AuctionRoomSellerResponse {
             .startedAt(auctionRoom.getStartedAt())
             .auctionRoomType(auctionRoom.getAuctionRoomType().name())
             .imageURL(auctionRoom.getImage().getFilePath())
-            .itemList(itemDtoList)
+            .itemList(itemSellerDtoList)
             .build();
 
         return result;

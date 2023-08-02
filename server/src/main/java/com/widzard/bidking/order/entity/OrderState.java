@@ -10,7 +10,8 @@ public enum OrderState {
     DELIVERING("delivering"),
     COMPLETED("completed"),
     ORDER_CANCELED("orderCanceled"),
-    DELIVERY_CANCELED("deliveryCanceled");
+    DELIVERY_CANCELED("deliveryCanceled"),
+    ORDER_FAILED("orderFailed");
 
     private String orderValue;
 

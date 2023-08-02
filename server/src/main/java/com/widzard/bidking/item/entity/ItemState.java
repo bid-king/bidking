@@ -1,7 +1,7 @@
 package com.widzard.bidking.item.entity;
 
 public enum ItemState {
-    PRE_AUCTION, // 결정 전
-    SUCCESS, // 낙찰
-    FAIL; // 유찰
+    BEFORE_AUCTION , // 결정 전
+    IN_AUCTION , // 낙찰
+    AFTER_AUCTION; // 유찰
 }

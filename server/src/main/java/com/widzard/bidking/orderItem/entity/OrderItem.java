@@ -1,8 +1,9 @@
-package com.widzard.bidking.order.entity;
+package com.widzard.bidking.orderItem.entity;
 
 
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.item.entity.Item;
+import com.widzard.bidking.order.entity.Order;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,14 +28,15 @@ public class OrderItem extends BaseEntity {
     @Column(name = "order_item_id")
     private Long id;// (주문상품코드)
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    private Long price;// (주문가격(낙찰가격))
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;// (상품코드, Item)
 
-    private Long price;// (주문가격(낙찰가격))
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
 
+    private String bidAt; //낙찰시간
 }

@@ -143,6 +143,16 @@ public class AuctionController {
         return new ResponseEntity<List<AuctionResponse>>(auctionResponseList, HttpStatus.OK);
     }
 
+    @GetMapping("/{auctionId}/seller/after-live")
+    public ResponseEntity<AuctionRoomSellerResponse> readAuctionRoomSeller(
+        @AuthenticationPrincipal Member member,
+        @PathVariable("auctionId") Long auctionId
+    ) {
+        AuctionRoomSellerResponse auctionRoomSellerResponse = auctionService.readAuctionRoomSeller(
+            member, auctionId);
+        return new ResponseEntity<>(auctionRoomSellerResponse, HttpStatus.OK);
+    }
+
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
