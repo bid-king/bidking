@@ -14,7 +14,6 @@ export function Login() {
         height: '91.5vh',
       }}
     >
-      {/* <KakaoButton /> */}
       <LoginBox />
     </div>
   );

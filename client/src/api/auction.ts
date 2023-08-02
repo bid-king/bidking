@@ -1,4 +1,4 @@
-import { https } from '../_libs/util/http';
+import { http, https } from '../_libs/util/http';
 
 export default {
   get: (auctionId: number) => https.get<AuctionRoomResponse>(`/api/v1/auctions/${auctionId}`),
@@ -9,6 +9,7 @@ export default {
   //경매 수정
   delete: (auctionId: number) => https.delete(`/api/v1/auctions/${auctionId}`),
   //경매 삭제
+  getCategoryList: () => http.get<CategoryListResponse>('/api/v1/items/categories'),
 };
 
 export interface AuctionRoomResponse {
@@ -76,4 +77,13 @@ interface AuctionUpdateRequest {
       ordering: number;
     }
   ];
+}
+
+export interface Category {
+  id: number;
+  name: string;
+}
+
+export interface CategoryListResponse {
+  categoryList: Category[];
 }

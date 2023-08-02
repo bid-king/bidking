@@ -3,13 +3,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 const url = 'http://70.12.247.192:8080/api/v1/oauth/kakao/login';
 
 interface UserState {
-  memberId: number | null;
+  id: number | null;
   isLogined?: boolean;
   accessToken?: string;
 }
 
 const initialState: UserState = {
-  memberId: null,
+  id: null,
   isLogined: false,
   accessToken: '',
 };
@@ -21,7 +21,7 @@ export const user = createSlice({
     getUserInformation(state, action: PayloadAction<UserState>) {
       state.isLogined = action.payload.isLogined;
       state.accessToken = action.payload.accessToken;
-      state.memberId = action.payload.memberId;
+      state.id = action.payload.id;
     },
   },
 });
