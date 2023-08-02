@@ -11,6 +11,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem,Long> {
 
     @Query("SELECT o FROM OrderItem o"
         + " JOIN o.item i"
-        + " WHERE i.auctionRoom = :auctionRoom")
+        + " WHERE i.auctionRoom = :auctionRoom")// TODO Order join 추가
     List<OrderItem> findOrderItemsByAuctionRoom(@Param("auctionRoom") AuctionRoom auctionRoom);
 }
