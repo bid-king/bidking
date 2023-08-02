@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import axios from 'axios';
+
 import {
   setAuctionTitle,
   setStartedAt,
@@ -8,7 +8,6 @@ import {
   setDeliveryRulesChecked,
   setItemPermissionChecked,
 } from '../../store/slices/auctionCreateSlice';
-import { getToken, API_URL } from '../util/http';
 
 export function useAuctionCreateBox() {
   const dispatch = useAppDispatch();
@@ -20,10 +19,7 @@ export function useAuctionCreateBox() {
   };
 
   const handleStartedAt = (e: ChangeEvent<HTMLInputElement>) => {
-    const date = new Date(e.target.value + 'Z'); // 'Z'를 추가하여 UTC 시간임을 명시
-    const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
-    console.log(formattedDate);
-    dispatch(setStartedAt(formattedDate));
+    dispatch(setStartedAt(e.target.value));
   };
 
   const handleAuctionRoomType = (e: ChangeEvent<HTMLInputElement>) => {
@@ -50,53 +46,6 @@ export function useAuctionCreateBox() {
     }
   };
 
-  const getOrderedItemImgs = (itemImgs: Record<string, File>): File[] => {
-    const orderedKeys = Object.keys(itemImgs).sort((a, b) => Number(a) - Number(b));
-    return orderedKeys.map(key => itemImgs[key]);
-  };
-
-  const itemImgs = useAppSelector(state => state.auctionCreateItemImgs.itemImgs);
-  const isLogined = useAppSelector(state => state.user.isLogined);
-
-  async function createAuction() {
-    const data = {
-      auctionTitle,
-      startedAt: startedAt,
-      auctionRoomType,
-      itemPermissionChecked,
-      deliveryRulesChecked,
-      itemList: items,
-    };
-    if (data && isLogined) {
-      const formData = new FormData();
-      formData.append('auctionCreateRequest', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-
-      if (image) {
-        formData.append('auctionRoomImg', image);
-      }
-
-      getOrderedItemImgs(itemImgs).forEach((file, index) => {
-        formData.append('itemImgs', file);
-      });
-
-      const token = await getToken();
-
-      axios
-        .post(`${API_URL}/api/v1/auctions`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-  }
-
   return {
     auctionTitle,
     startedAt,
@@ -115,9 +64,5 @@ export function useAuctionCreateBox() {
     addItem,
     handleImageChange,
     items,
-    createAuction,
-    itemImgs,
-    isLogined,
-    getOrderedItemImgs,
   };
 }

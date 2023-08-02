@@ -1,19 +1,11 @@
-/** @jsxImportSource @emotion/react */
 import React from 'react';
-import { AuctionCreateBox } from './AuctionCreateBox';
-import colors from '../../_libs/design/colors';
+import { AuctionCreate } from './AuctionCreateBox';
 
 export function SellerCreateAuction() {
   return (
-    <div
-      css={{
-        backgroundColor: colors.backgroundDark,
-        display: 'flex',
-        justifyContent: 'center',
-        padding: '2rem',
-      }}
-    >
-      <AuctionCreateBox />
+    <div>
+      경매등록화면입니다.
+      <AuctionCreate />
     </div>
   );
 }
