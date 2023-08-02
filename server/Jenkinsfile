@@ -2,11 +2,39 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Prepare') {
             steps {
-                sh 'ls'
+                echo 'Checking current file list...'
                 sh 'cd server && ls'
-                echo 'Hello World'
+                echo 'Preparing the environment...'
+                sh 'chmod +x ./gradlew'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh "./gradlew clean test"
+            }
+
+            post {
+                // If Gradle was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                   publishHTML([
+                      allowMissing: false,
+                      alwaysLinkToLastBuild: false,
+                      keepAll: false,
+                      reportDir: 'lib/target/site/bidking/',
+                      reportFiles: 'index.html',
+                      reportName: 'bidking springboot Report',
+                      reportTitles: '',
+                      useWrapperFileDirectly: true])
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building the project...'
+                sh './gradlew clean build'
             }
         }
     }
