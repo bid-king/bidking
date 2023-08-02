@@ -41,7 +41,7 @@ export default {
 };
 
 interface LoginResponse {
-  memberId: number;
+  id: number;
   grantType: 'Bearer';
   accessToken: string;
 }

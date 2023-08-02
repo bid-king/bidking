@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import colors from '../../_libs/design/colors';
 import { Text } from '../../_libs/components/common/Text';
 import { Spacing } from '../../_libs/components/common/Spacing';
@@ -11,6 +11,8 @@ import { Checkbox } from '../../_libs/components/common/Checkbox';
 import { useAuctionCreateBox } from '../../_libs/hooks/useAuctionCreateBox';
 import auction from '../../api/auction';
 import { useAppSelector } from '../../store/hooks';
+import axios from 'axios';
+import { API_URL, getToken } from '../../_libs/util/http';
 
 export function AuctionCreate() {
   const {
@@ -33,33 +35,51 @@ export function AuctionCreate() {
     items,
   } = useAuctionCreateBox();
 
-  const itemImgs = useAppSelector(state => state.auctionCreateItemImgs);
-  console.log(itemImgs);
+  const getOrderedItemImgs = (itemImgs: Record<string, File>): File[] => {
+    const orderedKeys = Object.keys(itemImgs).sort((a, b) => Number(a) - Number(b));
+    return orderedKeys.map(key => itemImgs[key]);
+  };
 
-  function createAuction() {
-    // console.log({
-    //   auctionTitle,
-    //   startedAt,
-    //   auctionRoomType,
-    //   itemPermissionChecked,
-    //   deliveryRulesChecked,
-    //   items,
-    // });
-    auction
-      .post({
-        auctionTitle,
-        startedAt,
-        auctionRoomType,
-        itemPermissionChecked,
-        deliveryRulesChecked,
-        items,
-      })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
+  const itemImgs = useAppSelector(state => state.auctionCreateItemImgs.itemImgs);
+  const isLogined = useAppSelector(state => state.user.isLogined);
+
+  async function createAuction() {
+    const data = {
+      auctionTitle,
+      startedAt: startedAt,
+      auctionRoomType,
+      itemPermissionChecked,
+      deliveryRulesChecked,
+      itemList: items,
+    };
+    if (data && isLogined) {
+      const formData = new FormData();
+      formData.append('auctionCreateRequest', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+
+      if (image) {
+        formData.append('auctionRoomImg', image);
+      }
+
+      getOrderedItemImgs(itemImgs).forEach((file, index) => {
+        formData.append('itemImgs', file);
       });
+
+      const token = await getToken();
+
+      axios
+        .post(`${API_URL}/api/v1/auctions`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 
   return (
@@ -95,7 +115,7 @@ export function AuctionCreate() {
             <Text type="bold" content="경매 날짜와 시간을 선택하세요" />
           </label>
           <Spacing rem="1" />
-          <Input id="startedAt-input" placeholder="" inputType="date" onChange={handleStartedAt} />
+          <Input id="startedAt-input" placeholder="" inputType="datetime-local" onChange={handleStartedAt} />
         </div>
         <Spacing rem="2" />
 

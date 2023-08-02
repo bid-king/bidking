@@ -18,7 +18,6 @@ const useAuctionCreateCard = (ordering: number) => {
   const handleItemCategory = (e: ChangeEvent<HTMLInputElement>) => {
     setItemCategory(e.target.value);
   };
-
   const handleStartPrice = (e: ChangeEvent<HTMLInputElement>) => {
     setStartPrice(e.target.value);
   };
@@ -29,7 +28,7 @@ const useAuctionCreateCard = (ordering: number) => {
 
   const handleItemImg = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      dispatch(setItemImg(e.target.files[0]));
+      dispatch(setItemImg({ id: itemOrdering.toString(), file: e.target.files[0] }));
     }
   };
 
@@ -57,6 +56,7 @@ const useAuctionCreateCard = (ordering: number) => {
     handleItemCategory,
     handleStartPrice,
     handleDescription,
+    itemOrdering,
   };
 };
 

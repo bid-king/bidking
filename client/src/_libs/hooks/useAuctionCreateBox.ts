@@ -19,7 +19,11 @@ export function useAuctionCreateBox() {
   };
 
   const handleStartedAt = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setStartedAt(e.target.value));
+    console.log(e.target.value);
+    const date = new Date(e.target.value + 'Z'); // 'Z'를 추가하여 UTC 시간임을 명시
+    const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+    console.log(formattedDate);
+    dispatch(setStartedAt(formattedDate));
   };
 
   const handleAuctionRoomType = (e: ChangeEvent<HTMLInputElement>) => {
