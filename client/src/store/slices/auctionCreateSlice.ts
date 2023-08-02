@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuctionItem {
   name: string;
-  itemCategory: number;
+  itemCategory: string;
   description: string;
-  startPrice: number;
+  startPrice: string;
   ordering: number;
 }
 
@@ -12,18 +12,18 @@ interface AuctionCreate {
   auctionTitle: string;
   startedAt: string;
   auctionRoomType: string;
-  itemPermissionChecked: string;
-  deliveryRulesChecked: string;
-  itemList: AuctionItem[];
+  itemPermissionChecked: boolean;
+  deliveryRulesChecked: boolean;
+  items: AuctionItem[];
 }
 
 const initialState: AuctionCreate = {
   auctionTitle: '',
   startedAt: '',
-  auctionRoomType: '',
-  itemPermissionChecked: '',
-  deliveryRulesChecked: '',
-  itemList: [],
+  auctionRoomType: 'GENERAL',
+  itemPermissionChecked: false,
+  deliveryRulesChecked: false,
+  items: [],
 };
 
 export const auctionCreateSlice = createSlice({
@@ -39,14 +39,19 @@ export const auctionCreateSlice = createSlice({
     setAuctionRoomType: (state, action: PayloadAction<string>) => {
       state.auctionRoomType = action.payload;
     },
-    setItemPermissionChecked: (state, action: PayloadAction<string>) => {
-      state.itemPermissionChecked = action.payload;
+    setItemPermissionChecked: state => {
+      state.itemPermissionChecked = !state.itemPermissionChecked;
     },
-    setDeliveryRulesChecked: (state, action: PayloadAction<string>) => {
-      state.deliveryRulesChecked = action.payload;
+    setDeliveryRulesChecked: state => {
+      state.deliveryRulesChecked = !state.deliveryRulesChecked;
     },
     addItemToList: (state, action: PayloadAction<AuctionItem>) => {
-      state.itemList.push(action.payload);
+      const index = state.items.findIndex(item => item.ordering === action.payload.ordering);
+      if (index >= 0) {
+        state.items[index] = action.payload;
+      } else {
+        state.items.push(action.payload);
+      }
     },
     resetAuctionCreate: state => initialState,
   },
