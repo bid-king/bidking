@@ -6,14 +6,22 @@ import { Input } from '../common/Input';
 import { Spacing } from '../common/Spacing';
 import { TextArea } from '../common/TextArea';
 import useAuctionCreateCard from '../../hooks/useAuctionCreateCard';
+import { Select, SelectOption } from '../common/SelectOption';
 
 interface Props {
   ordering: number;
 }
 
 export function AuctionCreateCard({ ordering }: Props) {
-  const { handleItemImg, handleName, handleItemCategory, handleStartPrice, handleDescription } =
-    useAuctionCreateCard(ordering);
+  const {
+    itemCategory,
+    handleItemImg,
+    handleName,
+    handleItemCategory,
+    handleStartPrice,
+    handleDescription,
+    categoryList,
+  } = useAuctionCreateCard(ordering);
 
   return (
     <div
@@ -45,13 +53,17 @@ export function AuctionCreateCard({ ordering }: Props) {
       <Spacing rem="1" />
 
       <div>
-        <div>
-          <Input placeholder="카테고리" onChange={handleItemCategory} />
-        </div>
+        <Select value={itemCategory} onChange={handleItemCategory}>
+          {categoryList.map(category => (
+            <SelectOption value={category.id} key={category.id}>
+              {category.name}
+            </SelectOption>
+          ))}
+        </Select>
         <Spacing rem="1" />
 
         <div>
-          <Input placeholder="경매시작가" onChange={handleStartPrice} />
+          <Input inputType="number" placeholder="경매시작가" onChange={handleStartPrice} />
         </div>
         <Spacing rem="1" />
 

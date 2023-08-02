@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import colors from '../../_libs/design/colors';
 import { Text } from '../../_libs/components/common/Text';
 import { Spacing } from '../../_libs/components/common/Spacing';
@@ -9,15 +9,10 @@ import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import { QuestionModal } from '../../_libs/components/auctionCreate/QuestionModal';
 import { Checkbox } from '../../_libs/components/common/Checkbox';
 import { useAuctionCreateBox } from '../../_libs/hooks/useAuctionCreateBox';
-import auction from '../../api/auction';
-import { useAppSelector } from '../../store/hooks';
-import axios from 'axios';
-import { API_URL, getToken } from '../../_libs/util/http';
+import { RadioButton } from '../../_libs/components/common/RadioButton';
 
-export function AuctionCreate() {
+export function AuctionCreateBox() {
   const {
-    auctionTitle,
-    startedAt,
     auctionRoomType,
     itemPermissionChecked,
     deliveryRulesChecked,
@@ -27,60 +22,11 @@ export function AuctionCreate() {
     handleItemPermissionChecked,
     handleDeliveryRulesChecked,
     image,
-    setImage,
     itemList,
-    setItemList,
     addItem,
     handleImageChange,
-    items,
+    createAuction,
   } = useAuctionCreateBox();
-
-  const getOrderedItemImgs = (itemImgs: Record<string, File>): File[] => {
-    const orderedKeys = Object.keys(itemImgs).sort((a, b) => Number(a) - Number(b));
-    return orderedKeys.map(key => itemImgs[key]);
-  };
-
-  const itemImgs = useAppSelector(state => state.auctionCreateItemImgs.itemImgs);
-  const isLogined = useAppSelector(state => state.user.isLogined);
-
-  async function createAuction() {
-    const data = {
-      auctionTitle,
-      startedAt: startedAt,
-      auctionRoomType,
-      itemPermissionChecked,
-      deliveryRulesChecked,
-      itemList: items,
-    };
-    if (data && isLogined) {
-      const formData = new FormData();
-      formData.append('auctionCreateRequest', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-
-      if (image) {
-        formData.append('auctionRoomImg', image);
-      }
-
-      getOrderedItemImgs(itemImgs).forEach((file, index) => {
-        formData.append('itemImgs', file);
-      });
-
-      const token = await getToken();
-
-      axios
-        .post(`${API_URL}/api/v1/auctions`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-  }
 
   return (
     <div
@@ -147,11 +93,10 @@ export function AuctionCreate() {
           >
             <Text type="p" content="일반경매" />
             <Spacing rem="1" dir="h" />
-            <input
-              type="radio"
+            <RadioButton
               name="auctionRoomType"
-              checked={auctionRoomType === 'GENERAL'}
               value="GENERAL"
+              checkedValue={auctionRoomType}
               onChange={handleAuctionRoomType}
             />
           </div>
@@ -162,11 +107,10 @@ export function AuctionCreate() {
           >
             <Text type="p" content="네덜란드" />
             <Spacing rem="1" dir="h" />
-            <input
-              type="radio"
+            <RadioButton
               name="auctionRoomType"
-              checked={auctionRoomType === 'REVERSE'}
               value="REVERSE"
+              checkedValue={auctionRoomType}
               onChange={handleAuctionRoomType}
             />
           </div>
