@@ -49,20 +49,16 @@ export interface AuctionRoomResponse {
 interface AuctionCreateRequest {
   auctionTitle: string;
   startedAt: string;
-  auctionRoomType: 'GENERAL' | 'REVERSE';
-  image: File;
+  auctionRoomType: string;
   itemPermissionChecked: boolean;
   deliveryRulesChecked: boolean;
-  item: [
-    {
-      name: string;
-      itemCategory: number;
-      description: string;
-      startPrice: number;
-      imageName: File;
-      ordering: number;
-    }
-  ];
+  items: {
+    name: string;
+    itemCategory: string;
+    description: string;
+    startPrice: string;
+    ordering: number;
+  }[];
 }
 
 interface AuctionUpdateRequest {

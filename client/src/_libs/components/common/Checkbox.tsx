@@ -1,14 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, ChangeEvent } from 'react';
 import colors from '../../design/colors';
 import { HTMLAttributes } from 'react';
 
-export function Checkbox({ theme, id, value }: Props) {
+export function Checkbox({ theme, id, value, onChange }: Props) {
   return (
     <input
       id={id}
       type="checkbox"
       value={value}
+      onChange={onChange}
       css={{
         appearance: 'none',
         cursor: 'pointer',
@@ -36,4 +37,5 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   theme: 'light' | 'dark';
   id: string;
   value: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }

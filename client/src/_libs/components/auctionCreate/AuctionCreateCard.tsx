@@ -1,39 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import React, { HTMLAttributes, useState, ChangeEvent } from 'react';
+import React, { HTMLAttributes, useState, ChangeEvent, useEffect } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
 import { Input } from '../common/Input';
 import { Spacing } from '../common/Spacing';
 import { TextArea } from '../common/TextArea';
+import useAuctionCreateCard from '../../hooks/useAuctionCreateCard';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  item: {
-    itemId: string;
-    itemName: string;
-    category: string;
-    itemImage: string;
-    itemDescription: string;
-    itemOrdering: string;
-  };
+interface Props {
+  ordering: number;
 }
 
-export function AuctionCreateCard({
-  item = {
-    itemId: '1',
-    itemName: '낙찰된 상품명',
-    category: '카테고리',
-    itemImage: 'img src',
-    itemDescription: '상품 설명',
-    itemOrdering: '1',
-  },
-}: Props) {
-  const [image, setImage] = useState<File | null>(null);
+export function AuctionCreateCard({ ordering }: Props) {
+  const { handleItemImg, handleName, handleItemCategory, handleStartPrice, handleDescription } =
+    useAuctionCreateCard(ordering);
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  };
   return (
     <div
       className="container"
@@ -55,22 +36,22 @@ export function AuctionCreateCard({
           justifyContent: 'space-between',
         }}
       >
-        <Text type="bold" content={'순번 ' + item.itemOrdering} />
+        <Text type="bold" content={'순번' + ordering} />
       </div>
       <Spacing rem="1" />
-      <div className="cardBody-ItemName">
-        <Input placeholder="물품명" />
+      <div className="cardBody-name">
+        <Input placeholder="물품명" onChange={handleName} />
       </div>
       <Spacing rem="1" />
 
       <div>
         <div>
-          <Input placeholder="카테고리" />
+          <Input placeholder="카테고리" onChange={handleItemCategory} />
         </div>
         <Spacing rem="1" />
 
         <div>
-          <Input placeholder="경매시작가" />
+          <Input placeholder="경매시작가" onChange={handleStartPrice} />
         </div>
         <Spacing rem="1" />
 
@@ -78,13 +59,11 @@ export function AuctionCreateCard({
           <Text type="bold" content="물품 대표사진을 등록하세요" />
           <Spacing rem="1" />
           <div>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            {image && <p>Selected image: {image.name}</p>}
+            <input type="file" accept="image/*" onChange={handleItemImg} />
           </div>
         </div>
         <Spacing rem="1" />
-
-        <TextArea placeholder="물품 설명(500자 이내)" />
+        <TextArea placeholder="물품 설명(500자 이내)" onChange={handleDescription} />
       </div>
     </div>
   );

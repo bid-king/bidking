@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, ChangeEvent } from 'react';
+import React from 'react';
 import colors from '../../_libs/design/colors';
 import { Text } from '../../_libs/components/common/Text';
 import { Spacing } from '../../_libs/components/common/Spacing';
@@ -7,53 +7,60 @@ import { Input } from '../../_libs/components/common/Input';
 import { AuctionCreateCard } from '../../_libs/components/auctionCreate/AuctionCreateCard';
 import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import { QuestionModal } from '../../_libs/components/auctionCreate/QuestionModal';
-
-interface Props {}
+import { Checkbox } from '../../_libs/components/common/Checkbox';
+import { useAuctionCreateBox } from '../../_libs/hooks/useAuctionCreateBox';
+import auction from '../../api/auction';
+import { useAppSelector } from '../../store/hooks';
 
 export function AuctionCreate() {
-  const [image, setImage] = useState<File | null>(null);
+  const {
+    auctionTitle,
+    startedAt,
+    auctionRoomType,
+    itemPermissionChecked,
+    deliveryRulesChecked,
+    handleAuctionTitle,
+    handleStartedAt,
+    handleAuctionRoomType,
+    handleItemPermissionChecked,
+    handleDeliveryRulesChecked,
+    image,
+    setImage,
+    itemList,
+    setItemList,
+    addItem,
+    handleImageChange,
+    items,
+  } = useAuctionCreateBox();
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  };
+  const itemImgs = useAppSelector(state => state.auctionCreateItemImgs);
+  console.log(itemImgs);
 
-  const [items, setItems] = useState<
-    Array<{
-      itemId: string;
-      itemName: string;
-      category: string;
-      itemImage: string;
-      itemDescription: string;
-      itemOrdering: string;
-    }>
-  >([
-    {
-      itemId: '1',
-      itemName: '낙찰된 상품명',
-      category: '카테고리',
-      itemImage: 'img src',
-      itemDescription: '상품 설명',
-      itemOrdering: '1',
-    },
-  ]);
-
-  // 물품 추가 버튼 클릭 시 처리 함수
-  const handleAddItem = () => {
-    // 임시로 새 item 데이터 생성. 실제로는 사용자의 입력을 받아와야 할 것입니다.
-    const newItem = {
-      itemId: `${items.length + 1}`, // items 배열의 길이를 이용하여 itemId 생성
-      itemName: '새로운 상품',
-      category: '새 카테고리',
-      itemImage: '새 img src',
-      itemDescription: '새 상품 설명',
-      itemOrdering: `${items.length + 1}`,
-    };
-
-    // setItems를 사용하여 items 배열에 newItem 추가
-    setItems([newItem, ...items]);
-  };
+  function createAuction() {
+    // console.log({
+    //   auctionTitle,
+    //   startedAt,
+    //   auctionRoomType,
+    //   itemPermissionChecked,
+    //   deliveryRulesChecked,
+    //   items,
+    // });
+    auction
+      .post({
+        auctionTitle,
+        startedAt,
+        auctionRoomType,
+        itemPermissionChecked,
+        deliveryRulesChecked,
+        items,
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 
   return (
     <div
@@ -74,25 +81,25 @@ export function AuctionCreate() {
           padding: '0.5rem',
         }}
       >
-        <div className="title">
-          <label htmlFor="title-input">
+        <div className="auctionTitle">
+          <label htmlFor="auctionTitle-input">
             <Text type="bold" content="경매 제목을 입력하세요" />
           </label>
           <Spacing rem="1" />
-          <Input id="title-input" placeholder="" inputType="title" />
+          <Input id="auctionTitle-input" placeholder="" inputType="text" onChange={handleAuctionTitle} />
         </div>
         <Spacing rem="2" />
 
-        <div className="date">
-          <label htmlFor="date-input">
+        <div className="startedAt">
+          <label htmlFor="startedAt-input">
             <Text type="bold" content="경매 날짜와 시간을 선택하세요" />
           </label>
           <Spacing rem="1" />
-          <Input id="date-input" placeholder="" inputType="date" />
+          <Input id="startedAt-input" placeholder="" inputType="date" onChange={handleStartedAt} />
         </div>
         <Spacing rem="2" />
 
-        <div className="auction-method-check">
+        <div className="auctionRoomType">
           <div
             css={{
               display: 'flex',
@@ -120,7 +127,13 @@ export function AuctionCreate() {
           >
             <Text type="p" content="일반경매" />
             <Spacing rem="1" dir="h" />
-            <input type="checkbox" name="" id="" />
+            <input
+              type="radio"
+              name="auctionRoomType"
+              checked={auctionRoomType === 'GENERAL'}
+              value="GENERAL"
+              onChange={handleAuctionRoomType}
+            />
           </div>
           <div
             css={{
@@ -129,7 +142,13 @@ export function AuctionCreate() {
           >
             <Text type="p" content="네덜란드" />
             <Spacing rem="1" dir="h" />
-            <input type="checkbox" name="" id="" />
+            <input
+              type="radio"
+              name="auctionRoomType"
+              checked={auctionRoomType === 'REVERSE'}
+              value="REVERSE"
+              onChange={handleAuctionRoomType}
+            />
           </div>
         </div>
         <Spacing rem="2" />
@@ -155,6 +174,7 @@ export function AuctionCreate() {
           </div>
           <Spacing rem="1" />
           <div
+            className="itemPermissionChecked"
             css={{
               display: 'flex',
               color: colors.warn,
@@ -174,9 +194,21 @@ export function AuctionCreate() {
               />
             </div>
             <Spacing rem="1" dir="h" />
-            <input type="checkbox" name="" id="" />
+            <div
+              css={{
+                paddingTop: '0.5rem',
+              }}
+            >
+              <Checkbox
+                theme="light"
+                id="itemPermissionChecked"
+                value="itemPermissionChecked"
+                onChange={handleItemPermissionChecked}
+              />
+            </div>
           </div>
           <div
+            className="deliveryRulesChecked"
             css={{
               display: 'flex',
               color: colors.warn,
@@ -196,7 +228,18 @@ export function AuctionCreate() {
               />
             </div>
             <Spacing rem="1" dir="h" />
-            <input type="checkbox" name="" id="" />
+            <div
+              css={{
+                paddingTop: '0.5rem',
+              }}
+            >
+              <Checkbox
+                theme="light"
+                id="deliveryRulesChecked"
+                value="deliveryRulesChecked"
+                onChange={handleDeliveryRulesChecked}
+              />
+            </div>
           </div>
         </div>
 
@@ -207,17 +250,23 @@ export function AuctionCreate() {
             justifyContent: 'center',
           }}
         >
-          <ConfirmButton label="물품추가" onClick={handleAddItem} />
+          <ConfirmButton label="물품추가" onClick={addItem} />
         </div>
         <Spacing rem="2" />
 
-        {items.map(item => (
-          <div key={item.itemId}>
-            <AuctionCreateCard item={item} />
-            <Spacing rem="2" />
-          </div>
-        ))}
-        <ConfirmButton btnType="ok" label="경매등록" />
+        {itemList.map((item, index) => {
+          return (
+            <div key={item}>
+              <AuctionCreateCard ordering={itemList.length - index} />
+              <Spacing rem="2" />
+            </div>
+          );
+        })}
+        {itemPermissionChecked && deliveryRulesChecked ? (
+          <ConfirmButton btnType="confirm" label="경매등록" onClick={createAuction} />
+        ) : (
+          <ConfirmButton btnType="disabled" label="경매등록" />
+        )}
       </div>
     </div>
   );
