@@ -24,5 +24,5 @@ public class AuctionListRequest {
     private int perPage; // 페이지당 경매
 
     @NotNull
-    private List<ItemCategory> categoryList; // 적용된 카테고리
+    private List<Long> categoryList; // 적용된 카테고리
 }
