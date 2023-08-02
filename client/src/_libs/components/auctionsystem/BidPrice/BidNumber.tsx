@@ -11,15 +11,15 @@ export function BidNumber({ n, o }: Props) {
     <div
       css={{
         // border: '1px solid black',
-        width: n === 1 ? '1.4rem' : '1.8rem',
-        height: '3rem',
+        width: n === 1 ? '1.2rem' : '1.55rem',
+        height: '2.5rem',
         textAlign: 'center',
         fontWeight: '600',
         fontFeatureSettings: '"tnum"',
-        fontSize: '3rem',
+        fontSize: '2.5rem',
         overflow: 'hidden',
         position: 'relative',
-        lineHeight: '3rem',
+        lineHeight: '2.5rem',
         background: 'transparent',
         transition: 'width 0.2s ease-out',
       }}

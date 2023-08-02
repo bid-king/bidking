@@ -8,14 +8,14 @@ export function BidWon() {
       css={{
         // border: '1px solid black',
         width: '2.5rem',
-        height: '3rem',
+        height: '2.5rem',
         textAlign: 'center',
         fontWeight: '700',
         fontFeatureSettings: '"tnum"',
-        fontSize: '3rem',
+        fontSize: '2.5rem',
         overflow: 'hidden',
         position: 'relative',
-        lineHeight: '2.75rem',
+        lineHeight: '2.35rem',
       }}
     >
       <div css={{ position: 'absolute', top: '0.05rem' }}>

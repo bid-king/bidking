@@ -1,6 +1,9 @@
+/** @jsxImportSource @emotion/react */
 import React, { useRef, useEffect } from 'react';
 import { StreamManager } from 'openvidu-browser';
 import { useOpenviduBuyer } from '../../hooks/useOpenviduBuyer';
+import { Text } from '../common/Text';
+import colors from '../../design/colors';
 
 interface BuyerStreamProps {
   roomId: number;
@@ -9,14 +12,29 @@ interface BuyerStreamProps {
 }
 
 export function BuyerStream({ roomId, userId, userType = 'buyer' }: BuyerStreamProps) {
-  const { streamList } = useOpenviduBuyer(userId, roomId);
-
-  const sellerStreamManager = streamList.find(stream => stream.userId !== userId)?.streamManager;
+  // const { streamList } = useOpenviduBuyer(userId, roomId);
+  // const sellerStreamManager = streamList.find(stream => stream.userId !== userId)?.streamManager;
 
   return (
-    <div>
-      <h2>Buyer Stream</h2>
-      {sellerStreamManager && <Video streamManager={sellerStreamManager} />}
+    <div css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem', border: '1px solid transparent' }}>
+      {/* {sellerStreamManager ? (
+        <Video streamManager={sellerStreamManager} />
+      ) : ( */}
+      <div
+        css={{
+          backgroundColor: colors.backgroundLight2,
+          border: '1px solid transparent',
+          width: '100%',
+          height: '100%',
+          borderRadius: '1.5rem',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text content={'인증된 사용자가 아닙니다.'} type="h2" />
+      </div>
+      {/* )} */}
     </div>
   );
 }
