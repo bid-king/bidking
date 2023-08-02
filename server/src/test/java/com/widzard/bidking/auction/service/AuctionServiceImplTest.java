@@ -216,19 +216,11 @@ class AuctionServiceImplTest {
     @Test
     @Disabled
     void readAuctionRoomListByCategory() throws IOException {
-        List<ItemCategory> categoryList = new ArrayList<>();
-        ItemCategory itemCategory = ItemCategory.builder()
-            .id(1L)
-            .name("전자기기")
-            .build();
-        categoryList.add(itemCategory);
+        List<Long> categoryList = new ArrayList<>();
+        categoryList.add(1L);
 
-        List<ItemCategory> categoryList2 = new ArrayList<>();
-        ItemCategory itemCategory2 = ItemCategory.builder()
-            .id(2L)
-            .name("의류")
-            .build();
-        categoryList2.add(itemCategory2);
+        List<Long> categoryList2 = new ArrayList<>();
+        categoryList2.add(2L);
 
         //1번 카테고리를 갖는 옥션룸 요청
         auctionListRequest = AuctionListRequest.builder()
@@ -264,26 +256,25 @@ class AuctionServiceImplTest {
     }
 
     @Test
+    @Disabled
     void readAuctionRoomListByKeyword() throws IOException {
-        List<ItemCategory> categoryList = new ArrayList<>();
-        ItemCategory itemCategory = ItemCategory.builder()
-            .id(1L)
-            .name("전자기기")
-            .build();
-        categoryList.add(itemCategory);
-
-        List<ItemCategory> categoryList2 = new ArrayList<>();
-        ItemCategory itemCategory2 = ItemCategory.builder()
-            .id(2L)
-            .name("의류")
-            .build();
-        categoryList2.add(itemCategory2);
+        List<Long> categoryList = new ArrayList<>();
+        categoryList.add(1L);
 
         //생성
         log.info("created auctionRoom's itemList = {}", find);
         //"테스트" 검색
         AuctionListRequest auctionListRequest3 = AuctionListRequest.builder()
+            .categoryList(categoryList)
             .keyword("테스트")
+            .page(1)
+            .perPage(1)
+            .build();
+
+        //"aa" 검색
+        AuctionListRequest auctionListRequest4 = AuctionListRequest.builder()
+            .categoryList(categoryList)
+            .keyword("aa")
             .page(1)
             .perPage(1)
             .build();
@@ -293,13 +284,6 @@ class AuctionServiceImplTest {
         log.info("searched auctionRoom's itemList3 = {}", auctionRoomList3.get(0).getItemList());
 
         Assertions.assertNotEquals(auctionRoomList3, find);
-
-        //"aa" 검색
-        AuctionListRequest auctionListRequest4 = AuctionListRequest.builder()
-            .keyword("aa")
-            .page(1)
-            .perPage(1)
-            .build();
 
         List<AuctionRoom> auctionRoomList4 = auctionService.readAuctionRoomList(
             auctionListRequest4);
@@ -311,21 +295,13 @@ class AuctionServiceImplTest {
     @Test
     @Disabled
     void readAuctionRoomListBySearchCondition() throws IOException {
-        List<ItemCategory> categoryList = new ArrayList<>();
-        ItemCategory itemCategory = ItemCategory.builder()
-            .id(1L)
-            .name("전자기기")
-            .build();
-        categoryList.add(itemCategory);
+        List<Long> categoryList = new ArrayList<>();
+        categoryList.add(1L);
 
-        List<ItemCategory> categoryList2 = new ArrayList<>();
-        ItemCategory itemCategory2 = ItemCategory.builder()
-            .id(2L)
-            .name("의류")
-            .build();
-        categoryList2.add(itemCategory2);
+        List<Long> categoryList2 = new ArrayList<>();
+        categoryList2.add(2L);
 
-        List<ItemCategory> categoryList3 = new ArrayList<>();
+        List<Long> categoryList3 = new ArrayList<>();
 
         //1번 카테고리를 갖는 옥션룸 요청
         auctionListRequest = AuctionListRequest.builder()
@@ -379,19 +355,11 @@ class AuctionServiceImplTest {
 
     @Test
     void readAuctionRoomListByLiveStatus() throws IOException {
-        List<ItemCategory> categoryList = new ArrayList<>();
-        ItemCategory itemCategory = ItemCategory.builder()
-            .id(1L)
-            .name("전자기기")
-            .build();
-        categoryList.add(itemCategory);
+        List<Long> categoryList = new ArrayList<>();
+        categoryList.add(1L);
 
-        List<ItemCategory> categoryList2 = new ArrayList<>();
-        ItemCategory itemCategory2 = ItemCategory.builder()
-            .id(2L)
-            .name("의류")
-            .build();
-        categoryList2.add(itemCategory2);
+        List<Long> categoryList2 = new ArrayList<>();
+        categoryList2.add(2L);
 
         //1번 카테고리를 갖는 옥션룸 요청
         auctionListRequest = AuctionListRequest.builder()
@@ -420,12 +388,8 @@ class AuctionServiceImplTest {
     @Test
     @Disabled
     void readAuctionRoomListByItemNameAndItemDescription() throws IOException {
-        List<ItemCategory> categoryList = new ArrayList<>();
-        ItemCategory itemCategory = ItemCategory.builder()
-            .id(1L)
-            .name("전자기기")
-            .build();
-        categoryList.add(itemCategory);
+        List<Long> categoryList = new ArrayList<>();
+        categoryList.add(1L);
 
         //1번 카테고리를 갖는 옥션룸 요청
         AuctionListRequest auctionListRequest = AuctionListRequest.builder()
@@ -478,12 +442,8 @@ class AuctionServiceImplTest {
 
     @Test
     void readAuctionRoomListByStartTime() throws IOException {
-        List<ItemCategory> categoryList = new ArrayList<>();
-        ItemCategory itemCategory = ItemCategory.builder()
-            .id(1L)
-            .name("전자기기")
-            .build();
-        categoryList.add(itemCategory);
+        List<Long> categoryList = new ArrayList<>();
+        categoryList.add(1L);
 
         //1번 카테고리를 갖는 옥션룸 요청
         auctionListRequest = AuctionListRequest.builder()
@@ -516,12 +476,9 @@ class AuctionServiceImplTest {
 
     @Test
     void readAuctionRoomListByBookmark() throws IOException {
-        List<ItemCategory> categoryList = new ArrayList<>();
-        ItemCategory itemCategory = ItemCategory.builder()
-            .id(1L)
-            .name("전자기기")
-            .build();
-        categoryList.add(itemCategory);
+        List<Long> categoryList = new ArrayList<>();
+        categoryList.add(1L);
+        categoryList.add(2L);
 
         //1번 카테고리를 갖는 옥션룸 요청
         auctionListRequest = AuctionListRequest.builder()

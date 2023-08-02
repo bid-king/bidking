@@ -59,15 +59,19 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
-        return auctionListSearch.findAllBySearchCondition(auctionListRequest);
+        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAllById(
+            auctionListRequest.getCategoryList());
+        return auctionListSearch.findAllBySearchCondition(auctionListRequest, itemCategoryList);
     }
 
     @Override
     public List<AuctionBookmarkResponse> readAuctionRoomListWithLoginStatus(
         AuctionListRequest auctionListRequest,
         Member member) {
+        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAllById(
+            auctionListRequest.getCategoryList());
         List<AuctionRoom> auctionRoomList = auctionListSearch.findAllBySearchCondition(
-            auctionListRequest);
+            auctionListRequest, itemCategoryList);
         List<AuctionBookmarkResponse> auctionBookmarkResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
         ) {
@@ -90,7 +94,10 @@ public class AuctionServiceImpl implements AuctionService {
     public List<AuctionRoom> readAuctionRoomListOnlyBookmarked(
         AuctionListRequest auctionListRequest,
         Member member) {
-        return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest, member);
+        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAllById(
+            auctionListRequest.getCategoryList());
+        return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest, member,
+            itemCategoryList);
     }
 
     @Override
