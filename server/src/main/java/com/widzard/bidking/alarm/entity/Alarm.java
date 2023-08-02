@@ -6,6 +6,7 @@ import com.widzard.bidking.member.entity.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class Alarm extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member; // ( 수신 고객 )
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Content content; // ( 내용 )
 
@@ -44,13 +45,13 @@ public class Alarm extends BaseEntity {
     private Boolean isRead; // ( 사용자 읽음 여부 )
 
     @Column(nullable = false)
-    private LocalDateTime sendedAt;
+    private String sendedAt;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MediaType mediaType; // ( 알림 매체 타입 )
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AlarmType alarmType; // ( 알림 메시지 타입 )
 }
