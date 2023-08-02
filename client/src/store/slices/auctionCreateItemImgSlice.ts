@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuctionCreateItemImgs {
-  itemImgs: File[];
+  itemImgs: Record<string, File>;
 }
 
 const initialState: AuctionCreateItemImgs = {
-  itemImgs: [],
+  itemImgs: {},
 };
 
 export const auctionCreateItemImgSlice = createSlice({
   name: 'auctionCreateItemImg',
   initialState,
   reducers: {
-    setItemImg: (state, action: PayloadAction<File>) => {
-      state.itemImgs.push(action.payload);
+    setItemImg: (state, action: PayloadAction<{ id: string; file: File }>) => {
+      state.itemImgs[action.payload.id] = action.payload.file;
     },
   },
 });

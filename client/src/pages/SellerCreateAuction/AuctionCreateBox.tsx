@@ -9,13 +9,10 @@ import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import { QuestionModal } from '../../_libs/components/auctionCreate/QuestionModal';
 import { Checkbox } from '../../_libs/components/common/Checkbox';
 import { useAuctionCreateBox } from '../../_libs/hooks/useAuctionCreateBox';
-import auction from '../../api/auction';
-import { useAppSelector } from '../../store/hooks';
+import { RadioButton } from '../../_libs/components/common/RadioButton';
 
-export function AuctionCreate() {
+export function AuctionCreateBox() {
   const {
-    auctionTitle,
-    startedAt,
     auctionRoomType,
     itemPermissionChecked,
     deliveryRulesChecked,
@@ -25,42 +22,11 @@ export function AuctionCreate() {
     handleItemPermissionChecked,
     handleDeliveryRulesChecked,
     image,
-    setImage,
     itemList,
-    setItemList,
     addItem,
     handleImageChange,
-    items,
+    createAuction,
   } = useAuctionCreateBox();
-
-  const itemImgs = useAppSelector(state => state.auctionCreateItemImgs);
-  console.log(itemImgs);
-
-  function createAuction() {
-    // console.log({
-    //   auctionTitle,
-    //   startedAt,
-    //   auctionRoomType,
-    //   itemPermissionChecked,
-    //   deliveryRulesChecked,
-    //   items,
-    // });
-    auction
-      .post({
-        auctionTitle,
-        startedAt,
-        auctionRoomType,
-        itemPermissionChecked,
-        deliveryRulesChecked,
-        items,
-      })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
 
   return (
     <div
@@ -95,7 +61,7 @@ export function AuctionCreate() {
             <Text type="bold" content="경매 날짜와 시간을 선택하세요" />
           </label>
           <Spacing rem="1" />
-          <Input id="startedAt-input" placeholder="" inputType="date" onChange={handleStartedAt} />
+          <Input id="startedAt-input" placeholder="" inputType="datetime-local" onChange={handleStartedAt} />
         </div>
         <Spacing rem="2" />
 
@@ -127,11 +93,10 @@ export function AuctionCreate() {
           >
             <Text type="p" content="일반경매" />
             <Spacing rem="1" dir="h" />
-            <input
-              type="radio"
+            <RadioButton
               name="auctionRoomType"
-              checked={auctionRoomType === 'GENERAL'}
               value="GENERAL"
+              checkedValue={auctionRoomType}
               onChange={handleAuctionRoomType}
             />
           </div>
@@ -142,11 +107,10 @@ export function AuctionCreate() {
           >
             <Text type="p" content="네덜란드" />
             <Spacing rem="1" dir="h" />
-            <input
-              type="radio"
+            <RadioButton
               name="auctionRoomType"
-              checked={auctionRoomType === 'REVERSE'}
               value="REVERSE"
+              checkedValue={auctionRoomType}
               onChange={handleAuctionRoomType}
             />
           </div>
