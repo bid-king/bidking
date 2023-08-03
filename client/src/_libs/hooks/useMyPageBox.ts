@@ -118,7 +118,7 @@ export function useMyPageBox() {
             'Content-Type': 'multipart/form-data',
           },
         })
-        .then(res => console.log(res))
+        .then(res => navigate('/'))
         .catch(err => console.log(err));
     }
   };
@@ -140,13 +140,18 @@ export function useMyPageBox() {
       member
         .get(memberId)
         .then(data => {
-          setImgSrc(data.imageUrl);
+          console.log(data);
           setUserId(data.userId);
           setNickname(data.nickname);
           setPhoneNumber(data.phoneNumber);
           setStreet(data.address.street);
           setDetails(data.address.details);
           setZipCode(data.address.zipCode);
+          if (data.imageUrl === '') {
+            setImgSrc('/image/profile.png');
+          } else {
+            setImgSrc(data.imageUrl);
+          }
         })
         .catch(err => {
           console.log(err);
