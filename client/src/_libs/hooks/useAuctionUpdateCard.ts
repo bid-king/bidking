@@ -6,11 +6,19 @@ import axios from 'axios';
 import auction from '../../api/auction';
 
 export function useAuctionUpdateCard(ordering: number) {
-  const [name, setName] = useState('');
-  const [itemCategory, setItemCategory] = useState('1');
-  const [startPrice, setStartPrice] = useState('');
-  const [description, setDescription] = useState('');
-  const [itemOrdering] = useState(ordering);
+  interface Item {
+    name?: string;
+    category?: string;
+    startPrice?: string;
+    description?: string;
+  }
+  const auctionUpdateState = useAppSelector(state => state.auctionUpdate.items);
+  const item: Item = auctionUpdateState.find(item => item.ordering === ordering) || {};
+  const [name, setName] = useState(item?.name || '');
+  const [itemCategory, setItemCategory] = useState(item.category || '');
+  const [startPrice, setStartPrice] = useState(item.startPrice || '');
+  const [description, setDescription] = useState(item.description || '');
+  const [itemOrdering, setItemOrdering] = useState(ordering);
   const dispatch = useAppDispatch();
 
   interface Category {
@@ -53,18 +61,36 @@ export function useAuctionUpdateCard(ordering: number) {
   };
 
   useEffect(() => {
-    if (name && startPrice && description) {
-      dispatch(
-        addItemToList({
-          name: name,
-          itemCategory: itemCategory,
-          description: description,
-          startPrice: startPrice,
-          ordering: itemOrdering,
-        })
-      );
-    }
+    dispatch(
+      addItemToList({
+        name: name,
+        itemCategory: itemCategory,
+        description: description,
+        startPrice: startPrice,
+        ordering: itemOrdering,
+      })
+    );
   }, [name, startPrice, description]);
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+    handleName(event);
+  };
+
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setItemCategory(event.target.value as string);
+    handleItemCategory(event);
+  };
+
+  const handleStartPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setStartPrice(event.target.value);
+    handleStartPrice(event);
+  };
+
+  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(event.target.value);
+    handleDescription(event);
+  };
 
   return {
     name,
@@ -78,5 +104,9 @@ export function useAuctionUpdateCard(ordering: number) {
     handleDescription,
     itemOrdering,
     categoryList,
+    handleNameChange,
+    handleCategoryChange,
+    handleStartPriceChange,
+    handleDescriptionChange,
   };
 }

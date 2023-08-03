@@ -83,36 +83,37 @@ export function useAuctionUpdateBox() {
       deliveryRulesChecked,
       itemList: items,
     };
-    if (data && isLogined) {
-      const formData = new FormData();
-      formData.append('auctionCreateRequest', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    console.log(data);
+    // if (data && isLogined) {
+    //   const formData = new FormData();
+    //   formData.append('auctionCreateRequest', new Blob([JSON.stringify(data)], { type: 'application/json' }));
 
-      if (image) {
-        formData.append('auctionRoomImg', image);
-      }
+    //   if (image) {
+    //     formData.append('auctionRoomImg', image);
+    //   }
 
-      getOrderedItemImgs(itemImgs).forEach((file, index) => {
-        formData.append('itemImgs', file);
-      });
+    //   getOrderedItemImgs(itemImgs).forEach((file, index) => {
+    //     formData.append('itemImgs', file);
+    //   });
 
-      const token = await getToken();
+    //   const token = await getToken();
 
-      axios
-        .post(`${API_URL}/api/v1/auctions`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then(res => {
-          console.log(data);
-          navigate(`/seller/detail/${res.data.id}`);
-        })
-        .catch(err => {
-          console.log(data);
-          SetErrMessage(err.response.data.message);
-        });
-    }
+    //   axios
+    //     .post(`${API_URL}/api/v1/auctions`, formData, {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //         'Content-Type': 'multipart/form-data',
+    //       },
+    //     })
+    //     .then(res => {
+    //       console.log(data);
+    //       navigate(`/seller/detail/${res.data.id}`);
+    //     })
+    //     .catch(err => {
+    //       console.log(data);
+    //       SetErrMessage(err.response.data.message);
+    //     });
+    // }
   }
 
   useEffect(() => {

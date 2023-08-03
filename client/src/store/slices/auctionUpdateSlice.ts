@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ItemList } from '../../api/auction';
 
-interface AuctionItem {
+export interface AuctionItem {
   name: string;
   itemCategory: string;
   description: string;

@@ -14,12 +14,16 @@ interface Props {
 
 export function AuctionCreateCard({ ordering }: Props) {
   const {
+    name,
     itemCategory,
+    startPrice,
+    description,
     handleItemImg,
     handleName,
     handleItemCategory,
     handleStartPrice,
     handleDescription,
+    itemOrdering,
     categoryList,
   } = useAuctionCreateCard(ordering);
 
@@ -48,7 +52,7 @@ export function AuctionCreateCard({ ordering }: Props) {
       </div>
       <Spacing rem="1" />
       <div className="cardBody-name">
-        <Input placeholder="물품명" onChange={handleName} />
+        <Input value={name} placeholder="물품명" onChange={handleName} />
       </div>
       <Spacing rem="1" />
 
@@ -63,7 +67,7 @@ export function AuctionCreateCard({ ordering }: Props) {
         <Spacing rem="1" />
 
         <div>
-          <Input inputType="number" placeholder="경매시작가" onChange={handleStartPrice} />
+          <Input value={startPrice} inputType="number" placeholder="경매시작가" onChange={handleStartPrice} />
         </div>
         <Spacing rem="1" />
 
@@ -75,7 +79,7 @@ export function AuctionCreateCard({ ordering }: Props) {
           </div>
         </div>
         <Spacing rem="1" />
-        <TextArea placeholder="물품 설명(500자 이내)" onChange={handleDescription} />
+        <TextArea value={description} placeholder="물품 설명(500자 이내)" onChange={handleDescription} />
       </div>
     </div>
   );

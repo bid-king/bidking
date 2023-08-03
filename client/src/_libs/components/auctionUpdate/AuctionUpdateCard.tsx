@@ -5,8 +5,10 @@ import { Text } from '../common/Text';
 import { Input } from '../common/Input';
 import { Spacing } from '../common/Spacing';
 import { TextArea } from '../common/TextArea';
-import { useAuctionCreateCard } from '../../hooks/useAuctionCreateCard';
+import { useAuctionUpdateCard } from '../../hooks/useAuctionUpdateCard';
 import { Select, SelectOption } from '../common/SelectOption';
+import { useAppSelector } from '../../../store/hooks';
+import AuctionItem from '../../../store/slices/auctionUpdateSlice';
 
 interface Props {
   ordering: number;
@@ -14,14 +16,22 @@ interface Props {
 
 export function AuctionUpdateCard({ ordering }: Props) {
   const {
+    name,
     itemCategory,
+    startPrice,
+    description,
     handleItemImg,
     handleName,
     handleItemCategory,
     handleStartPrice,
     handleDescription,
+    itemOrdering,
     categoryList,
-  } = useAuctionCreateCard(ordering);
+    handleNameChange,
+    handleCategoryChange,
+    handleStartPriceChange,
+    handleDescriptionChange,
+  } = useAuctionUpdateCard(ordering);
 
   return (
     <div
@@ -48,12 +58,12 @@ export function AuctionUpdateCard({ ordering }: Props) {
       </div>
       <Spacing rem="1" />
       <div className="cardBody-name">
-        <Input placeholder="물품명" onChange={handleName} />
+        <Input value={name} placeholder="물품명" onChange={handleNameChange} />
       </div>
       <Spacing rem="1" />
 
       <div>
-        <Select value={itemCategory} onChange={handleItemCategory}>
+        <Select value={itemCategory} onChange={handleCategoryChange}>
           {categoryList.map(category => (
             <SelectOption value={category.id} key={category.id}>
               {category.name}
@@ -63,7 +73,7 @@ export function AuctionUpdateCard({ ordering }: Props) {
         <Spacing rem="1" />
 
         <div>
-          <Input inputType="number" placeholder="경매시작가" onChange={handleStartPrice} />
+          <Input value={startPrice} inputType="number" placeholder="경매시작가" onChange={handleStartPriceChange} />
         </div>
         <Spacing rem="1" />
 
@@ -75,7 +85,7 @@ export function AuctionUpdateCard({ ordering }: Props) {
           </div>
         </div>
         <Spacing rem="1" />
-        <TextArea placeholder="물품 설명(500자 이내)" onChange={handleDescription} />
+        <TextArea value={description} placeholder="물품 설명(500자 이내)" onChange={handleDescriptionChange} />
       </div>
     </div>
   );
