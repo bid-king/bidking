@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Socket.IO 예제</title>
+  </head>
+  <body>
+    <!-- 방 선택 -->
+    <select id="roomoptions" onchange="joinRoom()">
+      <option value="채팅방 1" selected>채팅방 1</option>
+      <option value="채팅방 2">채팅방2</option>
+    </select>
+
+    <ul id="messages" type="none">
+      <li id="usercount"></li>
+    </ul>
+
+    <form id="msgform">
+      <input id="msginput" autocomplete="off" type="text" />
+      <button type="submit">전송</button>
+    </form>
+
+    <!-- <button onclick="getRooms()">방 목록 가져오기</button> -->
+    <button onclick="enableDebug()">방 목록 가져오기</button>
+
+    <p id="rooms"></p>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var roomname = '채팅방 1';
+      var socket = io();
+      var msgform = document.getElementById('msgform');
+      var getUserForm = document.getElementById('getUserForm');
+      var roomsText = document.getElementById('rooms');
+      var usersText = document.getElementById('users');
+
+      // socket.on 함수로 서버에서 전달하는 신호를 수신
+      socket.on('usercount', count => {
+        var userCounter = document.getElementById('usercount');
+        userCounter.innerText = '현재 ' + count + '명이 서버에 접속해있습니다.';
+      });
+
+      // 메시지 수신시 HTML에 메시지 내용 작성
+      socket.on('message', msg => {
+        var messageList = document.getElementById('messages');
+        var messageTag = document.createElement('li');
+        messageTag.innerText = msg;
+        messageList.appendChild(messageTag);
+      });
+
+      // 접속한 룸이 바뀌었을 때
+      socket.on('roomChanged', joinedRoom => {
+        roomname = joinedRoom;
+        var messageList = document.getElementById('messages');
+        var messageTag = document.createElement('li');
+        messageTag.innerText = joinedRoom + '에 접속했습니다.';
+        messageList.appendChild(messageTag);
+      });
+
+      msgform.onsubmit = e => {
+        e.preventDefault();
+        var msginput = document.getElementById('msginput');
+
+        // socket.emit으로 서버에 신호를 전달
+        // 특정 룸에 메시지를 보내기 위해 룸의 이름을 같이 전송
+        socket.emit('message', msginput.value, roomname);
+
+        msginput.value = '';
+      };
+
+      // 방 목록 가져오기 버튼 클릭시
+      // function getRooms() {
+      function enableDebug() {
+        // url을 지정해서 특정 네임스페이스를 들어갈 수 있다.
+        var debug = io.connect('http://localhost:8005/debug');
+
+        debug.emit('getRooms'); // getRooms 이벤트 호출
+
+        debug.on('rooms', rooms => {
+          // rooms 이벤트 생성
+          // 룸 목록 업데이트
+          roomsText.textContent = '';
+          rooms.forEach(room => {
+            roomsText.innerHTML += room + '<br>';
+          });
+        });
+      }
+
+      // 방 접속 버튼 클릭시
+      function joinRoom() {
+        var roomOptions = document.getElementById('roomoptions');
+        var roomToJoin = roomOptions.options[roomOptions.selectedIndex].value;
+
+        // 서버에 룸 전환 신호를 발신
+        socket.emit('joinRoom', roomname, roomToJoin);
+      }
+    </script>
+  </body>
+</html>

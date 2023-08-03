@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CHAT</title>
+  </head>
+  <body>
+    <div>
+      닉네임 <input type="text" name="nickname" id="nickname" /> <br />
+      경매방<input type="number" name="roomId" id="roomId" /> <br />
+      <button onclick="enterRoom()">입장</button>
+      <button onclick="leaveRoom()">퇴장</button>
+    </div>
+    <hr />
+    <div>
+      <input type="text" name="message" id="message" />
+      <button onclick="sendMsg()">전송</button>
+    </div>
+    <div>
+      <ul id="messages"></ul>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    var nickname;
+    var roomId;
+
+    socket.on('message', msg => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = msg;
+      messageList.appendChild(messageTag);
+    });
+
+    function enterRoom() {
+      nickname = document.getElementById('nickname').value;
+      roomId = document.getElementById('roomId').value;
+      socket.emit('enterRoom', {
+        nickname,
+        roomId,
+      });
+    }
+
+    function leaveRoom() {
+      nickname = document.getElementById('nickname');
+      roomId = document.getElementById('roomId');
+      socket.emit('leaveRoom', {
+        nickname: nickname.value,
+        roomId: roomId.value,
+      });
+      nickname.value = '';
+      roomId.value = '';
+    }
+
+    function sendMsg() {
+      var msg = document.getElementById('message');
+      socket.emit('message', {
+        nickname,
+        roomId,
+        msg: msg.value,
+      });
+      msg.value = '';
+    }
+  </script>
+</html>
