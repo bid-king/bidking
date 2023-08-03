@@ -26,6 +26,7 @@ export function AuctionCreateBox() {
     addItem,
     handleImageChange,
     createAuction,
+    errMessage,
   } = useAuctionCreateBox();
 
   return (
@@ -226,6 +227,7 @@ export function AuctionCreateBox() {
             </div>
           );
         })}
+        {errMessage && <Text content={errMessage} />}
         {itemPermissionChecked && deliveryRulesChecked ? (
           <ConfirmButton btnType="confirm" label="경매등록" onClick={createAuction} />
         ) : (

@@ -1,29 +1,51 @@
 import { useState, ChangeEvent, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import axios from 'axios';
+import auction, { AuctionRoomResponse } from '../../api/auction';
 import {
   setAuctionTitle,
   setStartedAt,
   setAuctionRoomType,
   setDeliveryRulesChecked,
   setItemPermissionChecked,
-  resetAuctionCreate,
-} from '../../store/slices/auctionCreateSlice';
+  resetAuctionUpdate,
+  setAuctionItem,
+} from '../../store/slices/auctionUpdateSlice';
+
 import { getToken, API_URL } from '../util/http';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { transformToAuctionItem, OriginalItem, AuctionItem } from '../util/transformToAuctionItem';
 
-export function useAuctionCreateBox() {
+export function useAuctionUpdateBox() {
+  // 1. Hooks and selectors
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { auctionTitle, startedAt, auctionRoomType, itemPermissionChecked, deliveryRulesChecked, items } =
-    useAppSelector(state => state.auctionCreate);
+    useAppSelector(state => state.auctionUpdate);
+  const itemImgs = useAppSelector(state => state.auctionUpdateItemImgs.itemImgs);
+  const isLogined = useAppSelector(state => state.user.isLogined);
+  const params = useParams<string>();
+  const auctionId = Number(params.auctionId);
+  // 2. State
+  const [image, setImage] = useState<File | null>(null);
+  const [itemList, setItemList] = useState<number[]>([0]);
+  const [errMessage, SetErrMessage] = useState('');
+  const [detail, setDetail] = useState<AuctionRoomResponse | undefined>(undefined);
+  const [auctionRoomUrl, setAuctionRoomUrl] = useState('');
 
+  // 3. Function to add item
+  const addItem = () => {
+    setItemList(prevItem => [prevItem.length, ...prevItem]);
+  };
+
+  // 4. Handlers
   const handleAuctionTitle = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setAuctionTitle(e.target.value));
   };
 
   const handleStartedAt = (e: ChangeEvent<HTMLInputElement>) => {
-    const date = new Date(e.target.value + 'Z'); // 'Z'를 추가하여 UTC 시간임을 명시
+    const date = new Date(e.target.value + 'Z');
     const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
     dispatch(setStartedAt(formattedDate));
   };
@@ -40,26 +62,17 @@ export function useAuctionCreateBox() {
     dispatch(setDeliveryRulesChecked());
   };
 
-  const [image, setImage] = useState<File | null>(null);
-  const [itemList, setItemList] = useState<number[]>([0]);
-  const [errMessage, SetErrMessage] = useState('');
-  const addItem = () => {
-    setItemList(prevItem => [prevItem.length, ...prevItem]);
-  };
-
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setImage(e.target.files[0]);
     }
   };
 
+  // 5. Utility function
   const getOrderedItemImgs = (itemImgs: Record<string, File>): File[] => {
     const orderedKeys = Object.keys(itemImgs).sort((a, b) => Number(a) - Number(b));
     return orderedKeys.map(key => itemImgs[key]);
   };
-
-  const itemImgs = useAppSelector(state => state.auctionCreateItemImgs.itemImgs);
-  const isLogined = useAppSelector(state => state.user.isLogined);
 
   async function createAuction() {
     const data = {
@@ -78,7 +91,7 @@ export function useAuctionCreateBox() {
         formData.append('auctionRoomImg', image);
       }
 
-      getOrderedItemImgs(itemImgs).forEach(file => {
+      getOrderedItemImgs(itemImgs).forEach((file, index) => {
         formData.append('itemImgs', file);
       });
 
@@ -103,8 +116,24 @@ export function useAuctionCreateBox() {
   }
 
   useEffect(() => {
+    auction
+      .get(auctionId)
+      .then(data => {
+        setDetail(data);
+        dispatch(setAuctionTitle(data.name));
+        dispatch(setAuctionRoomType(data.auctionRoomType));
+        dispatch(setStartedAt(data.startedAt));
+        setAuctionRoomUrl(data.imageURL);
+        const originalData: OriginalItem[] = data.itemList;
+        const auctionItemList: AuctionItem[] = originalData.map(transformToAuctionItem);
+        dispatch(setAuctionItem(auctionItemList));
+      })
+      .catch(err => console.log(err));
+  }, [auctionId]);
+
+  useEffect(() => {
     return () => {
-      dispatch(resetAuctionCreate());
+      dispatch(resetAuctionUpdate());
     };
   }, [dispatch]);
 
@@ -131,5 +160,7 @@ export function useAuctionCreateBox() {
     isLogined,
     getOrderedItemImgs,
     errMessage,
+    detail,
+    auctionRoomUrl,
   };
 }

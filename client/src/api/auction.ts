@@ -1,7 +1,7 @@
 import { http, https } from '../_libs/util/http';
 
 export default {
-  get: (auctionId: number) => https.get<AuctionRoomResponse>(`/api/v1/auctions/${auctionId}`),
+  get: (auctionId: number) => http.get<AuctionRoomResponse>(`/api/v1/auctions/${auctionId}`),
   //경매 상세 정보
   post: (data: AuctionCreateRequest) => https.post('/api/v1/auctions', data),
   //경매 등록
@@ -22,29 +22,29 @@ export interface AuctionRoomResponse {
   auctionRoomType: 'GENERAL';
   startedAt: string;
   imageURL: string;
-  itemList: [
-    {
-      itemId: number;
-      itemName: string;
-      category: string;
-      startPrice: number;
-      itemState: 'PRE_AUCTION';
-      itemImageUrl: string;
-      itemDescription: string;
-      itemOrdering: number;
-      successTime: string;
-      successPrice: number;
-      successMemberNickname: string;
-      successMemberId: number;
-      deliveryAddress: string;
-      deliveryMsg: string;
-      invoice: {
-        courier: string;
-        invoiceId: number;
-        invoiceNumber: string;
-      };
-    }
-  ];
+  itemList: ItemList[];
+}
+
+export interface ItemList {
+  itemId: number;
+  itemName: string;
+  category: string;
+  startPrice: number;
+  itemState: 'PRE_AUCTION';
+  itemImageUrl: string;
+  itemDescription: string;
+  itemOrdering: number;
+  successTime: string;
+  successPrice: number;
+  successMemberNickname: string;
+  successMemberId: number;
+  deliveryAddress: string;
+  deliveryMsg: string;
+  invoice: {
+    courier: string;
+    invoiceId: number;
+    invoiceNumber: string;
+  };
 }
 
 interface AuctionCreateRequest {

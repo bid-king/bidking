@@ -1,11 +1,11 @@
 import { ChangeEvent, useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { addItemToList } from '../../store/slices/auctionCreateSlice';
-import { setItemImg } from '../../store/slices/auctionCreateItemImgSlice';
+import { addItemToList } from '../../store/slices/auctionUpdateSlice';
+import { setItemImg } from '../../store/slices/auctionUpdateItemImgSlice';
 import axios from 'axios';
 import auction from '../../api/auction';
 
-export function useAuctionCreateCard(ordering: number) {
+export function useAuctionUpdateCard(ordering: number) {
   const [name, setName] = useState('');
   const [itemCategory, setItemCategory] = useState('1');
   const [startPrice, setStartPrice] = useState('');
@@ -80,5 +80,3 @@ export function useAuctionCreateCard(ordering: number) {
     categoryList,
   };
 }
-
-export default useAuctionCreateCard;

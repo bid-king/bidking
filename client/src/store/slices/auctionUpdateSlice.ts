@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ItemList } from '../../api/auction';
 
 interface AuctionItem {
   name: string;
@@ -8,7 +9,7 @@ interface AuctionItem {
   ordering: number;
 }
 
-interface AuctionCreate {
+interface AuctionUpdate {
   auctionTitle: string;
   startedAt: string;
   auctionRoomType: string;
@@ -17,7 +18,7 @@ interface AuctionCreate {
   items: AuctionItem[];
 }
 
-const initialState: AuctionCreate = {
+const initialState: AuctionUpdate = {
   auctionTitle: '',
   startedAt: '',
   auctionRoomType: 'GENERAL',
@@ -26,7 +27,7 @@ const initialState: AuctionCreate = {
   items: [],
 };
 
-export const auctionCreateSlice = createSlice({
+export const auctionUpdateSlice = createSlice({
   name: 'auctionCreate',
   initialState,
   reducers: {
@@ -45,6 +46,9 @@ export const auctionCreateSlice = createSlice({
     setDeliveryRulesChecked: state => {
       state.deliveryRulesChecked = !state.deliveryRulesChecked;
     },
+    setAuctionItem: (state, action: PayloadAction<AuctionItem[]>) => {
+      state.items = action.payload;
+    },
     addItemToList: (state, action: PayloadAction<AuctionItem>) => {
       const index = state.items.findIndex(item => item.ordering === action.payload.ordering);
       if (index >= 0) {
@@ -53,7 +57,7 @@ export const auctionCreateSlice = createSlice({
         state.items.push(action.payload);
       }
     },
-    resetAuctionCreate: state => {
+    resetAuctionUpdate: state => {
       state.auctionTitle = initialState.auctionTitle;
       state.startedAt = initialState.startedAt;
       state.auctionRoomType = initialState.auctionRoomType;
@@ -71,7 +75,8 @@ export const {
   setItemPermissionChecked,
   setDeliveryRulesChecked,
   addItemToList,
-  resetAuctionCreate,
-} = auctionCreateSlice.actions;
+  resetAuctionUpdate,
+  setAuctionItem,
+} = auctionUpdateSlice.actions;
 
-export default auctionCreateSlice.reducer;
+export default auctionUpdateSlice.reducer;

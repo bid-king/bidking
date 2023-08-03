@@ -12,7 +12,7 @@ interface Props {
   ordering: number;
 }
 
-export function AuctionCreateCard({ ordering }: Props) {
+export function AuctionUpdateCard({ ordering }: Props) {
   const {
     itemCategory,
     handleItemImg,
