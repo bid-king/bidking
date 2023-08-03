@@ -1,5 +1,6 @@
 package com.widzard.bidking.auction.dto.response;
 
+import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,4 +20,7 @@ public class AuctionRoomEnterResponse {
     private int currentItemId;
     private List<AuctionItemResponse> itemList = new ArrayList<>();
 
+    public static AuctionRoomEnterResponse from(AuctionRoom auctionRoom) {
+        return null;
+    }
 }

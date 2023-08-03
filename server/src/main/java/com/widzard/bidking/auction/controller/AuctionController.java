@@ -159,8 +159,8 @@ public class AuctionController {
         @AuthenticationPrincipal Member member,
         @PathVariable("auctionId") Long auctionId
     ) {
-        auctionService.validateEnterRoom(member.getId(), auctionId);
-        return new ResponseEntity<>(null, HttpStatus.PERMANENT_REDIRECT);
+        AuctionRoom liveAuctionRoom = auctionService.validateEnterRoom(member.getId(), auctionId);
+        return new ResponseEntity<>(AuctionRoomEnterResponse.from(liveAuctionRoom), HttpStatus.PERMANENT_REDIRECT);
     }
 
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {

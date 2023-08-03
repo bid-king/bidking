@@ -2,10 +2,11 @@ package com.widzard.bidking.auction.entity;
 
 
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
+import com.widzard.bidking.auction.exception.AuctionRoomIsAlreadyStartedException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.exception.EmptyThumbnailException;
+import com.widzard.bidking.auction.exception.UnableToStartAuctionException;
 import com.widzard.bidking.global.entity.BaseEntity;
-import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.item.exception.EmptyItemListException;
@@ -65,7 +66,7 @@ public class AuctionRoom extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AuctionRoomType auctionRoomType; // (경매방식)
 
-    private String startedAt; //경매방 시작시간
+    private LocalDateTime startedAt; //경매방 시작시간
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
@@ -80,7 +81,7 @@ public class AuctionRoom extends BaseEntity {
         String name,
         Member seller,
         AuctionRoomType auctionRoomType,
-        String startedAt,
+        LocalDateTime startedAt,
         Image auctionRoomImg
     ) {
         return AuctionRoom.builder()
@@ -125,7 +126,7 @@ public class AuctionRoom extends BaseEntity {
         this.isSessionCreated = state;
     }
 
-    public void changeStartedAt(String startedAt) {
+    public void changeStartedAt(LocalDateTime startedAt) {
         this.startedAt = startedAt;
     }
 
@@ -138,12 +139,30 @@ public class AuctionRoom extends BaseEntity {
         }
         //시작시간
         LocalDateTime now = LocalDateTime.now();
-        if (TimeUtility.toLocalDateTime(this.getStartedAt()).isBefore(now.plusHours(1))) {
+        if (this.getStartedAt().isBefore(now.plusHours(1))) {
             throw new AuctionStartTimeInvalidException();
         }
         //썸네일유무
         if (this.getImage() == null) {
             throw new EmptyThumbnailException();
+        }
+    }
+
+    public void changeOnLive() {
+        this.auctionRoomLiveState = AuctionRoomLiveState.ON_LIVE;
+    }
+
+    public void canLive() {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isBefore(this.startedAt.minusMinutes(20L)) || now.isAfter(this.startedAt)) {
+            throw new UnableToStartAuctionException();
+        }
+        if (this.auctionRoomLiveState != AuctionRoomLiveState.BEFORE_LIVE) {
+            throw new AuctionRoomIsAlreadyStartedException();
+        }
+
+        if (this.getAuctionRoomTradeState() != AuctionRoomTradeState.BEFORE_PROGRESS) {
+            throw new AuctionRoomIsAlreadyStartedException();
         }
     }
 }
