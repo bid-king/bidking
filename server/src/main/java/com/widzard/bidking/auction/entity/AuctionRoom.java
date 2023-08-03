@@ -2,10 +2,15 @@ package com.widzard.bidking.auction.entity;
 
 
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
+import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
+import com.widzard.bidking.auction.exception.EmptyThumbnailException;
 import com.widzard.bidking.global.entity.BaseEntity;
+import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.entity.Item;
+import com.widzard.bidking.item.exception.EmptyItemListException;
 import com.widzard.bidking.member.entity.Member;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -124,4 +129,21 @@ public class AuctionRoom extends BaseEntity {
         this.startedAt = startedAt;
     }
 
+    // 경매방 검증
+    public void isValid() {
+        //아이템 갯수
+        List<Item> itemList = this.getItemList();
+        if (itemList == null || itemList.size() == 0) {
+            throw new EmptyItemListException();
+        }
+        //시작시간
+        LocalDateTime now = LocalDateTime.now();
+        if (TimeUtility.toLocalDateTime(this.getStartedAt()).isBefore(now.plusHours(1))) {
+            throw new AuctionStartTimeInvalidException();
+        }
+        //썸네일유무
+        if (this.getImage() == null) {
+            throw new EmptyThumbnailException();
+        }
+    }
 }
