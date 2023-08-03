@@ -41,4 +41,5 @@ public class AuctionUpdateRequest {
 
     @Valid
     private List<ItemUpdateRequest> itemList = new ArrayList<>(); // 상품 리스트
+
 }

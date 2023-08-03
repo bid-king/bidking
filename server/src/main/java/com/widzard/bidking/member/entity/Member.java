@@ -37,6 +37,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Getter
 @Builder
 @ToString
+@DynamicInsert
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
@@ -67,11 +68,11 @@ public class Member extends BaseEntity implements UserDetails {
     @JoinColumn(name = "image_id")
     private Image image; // 프로필 사진
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="tinyint(1) default 1")
     private boolean available; // 활성화 여부 (탈퇴 시 false)
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("USER")
+    @ColumnDefault("'USER'")
     @Column(nullable = false, length = 10)
     private MemberRole memberRole; // 역할
 

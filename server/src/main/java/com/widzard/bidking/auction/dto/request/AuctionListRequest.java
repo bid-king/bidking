@@ -26,4 +26,5 @@ public class AuctionListRequest {
 
     @NotNull(message = "카테고리 리스트를 입력해주세요")
     private List<Long> categoryList; // 적용된 카테고리
+
 }

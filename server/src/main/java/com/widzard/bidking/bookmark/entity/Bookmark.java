@@ -51,7 +51,7 @@ public class Bookmark extends BaseEntity {
     @JoinColumn(name = "auction_room_id", nullable = false)
     private AuctionRoom auctionRoom;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition="tinyint(1) default 1")
     private boolean isAdded;
 
     public static Bookmark createBookmark(Member member, AuctionRoom auctionRoom) {

@@ -57,7 +57,7 @@ public class Item extends BaseEntity {
     private String description;// (설명)
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("BEFORE_AUCTION")
+    @ColumnDefault("'BEFORE_AUCTION'")
     @Column(nullable = false, length = 20)
     private ItemState itemState;// (상태)
 

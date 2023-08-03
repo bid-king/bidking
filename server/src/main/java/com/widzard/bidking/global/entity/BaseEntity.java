@@ -1,6 +1,7 @@
 package com.widzard.bidking.global.entity;
 
 import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -17,10 +18,12 @@ public abstract class BaseEntity {
 
     @CreatedDate
     @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime createdAt; // data 생성 시간
 
     @LastModifiedDate
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime lastModifiedAt; // data 마지막 변경 시간
 
 }

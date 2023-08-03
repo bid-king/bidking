@@ -47,7 +47,7 @@ public class Order extends BaseEntity {
     private Member orderer;
 
     @Enumerated(EnumType.STRING)
-    @ColumnDefault("PAYMENT_WAITING")
+    @ColumnDefault("'PAYMENT_WAITING'")
     @Column(name = "order_state", nullable = false, length = 20)
     private OrderState orderState; // (주문 상태 (OrderState))
 

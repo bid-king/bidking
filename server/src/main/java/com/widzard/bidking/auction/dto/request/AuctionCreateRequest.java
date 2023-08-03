@@ -39,5 +39,4 @@ public class AuctionCreateRequest {
     @Valid
     private List<ItemCreateRequest> itemList = new ArrayList<>(); // 상품 리스트
 
-
 }
