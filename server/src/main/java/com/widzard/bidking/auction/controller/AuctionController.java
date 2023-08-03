@@ -174,6 +174,4 @@ public class AuctionController {
         }
         return auctionResponseList;
     }
-
-
 }
