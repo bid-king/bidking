@@ -77,7 +77,7 @@ public class Item extends BaseEntity {
 
 
     public static Item create(
-//        AuctionRoom auctionRoom,
+        AuctionRoom auctionRoom,
         Long startPrice,
         String name,
         String description,
@@ -86,7 +86,7 @@ public class Item extends BaseEntity {
         Image itemImg
     ) {
         return Item.builder()
-//            .auctionRoom(auctionRoom)
+            .auctionRoom(auctionRoom)
             .startPrice(startPrice)
             .name(name)
             .description(description)

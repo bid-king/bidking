@@ -18,10 +18,10 @@ public class AuctionListRequest {
 
     private String keyword; // 검색어
 
-    @NotBlank(message = "현재 페이지를 입력해주세요.")
+    @NotNull(message = "현재 페이지를 입력해주세요.")
     private int page; // 현재 페이지
 
-    @NotBlank(message = "페이지당 조회할 경매 수를 입력해주세요.")
+    @NotNull(message = "페이지당 조회할 경매 수를 입력해주세요.")
     private int perPage; // 페이지당 경매
 
     @NotNull(message = "카테고리 리스트를 입력해주세요")
