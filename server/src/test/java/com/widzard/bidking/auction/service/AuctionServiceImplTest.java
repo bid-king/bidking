@@ -18,6 +18,7 @@ import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.entity.MemberRole;
 import com.widzard.bidking.member.repository.MemberRepository;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -138,7 +139,7 @@ class AuctionServiceImplTest {
         auctionCreateRequest = AuctionCreateRequest.builder()
             .auctionTitle("테스트용 경매방 제목")
             .auctionRoomType(AuctionRoomType.GENERAL)//일반경매
-            .startedAt("2023-09-15 00:00:00")
+            .startedAt(LocalDateTime.parse("2023-09-15T00:00:00"))
             .itemPermissionChecked(true)
             .itemList(itemCreateRequestList)
             .build();
@@ -199,7 +200,7 @@ class AuctionServiceImplTest {
             .deliveryRulesChecked(true)
             .auctionTitle("changed title")
             .itemPermissionChecked(true)
-            .startedAt("2023-12-12 00:00:00")
+            .startedAt(LocalDateTime.parse("2023-12-12T00:00:00"))
             .itemList(itemUpdateRequestList)
             .build();
         log.info("before changed = {}", find);
@@ -504,8 +505,8 @@ class AuctionServiceImplTest {
         log.info("created auctionRoom's itemList = {}", find.getItemList());
 
         //chage startedAt (default : 2023-09-15 00:00:00)
-        create1.changeStartedAt("2023-09-14 00:00:00");
-        create2.changeStartedAt("2023-09-13 00:00:00");
+        create1.changeStartedAt(LocalDateTime.parse("2023-09-14T00:00:00"));
+        create2.changeStartedAt(LocalDateTime.parse("2023-09-13T00:00:00"));
 
         //전자 기기 & 테스트 검색 ( 옥션룸 제목 )
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
@@ -543,8 +544,8 @@ class AuctionServiceImplTest {
         log.info("created auctionRoom's itemList = {}", find.getItemList());
 
         //chage startedAt (default : 2023-09-15 00:00:00)
-        create1.changeStartedAt("2023-09-14 00:00:00");
-        create2.changeStartedAt("2023-09-13 00:00:00");
+        create1.changeStartedAt(LocalDateTime.parse("2023-09-14T00:00:00"));
+        create2.changeStartedAt(LocalDateTime.parse("2023-09-13T00:00:00"));
 
         //전자 기기 & 테스트 검색 ( 옥션룸 제목 )
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);

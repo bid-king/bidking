@@ -3,6 +3,7 @@ package com.widzard.bidking.auction.dto.response;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.item.dto.ItemSellerDto;
 import com.widzard.bidking.orderItem.entity.OrderItem;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class AuctionRoomSellerResponse {
 
     private String name; //(방이름)
 
-    private String startedAt; //경매방 시작시간
+    private LocalDateTime startedAt; //경매방 시작시간
 
     private String auctionRoomLiveState; // (라이브 상태)
 

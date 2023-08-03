@@ -1,6 +1,7 @@
 package com.widzard.bidking.global.entity;
 
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,8 +16,13 @@ import lombok.Setter;
 @Setter(AccessLevel.PRIVATE)
 public class Address {
 
+    @Column(nullable = false)
     private String street; // 도로명 주소
+
+    @Column(nullable = false)
     private String details; // (상세주소)
+
+    @Column(nullable = false, length = 5)
     private String zipCode; //우편번호
 
     @Override

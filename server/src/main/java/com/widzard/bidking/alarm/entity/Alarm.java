@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Getter
 @Entity
@@ -31,11 +33,11 @@ public class Alarm extends BaseEntity {
     private Long id; // ( 알람 코드 )
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member; // ( 수신 고객 )
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private Content content; // ( 내용 )
 
     @Column(nullable = false)
@@ -45,13 +47,13 @@ public class Alarm extends BaseEntity {
     private Boolean isRead; // ( 사용자 읽음 여부 )
 
     @Column(nullable = false)
-    private String sendedAt;
+    private LocalDateTime sendedAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 12)
     private MediaType mediaType; // ( 알림 매체 타입 )
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private AlarmType alarmType; // ( 알림 메시지 타입 )
 }

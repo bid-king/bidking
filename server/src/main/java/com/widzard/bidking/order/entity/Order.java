@@ -13,17 +13,28 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Getter
 @Entity
+@DynamicInsert
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "orders")
+@Table(
+    name = "orders",
+    indexes = {
+        @Index(name = "idx__order_state__member_id",
+            columnList = "order_state, member_id")
+    }
+)
 public class Order extends BaseEntity {
 
     @Id
@@ -32,14 +43,16 @@ public class Order extends BaseEntity {
     private Long id; // (주문코드)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member orderer;
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("PAYMENT_WAITING")
+    @Column(name = "order_state", nullable = false, length = 20)
     private OrderState orderState; // (주문 상태 (OrderState))
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_room_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_room_id", nullable = false)
     private AuctionRoom auctionRoom; // 경매 방
 
     @OneToOne(fetch = FetchType.LAZY)

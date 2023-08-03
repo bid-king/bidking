@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class ItemCategoryDto {
 
     private Long id;
+
     private String name;
 
     public static ItemCategoryDto create(ItemCategory itemCategory) {

@@ -17,12 +17,14 @@ public class MemberUpdateRequest {
     @NotEmptyIfPresent(message = "비밀번호는 8자 이상, 16자 이하로 입력해주세요.")
     private String newPassword;
 
-    @NotNull(message = "아이디를 입력해주세요.")
+    @NotBlank(message = "닉네임을 입력해주세요.")
+    @Length(min = 2, max = 12, message = "닉네임은 2자 이상, 12자 이하로 입력해주세요.")
     private String nickname;
 
-    @NotNull(message = "휴대폰 본인 인증을 위해 휴대폰 번호를 입력해주세요.")
-    private String phoneNumber;
+    @NotBlank(message = "휴대폰 본인 인증을 위해 휴대폰 번호를 입력해주세요.")
+    private String phoneNumber; //( 핸드폰 번호 )
 
-    private Address address;
+    @NotNull(message = "주소를 입력해주세요.")
+    private Address address; // ( 기본배송지 )
 
 }

@@ -153,6 +153,12 @@ public class AuctionController {
         return new ResponseEntity<>(auctionRoomSellerResponse, HttpStatus.OK);
     }
 
+//    @GetMapping("/test3")
+//    public ResponseEntity<LocalDateTime> test3(
+//        @RequestBody
+//            TEST test){
+//        return new ResponseEntity<>(test.getTest(), HttpStatus.OK);
+//    }
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
