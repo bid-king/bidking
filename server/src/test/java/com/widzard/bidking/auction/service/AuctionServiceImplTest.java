@@ -18,6 +18,7 @@ import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.entity.MemberRole;
 import com.widzard.bidking.member.repository.MemberRepository;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -138,7 +139,7 @@ class AuctionServiceImplTest {
         auctionCreateRequest = AuctionCreateRequest.builder()
             .auctionTitle("테스트용 경매방 제목")
             .auctionRoomType(AuctionRoomType.GENERAL)//일반경매
-            .startedAt("2023-09-15 00:00:00")
+            .startedAt(LocalDateTime.parse("2023-09-15T00:00:00"))
             .itemPermissionChecked(true)
             .itemList(itemCreateRequestList)
             .build();
@@ -150,7 +151,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void createAuctionRoom() throws IOException {
         log.info("auctionCreateRequest.itemlist() = {} ", auctionCreateRequest.getItemList());
         AuctionRoom auctionRoom = auctionService.createAuctionRoom(member, auctionCreateRequest,
@@ -160,7 +160,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void readAuctionRoom() throws IOException {
         AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImg);
@@ -171,7 +170,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void updateAuctionRoom() throws IOException {
 
         AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
@@ -202,7 +200,7 @@ class AuctionServiceImplTest {
             .deliveryRulesChecked(true)
             .auctionTitle("changed title")
             .itemPermissionChecked(true)
-            .startedAt("2023-12-12 00:00:00")
+            .startedAt(LocalDateTime.parse("2023-12-12T00:00:00"))
             .itemList(itemUpdateRequestList)
             .build();
         log.info("before changed = {}", find);
@@ -259,25 +257,18 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void readAuctionRoomListByKeyword() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
+
+        List<Long> categoryList2 = new ArrayList<>();
+        categoryList2.add(2L);
 
         //생성
         log.info("created auctionRoom's itemList = {}", find);
         //"테스트" 검색
         AuctionListRequest auctionListRequest3 = AuctionListRequest.builder()
-            .categoryList(categoryList)
             .keyword("테스트")
-            .page(1)
-            .perPage(1)
-            .build();
-
-        //"aa" 검색
-        AuctionListRequest auctionListRequest4 = AuctionListRequest.builder()
-            .categoryList(categoryList)
-            .keyword("aa")
             .page(1)
             .perPage(1)
             .build();
@@ -287,6 +278,13 @@ class AuctionServiceImplTest {
         log.info("searched auctionRoom's itemList3 = {}", auctionRoomList3.get(0).getItemList());
 
         Assertions.assertNotEquals(auctionRoomList3, find);
+
+        //"aa" 검색
+        AuctionListRequest auctionListRequest4 = AuctionListRequest.builder()
+            .keyword("aa")
+            .page(1)
+            .perPage(1)
+            .build();
 
         List<AuctionRoom> auctionRoomList4 = auctionService.readAuctionRoomList(
             auctionListRequest4);
@@ -357,7 +355,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void readAuctionRoomListByLiveStatus() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
@@ -445,7 +442,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void readAuctionRoomListByStartTime() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
@@ -469,8 +465,8 @@ class AuctionServiceImplTest {
         log.info("created auctionRoom's itemList = {}", find.getItemList());
 
         //chage startedAt (default : 2023-09-15 00:00:00)
-        create1.changeStartedAt("2023-09-14 00:00:00");
-        create2.changeStartedAt("2023-09-13 00:00:00");
+        create1.changeStartedAt(LocalDateTime.parse("2023-09-14T00:00:00"));
+        create2.changeStartedAt(LocalDateTime.parse("2023-09-13T00:00:00"));
 
         //전자 기기 & 테스트 검색 ( 옥션룸 제목 )
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);
@@ -480,11 +476,9 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void readAuctionRoomListByBookmark() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
-        categoryList.add(2L);
 
         //1번 카테고리를 갖는 옥션룸 요청
         auctionListRequest = AuctionListRequest.builder()
@@ -506,8 +500,8 @@ class AuctionServiceImplTest {
         log.info("created auctionRoom's itemList = {}", find.getItemList());
 
         //chage startedAt (default : 2023-09-15 00:00:00)
-        create1.changeStartedAt("2023-09-14 00:00:00");
-        create2.changeStartedAt("2023-09-13 00:00:00");
+        create1.changeStartedAt(LocalDateTime.parse("2023-09-14T00:00:00"));
+        create2.changeStartedAt(LocalDateTime.parse("2023-09-13T00:00:00"));
 
         //전자 기기 & 테스트 검색 ( 옥션룸 제목 )
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomList(auctionListRequest);

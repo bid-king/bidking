@@ -41,4 +41,5 @@ public interface AuctionService {
 
     AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId);
 
+    AuctionRoom validateEnterRoom(Member seller, Long auctionId);
 }

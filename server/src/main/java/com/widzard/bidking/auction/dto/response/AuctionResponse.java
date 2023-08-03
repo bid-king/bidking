@@ -2,9 +2,8 @@ package com.widzard.bidking.auction.dto.response;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
-import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.item.dto.AuctionListItemDto;
-import com.widzard.bidking.item.dto.ItemDto;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +25,7 @@ public class AuctionResponse {
 
     private String imageUrl; //옥션 썸네일
 
-    private String startedAt; //옥션 시작시간
+    private LocalDateTime startedAt; //옥션 시작시간
 
     private AuctionRoomLiveState auctionRoomLiveState; //옥션 진행 상태
 

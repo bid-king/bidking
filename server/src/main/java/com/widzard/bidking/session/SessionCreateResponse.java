@@ -2,6 +2,7 @@ package com.widzard.bidking.session;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.item.dto.ItemDto;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class SessionCreateResponse {
 
     private String auctionRoomType; // (경매방식)
 
-    private String startedAt; //경매방 시작시간
+    private LocalDateTime startedAt; //경매방 시작시간
 
     private String imageURL; // (썸네일)
 
