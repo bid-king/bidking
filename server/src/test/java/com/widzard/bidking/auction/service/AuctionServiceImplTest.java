@@ -150,7 +150,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void createAuctionRoom() throws IOException {
         log.info("auctionCreateRequest.itemlist() = {} ", auctionCreateRequest.getItemList());
         AuctionRoom auctionRoom = auctionService.createAuctionRoom(member, auctionCreateRequest,
@@ -160,7 +159,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void readAuctionRoom() throws IOException {
         AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImg);
@@ -171,7 +169,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void updateAuctionRoom() throws IOException {
 
         AuctionRoom create = auctionService.createAuctionRoom(member, auctionCreateRequest,
@@ -357,7 +354,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void readAuctionRoomListByLiveStatus() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
@@ -445,7 +441,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void readAuctionRoomListByStartTime() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
@@ -480,7 +475,6 @@ class AuctionServiceImplTest {
     }
 
     @Test
-    @Disabled
     void readAuctionRoomListByBookmark() throws IOException {
         List<Long> categoryList = new ArrayList<>();
         categoryList.add(1L);
@@ -517,6 +511,5 @@ class AuctionServiceImplTest {
     }
 
     //TODO itemList를 빈 리스트로 update 요청시 아이템 에러 발생
-
     //TODO 시작시간을 현재시간 1시간 이내로 설정시 시간 에러 발생
 }
