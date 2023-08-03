@@ -299,13 +299,17 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Transactional
     @Override
-    public AuctionRoom validateEnterRoom(Long memberId, Long auctionId) {
+    public AuctionRoom validateEnterRoom(Member seller, Long auctionId) {
         // 1. 사용자 및 경매방 검증
-            // 1) 현재 판매자가 생성한 경매가 있는지 검증
-            // 2) 해당 경매가 아직 진행되지 않은 경매인가 (이미 시작했던 / 끝난 경매방인지)
-            // 3) 경매방이 시작될 수 있는 시간인가 (경매방 시작시간 20분전부터 해당 시간까지)
-        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMemberId(auctionId, memberId).orElseThrow(AuctionRoomNotFoundException::new);
-        log.info(String.valueOf(auctionRoom));
+        // 1) 현재 판매자가 생성한 경매가 있는지 검증
+        // 2) 해당 경매가 아직 진행되지 않은 경매인가 (이미 시작했던 / 끝난 경매방인지)
+        // 3) 경매방이 시작될 수 있는 시간인가 (경매방 시작시간 20분전부터 해당 시간까지)
+        log.info("seller pk: {}", seller.getId());
+        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(
+            auctionId,
+            seller
+        ).orElseThrow(AuctionRoomNotFoundException::new);
+        log.info("시작할 경매방: {}", auctionRoom);
         auctionRoom.canLive();
         // 2. 경매방 라이브로 상태 변경
         auctionRoom.changeOnLive();
