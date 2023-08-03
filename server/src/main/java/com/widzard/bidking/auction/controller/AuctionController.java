@@ -154,6 +154,19 @@ public class AuctionController {
         return new ResponseEntity<>(auctionRoomSellerResponse, HttpStatus.OK);
     }
 
+    @PostMapping("/{auctionId}/item/{itemId}/start")
+    public ResponseEntity<String> startBidding(
+        @AuthenticationPrincipal Member member,
+        @PathVariable("auctionId") Long auctionId,
+        @PathVariable("itemId") Long itemId
+    ) {
+        auctionService.startBidding(member, auctionId, itemId);
+        return new ResponseEntity<>(
+            null,
+            HttpStatus.OK
+        );
+    }
+
     @GetMapping("/{auctionId}/enter")
     public ResponseEntity<AuctionRoomEnterResponse> validateEnteringRoom(
         @AuthenticationPrincipal Member member,
@@ -165,6 +178,7 @@ public class AuctionController {
             HttpStatus.OK
         );
     }
+
 
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
