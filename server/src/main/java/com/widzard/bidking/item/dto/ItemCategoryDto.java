@@ -23,4 +23,5 @@ public class ItemCategoryDto {
             .name(itemCategory.getName())
             .build();
     }
+
 }

@@ -9,13 +9,11 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
-import com.widzard.bidking.auction.exception.EmptyThumbnailException;
 import com.widzard.bidking.auction.exception.ImageNotSufficientException;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.bookmark.entity.Bookmark;
 import com.widzard.bidking.bookmark.repository.BookmarkRepository;
-import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.image.service.ImageService;
 import com.widzard.bidking.item.dto.request.ItemCreateRequest;
@@ -59,15 +57,19 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
-        return auctionListSearch.findAllBySearchCondition(auctionListRequest);
+        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAllById(
+            auctionListRequest.getCategoryList());
+        return auctionListSearch.findAllBySearchCondition(auctionListRequest, itemCategoryList);
     }
 
     @Override
     public List<AuctionBookmarkResponse> readAuctionRoomListWithLoginStatus(
         AuctionListRequest auctionListRequest,
         Member member) {
+        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAllById(
+            auctionListRequest.getCategoryList());
         List<AuctionRoom> auctionRoomList = auctionListSearch.findAllBySearchCondition(
-            auctionListRequest);
+            auctionListRequest, itemCategoryList);
         List<AuctionBookmarkResponse> auctionBookmarkResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
         ) {
@@ -90,7 +92,10 @@ public class AuctionServiceImpl implements AuctionService {
     public List<AuctionRoom> readAuctionRoomListOnlyBookmarked(
         AuctionListRequest auctionListRequest,
         Member member) {
-        return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest, member);
+        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAllById(
+            auctionListRequest.getCategoryList());
+        return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest, member,
+            itemCategoryList);
     }
 
     @Override
@@ -244,8 +249,7 @@ public class AuctionServiceImpl implements AuctionService {
             //썸네일 변경
             imageService.modifyImage(curFileImg, item.getImage().getId());
         }
-
-        auctionRoom.isValid();//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일
+        auctionRoom.isValid();
         return auctionRoom;
     }
 
@@ -292,4 +296,40 @@ public class AuctionServiceImpl implements AuctionService {
 
         return AuctionRoomSellerResponse.from(auctionRoom, orderItemList);
     }
+
+    @Transactional
+    @Override
+    public AuctionRoom validateEnterRoom(Member seller, Long auctionId) {
+        // 1. 사용자 및 경매방 검증
+        // 1) 현재 판매자가 생성한 경매가 있는지 검증
+        // 2) 해당 경매가 아직 진행되지 않은 경매인가 (이미 시작했던 / 끝난 경매방인지)
+        // 3) 경매방이 시작될 수 있는 시간인가 (경매방 시작시간 20분전부터 해당 시간까지)
+        log.info("seller pk: {}", seller.getId());
+        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(
+            auctionId,
+            seller
+        ).orElseThrow(AuctionRoomNotFoundException::new);
+        log.info("시작할 경매방: {}", auctionRoom);
+        auctionRoom.canLive();
+        // 2. 경매방 라이브로 상태 변경
+        auctionRoom.changeOnLive();
+        // 3. 결과 반환
+        return auctionRoom;
+    }
+
+    @Transactional
+    @Override
+    public void startBidding(Member member, Long auctionId, Long itemId) {
+        // 1. 사용자/경매방 검증
+        // 2. 경매 진행될 수 있는 아이템 검증
+        // 3. 해당 아이템 경매 진행으로 변경
+        // 4. 경매 진행 첫번째 상품이면 tradestate => in progress로 상태 변경
+        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(auctionId, member)
+            .orElseThrow(AuctionRoomNotFoundException::new);
+
+        Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+
+
+    }
+
 }

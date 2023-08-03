@@ -26,4 +26,5 @@ public class AuctionListItemDto {
             .itemCategory(ItemCategoryDto.create(item.getItemCategory()))
             .build();
     }
+
 }

@@ -4,7 +4,6 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
-import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.member.entity.Member;
 import io.openvidu.java.client.OpenVidu;
 import io.openvidu.java.client.OpenViduHttpException;
@@ -229,7 +228,8 @@ public class SessionController {
                 this.sessionIdUserIdToken.remove(session);
 
                 // 시작 전에 방이 폭파될 경우 다시 생성할 수 있도록 생성
-                if (auctionRoom.getStartedAt().isAfter(LocalDateTime.now())) {
+                if (auctionRoom.getStartedAt()
+                    .isAfter(LocalDateTime.now())) {
                     auctionRoom.changeLiveState(AuctionRoomLiveState.BEFORE_LIVE);
                     auctionRoom.changeIsSessionCreated(false);
                 } else { // 시작 시간 이후 폭파할 경우 OFF로 변경

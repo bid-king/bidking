@@ -26,7 +26,7 @@ export function TopBidder({ theme = 'light' }: Props) {
         }
       >
         <Text content="최고 입찰" />
-        <Text type="h1" content={'이연우'} />
+        <Text type="h2" content={'이연우'} />
       </div>
     </div>
   );

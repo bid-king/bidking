@@ -258,19 +258,11 @@ class AuctionServiceImplTest {
 
     @Test
     void readAuctionRoomListByKeyword() throws IOException {
-        List<ItemCategory> categoryList = new ArrayList<>();
-        ItemCategory itemCategory = ItemCategory.builder()
-            .id(1L)
-            .name("전자기기")
-            .build();
-        categoryList.add(itemCategory);
+        List<Long> categoryList = new ArrayList<>();
+        categoryList.add(1L);
 
-        List<ItemCategory> categoryList2 = new ArrayList<>();
-        ItemCategory itemCategory2 = ItemCategory.builder()
-            .id(2L)
-            .name("의류")
-            .build();
-        categoryList2.add(itemCategory2);
+        List<Long> categoryList2 = new ArrayList<>();
+        categoryList2.add(2L);
 
         //생성
         log.info("created auctionRoom's itemList = {}", find);

@@ -18,20 +18,21 @@ export function AuctionSystem({ theme = 'light' }: Props) {
     <div
       css={{
         ...THEME_VARIANT[theme],
+        width: '100%',
         borderRadius: '2rem',
-        padding: '0 2rem',
+        padding: '0 1.5rem',
       }}
     >
       {/* <BidList /> */}
-      <Spacing rem="2" />
+      <Spacing rem="1.5" />
       <TopBidder theme={theme} />
       <Spacing rem="0.5" />
       <BidPrice align="center" theme={theme} />
-      <Spacing rem="1" />
+      <Spacing rem="1.5" />
       <Timer theme={theme} />
       <Spacing rem="2" />
-      <BiddingForm theme={theme} askingPrice={'1211000'} />
-      <Spacing rem="2" />
+      <BiddingForm theme={theme} askingPrice={'+1호가'} />
+      <Spacing rem="1.5" />
     </div>
   );
 }

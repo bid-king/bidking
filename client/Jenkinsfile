@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                dir('client') {
+                    echo "Building the project..."
+                    sh "npm install yarn"
+                    sh "yarn build"
+                }
+            }
+        }
+    }
+}

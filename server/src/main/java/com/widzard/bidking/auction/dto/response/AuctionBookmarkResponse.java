@@ -2,7 +2,6 @@ package com.widzard.bidking.auction.dto.response;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
-import com.widzard.bidking.bookmark.entity.Bookmark;
 import com.widzard.bidking.item.dto.AuctionListItemDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

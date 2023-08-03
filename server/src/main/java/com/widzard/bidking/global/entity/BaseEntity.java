@@ -18,12 +18,12 @@ public abstract class BaseEntity {
 
     @CreatedDate
     @CreationTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt; // data 생성 시간
 
     @LastModifiedDate
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime lastModifiedAt; // data 마지막 변경 시간
 
 }

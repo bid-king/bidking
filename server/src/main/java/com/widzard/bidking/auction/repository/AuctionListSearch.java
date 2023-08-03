@@ -2,6 +2,7 @@ package com.widzard.bidking.auction.repository;
 
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.member.entity.Member;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -15,7 +16,8 @@ public class AuctionListSearch {
 
     private final EntityManager entityManager;
 
-    public List<AuctionRoom> findAllBySearchCondition(AuctionListRequest auctionListRequest) {
+    public List<AuctionRoom> findAllBySearchCondition(AuctionListRequest auctionListRequest,
+        List<ItemCategory> itemCategoryList) {
         StringBuilder jpqlBuilder = new StringBuilder(
             "SELECT DISTINCT a FROM AuctionRoom a JOIN a.itemList i");
 
@@ -41,13 +43,13 @@ public class AuctionListSearch {
         applyPagination(auctionListRequest, query);
 
         // 파라미터 적용
-        applyCategoryAndKeywordParameter(auctionListRequest, query);
+        applyCategoryAndKeywordParameter(auctionListRequest, query, itemCategoryList);
 
         return query.getResultList();
     }
 
     public List<AuctionRoom> findAllBySearchConditionOnlyBookmarked(
-        AuctionListRequest auctionListRequest, Member member) {
+        AuctionListRequest auctionListRequest, Member member, List<ItemCategory> itemCategoryList) {
         StringBuilder jpqlBuilder = new StringBuilder(
             "SELECT DISTINCT a FROM AuctionRoom a JOIN a.itemList i");
         jpqlBuilder.append(" LEFT JOIN Bookmark b ON b.auctionRoom = a");
@@ -78,7 +80,7 @@ public class AuctionListSearch {
 
         // 파라미터 적용
         query.setParameter("member", member);
-        applyCategoryAndKeywordParameter(auctionListRequest, query);
+        applyCategoryAndKeywordParameter(auctionListRequest, query, itemCategoryList);
 
         return query.getResultList();
     }
@@ -127,10 +129,10 @@ public class AuctionListSearch {
     }
 
     private void applyCategoryAndKeywordParameter(AuctionListRequest auctionListRequest,
-        TypedQuery<AuctionRoom> query) {
+        TypedQuery<AuctionRoom> query, List<ItemCategory> itemCategoryList) {
         if (auctionListRequest.getCategoryList() != null && !auctionListRequest.getCategoryList()
             .isEmpty()) {
-            query.setParameter("categoryList", auctionListRequest.getCategoryList());
+            query.setParameter("categoryList", itemCategoryList);
         }
         if (auctionListRequest.getKeyword() != null && !auctionListRequest.getKeyword().isEmpty()) {
             query.setParameter("keyword", "%" + auctionListRequest.getKeyword() + "%");

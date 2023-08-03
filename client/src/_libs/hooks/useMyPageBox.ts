@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useState, useEffect, ChangeEvent } from 'react';
 import member from '../../api/member';
 import { useAppSelector } from '../../store/hooks';
-import { getToken } from '../util/http';
+import { getToken, API_URL } from '../util/http';
+import { useNavigate } from 'react-router-dom';
 
 export function useMyPageBox() {
   const [userId, setUserId] = useState('');
@@ -24,7 +25,9 @@ export function useMyPageBox() {
   const [phoneNumberErrorMessage, setPhoneNumberErrorMessage] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const isLogined = useAppSelector(state => state.user.isLogined);
-  const memberId = 1;
+  const [imgSrc, setImgSrc] = useState('');
+  const navigate = useNavigate();
+  const memberId = useAppSelector(state => state.user.id);
 
   // Handlers
   const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -89,34 +92,33 @@ export function useMyPageBox() {
     }
   };
 
-  const memberUpdate = () => {
+  const memberUpdate = async () => {
     if (memberId && isLogined) {
-      const data = new FormData();
-      data.append('oldPassword', oldPassword);
-      data.append('newPassword', newPassword);
-      data.append('nickname', nickname);
-      data.append('phoneNumber', phoneNumber);
-      data.append(
-        'address',
-        JSON.stringify({
-          street,
-          details,
-          zipCode,
-        })
-      );
-
+      const data = {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        nickname: nickname,
+        phoneNumber: phoneNumber,
+        address: {
+          street: street,
+          details: details,
+          zipCode: zipCode,
+        },
+      };
+      const formData = new FormData();
+      formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
       if (image) {
-        data.append('profileImage', image);
+        formData.append('image', image);
       }
-
+      const token = await getToken();
       axios
-        .put(`/api/members/${memberId}`, data, {
+        .put(`${API_URL}/api/v1/members/${memberId}`, formData, {
           headers: {
-            Authorization: `Bearer ${getToken}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
           },
         })
-        .then(res => console.log(res))
+        .then(res => navigate('/'))
         .catch(err => console.log(err));
     }
   };
@@ -138,12 +140,18 @@ export function useMyPageBox() {
       member
         .get(memberId)
         .then(data => {
+          console.log(data);
           setUserId(data.userId);
           setNickname(data.nickname);
           setPhoneNumber(data.phoneNumber);
           setStreet(data.address.street);
           setDetails(data.address.details);
           setZipCode(data.address.zipCode);
+          if (data.imageUrl === '') {
+            setImgSrc('/image/profile.png');
+          } else {
+            setImgSrc(data.imageUrl);
+          }
         })
         .catch(err => {
           console.log(err);
@@ -199,5 +207,6 @@ export function useMyPageBox() {
     requestVerification,
     requestCerificated,
     memberUpdate,
+    imgSrc,
   };
 }
