@@ -9,7 +9,6 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
-import com.widzard.bidking.auction.exception.EmptyThumbnailException;
 import com.widzard.bidking.auction.exception.ImageNotSufficientException;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
@@ -251,8 +250,7 @@ public class AuctionServiceImpl implements AuctionService {
             //썸네일 변경
             imageService.modifyImage(curFileImg, item.getImage().getId());
         }
-
-        validAuctionRoom(auctionRoom);//정상 옥션룸인지 아이템 0개인지, 시작시간, 썸네일
+        auctionRoom.isValid();
         return auctionRoom;
     }
 
@@ -300,23 +298,21 @@ public class AuctionServiceImpl implements AuctionService {
         return AuctionRoomSellerResponse.from(auctionRoom, orderItemList);
     }
 
-    //도우미 함수
-    private void validAuctionRoom(AuctionRoom auctionRoom) {
-        //아이템 갯수
-        List<Item> itemList = auctionRoom.getItemList();
-        if (itemList == null || itemList.size() == 0) {
-            throw new EmptyItemListException();
-        }
-        //시작시간
-        LocalDateTime now = LocalDateTime.now();
-        if (TimeUtility.toLocalDateTime(auctionRoom.getStartedAt()).isBefore(now.plusHours(1))) {
-            throw new AuctionStartTimeInvalidException();
-        }
-        //썸네일유무
-        if (auctionRoom.getImage() == null) {
-            throw new EmptyThumbnailException();
-        }
-        //
+    @Transactional
+    @Override
+    public void validateEnterRoom(Long memberId, Long auctionId) {
+        // 1. 사용자 및 경매방 검증
+            // 1) 해당 판매자가 생성한 경매 id가 맞는가
+            // 2) 해당 경매가 아직 진행되지 않은 경매인가
+            // 3) 경매방이 시작될 수 있는 시간인가 (경매방 시작시간 20분전부터 해당 시간까지)
+
+
+        // 2. 경매방 상태 변경
+        // 3. 결과 반환
+
+
+
     }
+
 
 }

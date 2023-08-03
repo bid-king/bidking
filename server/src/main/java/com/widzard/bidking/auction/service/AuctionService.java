@@ -41,4 +41,5 @@ public interface AuctionService {
 
     AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId);
 
+    void validateEnterRoom(Long memberId, Long auctionId);
 }

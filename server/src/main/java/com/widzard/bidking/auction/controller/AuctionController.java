@@ -7,6 +7,7 @@ import com.widzard.bidking.auction.dto.response.AuctionBookmarkCountResponse;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionResponse;
+import com.widzard.bidking.auction.dto.response.AuctionRoomEnterResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
@@ -153,6 +154,15 @@ public class AuctionController {
         return new ResponseEntity<>(auctionRoomSellerResponse, HttpStatus.OK);
     }
 
+    @GetMapping("/{auctionId}/enter")
+    public ResponseEntity<AuctionRoomEnterResponse> validateEnteringRoom(
+        @AuthenticationPrincipal Member member,
+        @PathVariable("auctionId") Long auctionId
+    ) {
+        auctionService.validateEnterRoom(member.getId(), auctionId);
+        return new ResponseEntity<>(null, HttpStatus.PERMANENT_REDIRECT);
+    }
+
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
@@ -161,4 +171,6 @@ public class AuctionController {
         }
         return auctionResponseList;
     }
+
+
 }
