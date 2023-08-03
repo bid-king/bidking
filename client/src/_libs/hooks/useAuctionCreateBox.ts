@@ -96,7 +96,7 @@ export function useAuctionCreateBox() {
           navigate(`/seller/detail/${res.data.id}`);
         })
         .catch(err => {
-          console.log(data);
+          console.log(err);
           SetErrMessage(err.response.data.message);
         });
     }

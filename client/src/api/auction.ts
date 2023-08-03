@@ -1,9 +1,7 @@
 import { http, https } from '../_libs/util/http';
 
 export default {
-  // get: (auctionId: number) => http.get<AuctionRoomResponse>(`/api/v1/auctions/${auctionId}`),
-  get: (auctionId: number) => http.get<AuctionRoomResponse>('/items'),
-
+  get: (auctionId: number) => http.get<AuctionRoomResponse>(`/api/v1/auctions/${auctionId}`),
   //경매 상세 정보
   post: (data: AuctionCreateRequest) => https.post('/api/v1/auctions', data),
   //경매 등록

@@ -56,7 +56,6 @@ export function AuctionCreateBox() {
           <Input id="auctionTitle-input" placeholder="" inputType="text" onChange={handleAuctionTitle} />
         </div>
         <Spacing rem="2" />
-
         <div className="startedAt">
           <label htmlFor="startedAt-input">
             <Text type="bold" content="경매 날짜와 시간을 선택하세요" />
@@ -65,7 +64,6 @@ export function AuctionCreateBox() {
           <Input id="startedAt-input" placeholder="" inputType="datetime-local" onChange={handleStartedAt} />
         </div>
         <Spacing rem="2" />
-
         <div className="auctionRoomType">
           <div
             css={{
@@ -117,7 +115,6 @@ export function AuctionCreateBox() {
           </div>
         </div>
         <Spacing rem="2" />
-
         <div className="auction-image">
           <Text type="bold" content="경매 정보를 알려줄 수 있는 썸네일을 등록하세요" />
           <Spacing rem="1" />
@@ -127,7 +124,6 @@ export function AuctionCreateBox() {
           </div>
         </div>
         <Spacing rem="2" />
-
         <div className="auction-confirm-check">
           <div
             css={{
@@ -207,7 +203,6 @@ export function AuctionCreateBox() {
             </div>
           </div>
         </div>
-
         <Spacing rem="2" />
         <div
           css={{
@@ -218,7 +213,6 @@ export function AuctionCreateBox() {
           <ConfirmButton label="물품추가" onClick={addItem} />
         </div>
         <Spacing rem="2" />
-
         {itemList.map((item, index) => {
           return (
             <div key={item}>
