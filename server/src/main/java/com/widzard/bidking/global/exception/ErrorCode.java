@@ -42,7 +42,8 @@ public enum ErrorCode {
     /*
      * Auction
      */
-    AUCTION_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "AUCTION_ROOM_NOT_FOUND", "존재하지 않는 경매방입니다."),
+    AUCTION_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "AUCTION_ROOM_NOT_FOUND",
+        "해당 유저가 만든 경매방이 존재하지 않습니다."),
 
     /*
      * Item
@@ -59,7 +60,7 @@ public enum ErrorCode {
     IMAGE_OPERATION_FAIL(HttpStatus.EXPECTATION_FAILED, "IMAGE_OPERATION_FAIL", "이미지 작업 실패"),
     IMAGE_NOT_SUFFICIENT(HttpStatus.NOT_FOUND, "IMAGE_NOT_SUFFICIENT", "이미지의 수가 일치하지 않습니다."),
     ALREADY_STARTED_AUCTIONROOM(HttpStatus.BAD_REQUEST, "NOT_BEFORE_LIVE", "이미 진행한 경매방입니다."),
-    UNABLE_START_AUCTIONROOM(HttpStatus.BAD_REQUEST, "UNABLE_TO_START", "아직 경매방을 시작할 수 없는 시간입니다.");
+    UNABLE_START_AUCTIONROOM(HttpStatus.BAD_REQUEST, "UNABLE_TO_START", "경매방을 시작할 수 없는 시간입니다.");
 
     private final HttpStatus status;
     private final String code;

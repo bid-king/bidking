@@ -160,8 +160,10 @@ public class AuctionController {
         @PathVariable("auctionId") Long auctionId
     ) {
         AuctionRoom liveAuctionRoom = auctionService.validateEnterRoom(member, auctionId);
-        return new ResponseEntity<>(AuctionRoomEnterResponse.from(liveAuctionRoom),
-            HttpStatus.OK);
+        return new ResponseEntity<>(
+            AuctionRoomEnterResponse.from(liveAuctionRoom),
+            HttpStatus.OK
+        );
     }
 
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
