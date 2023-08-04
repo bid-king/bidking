@@ -32,6 +32,13 @@ router.post('/fail', async (req, res, next) => {
   res.send('ok');
 });
 
+router.post('/next', async (req, res, next) => {
+  const io = req.app.get('io');
+  const { roomId, item } = req.body;
+  io.to(`${roomId}`).emit('next', item);
+  res.send('ok');
+});
+
 router.post('/start', async (req, res, next) => {
   const io = req.app.get('io');
   const { roomId, item } = req.body;
