@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'node.js18.16.1'
+        nodejs 'node-18'
     }
 
     stages {
@@ -11,6 +11,14 @@ pipeline {
             steps {
                 dir('client') {
                     sh "rm -rf *"
+                }
+            }
+        }
+        
+        stage('Git clone') {
+            steps {
+                dir('client') {
+                    git branch: 'develop', credentialsId: 'real_final', url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A706'
                 }
             }
         }
