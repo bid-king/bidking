@@ -38,7 +38,7 @@
       timer.innerText = time;
     });
 
-    socket.on('message', data => {
+    socket.on('chat', data => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
       const { nickname, msg } = data;
@@ -110,7 +110,7 @@
 
     function sendMsg() {
       var msg = document.getElementById('message');
-      socket.emit('message', {
+      socket.emit('chat', {
         nickname,
         roomId,
         msg: msg.value,

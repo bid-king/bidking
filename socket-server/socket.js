@@ -12,18 +12,18 @@ module.exports = (server, app, sessionMiddleware) => {
     socket.on('enterRoom', data => {
       const { nickname, roomId } = data;
       socket.join(roomId);
-      io.to(roomId).emit('message', { nickname: 'System', msg: `${nickname} 입장` });
+      io.to(roomId).emit('chat', { nickname: 'System', msg: `${nickname} 입장` });
     });
 
     socket.on('leaveRoom', data => {
       const { nickname, roomId } = data;
       socket.leave(data.roomId);
-      io.to(roomId).emit('message', { nickname: 'System', msg: `${nickname} 퇴장` });
+      io.to(roomId).emit('chat', { nickname: 'System', msg: `${nickname} 퇴장` });
     });
 
-    socket.on('message', data => {
+    socket.on('chat', data => {
       const { nickname, roomId, msg } = data;
-      io.to(roomId).emit('message', { nickname, msg });
+      io.to(roomId).emit('chat', { nickname, msg });
     });
 
     socket.on('notice', data => {
