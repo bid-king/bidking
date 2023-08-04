@@ -51,6 +51,13 @@
       messageList.appendChild(messageTag);
     });
 
+    socket.on('failBid', item => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = ` ${item.itemName}이 유찰됨`;
+      messageList.appendChild(messageTag);
+    });
+
     function enterRoom() {
       nickname = document.getElementById('nickname').value;
       roomId = document.getElementById('roomId').value;

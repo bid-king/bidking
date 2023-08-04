@@ -18,4 +18,11 @@ router.post('/success', async (req, res, next) => {
   res.send('ok');
 });
 
+router.post('/fail', async (req, res, next) => {
+  const io = req.app.get('io');
+  const { roomId, item } = req.body;
+  io.to(`${roomId}`).emit('failBid', item);
+  res.send('ok');
+});
+
 module.exports = router;
