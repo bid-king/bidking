@@ -1,20 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { bidPriceParse } from '../../util/bidPriceParse';
 import { ConfirmButton } from '../common/ConfirmButton';
 import { Input } from '../common/Input';
-import { RoundButton } from '../common/RoundButton';
+
 import { Spacing } from '../common/Spacing';
-import { Text } from '../common/Text';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme: 'dark' | 'light';
   askingPrice: string;
+  onBid: Dispatch<SetStateAction<string>>;
 }
-export function BiddingForm({ theme = 'light', askingPrice = '1100000' }: Props) {
-  const [bidPrice, setBidPrice] = useState<string>('0');
+export function BiddingForm({ theme = 'light', askingPrice, onBid }: Props) {
+  const [bidPrice, setBidPrice] = useState<string>('');
   useEffect(() => {}, []);
   return (
     <div
@@ -29,14 +29,32 @@ export function BiddingForm({ theme = 'light', askingPrice = '1100000' }: Props)
         <ConfirmButton
           btnType="warn"
           label={bidPriceParse(askingPrice) + '원 즉시입찰'}
-          onClick={() => alert('즉시입찰')}
+          onClick={() => onBid(askingPrice)}
         />
       </div>
       <Spacing rem="0.5" />
       <div css={{ display: 'flex' }}>
-        <Input theme={theme} inputType="text" placeholder={'입찰가 입력'} onChange={e => setBidPrice(e.target.value)} />
+        <Input
+          theme={theme}
+          inputType="text"
+          placeholder={'입찰가 입력'}
+          value={bidPrice}
+          onChange={e => setBidPrice(e.target.value)}
+        />
         <Spacing rem="1" dir="h" />
-        <ConfirmButton btnType="confirm" label="입찰" onClick={() => alert('입찰함')} />
+        <ConfirmButton
+          btnType="confirm"
+          label="입찰"
+          onClick={() => {
+            if (bidPrice.trim().length === 0) {
+              alert('똑바로 가격쓰세요ㅡㅡ');
+              return;
+            }
+            //무조건 현재 가격보다 더 크게써야함
+            onBid(bidPrice);
+            setBidPrice('');
+          }}
+        />
       </div>
     </div>
   );
