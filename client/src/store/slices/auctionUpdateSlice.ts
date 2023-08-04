@@ -6,6 +6,17 @@ export interface AuctionItem {
   description: string;
   startPrice: string;
   ordering: number;
+  itemId: number | undefined;
+  isChanged: boolean;
+}
+
+export interface AuctionCreateItem {
+  name: string;
+  itemCategory: string;
+  description: string;
+  startPrice: string;
+  ordering: number;
+  isChanged: boolean;
 }
 
 interface AuctionUpdate {
@@ -14,7 +25,7 @@ interface AuctionUpdate {
   auctionRoomType: string;
   itemPermissionChecked: boolean;
   deliveryRulesChecked: boolean;
-  items: AuctionItem[];
+  items: (AuctionItem | AuctionCreateItem)[];
 }
 
 const initialState: AuctionUpdate = {
@@ -27,7 +38,7 @@ const initialState: AuctionUpdate = {
 };
 
 export const auctionUpdateSlice = createSlice({
-  name: 'auctionCreate',
+  name: 'auctionUpdate',
   initialState,
   reducers: {
     setAuctionTitle: (state, action: PayloadAction<string>) => {
@@ -56,6 +67,14 @@ export const auctionUpdateSlice = createSlice({
         state.items.push(action.payload);
       }
     },
+    addCreateItemToList: (state, action: PayloadAction<AuctionCreateItem>) => {
+      const index = state.items.findIndex(item => item.ordering === action.payload.ordering);
+      if (index >= 0) {
+        state.items[index] = action.payload;
+      } else {
+        state.items.push(action.payload);
+      }
+    },
     resetAuctionUpdate: state => {
       state.auctionTitle = initialState.auctionTitle;
       state.startedAt = initialState.startedAt;
@@ -76,6 +95,7 @@ export const {
   addItemToList,
   resetAuctionUpdate,
   setAuctionItem,
+  addCreateItemToList,
 } = auctionUpdateSlice.actions;
 
 export default auctionUpdateSlice.reducer;

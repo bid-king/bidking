@@ -13,6 +13,7 @@ export const auctionUpdateItemImgSlice = createSlice({
   initialState,
   reducers: {
     setItemImg: (state, action: PayloadAction<{ id: string; file: File }>) => {
+      console.log(action.payload.id);
       state.itemImgs[action.payload.id] = action.payload.file;
     },
   },

@@ -19,6 +19,8 @@ export interface AuctionItem {
   description: string;
   startPrice: string;
   ordering: number;
+  itemId: number;
+  isChanged: boolean;
 }
 
 export function transformToAuctionItem(originalItem: OriginalItem): AuctionItem {
@@ -28,5 +30,7 @@ export function transformToAuctionItem(originalItem: OriginalItem): AuctionItem 
     description: originalItem.itemDescription,
     startPrice: originalItem.startPrice.toString(),
     ordering: originalItem.itemOrdering,
+    itemId: originalItem.itemId,
+    isChanged: false,
   };
 }

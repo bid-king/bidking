@@ -11,6 +11,8 @@ import { Checkbox } from '../../_libs/components/common/Checkbox';
 import { useAuctionUpdateBox } from '../../_libs/hooks/useAuctionUpdateBox';
 import { RadioButton } from '../../_libs/components/common/RadioButton';
 import { Image } from '../../_libs/components/common/Image';
+import { AuctionUpdateCreateCard } from '../../_libs/components/auctionUpdate/AuctionUpdateCreateCard';
+import { useAppSelector } from '../../store/hooks';
 
 export function AuctionUpdateBox() {
   const {
@@ -25,13 +27,14 @@ export function AuctionUpdateBox() {
     handleItemPermissionChecked,
     handleDeliveryRulesChecked,
     image,
+    // handleAddItem,
     setImage,
-    itemList,
-    setItemList,
-    addItem,
+    // itemList,
+    // setItemList,
+    // addItem,
     handleImageChange,
     items,
-    createAuction,
+    updateAuction,
     itemImgs,
     isLogined,
     getOrderedItemImgs,
@@ -40,6 +43,12 @@ export function AuctionUpdateBox() {
     auctionRoomUrl,
   } = useAuctionUpdateBox();
 
+  const currentOrdering = useAppSelector(state => state.auctionUpdate.items);
+  const [itemList, setItemList] = useState<number[]>([]);
+  const addItem = () => {
+    setItemList(prevItem => [prevItem.length, ...prevItem]);
+  };
+  console.log(currentOrdering);
   return (
     <div
       css={{
@@ -246,7 +255,15 @@ export function AuctionUpdateBox() {
             >
               <ConfirmButton label="물품추가" onClick={addItem} />
             </div>
-            <Spacing rem="2" />
+
+            {itemList.map((item, index) => {
+              return (
+                <div key={index}>
+                  <AuctionUpdateCard ordering={currentOrdering.length + 1} />
+                  <Spacing rem="2" />
+                </div>
+              );
+            })}
 
             {items.map((item, index) => {
               return (
@@ -258,7 +275,7 @@ export function AuctionUpdateBox() {
             })}
             {errMessage && <Text content={errMessage} />}
             {itemPermissionChecked && deliveryRulesChecked ? (
-              <ConfirmButton btnType="confirm" label="경매등록" onClick={createAuction} />
+              <ConfirmButton btnType="confirm" label="경매등록" onClick={updateAuction} />
             ) : (
               <ConfirmButton btnType="disabled" label="경매등록" />
             )}

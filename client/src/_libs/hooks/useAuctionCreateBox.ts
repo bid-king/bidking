@@ -23,9 +23,9 @@ export function useAuctionCreateBox() {
   };
 
   const handleStartedAt = (e: ChangeEvent<HTMLInputElement>) => {
-    const date = new Date(e.target.value + 'Z'); // 'Z'를 추가하여 UTC 시간임을 명시
-    const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
-    dispatch(setStartedAt(formattedDate));
+    // const date = new Date(e.target.value + 'Z'); // 'Z'를 추가하여 UTC 시간임을 명시
+    // const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+    dispatch(setStartedAt(e.target.value));
   };
 
   const handleAuctionRoomType = (e: ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +92,6 @@ export function useAuctionCreateBox() {
           },
         })
         .then(res => {
-          console.log(data);
           navigate(`/seller/detail/${res.data.id}`);
         })
         .catch(err => {

@@ -10,6 +10,7 @@ import {
   setItemPermissionChecked,
   resetAuctionUpdate,
   setAuctionItem,
+  addItemToList,
 } from '../../store/slices/auctionUpdateSlice';
 
 import { getToken, API_URL } from '../util/http';
@@ -27,17 +28,28 @@ export function useAuctionUpdateBox() {
   const isLogined = useAppSelector(state => state.user.isLogined);
   const params = useParams<string>();
   const auctionId = Number(params.auctionId);
+
   // 2. State
   const [image, setImage] = useState<File | null>(null);
-  const [itemList, setItemList] = useState<number[]>([0]);
+  // const [itemList, setItemList] = useState<number[]>([0]);
   const [errMessage, SetErrMessage] = useState('');
   const [detail, setDetail] = useState<AuctionRoomResponse | undefined>(undefined);
   const [auctionRoomUrl, setAuctionRoomUrl] = useState('');
 
   // 3. Function to add item
-  const addItem = () => {
-    setItemList(prevItem => [prevItem.length, ...prevItem]);
-  };
+  // const handleAddItem = () => {
+  //   const maxOrdering = items.reduce((max, current) => Math.max(max, current.ordering), 0);
+  //   const newItem = {
+  //     name: '',
+  //     itemCategory: '1',
+  //     description: '',
+  //     startPrice: '',
+  //     itemId: undefined,
+  //     ordering: maxOrdering + 1,
+  //     isChanged: false,
+  //   };
+  //   dispatch(addItemToList(newItem));
+  // };
 
   // 4. Handlers
   const handleAuctionTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,9 +57,9 @@ export function useAuctionUpdateBox() {
   };
 
   const handleStartedAt = (e: ChangeEvent<HTMLInputElement>) => {
-    const date = new Date(e.target.value + 'Z');
-    const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
-    dispatch(setStartedAt(formattedDate));
+    // const date = new Date(e.target.value + 'Z');
+    // const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
+    dispatch(setStartedAt(e.target.value));
   };
 
   const handleAuctionRoomType = (e: ChangeEvent<HTMLInputElement>) => {
@@ -74,46 +86,66 @@ export function useAuctionUpdateBox() {
     return orderedKeys.map(key => itemImgs[key]);
   };
 
-  async function createAuction() {
+  async function updateAuction() {
     const data = {
       auctionTitle,
       startedAt: startedAt,
       auctionRoomType,
+      imageUrl: 'tempImageURL.jpg',
       itemPermissionChecked,
       deliveryRulesChecked,
-      itemList: items,
+      itemList: items.map(item => {
+        if ('itemId' in item) {
+          // AuctionItem 타입
+          return {
+            ...item,
+            id: item.itemId,
+            itemName: item.name,
+            itemCategoryId: item.itemCategory,
+          };
+        } else {
+          // AuctionCreateItem 타입
+          return {
+            ...item,
+            itemName: item.name,
+            itemCategoryId: item.itemCategory,
+          };
+        }
+      }),
     };
     console.log(data);
-    // if (data && isLogined) {
-    //   const formData = new FormData();
-    //   formData.append('auctionCreateRequest', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    if (data && isLogined) {
+      const formData = new FormData();
+      formData.append('auctionUpdateRequest', new Blob([JSON.stringify(data)], { type: 'application/json' }));
 
-    //   if (image) {
-    //     formData.append('auctionRoomImg', image);
-    //   }
+      if (image) {
+        formData.append('auctionRoomImg', image);
+      } else {
+        formData.append('auctionRoomImg', new Blob([JSON.stringify('null')], { type: 'application/json' }));
+      }
 
-    //   getOrderedItemImgs(itemImgs).forEach((file, index) => {
-    //     formData.append('itemImgs', file);
-    //   });
+      getOrderedItemImgs(itemImgs).forEach((file, index) => {
+        formData.append('itemImgs', file);
+      });
 
-    //   const token = await getToken();
+      const token = await getToken();
 
-    //   axios
-    //     .post(`${API_URL}/api/v1/auctions`, formData, {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //         'Content-Type': 'multipart/form-data',
-    //       },
-    //     })
-    //     .then(res => {
-    //       console.log(data);
-    //       navigate(`/seller/detail/${res.data.id}`);
-    //     })
-    //     .catch(err => {
-    //       console.log(data);
-    //       SetErrMessage(err.response.data.message);
-    //     });
-    // }
+      axios
+        .put(`${API_URL}/api/v1/auctions/${auctionId}`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(res => {
+          console.log(res);
+          navigate(`/seller/detail/${res.data.id}`);
+        })
+        .catch(err => {
+          console.log(data);
+          SetErrMessage(err.response.data.message);
+        });
+    }
   }
 
   useEffect(() => {
@@ -151,12 +183,11 @@ export function useAuctionUpdateBox() {
     handleDeliveryRulesChecked,
     image,
     setImage,
-    itemList,
-    setItemList,
-    addItem,
+    // itemList,
+    // setItemList,
     handleImageChange,
     items,
-    createAuction,
+    updateAuction,
     itemImgs,
     isLogined,
     getOrderedItemImgs,
