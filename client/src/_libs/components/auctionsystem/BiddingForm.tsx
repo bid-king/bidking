@@ -25,15 +25,18 @@ export function BiddingForm({ theme = 'light', askingPrice = '1100000' }: Props)
         ...THEME_VARIANT[theme],
       }}
     >
-      <div css={{ display: 'flex' }}>
-        <Input
-          inputType="text"
-          placeholder={bidPriceParse(askingPrice)}
-          onChange={e => setBidPrice(e.target.value)}
-          theme={theme}
+      <div css={{ display: 'flex', alignItems: 'center' }}>
+        <ConfirmButton
+          btnType="warn"
+          label={bidPriceParse(askingPrice) + '원 즉시입찰'}
+          onClick={() => alert('즉시입찰')}
         />
+      </div>
+      <Spacing rem="0.5" />
+      <div css={{ display: 'flex' }}>
+        <Input theme={theme} inputType="text" placeholder={'입찰가 입력'} onChange={e => setBidPrice(e.target.value)} />
         <Spacing rem="1" dir="h" />
-        <ConfirmButton btnType="warn" label="입찰" onClick={() => alert('입찰함')} />
+        <ConfirmButton btnType="confirm" label="입찰" onClick={() => alert('입찰함')} />
       </div>
     </div>
   );
