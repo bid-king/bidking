@@ -1,12 +1,30 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs 'node.js18.16.1'
+    }
+
     stages {
+
+        stage('Clear current directory') {
+            steps {
+                dir('client') {
+                    sh "rm -rf *"
+                }
+            }
+        }
+
+        stage('Pull from Gitlab') {
+
+        }
+
         stage('Build') {
             steps {
                 dir('client') {
                     echo "Building the project..."
-                    sh "npm install yarn"
+                    sh "npm install -g yarn"
+                    sh "yarn"
                     sh "yarn build"
                 }
             }
