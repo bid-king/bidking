@@ -6,8 +6,6 @@ import com.widzard.bidking.auction.exception.AuctionRoomIsAlreadyStartedExceptio
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.exception.EmptyThumbnailException;
 import com.widzard.bidking.auction.exception.UnableToStartAuctionException;
-import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
-import com.widzard.bidking.auction.exception.EmptyThumbnailException;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.entity.Item;
@@ -102,9 +100,6 @@ public class AuctionRoom extends BaseEntity {
     @OneToMany(mappedBy = "auctionRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> itemList = new ArrayList<>();
 
-    @Column(nullable = false)
-    private boolean isSessionCreated;
-
     public static AuctionRoom createAuctionRoom(
         String name,
         Member seller,
@@ -121,7 +116,6 @@ public class AuctionRoom extends BaseEntity {
             .startedAt(startedAt)
             .image(auctionRoomImg)
             .itemList(new ArrayList<>())
-            .isSessionCreated(false)
             .build();
     }
 
@@ -147,10 +141,6 @@ public class AuctionRoom extends BaseEntity {
 
     public void changeTradeState(AuctionRoomTradeState state) {
         this.auctionRoomTradeState = state;
-    }
-
-    public void changeIsSessionCreated(boolean state) {
-        this.isSessionCreated = state;
     }
 
     public void changeStartedAt(LocalDateTime startedAt) {
