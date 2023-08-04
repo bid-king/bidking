@@ -7,6 +7,7 @@ import com.widzard.bidking.auction.dto.response.AuctionBookmarkCountResponse;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionResponse;
+import com.widzard.bidking.auction.dto.response.AuctionRoomEnterResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
@@ -152,6 +153,32 @@ public class AuctionController {
             member, auctionId);
         return new ResponseEntity<>(auctionRoomSellerResponse, HttpStatus.OK);
     }
+
+    @PostMapping("/{auctionId}/item/{itemId}/start")
+    public ResponseEntity<String> startBidding(
+        @AuthenticationPrincipal Member member,
+        @PathVariable("auctionId") Long auctionId,
+        @PathVariable("itemId") Long itemId
+    ) {
+        auctionService.startBidding(member, auctionId, itemId);
+        return new ResponseEntity<>(
+            null,
+            HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{auctionId}/enter")
+    public ResponseEntity<AuctionRoomEnterResponse> validateEnteringRoom(
+        @AuthenticationPrincipal Member member,
+        @PathVariable("auctionId") Long auctionId
+    ) {
+        AuctionRoom liveAuctionRoom = auctionService.validateEnterRoom(member, auctionId);
+        return new ResponseEntity<>(
+            AuctionRoomEnterResponse.from(liveAuctionRoom),
+            HttpStatus.OK
+        );
+    }
+
 
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
         List<AuctionResponse> auctionResponseList = new ArrayList<>();

@@ -4,7 +4,6 @@ import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
-import com.widzard.bidking.global.util.TimeUtility;
 import com.widzard.bidking.member.entity.Member;
 import io.openvidu.java.client.OpenVidu;
 import io.openvidu.java.client.OpenViduHttpException;
@@ -104,7 +103,7 @@ public class SessionController {
         }
 
         // 세션 생성 가능한 시간인지 확인 : 시작 설정 시간 20분 전부터 세션 생성 가능
-        LocalDateTime startTime = TimeUtility.toLocalDateTime(auctionRoom.getStartedAt());
+        LocalDateTime startTime = auctionRoom.getStartedAt();
         LocalDateTime now = LocalDateTime.now();
         Duration duration = Duration.between(now, startTime);
         if (duration.getSeconds() > 60 * 20) { // TODO: if start < now?
@@ -229,7 +228,7 @@ public class SessionController {
                 this.sessionIdUserIdToken.remove(session);
 
                 // 시작 전에 방이 폭파될 경우 다시 생성할 수 있도록 생성
-                if (TimeUtility.toLocalDateTime(auctionRoom.getStartedAt())
+                if (auctionRoom.getStartedAt()
                     .isAfter(LocalDateTime.now())) {
                     auctionRoom.changeLiveState(AuctionRoomLiveState.BEFORE_LIVE);
                     auctionRoom.changeIsSessionCreated(false);
