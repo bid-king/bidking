@@ -65,6 +65,13 @@
       messageList.appendChild(messageTag);
     });
 
+    socket.on('start', item => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = ` ${item.itemName} 경매 시작!`;
+      messageList.appendChild(messageTag);
+    });
+
     function enterRoom() {
       nickname = document.getElementById('nickname').value;
       roomId = document.getElementById('roomId').value;
