@@ -139,7 +139,6 @@ public class AuctionRoom extends BaseEntity {
         this.name = req.getAuctionTitle();
         this.startedAt = req.getStartedAt();
         this.auctionRoomType = req.getAuctionRoomType();
-//        updateImg(req.getImageDto());
     }
 
     public void changeLiveState(AuctionRoomLiveState state) {

@@ -30,9 +30,6 @@ public class AuctionUpdateRequest {
     @NotNull(message = "경매 방식을 선택하세요")
     private AuctionRoomType auctionRoomType; //경매 방식
 
-    @NotNull(message = "경매 썸네일을 등록하세요")
-    private String imageUrl; //이미지
-
     @AssertTrue(message = "금지 품목 규정 확인 여부를 체크하세요")
     private Boolean itemPermissionChecked; // 금지 품목 규정 확인 여부
 

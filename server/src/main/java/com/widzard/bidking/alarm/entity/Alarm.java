@@ -46,9 +46,6 @@ public class Alarm extends BaseEntity {
     @Column(nullable = false)
     private Boolean isRead; // ( 사용자 읽음 여부 )
 
-    @Column(nullable = false)
-    private LocalDateTime sendedAt;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 12)
     private MediaType mediaType; // ( 알림 매체 타입 )
