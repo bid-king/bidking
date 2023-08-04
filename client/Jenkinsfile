@@ -15,10 +15,6 @@ pipeline {
             }
         }
 
-        stage('Pull from Gitlab') {
-
-        }
-
         stage('Build') {
             steps {
                 dir('client') {
