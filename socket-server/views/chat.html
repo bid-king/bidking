@@ -20,6 +20,9 @@
       <button onclick="sendNotice()">공지</button><br />
     </div>
     <div>
+      <h3 id="timer"></h3>
+    </div>
+    <div>
       <ul id="messages"></ul>
     </div>
   </body>
@@ -29,6 +32,11 @@
 
     var nickname;
     var roomId;
+
+    socket.on('time', time => {
+      var timer = document.getElementById('timer');
+      timer.innerText = time;
+    });
 
     socket.on('message', data => {
       var messageList = document.getElementById('messages');
