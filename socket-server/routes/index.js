@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-let timerInterval;
+const timerInterval = {};
 
 router.get('/', async (req, res, next) => {
   res.render('index');
@@ -61,16 +61,18 @@ function countdownTimer(req, roomId) {
     seconds--;
 
     if (seconds < 0) {
-      clearInterval(timerInterval);
+      clearInterval(timerInterval[roomId]);
+      // TODO: 자바로 물품 종료 post 보내기 (axios)
+      // TODO: response로 온 정보 client로 전송
     }
   }
 
   updateTimer();
-  timerInterval = setInterval(updateTimer, 1000);
+  timerInterval[roomId] = setInterval(updateTimer, 1000);
 }
 
 function startCountdownTimer(req, roomId) {
-  clearInterval(timerInterval);
+  clearInterval(timerInterval[roomId]);
   countdownTimer(req, roomId);
 }
 
