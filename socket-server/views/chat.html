@@ -44,6 +44,13 @@
       messageList.appendChild(messageTag);
     });
 
+    socket.on('updateBid', bidInfo => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = `${bidInfo.user.nickname}님이 ${bidInfo.item.itemName}에 ${bidInfo.price}원 압찰`;
+      messageList.appendChild(messageTag);
+    });
+
     socket.on('successBid', bidInfo => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');

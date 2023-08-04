@@ -10,6 +10,13 @@ router.get('/chat', async (req, res, next) => {
   res.render('chat');
 });
 
+router.post('/update', async (req, res, next) => {
+  const io = req.app.get('io');
+  const { roomId, bidInfo } = req.body;
+  io.to(`${roomId}`).emit('updateBid', bidInfo);
+  res.send('ok');
+});
+
 router.post('/success', async (req, res, next) => {
   const io = req.app.get('io');
   const { roomId, bidInfo } = req.body;
