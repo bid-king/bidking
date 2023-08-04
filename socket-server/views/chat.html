@@ -30,17 +30,18 @@
     var nickname;
     var roomId;
 
-    socket.on('message', msg => {
+    socket.on('message', data => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
-      messageTag.innerText = msg;
+      const { nickname, msg } = data;
+      messageTag.innerText = `${nickname} : ${msg}`;
       messageList.appendChild(messageTag);
     });
 
     socket.on('notice', msg => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
-      messageTag.innerText = msg;
+      messageTag.innerText = `판매자 : ${msg}`;
       messageList.appendChild(messageTag);
     });
 
