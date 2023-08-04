@@ -16,9 +16,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionCreateRequest {
 
     @NotBlank(message = "경매방 제목을 입력하세요")

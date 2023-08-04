@@ -10,13 +10,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@AllArgsConstructor
-@Builder
 @Getter
+@Builder
+@AllArgsConstructor
 public class SessionCreateResponse {
 
     private Long id;//(경매방 id)
-    
+
     private String auctionRoomSession;
 
     private Long sellerId; //(판매자 Member id)

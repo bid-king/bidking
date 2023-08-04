@@ -138,7 +138,7 @@ class AuctionServiceImplTest {
 
         auctionCreateRequest = AuctionCreateRequest.builder()
             .auctionTitle("테스트용 경매방 제목")
-            .auctionRoomType(AuctionRoomType.GENERAL)//일반경매
+            .auctionRoomType(AuctionRoomType.COMMON)//일반경매
             .startedAt(LocalDateTime.parse("2023-09-15T00:00:00"))
             .itemPermissionChecked(true)
             .itemList(itemCreateRequestList)

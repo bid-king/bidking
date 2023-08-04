@@ -6,5 +6,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public enum AlarmType {
-    AUCTION, ORDER, DELIVERY;
+    AUCTION,
+    ORDER,
+    DELIVERY;
 }

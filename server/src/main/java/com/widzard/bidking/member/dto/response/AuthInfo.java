@@ -9,4 +9,5 @@ public class AuthInfo {
 
     private Long id;
     private String token;
+
 }

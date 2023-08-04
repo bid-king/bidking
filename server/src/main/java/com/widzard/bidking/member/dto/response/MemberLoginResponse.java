@@ -17,4 +17,5 @@ public class MemberLoginResponse {
     public static MemberLoginResponse from(AuthInfo authInfo) {
         return new MemberLoginResponse(authInfo.getId(), TOKEN_HEADER_PREFIX, authInfo.getToken());
     }
+
 }

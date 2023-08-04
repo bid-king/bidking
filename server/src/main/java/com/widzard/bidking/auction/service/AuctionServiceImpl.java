@@ -151,6 +151,7 @@ public class AuctionServiceImpl implements AuctionService {
                 .orElseThrow(ItemCategoryNotFoundException::new);
 
             Item item = Item.create(
+                savedAuctionRoom,
                 itemCreateRequest.getStartPrice(),
                 itemCreateRequest.getName(),
                 itemCreateRequest.getDescription(),
@@ -226,7 +227,7 @@ public class AuctionServiceImpl implements AuctionService {
                     .orElseThrow(ItemCategoryNotFoundException::new);
                 //TODO imageService.uploadImage(itemImgs[i])에서 itemImgs[i]가 null이어도 들어가나 확인
                 Image image = imageService.uploadImage(itemImgs[i]);
-                Item item = Item.create(updateRequest.getStartPrice(), updateRequest.getItemName()
+                Item item = Item.create(auctionRoom, updateRequest.getStartPrice(), updateRequest.getItemName()
                     , updateRequest.getDescription(), itemCategory, curOrdering,
                     image);
                 itemRepository.save(item);

@@ -13,11 +13,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "item_category")
 public class ItemCategory extends BaseEntity {
 
@@ -26,5 +26,6 @@ public class ItemCategory extends BaseEntity {
     @Column(name = "item_category_id")
     private Long id;
 
+    @Column(nullable = false, length = 10, unique = true)
     private String name;// (카테명)
 }
