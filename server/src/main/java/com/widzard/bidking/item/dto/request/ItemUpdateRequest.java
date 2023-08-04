@@ -9,9 +9,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemUpdateRequest {
@@ -34,8 +36,10 @@ public class ItemUpdateRequest {
     @NotNull(message = "순서를 입력하세요")
     private int ordering;
 
-    @NotNull(message = "이미지를 설정하세요")
-    private ImageDto imageDto;
+    private Boolean isChanged; // 이미지 수정 여부
+
+//    @NotNull(message = "이미지를 설정하세요")
+//    private ImageDto imageDto;
 
 //    private InvoiceDto invoice; //TODO invoice 구현 후
 }

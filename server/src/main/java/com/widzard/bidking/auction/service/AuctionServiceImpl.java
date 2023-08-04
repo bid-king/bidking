@@ -184,6 +184,7 @@ public class AuctionServiceImpl implements AuctionService {
     ) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
+        log.info("auctionRoom ItemList={}",auctionRoom.getItemList().toString());
         //auctionRoom 기본자료형 필드 업데이트
         auctionRoom.update(req);
 
@@ -213,20 +214,20 @@ public class AuctionServiceImpl implements AuctionService {
         }
 
         //2. 아이템 신규 등록, 기존 아이템 수정
+        int imageCnt = 0;
         for (int i = 0; i < itemUpdateRequestList.size(); i++) {
             int curOrdering = i + 1;
 
             ItemUpdateRequest updateRequest = itemUpdateRequestList.get(i);
             updateRequest.setOrdering(curOrdering);
-
+            log.info("isChanged={}", updateRequest.toString());
             Long itemId = updateRequest.getId();
             //2-1 아이템 신규 등록(신규 등록인 아이템은 아이디가 null)
             if (itemId == null) {
                 ItemCategory itemCategory = itemCategoryRepository.findById(
                         updateRequest.getItemCategoryId())
                     .orElseThrow(ItemCategoryNotFoundException::new);
-                //TODO imageService.uploadImage(itemImgs[i])에서 itemImgs[i]가 null이어도 들어가나 확인
-                Image image = imageService.uploadImage(itemImgs[i]);
+                Image image = imageService.uploadImage(itemImgs[imageCnt++]);
                 Item item = Item.create(auctionRoom, updateRequest.getStartPrice(), updateRequest.getItemName()
                     , updateRequest.getDescription(), itemCategory, curOrdering,
                     image);
@@ -241,13 +242,14 @@ public class AuctionServiceImpl implements AuctionService {
                 updateRequest.getItemCategoryId()).orElseThrow(
                 ItemCategoryNotFoundException::new);
             item.update(updateRequest, category);
-
-            MultipartFile curFileImg = itemImgs[i];
-            //동일 인덱스의 사진이 null이면 썸네일 유지
-            if (curFileImg.isEmpty()) {
+            
+            //요청이 false이면 컨티뉴
+            if (!updateRequest.getIsChanged()) {
                 continue;
             }
             //썸네일 변경
+            MultipartFile curFileImg = itemImgs[imageCnt++];
+            log.info("file={}",curFileImg.toString());
             imageService.modifyImage(curFileImg, item.getImage().getId());
         }
         auctionRoom.isValid();
