@@ -15,7 +15,9 @@
     <hr />
     <div>
       <input type="text" name="message" id="message" />
-      <button onclick="sendMsg()">전송</button>
+      <button onclick="sendMsg()">채팅</button><br />
+      <input type="text" name="notice" id="notice" />
+      <button onclick="sendNotice()">공지</button><br />
     </div>
     <div>
       <ul id="messages"></ul>
@@ -29,6 +31,13 @@
     var roomId;
 
     socket.on('message', msg => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = msg;
+      messageList.appendChild(messageTag);
+    });
+
+    socket.on('notice', msg => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
       messageTag.innerText = msg;
@@ -59,6 +68,15 @@
       var msg = document.getElementById('message');
       socket.emit('message', {
         nickname,
+        roomId,
+        msg: msg.value,
+      });
+      msg.value = '';
+    }
+
+    function sendNotice() {
+      var msg = document.getElementById('notice');
+      socket.emit('notice', {
         roomId,
         msg: msg.value,
       });

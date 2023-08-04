@@ -26,6 +26,11 @@ module.exports = (server, app, sessionMiddleware) => {
       io.to(roomId).emit('message', `${nickname} : ${msg}`);
     });
 
+    socket.on('notice', data => {
+      const { roomId, msg } = data;
+      io.to(roomId).emit('notice', `판매자 : ${msg}`);
+    });
+
     socket.on('disconnect', () => {
       console.log('socket 접속 해제');
     });
