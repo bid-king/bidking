@@ -17,12 +17,8 @@ public enum ErrorCode {
     NOT_SUPPORTED_METHOD_ERROR(HttpStatus.METHOD_NOT_ALLOWED, "GLOBAL_NOT_SUPPORTED_METHOD_ERROR",
         "지원하지 않는 Method 요청입니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND, "GLOBAL_404_ERROR", "404 에러입니다. 요청한 데이터를 서버가 찾을 수 없습니다."),
-
-    /*
-     * Member
-     */
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "존재하지 않는 회원입니다."),
-
+    REQUEST_IS_NOT_VALID(HttpStatus.BAD_REQUEST, "Validation Error",
+        "request 값이 잘못되었습니다. 혹은 json 역직렬화를 할 수 없는 형식입니다."),
     /*
      * Phone Verification
      */
@@ -32,12 +28,14 @@ public enum ErrorCode {
     /*
      * Member
      */
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "존재하지 않는 회원입니다."),
     AUCTION_START_TIME_ERROR(HttpStatus.BAD_REQUEST, "AUCTION_START_TIME_ERROR", "경매방 시작시간 에러입니다."),
     INVALID_AUCTION_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "INVALID_AUCTION_REQUEST_ERROR",
         "올바르지 않은 입력값입니다."),
     MEMBER_DUPLICATED(HttpStatus.BAD_REQUEST, "AlREADY_JOINED_MEMBER", "이미 존재하는 회원입니다."),
     INVALID_TOKEN(HttpStatus.FORBIDDEN, "INVALID_TOKEN", "유효하지 않은 토큰입니다."),
     FORBIDDEN(HttpStatus.FORBIDDEN, "SC_FORBIDDEN", "해당 자원에 대한 권한이 없습니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHENTICATED", "로그인 인증이 안된 사용자입니다."),
 
     /*
      * Auction
@@ -60,7 +58,8 @@ public enum ErrorCode {
     IMAGE_OPERATION_FAIL(HttpStatus.EXPECTATION_FAILED, "IMAGE_OPERATION_FAIL", "이미지 작업 실패"),
     IMAGE_NOT_SUFFICIENT(HttpStatus.NOT_FOUND, "IMAGE_NOT_SUFFICIENT", "이미지의 수가 일치하지 않습니다."),
     ALREADY_STARTED_AUCTIONROOM(HttpStatus.BAD_REQUEST, "NOT_BEFORE_LIVE", "이미 진행한 경매방입니다."),
-    UNABLE_START_AUCTIONROOM(HttpStatus.BAD_REQUEST, "UNABLE_TO_START", "경매방을 시작할 수 없는 시간입니다.");
+    UNABLE_START_AUCTIONROOM(HttpStatus.BAD_REQUEST, "UNABLE_TO_START", "경매방을 시작할 수 없는 시간입니다."),
+    ;
 
     private final HttpStatus status;
     private final String code;

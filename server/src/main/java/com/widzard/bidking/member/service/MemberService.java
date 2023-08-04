@@ -7,6 +7,9 @@ import com.widzard.bidking.member.dto.response.AuthInfo;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
@@ -34,4 +37,6 @@ public interface MemberService {
 
     void deleteMember(Long userId);
 
+    void logout(Authentication authentication, HttpServletRequest request,
+        HttpServletResponse response);
 }
