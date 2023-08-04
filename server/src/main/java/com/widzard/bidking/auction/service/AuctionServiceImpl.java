@@ -317,5 +317,18 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionRoom;
     }
 
+    @Transactional
+    @Override
+    public void startBidding(Member seller, Long auctionId, Long itemId) {
+        // 1. 사용자 및 경매방 검증
+        // 2. 경매 진행될 수 있는 아이템 검증
+        // 3. 해당 아이템 경매 진행으로 변경
+        // 4. 경매 진행 첫번째 상품이면 tradestate => in progress로 상태 변경
+        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(auctionId, seller)
+            .orElseThrow(AuctionRoomNotFoundException::new);
+
+        Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+
+    }
 
 }
