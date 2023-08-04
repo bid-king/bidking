@@ -17,12 +17,8 @@ public enum ErrorCode {
     NOT_SUPPORTED_METHOD_ERROR(HttpStatus.METHOD_NOT_ALLOWED, "GLOBAL_NOT_SUPPORTED_METHOD_ERROR",
         "지원하지 않는 Method 요청입니다."),
     NOT_FOUND(HttpStatus.NOT_FOUND, "GLOBAL_404_ERROR", "404 에러입니다. 요청한 데이터를 서버가 찾을 수 없습니다."),
-
-    /*
-     * Member
-     */
-    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "존재하지 않는 회원입니다."),
-
+    REQUEST_IS_NOT_VALID(HttpStatus.BAD_REQUEST, "Validation Error",
+        "request 값이 잘못되었습니다. 혹은 json 역직렬화를 할 수 없는 형식입니다."),
     /*
      * Phone Verification
      */
@@ -32,6 +28,7 @@ public enum ErrorCode {
     /*
      * Member
      */
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "존재하지 않는 회원입니다."),
     AUCTION_START_TIME_ERROR(HttpStatus.BAD_REQUEST, "AUCTION_START_TIME_ERROR", "경매방 시작시간 에러입니다."),
     INVALID_AUCTION_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "INVALID_AUCTION_REQUEST_ERROR",
         "올바르지 않은 입력값입니다."),

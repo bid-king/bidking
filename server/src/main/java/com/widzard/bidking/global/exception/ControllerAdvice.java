@@ -1,6 +1,5 @@
 package com.widzard.bidking.global.exception;
 
-import javax.naming.AuthenticationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @Slf4j
 @RestControllerAdvice
 public class ControllerAdvice {
+
+    // TODO 401, 403, validation error
 
     /*
      * business custom exception 발생
@@ -50,26 +51,6 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorResponse> handle404(NoHandlerFoundException e) {
         log.error("NoHandlerFoundException: {}", e.getMessage());
         return createErrorResponseEntity(ErrorCode.NOT_FOUND);
-    }
-
-    /*
-     * 401 인증 예외 핸들러
-     */
-    @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<ErrorResponse> authenticationHandle(NoHandlerFoundException e) {
-        log.error("AuthenticationException: {}", e.getMessage());
-        return createErrorResponseEntity(ErrorCode.UNAUTHORIZED);
-    }
-
-    /*
-     * 403 권한 예외 핸들러
-     */
-    @ExceptionHandler(UnAuthorizationException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<ErrorResponse> authorizationHandle(NoHandlerFoundException e) {
-        log.error("UnAuthorizationException: {}", e.getMessage());
-        return createErrorResponseEntity(ErrorCode.FORBIDDEN);
     }
 
     private ResponseEntity<ErrorResponse> createErrorResponseEntity(ErrorCode errorCode) {
