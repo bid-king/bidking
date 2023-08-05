@@ -24,6 +24,7 @@ export function useMyPageBox() {
   const [newPassword, setNewPassword] = useState('');
   const [phoneNumberErrorMessage, setPhoneNumberErrorMessage] = useState('');
   const [image, setImage] = useState<File | null>(null);
+  const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
   const isLogined = useAppSelector(state => state.user.isLogined);
   const [imgSrc, setImgSrc] = useState('');
   const navigate = useNavigate();
@@ -63,8 +64,11 @@ export function useMyPageBox() {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedImage = e.target.files ? e.target.files[0] : null;
-    setImage(selectedImage);
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+      const url = URL.createObjectURL(e.target.files[0]);
+      setPreviewImageURL(url);
+    }
   };
 
   // Functions
@@ -208,5 +212,6 @@ export function useMyPageBox() {
     requestCerificated,
     memberUpdate,
     imgSrc,
+    previewImageURL,
   };
 }
