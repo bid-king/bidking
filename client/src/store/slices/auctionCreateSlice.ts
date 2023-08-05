@@ -20,7 +20,7 @@ interface AuctionCreate {
 const initialState: AuctionCreate = {
   auctionTitle: '',
   startedAt: '',
-  auctionRoomType: 'GENERAL',
+  auctionRoomType: 'COMMON',
   itemPermissionChecked: false,
   deliveryRulesChecked: false,
   items: [],

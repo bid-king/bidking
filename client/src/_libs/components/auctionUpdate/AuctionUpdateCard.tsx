@@ -9,6 +9,7 @@ import { useAuctionUpdateCard } from '../../hooks/useAuctionUpdateCard';
 import { Select, SelectOption } from '../common/SelectOption';
 import { useAppSelector } from '../../../store/hooks';
 import AuctionItem from '../../../store/slices/auctionUpdateSlice';
+import { Image } from '../common/Image';
 
 interface Props {
   ordering: number;
@@ -31,6 +32,7 @@ export function AuctionUpdateCard({ ordering }: Props) {
     handleCategoryChange,
     handleStartPriceChange,
     handleDescriptionChange,
+    previewImageURL,
   } = useAuctionUpdateCard(ordering);
 
   return (
@@ -81,6 +83,8 @@ export function AuctionUpdateCard({ ordering }: Props) {
           <Text type="bold" content="물품 대표사진을 등록하세요" />
           <Spacing rem="1" />
           <div>
+            <Image src={previewImageURL ? previewImageURL : '#'} alt="" />
+
             <input type="file" accept="image/*" onChange={handleItemImg} />
           </div>
         </div>

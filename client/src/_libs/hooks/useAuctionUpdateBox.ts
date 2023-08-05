@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react';
+import { useState, ChangeEvent, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import axios from 'axios';
 import auction, { AuctionRoomResponse } from '../../api/auction';
@@ -30,11 +30,13 @@ export function useAuctionUpdateBox() {
   const auctionId = Number(params.auctionId);
 
   // 2. State
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<File[]>([]);
   // const [itemList, setItemList] = useState<number[]>([0]);
   const [errMessage, SetErrMessage] = useState('');
   const [detail, setDetail] = useState<AuctionRoomResponse | undefined>(undefined);
   const [auctionRoomUrl, setAuctionRoomUrl] = useState('');
+  const getOrderingRef = useRef<number>(0);
+  const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
 
   // 3. Function to add item
   // const handleAddItem = () => {
@@ -75,8 +77,11 @@ export function useAuctionUpdateBox() {
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setImage(prevImages => [...prevImages, files[0]]);
+      const url = URL.createObjectURL(files[0]);
+      setPreviewImageURL(url);
     }
   };
 
@@ -113,16 +118,14 @@ export function useAuctionUpdateBox() {
         }
       }),
     };
-    console.log(data);
     if (data && isLogined) {
       const formData = new FormData();
       formData.append('auctionUpdateRequest', new Blob([JSON.stringify(data)], { type: 'application/json' }));
 
-      if (image) {
-        formData.append('auctionRoomImg', image);
-      } else {
-        formData.append('auctionRoomImg', new Blob([JSON.stringify('null')], { type: 'application/json' }));
-      }
+      image.forEach(img => {
+        formData.append('auctionRoomImg', img);
+      });
+      console.log(image);
 
       getOrderedItemImgs(itemImgs).forEach((file, index) => {
         formData.append('itemImgs', file);
@@ -160,6 +163,7 @@ export function useAuctionUpdateBox() {
         const originalData: OriginalItem[] = data.itemList;
         const auctionItemList: AuctionItem[] = originalData.map(transformToAuctionItem);
         dispatch(setAuctionItem(auctionItemList));
+        getOrderingRef.current = data.itemList.length;
       })
       .catch(err => console.log(err));
   }, [auctionId]);
@@ -194,5 +198,7 @@ export function useAuctionUpdateBox() {
     errMessage,
     detail,
     auctionRoomUrl,
+    getOrderingRef,
+    previewImageURL,
   };
 }

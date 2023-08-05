@@ -17,6 +17,7 @@ export function useAuctionCreateBox() {
   const navigate = useNavigate();
   const { auctionTitle, startedAt, auctionRoomType, itemPermissionChecked, deliveryRulesChecked, items } =
     useAppSelector(state => state.auctionCreate);
+  const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
 
   const handleAuctionTitle = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setAuctionTitle(e.target.value));
@@ -50,6 +51,8 @@ export function useAuctionCreateBox() {
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setImage(e.target.files[0]);
+      const url = URL.createObjectURL(e.target.files[0]);
+      setPreviewImageURL(url);
     }
   };
 
@@ -130,5 +133,6 @@ export function useAuctionCreateBox() {
     isLogined,
     getOrderedItemImgs,
     errMessage,
+    previewImageURL,
   };
 }

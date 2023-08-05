@@ -27,6 +27,7 @@ export function AuctionUpdateBox() {
     handleItemPermissionChecked,
     handleDeliveryRulesChecked,
     image,
+    previewImageURL,
     // handleAddItem,
     setImage,
     // itemList,
@@ -41,14 +42,17 @@ export function AuctionUpdateBox() {
     errMessage,
     detail,
     auctionRoomUrl,
+    getOrderingRef,
   } = useAuctionUpdateBox();
 
-  const currentOrdering = useAppSelector(state => state.auctionUpdate.items);
+  const [currentOrdering, setCurrentOrdering] = useState(items.length);
+  // const currentOrdering = useAppSelector(state => state.auctionUpdate.items).length;
+  // const currentOrdering = items.length;
   const [itemList, setItemList] = useState<number[]>([]);
   const addItem = () => {
     setItemList(prevItem => [prevItem.length, ...prevItem]);
   };
-  console.log(currentOrdering);
+  // console.log(getOrderingRef);
   return (
     <div
       css={{
@@ -130,7 +134,7 @@ export function AuctionUpdateBox() {
                 <Spacing rem="1" dir="h" />
                 <RadioButton
                   name="auctionRoomType"
-                  value="GENERAL"
+                  value="COMMON"
                   checkedValue={auctionRoomType}
                   onChange={handleAuctionRoomType}
                 />
@@ -156,9 +160,8 @@ export function AuctionUpdateBox() {
               <Text type="bold" content="경매 정보를 알려줄 수 있는 썸네일을 등록하세요" />
               <Spacing rem="1" />
               <div>
-                <Image src={auctionRoomUrl} alt="auctionRoomUrl" />
+                <Image src={previewImageURL ? previewImageURL : auctionRoomUrl} alt="auctionRoomUrl" />
                 <input type="file" accept="image/*" onChange={handleImageChange} />
-                {image && <p>Selected image: {image.name}</p>}
               </div>
             </div>
             <Spacing rem="2" />
@@ -259,7 +262,7 @@ export function AuctionUpdateBox() {
             {itemList.map((item, index) => {
               return (
                 <div key={index}>
-                  <AuctionUpdateCard ordering={currentOrdering.length + 1} />
+                  <AuctionUpdateCreateCard ordering={getOrderingRef.current + 1} />
                   <Spacing rem="2" />
                 </div>
               );

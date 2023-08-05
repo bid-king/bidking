@@ -23,6 +23,8 @@ export function useAuctionUpdateCard(ordering: number) {
   const [itemId, setItemId] = useState(item.itemId);
   const [itemOrdering, setItemOrdering] = useState(ordering);
   const [isImageChanged, setIsImageChanged] = useState(item.isChanged || false);
+  const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
+
   const dispatch = useAppDispatch();
 
   interface Category {
@@ -62,6 +64,8 @@ export function useAuctionUpdateCard(ordering: number) {
     if (e.target.files && e.target.files[0]) {
       dispatch(setItemImg({ id: itemOrdering.toString(), file: e.target.files[0] }));
       setIsImageChanged(true);
+      const url = URL.createObjectURL(e.target.files[0]);
+      setPreviewImageURL(url);
     } else {
       setIsImageChanged(false);
     }
@@ -117,5 +121,6 @@ export function useAuctionUpdateCard(ordering: number) {
     handleCategoryChange,
     handleStartPriceChange,
     handleDescriptionChange,
+    previewImageURL,
   };
 }

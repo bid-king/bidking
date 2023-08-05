@@ -19,7 +19,7 @@ export interface AuctionRoomResponse {
   auctionRoomLiveState: 'BEFORE_LIVE';
   auctionRoomUrl: string;
   auctionRoomTradeState: 'BEFORE_PROGRESS';
-  auctionRoomType: 'GENERAL';
+  auctionRoomType: 'COMMON';
   startedAt: string;
   imageURL: string;
   itemList: ItemList[];
@@ -65,7 +65,7 @@ interface AuctionCreateRequest {
 interface AuctionUpdateRequest {
   auctionTitle: string;
   startedAt: string;
-  auctionRoomType: 'GENERAL' | 'REVERSE';
+  auctionRoomType: 'COMMON' | 'REVERSE';
   image: File;
   item: [
     {

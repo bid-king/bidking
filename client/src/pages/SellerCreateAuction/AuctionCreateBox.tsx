@@ -10,6 +10,7 @@ import { QuestionModal } from '../../_libs/components/auctionCreate/QuestionModa
 import { Checkbox } from '../../_libs/components/common/Checkbox';
 import { useAuctionCreateBox } from '../../_libs/hooks/useAuctionCreateBox';
 import { RadioButton } from '../../_libs/components/common/RadioButton';
+import { Image } from '../../_libs/components/common/Image';
 
 export function AuctionCreateBox() {
   const {
@@ -27,6 +28,7 @@ export function AuctionCreateBox() {
     handleImageChange,
     createAuction,
     errMessage,
+    previewImageURL,
   } = useAuctionCreateBox();
 
   return (
@@ -94,7 +96,7 @@ export function AuctionCreateBox() {
             <Spacing rem="1" dir="h" />
             <RadioButton
               name="auctionRoomType"
-              value="GENERAL"
+              value="COMMON"
               checkedValue={auctionRoomType}
               onChange={handleAuctionRoomType}
             />
@@ -119,8 +121,8 @@ export function AuctionCreateBox() {
           <Text type="bold" content="경매 정보를 알려줄 수 있는 썸네일을 등록하세요" />
           <Spacing rem="1" />
           <div>
+            {image && <Image src={previewImageURL ? previewImageURL : '#'} alt="auctionRoomUrl" />}
             <input type="file" accept="image/*" onChange={handleImageChange} />
-            {image && <p>Selected image: {image.name}</p>}
           </div>
         </div>
         <Spacing rem="2" />

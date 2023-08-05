@@ -7,6 +7,7 @@ import { Spacing } from '../common/Spacing';
 import { TextArea } from '../common/TextArea';
 import { useAuctionCreateCard } from '../../hooks/useAuctionCreateCard';
 import { Select, SelectOption } from '../common/SelectOption';
+import { Image } from '../common/Image';
 
 interface Props {
   ordering: number;
@@ -25,6 +26,7 @@ export function AuctionCreateCard({ ordering }: Props) {
     handleDescription,
     itemOrdering,
     categoryList,
+    previewImageURL,
   } = useAuctionCreateCard(ordering);
 
   return (
@@ -75,6 +77,7 @@ export function AuctionCreateCard({ ordering }: Props) {
           <Text type="bold" content="물품 대표사진을 등록하세요" />
           <Spacing rem="1" />
           <div>
+            <Image src={previewImageURL ? previewImageURL : '#'} alt="" />
             <input type="file" accept="image/*" onChange={handleItemImg} />
           </div>
         </div>

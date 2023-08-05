@@ -31,7 +31,7 @@ interface AuctionUpdate {
 const initialState: AuctionUpdate = {
   auctionTitle: '',
   startedAt: '',
-  auctionRoomType: 'GENERAL',
+  auctionRoomType: 'COMMON',
   itemPermissionChecked: false,
   deliveryRulesChecked: false,
   items: [],

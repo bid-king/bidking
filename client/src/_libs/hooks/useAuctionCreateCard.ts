@@ -11,6 +11,7 @@ export function useAuctionCreateCard(ordering: number) {
   const [startPrice, setStartPrice] = useState('');
   const [description, setDescription] = useState('');
   const [itemOrdering] = useState(ordering);
+  const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
   const dispatch = useAppDispatch();
 
   interface Category {
@@ -49,6 +50,8 @@ export function useAuctionCreateCard(ordering: number) {
   const handleItemImg = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       dispatch(setItemImg({ id: itemOrdering.toString(), file: e.target.files[0] }));
+      const url = URL.createObjectURL(e.target.files[0]);
+      setPreviewImageURL(url);
     }
   };
 
@@ -78,6 +81,7 @@ export function useAuctionCreateCard(ordering: number) {
     handleDescription,
     itemOrdering,
     categoryList,
+    previewImageURL,
   };
 }
 
