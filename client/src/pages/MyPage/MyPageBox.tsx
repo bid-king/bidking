@@ -37,6 +37,7 @@ export function MyPageBox() {
     requestCerificated,
     memberUpdate,
     imgSrc,
+    previewImageURL,
   } = useMyPageBox();
 
   return (
@@ -51,7 +52,7 @@ export function MyPageBox() {
       }}
     >
       <div>
-        <ProfileImage src={imgSrc} rem={4} />
+        <ProfileImage src={previewImageURL ? previewImageURL : imgSrc} rem={4} />
         <input type="file" onChange={handleImageChange} />
       </div>
       <div>
