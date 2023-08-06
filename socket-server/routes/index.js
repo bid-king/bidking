@@ -11,6 +11,18 @@ router.get('/chat', async (req, res, next) => {
   res.render('chat');
 });
 
+router.get('/redis/set', async (req, res, next) => {
+  const redisCli = req.app.get('redisCli');
+  await redisCli.set('bidking', 'a706');
+  res.send('ok');
+});
+
+router.get('/redis/get', async (req, res, next) => {
+  const redisCli = req.app.get('redisCli');
+  const result = await redisCli.get('bidking');
+  res.send(result);
+});
+
 router.post('/update', async (req, res, next) => {
   const io = req.app.get('io');
   const { roomId, bidInfo } = req.body;

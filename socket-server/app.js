@@ -11,6 +11,7 @@ const ejs = require('ejs');
 dotenv.config();
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
+const redis = require('./redis');
 
 const app = express();
 app.set('port', process.env.PORT || 8005);
@@ -66,3 +67,4 @@ const server = app.listen(app.get('port'), () => {
 });
 
 webSocket(server, app, sessionMiddleware);
+redis(app);
