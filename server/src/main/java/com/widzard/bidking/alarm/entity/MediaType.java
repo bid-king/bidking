@@ -6,5 +6,6 @@ import lombok.ToString;
 @Getter
 @ToString
 public enum MediaType {
-    EMAIL, NOTIFICATION;
+    EMAIL,
+    NOTIFICATION;
 }

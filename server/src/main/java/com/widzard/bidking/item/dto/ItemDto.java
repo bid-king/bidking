@@ -17,19 +17,33 @@ import lombok.ToString;
 public class ItemDto {
 
     private Long itemId;
+
     private String itemName;
+
     private String category;
+
     private Long startPrice;
+
     private String itemState;
+
     private String itemImageUrl;
+
     private String itemDescription;
+
     private int itemOrdering;
+
     private LocalDateTime successTime;
+
     private Long successPrice;
+
     private String successMemberNickname;
+
     private Long successMemberId;
+
     private String deliveryAddress;
+
     private String deliveryMsg;
+
 //    private invoiceDto invoice; //TODO invoice 구현 후
 
 
@@ -46,4 +60,5 @@ public class ItemDto {
 //            .successTime(item.getOrderItem().getCreatedAt()) TODO orderItem 구현 후 지정
             .build();
     }
+
 }

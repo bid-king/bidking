@@ -24,9 +24,10 @@ export function AppRouter() {
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/mypage/:name" element={<MyPage />} />
+        <Route path="/mypage/:id" element={<MyPage />} />
         <Route path="/purchased" element={<Purchased />} />
         <Route path="/detail/:auctionId" element={<Detail />} />
+        <Route path="/auction/:auctionId" element={<Auction />} />
       </Route>
 
       {/* 판매자 라우터 페이지 */}
@@ -34,11 +35,10 @@ export function AppRouter() {
         <Route path="/seller/create-auction" element={<SellerCreateAuction />} />
         <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
         <Route path="/seller" element={<Seller />}></Route>
+        <Route path="/seller/auction/:auctionId" element={<SellerAuction />} />
       </Route>
 
       {/* 네브바가 안들어가는 페이지 및 판매페이지 */}
-      <Route path="/seller/auction/:auctionId" element={<SellerAuction />} />
-      <Route path="/auction/:auctionId" element={<Auction />} />
     </Routes>
   );
 }

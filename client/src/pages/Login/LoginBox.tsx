@@ -63,7 +63,7 @@ export function LoginBox() {
             <Spacing rem="1" />
           </>
         )}
-        <ConfirmButton type="submit" label="로그인" />
+        <ConfirmButton label="로그인" type="submit" onClick={handleSubmit} />
         <Spacing rem="2" />
         <div
           css={{

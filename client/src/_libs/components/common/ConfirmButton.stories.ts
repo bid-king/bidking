@@ -15,7 +15,6 @@ export const Primary: Story = {
   args: {
     label: '안녕?',
     btnType: 'ok',
-    activated: 1,
     type: 'button',
   },
 };

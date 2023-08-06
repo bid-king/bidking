@@ -1,12 +1,10 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+import { useState, useEffect, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import member from '../../api/member';
 import { useAppDispatch } from '../../store/hooks';
 import { getUserInformation } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export function useLogin() {
-  const API_URL = 'http://70.12.247.172:8080';
   const dispatch = useAppDispatch();
 
   const [userId, setUserId] = useState('');
@@ -27,13 +25,10 @@ export function useLogin() {
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (userId && password) {
-      axios
-        .post(`${API_URL}/api/v1/members/login`, {
-          userId: userId,
-          password: password,
-        })
+      member
+        .login(userId, password)
         .then(res => {
-          dispatch(getUserInformation({ userId, accessToken: res.data.accessToken, isLogined: true }));
+          dispatch(getUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true }));
           navigate('/');
         })
         .catch(err => {

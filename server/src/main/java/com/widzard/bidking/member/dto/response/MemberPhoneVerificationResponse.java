@@ -15,4 +15,5 @@ public class MemberPhoneVerificationResponse {
     public static MemberPhoneVerificationResponse from(String certifiedNumber) {
         return new MemberPhoneVerificationResponse(certifiedNumber);
     }
+
 }

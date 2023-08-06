@@ -19,7 +19,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         "JOIN oi.order o " +
         "JOIN oi.item i " +
         "JOIN i.auctionRoom a " +
-        "WHERE i.itemState = 'SUCCESS' " +
+        "WHERE i.itemState = 'AFTER_AUCTION' " +
         "and a.seller = :member " +
         "AND a.auctionRoomLiveState IN :liveState " +
         "AND a.auctionRoomTradeState IN :tradeState " +

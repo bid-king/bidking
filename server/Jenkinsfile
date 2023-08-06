@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Prepare') {
+            steps {
+                echo 'Checking current file list...'
+                sh 'ls server'
+                echo 'Preparing the environment...'
+                sh 'chmod +x ./server/gradlew'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('server') {
+                    echo 'Building the project...'
+                    sh './gradlew clean build'
+                }
+            }
+        }
+    }
+}

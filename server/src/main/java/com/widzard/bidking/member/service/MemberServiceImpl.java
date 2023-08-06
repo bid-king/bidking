@@ -5,10 +5,12 @@ import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.SendingMessageFailureException;
 import com.widzard.bidking.global.jwt.service.TokenProvider;
 import com.widzard.bidking.image.entity.Image;
+import com.widzard.bidking.image.exception.ImageOperationFailException;
 import com.widzard.bidking.image.service.ImageService;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
+import com.widzard.bidking.member.dto.response.AuthInfo;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberDuplicatedException;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
@@ -18,6 +20,8 @@ import com.widzard.bidking.order.repository.OrderRepository;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
@@ -25,7 +29,9 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,6 +59,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
+    SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
     @Value("${coolsms.api_key}")
     private String API_KEY;
@@ -97,11 +104,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String login(MemberLoginRequest request) {
+    public AuthInfo login(MemberLoginRequest request) {
         Member member = memberRepository.findByUserId(request.getUserId())
             .orElseThrow(MemberNotFoundException::new);
         comparePassword(request.getPassword(), member.getPassword());
-        return tokenProvider.generateAccessToken(member);
+        String loginToken = tokenProvider.generateAccessToken(member);
+        return new AuthInfo(member.getId(), loginToken);
     }
 
 
@@ -195,24 +203,39 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Image savedImage = null;
+        //변경요청이 존재하는 경우
         if (image != null) {
+            //기존 프사 있는 경우
             if (member.getImage() != null) {
-                // TODO: 있는 이미지 변경
-                imageService.deleteImage(member.getImage());
+                savedImage = imageService.modifyImage(image, memberId);
+            } else {//기존 프사 없는 경우
+                savedImage = imageService.uploadImage(image);
             }
-            savedImage = imageService.uploadImage(image);
+            //변경요청이 있는데 변경된 이미지가 없음
+            if (savedImage == null) {
+                throw new ImageOperationFailException();
+            }
         }
-
         member.updateItem(request, passwordEncoder.encode(newPassword), savedImage);
     }
 
     @Override
     public void deleteMember(Long userId) {
         Member member = memberRepository.findById(userId)
-            .orElseThrow(() -> new MemberNotFoundException());
+            .orElseThrow(MemberNotFoundException::new);
         member.changeToUnavailable();
         memberRepository.save(member);
     }
+
+    @Override
+    public void logout(
+        Authentication authentication,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) {
+        logoutHandler.logout(request, response, authentication);
+    }
+
 
     private void comparePassword(String rawPassword, String encodedPassword) {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
