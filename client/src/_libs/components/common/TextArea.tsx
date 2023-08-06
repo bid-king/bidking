@@ -5,14 +5,21 @@ import colors from '../../design/colors';
 interface Props {
   theme?: 'light' | 'dark';
   placeholder: string;
+  value?: string;
   onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export function TextArea({ placeholder = 'placeholder를 입력하세요', theme = 'light', onChange }: Props) {
+export function TextArea({
+  placeholder = 'placeholder를 입력하세요',
+  theme = 'light',
+  onChange,
+  value = '값을 입력하세요',
+}: Props) {
   return (
     <textarea
       onChange={onChange}
       placeholder={placeholder}
+      value={value}
       css={{
         fontFamily: 'Pretendard',
         fontSize: '1rem',

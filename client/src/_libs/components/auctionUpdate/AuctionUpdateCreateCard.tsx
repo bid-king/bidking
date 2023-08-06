@@ -5,15 +5,15 @@ import { Text } from '../common/Text';
 import { Input } from '../common/Input';
 import { Spacing } from '../common/Spacing';
 import { TextArea } from '../common/TextArea';
-import { useAuctionCreateCard } from '../../hooks/useAuctionCreateCard';
+import { useAuctionUpdateCreateCard } from '../../hooks/useAuctionUpdateCreateCard';
 import { Select, SelectOption } from '../common/SelectOption';
-import { Image } from '../common/Image';
+import { useAppSelector } from '../../../store/hooks';
 
 interface Props {
   ordering: number;
 }
 
-export function AuctionCreateCard({ ordering }: Props) {
+export function AuctionUpdateCreateCard({ ordering }: Props) {
   const {
     name,
     itemCategory,
@@ -26,8 +26,7 @@ export function AuctionCreateCard({ ordering }: Props) {
     handleDescription,
     itemOrdering,
     categoryList,
-    previewImageURL,
-  } = useAuctionCreateCard(ordering);
+  } = useAuctionUpdateCreateCard(ordering);
 
   return (
     <div
@@ -54,12 +53,12 @@ export function AuctionCreateCard({ ordering }: Props) {
       </div>
       <Spacing rem="1" />
       <div className="cardBody-name">
-        <Input value={name} placeholder="물품명" onChange={handleName} />
+        <Input placeholder="물품명" onChange={handleName} />
       </div>
       <Spacing rem="1" />
 
       <div>
-        <Select value={itemCategory} onChange={handleItemCategory}>
+        <Select>
           {categoryList.map(category => (
             <SelectOption value={category.id} key={category.id}>
               {category.name}
@@ -77,7 +76,6 @@ export function AuctionCreateCard({ ordering }: Props) {
           <Text type="bold" content="물품 대표사진을 등록하세요" />
           <Spacing rem="1" />
           <div>
-            <Image src={previewImageURL ? previewImageURL : '#'} alt="" />
             <input type="file" accept="image/*" onChange={handleItemImg} />
           </div>
         </div>

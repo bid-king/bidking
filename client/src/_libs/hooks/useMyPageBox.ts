@@ -25,7 +25,7 @@ export function useMyPageBox() {
   const [phoneNumberErrorMessage, setPhoneNumberErrorMessage] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const isLogined = useAppSelector(state => state.user.isLogined);
-  const [imgSrc, setImgSrc] = useState('');
+  const [imgSrc, setImgSrc] = useState('/image/profile.png');
   const navigate = useNavigate();
   const memberId = useAppSelector(state => state.user.id);
 

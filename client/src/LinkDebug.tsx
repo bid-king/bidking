@@ -42,6 +42,9 @@ export function LinkDebug() {
           <li>
             <Link to="/login/loading">로딩화면</Link>
           </li>
+          <li>
+            <Link to="/seller/update-auction/1">경매방 업데이트</Link>
+          </li>
         </ul>
       </nav>
     </div>

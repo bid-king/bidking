@@ -1,23 +1,34 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface AuctionItem {
+export interface AuctionItem {
   name: string;
   itemCategory: string;
   description: string;
   startPrice: string;
   ordering: number;
+  itemId: number | undefined;
+  isChanged: boolean;
 }
 
-interface AuctionCreate {
+export interface AuctionCreateItem {
+  name: string;
+  itemCategory: string;
+  description: string;
+  startPrice: string;
+  ordering: number;
+  isChanged: boolean;
+}
+
+interface AuctionUpdate {
   auctionTitle: string;
   startedAt: string;
   auctionRoomType: string;
   itemPermissionChecked: boolean;
   deliveryRulesChecked: boolean;
-  items: AuctionItem[];
+  items: (AuctionItem | AuctionCreateItem)[];
 }
 
-const initialState: AuctionCreate = {
+const initialState: AuctionUpdate = {
   auctionTitle: '',
   startedAt: '',
   auctionRoomType: 'COMMON',
@@ -26,8 +37,8 @@ const initialState: AuctionCreate = {
   items: [],
 };
 
-export const auctionCreateSlice = createSlice({
-  name: 'auctionCreate',
+export const auctionUpdateSlice = createSlice({
+  name: 'auctionUpdate',
   initialState,
   reducers: {
     setAuctionTitle: (state, action: PayloadAction<string>) => {
@@ -45,6 +56,9 @@ export const auctionCreateSlice = createSlice({
     setDeliveryRulesChecked: state => {
       state.deliveryRulesChecked = !state.deliveryRulesChecked;
     },
+    setAuctionItem: (state, action: PayloadAction<AuctionItem[]>) => {
+      state.items = action.payload;
+    },
     addItemToList: (state, action: PayloadAction<AuctionItem>) => {
       const index = state.items.findIndex(item => item.ordering === action.payload.ordering);
       if (index >= 0) {
@@ -53,7 +67,15 @@ export const auctionCreateSlice = createSlice({
         state.items.push(action.payload);
       }
     },
-    resetAuctionCreate: state => {
+    addCreateItemToList: (state, action: PayloadAction<AuctionCreateItem>) => {
+      const index = state.items.findIndex(item => item.ordering === action.payload.ordering);
+      if (index >= 0) {
+        state.items[index] = action.payload;
+      } else {
+        state.items.push(action.payload);
+      }
+    },
+    resetAuctionUpdate: state => {
       state.auctionTitle = initialState.auctionTitle;
       state.startedAt = initialState.startedAt;
       state.auctionRoomType = initialState.auctionRoomType;
@@ -71,7 +93,9 @@ export const {
   setItemPermissionChecked,
   setDeliveryRulesChecked,
   addItemToList,
-  resetAuctionCreate,
-} = auctionCreateSlice.actions;
+  resetAuctionUpdate,
+  setAuctionItem,
+  addCreateItemToList,
+} = auctionUpdateSlice.actions;
 
-export default auctionCreateSlice.reducer;
+export default auctionUpdateSlice.reducer;
