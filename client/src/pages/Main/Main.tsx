@@ -1,5 +1,16 @@
+/** @jsxImportSource @emotion/react */
 import React from 'react';
+import colors from '../../_libs/design/colors';
+import { MainBox } from './MainBox';
 
 export function Main() {
-  return <div>메인입니다.</div>;
+  return (
+    <div
+      css={{
+        backgroundColor: colors.backgroundLight,
+      }}
+    >
+      <MainBox />
+    </div>
+  );
 }

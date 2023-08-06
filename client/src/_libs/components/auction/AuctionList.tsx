@@ -28,7 +28,7 @@ export function AuctionList({
       css={{
         width: '22%',
         height: '13.5%',
-        minWidth: '22rem',
+        minWidth: '20rem',
         minHeight: '13.5rem',
         borderRadius: '1.5rem',
         position: 'relative',
