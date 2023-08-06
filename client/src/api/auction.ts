@@ -13,7 +13,11 @@ export default {
   //경매 삭제
   getCategoryList: () => http.get<CategoryListResponse>('/api/v1/items/categories'),
   getAuctionList: (data: AuctionRoomListRequest) =>
-    http.post<AuctionRoomListResponce>(`${API_URL}/api/v1/auctions/status`, data),
+    http.post<AuctionRoomListResponce[]>(`${API_URL}/api/v1/auctions/status`, data),
+  getSellerAuctionListBeforeLive: () =>
+    https.get<SellerAuctionRoomListResponce[]>(`${API_URL}/api/v1/auctions/seller/before-live`),
+  getSellerAuctionListAfterLive: () =>
+    https.get<SellerAuctionRoomListResponce[]>(`${API_URL}/api/v1/auctions/seller/after-live`),
 };
 
 export interface AuctionRoomResponse {
@@ -105,13 +109,13 @@ interface ItemCategory {
   name: string;
 }
 
-interface ItemListDto {
+export interface ItemListDto {
   id: number;
   name: string;
   itemCategory: ItemCategory;
 }
 
-interface AuctionRoomListResponce {
+export interface AuctionRoomListResponce {
   id: number;
   name: string;
   imageUrl: string;
@@ -119,4 +123,13 @@ interface AuctionRoomListResponce {
   auctionRoomLiveState: string;
   itemListDto: ItemListDto[];
   bookmarked: boolean;
+}
+
+export interface SellerAuctionRoomListResponce {
+  id: number;
+  name: string;
+  imageUrl: string;
+  startedAt: string;
+  auctionRoomLiveState: string;
+  itemListDto: ItemListDto[];
 }

@@ -1,5 +1,17 @@
+/** @jsxImportSource @emotion/react */
 import React from 'react';
+import colors from '../../_libs/design/colors';
+import { SellerBox } from './SellerBox';
 
 export function Seller() {
-  return <div>판매자 레이아웃입니다.</div>;
+  return (
+    <div
+      css={{
+        backgroundColor: colors.backgroundDark,
+        color: colors.white,
+      }}
+    >
+      <SellerBox />
+    </div>
+  );
 }
