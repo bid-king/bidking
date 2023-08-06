@@ -18,13 +18,19 @@ public class AuctionListRequest {
 
     private String keyword; // 검색어
 
-    @NotNull(message = "현재 페이지를 입력해주세요.")
     private int page; // 현재 페이지
 
-    @NotNull(message = "페이지당 조회할 경매 수를 입력해주세요.")
     private int perPage; // 페이지당 경매
 
-    @NotNull(message = "카테고리 리스트를 입력해주세요")
     private List<Long> categoryList; // 적용된 카테고리
 
+    public static AuctionListRequest create(String keyword, int page, int perPage,
+        List<Long> categoryList) {
+        return AuctionListRequest.builder()
+            .keyword(keyword)
+            .page(page)
+            .perPage(perPage)
+            .categoryList(categoryList)
+            .build();
+    }
 }
