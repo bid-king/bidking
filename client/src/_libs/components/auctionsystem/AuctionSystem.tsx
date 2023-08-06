@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { Spacing } from '../common/Spacing';
@@ -14,6 +14,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   theme: 'dark' | 'light';
 }
 export function AuctionSystem({ theme = 'light' }: Props) {
+  const [price, setPrice] = useState<string>('5000');
   useEffect(() => {}, []);
   return (
     <>
@@ -41,11 +42,11 @@ export function AuctionSystem({ theme = 'light' }: Props) {
         <Spacing rem="1.5" />
         <TopBidder theme={theme} />
         <Spacing rem="0.5" />
-        <BidPrice align="center" theme={theme} />
+        <BidPrice align="center" theme={theme} price={price} />
         <Spacing rem="1.5" />
         <Timer theme={theme} />
         <Spacing rem="1" />
-        <BiddingForm theme={theme} askingPrice={'11410000'} />
+        <BiddingForm theme={theme} askingPrice={String(Math.floor((Number(price) * 1.1) / 10) * 10)} onBid={setPrice} />
         <Spacing rem="1.5" />
       </div>
     </>
