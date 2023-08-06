@@ -6,6 +6,7 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
 const hpp = require('hpp');
+const ejs = require('ejs');
 
 dotenv.config();
 const webSocket = require('./socket');
@@ -13,6 +14,8 @@ const indexRouter = require('./routes');
 
 const app = express();
 app.set('port', process.env.PORT || 8005);
+app.set('views', __dirname + '/views');
+app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 
 const sessionOption = {
