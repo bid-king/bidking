@@ -21,7 +21,7 @@ export function Nav({ theme = 'light' }: Props) {
   const breakpoints = [576, 768, 992, 1200];
   const mq = breakpoints.map(bp => `@media (min-width: ${bp}px)`);
   const id = useAppSelector(state => state.user.id);
-  const { showModal, setShowModal, isLogined, handleMouseEnter, handleMouseLeave } = useNavBar();
+  const { showModal, isLogined, handleMouseEnter, handleMouseLeave } = useNavBar();
 
   return (
     <div>

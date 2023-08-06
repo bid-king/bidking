@@ -1,17 +1,17 @@
 import { ChangeEvent, useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { addItemToList } from '../../store/slices/auctionCreateSlice';
-import { setItemImg } from '../../store/slices/auctionCreateItemImgSlice';
+import { addCreateItemToList } from '../../store/slices/auctionUpdateSlice';
+import { setItemImg } from '../../store/slices/auctionUpdateItemImgSlice';
 import axios from 'axios';
 import auction from '../../api/auction';
 
-export function useAuctionCreateCard(ordering: number) {
+export function useAuctionUpdateCreateCard(ordering: number) {
+  const [isImageChanged, setIsImageChanged] = useState(false);
   const [name, setName] = useState('');
   const [itemCategory, setItemCategory] = useState('1');
   const [startPrice, setStartPrice] = useState('');
   const [description, setDescription] = useState('');
   const [itemOrdering] = useState(ordering);
-  const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
   const dispatch = useAppDispatch();
 
   interface Category {
@@ -50,24 +50,24 @@ export function useAuctionCreateCard(ordering: number) {
   const handleItemImg = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       dispatch(setItemImg({ id: itemOrdering.toString(), file: e.target.files[0] }));
-      const url = URL.createObjectURL(e.target.files[0]);
-      setPreviewImageURL(url);
+      setIsImageChanged(true);
+    } else {
+      setIsImageChanged(false);
     }
   };
 
   useEffect(() => {
-    if (name && startPrice && description) {
-      dispatch(
-        addItemToList({
-          name: name,
-          itemCategory: itemCategory,
-          description: description,
-          startPrice: startPrice,
-          ordering: itemOrdering,
-        })
-      );
-    }
-  }, [name, startPrice, description]);
+    dispatch(
+      addCreateItemToList({
+        name: name,
+        itemCategory: itemCategory,
+        description: description,
+        startPrice: startPrice,
+        ordering: itemOrdering,
+        isChanged: isImageChanged,
+      })
+    );
+  }, [name, startPrice, description, itemCategory, isImageChanged]);
 
   return {
     name,
@@ -81,8 +81,5 @@ export function useAuctionCreateCard(ordering: number) {
     handleDescription,
     itemOrdering,
     categoryList,
-    previewImageURL,
   };
 }
-
-export default useAuctionCreateCard;

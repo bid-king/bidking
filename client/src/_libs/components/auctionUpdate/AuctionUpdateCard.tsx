@@ -5,15 +5,17 @@ import { Text } from '../common/Text';
 import { Input } from '../common/Input';
 import { Spacing } from '../common/Spacing';
 import { TextArea } from '../common/TextArea';
-import { useAuctionCreateCard } from '../../hooks/useAuctionCreateCard';
+import { useAuctionUpdateCard } from '../../hooks/useAuctionUpdateCard';
 import { Select, SelectOption } from '../common/SelectOption';
+import { useAppSelector } from '../../../store/hooks';
+import AuctionItem from '../../../store/slices/auctionUpdateSlice';
 import { Image } from '../common/Image';
 
 interface Props {
   ordering: number;
 }
 
-export function AuctionCreateCard({ ordering }: Props) {
+export function AuctionUpdateCard({ ordering }: Props) {
   const {
     name,
     itemCategory,
@@ -26,8 +28,12 @@ export function AuctionCreateCard({ ordering }: Props) {
     handleDescription,
     itemOrdering,
     categoryList,
+    handleNameChange,
+    handleCategoryChange,
+    handleStartPriceChange,
+    handleDescriptionChange,
     previewImageURL,
-  } = useAuctionCreateCard(ordering);
+  } = useAuctionUpdateCard(ordering);
 
   return (
     <div
@@ -54,12 +60,12 @@ export function AuctionCreateCard({ ordering }: Props) {
       </div>
       <Spacing rem="1" />
       <div className="cardBody-name">
-        <Input value={name} placeholder="물품명" onChange={handleName} />
+        <Input value={name} placeholder="물품명" onChange={handleNameChange} />
       </div>
       <Spacing rem="1" />
 
       <div>
-        <Select value={itemCategory} onChange={handleItemCategory}>
+        <Select value={itemCategory} onChange={handleCategoryChange}>
           {categoryList.map(category => (
             <SelectOption value={category.id} key={category.id}>
               {category.name}
@@ -69,7 +75,7 @@ export function AuctionCreateCard({ ordering }: Props) {
         <Spacing rem="1" />
 
         <div>
-          <Input value={startPrice} inputType="number" placeholder="경매시작가" onChange={handleStartPrice} />
+          <Input value={startPrice} inputType="number" placeholder="경매시작가" onChange={handleStartPriceChange} />
         </div>
         <Spacing rem="1" />
 
@@ -78,11 +84,12 @@ export function AuctionCreateCard({ ordering }: Props) {
           <Spacing rem="1" />
           <div>
             <Image src={previewImageURL ? previewImageURL : '#'} alt="" />
+
             <input type="file" accept="image/*" onChange={handleItemImg} />
           </div>
         </div>
         <Spacing rem="1" />
-        <TextArea value={description} placeholder="물품 설명(500자 이내)" onChange={handleDescription} />
+        <TextArea value={description} placeholder="물품 설명(500자 이내)" onChange={handleDescriptionChange} />
       </div>
     </div>
   );

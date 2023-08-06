@@ -4,6 +4,8 @@ import storageSession from 'redux-persist/lib/storage/session';
 import userReducer from './slices/userSlice';
 import auctionCreateReducer from './slices/auctionCreateSlice';
 import auctionCreateItemImgReducer from './slices/auctionCreateItemImgSlice';
+import auctionUpdateReducer from './slices/auctionUpdateSlice';
+import auctionUpdateItemImgReducer from './slices/auctionUpdateItemImgSlice';
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +17,8 @@ export const rootReducer = combineReducers({
   user: userReducer,
   auctionCreate: auctionCreateReducer,
   auctionCreateItemImgs: auctionCreateItemImgReducer,
+  auctionUpdate: auctionUpdateReducer,
+  auctionUpdateItemImgs: auctionUpdateItemImgReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
