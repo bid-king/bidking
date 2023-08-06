@@ -3,7 +3,7 @@ const confirm = '#FBB708';
 const warn = '#DD3500';
 const progress = '#441CE4';
 const ok = '#20E9B9';
-const black = '#555555';
+const black = '#333338';
 
 export default {
   //Theme Colors
@@ -21,14 +21,14 @@ export default {
   progress33: 'rgba(68, 28, 228, 0.33)',
   ok33: 'rgba(32, 233, 185, 0.33)',
   //greys
-  grey: '#666666',
-  lightgrey: '#AAAAAA',
-  whitegrey: '#F4F4F4',
-  backgroundLight: '#EFEFF3',
+  grey: '#66666A',
+  lightgrey: '#BBBBBF',
+  whitegrey: '#EEEEF0',
+  backgroundLight: '#F4F4F7',
   backgroundLight2: '#FFFFFF',
-  backgroundLight3: '#DEDEE4',
+  backgroundLight3: '#DEDEE2',
   backgroundDark: '#16161D',
-  backgroundDark2: '#33333C',
-  backgroundDark3: '#55555F',
-  disabled: '#D9D9D9',
+  backgroundDark2: '#26262D',
+  backgroundDark3: '#515158',
+  disabled: '#DEDEE2',
 };
