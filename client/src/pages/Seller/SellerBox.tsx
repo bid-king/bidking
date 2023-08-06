@@ -10,12 +10,15 @@ import { useSellerBox } from '../../_libs/hooks/useSellerBox';
 export function SellerBox() {
   const { auctionListBeforeLive, auctionListAfterLive, isLogined } = useSellerBox();
   return (
-    <div>
+    <div
+      css={{
+        padding: '1rem',
+      }}
+    >
       {isLogined && (
         <div>
           <div
             css={{
-              padding: '0.7rem',
               display: 'flex',
               width: '100%',
               justifyContent: 'center',
