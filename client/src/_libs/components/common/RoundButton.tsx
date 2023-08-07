@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import colors from '../../design/colors';
 import { ButtonHTMLAttributes } from 'react';
 import { Icon } from './Icon';
 
-export function RoundButton({ color = 'confirm', label, size = 'large' }: Props) {
+export function RoundButton({ color = 'confirm', label, size = 'large', onClick }: Props) {
   return (
     <button
       type="button"
+      onClick={onClick}
       css={{
         cursor: 'pointer',
         borderRadius: '2.25rem',
@@ -64,4 +65,5 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   color?: 'confirm' | 'black' | 'white';
   size?: 'small' | 'large';
   label: string;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 }

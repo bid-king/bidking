@@ -1,17 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import colors from '../../_libs/design/colors';
-import { SellerBox } from './SellerBox';
+import { MainBox } from './MainBox';
 
-export function Seller() {
+export function Main() {
   return (
     <div
       css={{
-        backgroundColor: colors.backgroundDark,
-        color: colors.white,
+        backgroundColor: colors.backgroundLight,
       }}
     >
-      <SellerBox />
+      <MainBox />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-// export const API_URL = 'http://70.12.247.172:5000';
+// export const API_URL = 'http://70.12.247.182:5000';
 export const API_URL = 'http://localhost:5000';
 
 export async function getToken() {
