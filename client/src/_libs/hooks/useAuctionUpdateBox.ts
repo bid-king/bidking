@@ -31,27 +31,10 @@ export function useAuctionUpdateBox() {
 
   // 2. State
   const [image, setImage] = useState<File[]>([]);
-  // const [itemList, setItemList] = useState<number[]>([0]);
   const [errMessage, SetErrMessage] = useState('');
   const [detail, setDetail] = useState<AuctionRoomResponse | undefined>(undefined);
   const [auctionRoomUrl, setAuctionRoomUrl] = useState('');
-  const getOrderingRef = useRef<number>(0);
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
-
-  // 3. Function to add item
-  // const handleAddItem = () => {
-  //   const maxOrdering = items.reduce((max, current) => Math.max(max, current.ordering), 0);
-  //   const newItem = {
-  //     name: '',
-  //     itemCategory: '1',
-  //     description: '',
-  //     startPrice: '',
-  //     itemId: undefined,
-  //     ordering: maxOrdering + 1,
-  //     isChanged: false,
-  //   };
-  //   dispatch(addItemToList(newItem));
-  // };
 
   // 4. Handlers
   const handleAuctionTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -59,8 +42,6 @@ export function useAuctionUpdateBox() {
   };
 
   const handleStartedAt = (e: ChangeEvent<HTMLInputElement>) => {
-    // const date = new Date(e.target.value + 'Z');
-    // const formattedDate = date.toISOString().slice(0, 19).replace('T', ' ');
     dispatch(setStartedAt(e.target.value));
   };
 
@@ -125,7 +106,6 @@ export function useAuctionUpdateBox() {
       image.forEach(img => {
         formData.append('auctionRoomImg', img);
       });
-      console.log(image);
 
       getOrderedItemImgs(itemImgs).forEach((file, index) => {
         formData.append('itemImgs', file);
@@ -147,6 +127,7 @@ export function useAuctionUpdateBox() {
         .catch(err => {
           console.log(data);
           SetErrMessage(err.response.data.message);
+          navigate('/login/loading'); // 404페이지로 넘어가야함
         });
     }
   }
@@ -163,7 +144,6 @@ export function useAuctionUpdateBox() {
         const originalData: OriginalItem[] = data.itemList;
         const auctionItemList: AuctionItem[] = originalData.map(transformToAuctionItem);
         dispatch(setAuctionItem(auctionItemList));
-        getOrderingRef.current = data.itemList.length;
       })
       .catch(err => console.log(err));
   }, [auctionId]);
@@ -187,8 +167,6 @@ export function useAuctionUpdateBox() {
     handleDeliveryRulesChecked,
     image,
     setImage,
-    // itemList,
-    // setItemList,
     handleImageChange,
     items,
     updateAuction,
@@ -198,7 +176,6 @@ export function useAuctionUpdateBox() {
     errMessage,
     detail,
     auctionRoomUrl,
-    getOrderingRef,
     previewImageURL,
   };
 }

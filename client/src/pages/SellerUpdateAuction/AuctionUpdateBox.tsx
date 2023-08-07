@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import colors from '../../_libs/design/colors';
 import { Text } from '../../_libs/components/common/Text';
 import { Spacing } from '../../_libs/components/common/Spacing';
@@ -26,33 +26,15 @@ export function AuctionUpdateBox() {
     handleAuctionRoomType,
     handleItemPermissionChecked,
     handleDeliveryRulesChecked,
-    image,
     previewImageURL,
-    // handleAddItem,
-    setImage,
-    // itemList,
-    // setItemList,
-    // addItem,
     handleImageChange,
     items,
     updateAuction,
-    itemImgs,
-    isLogined,
-    getOrderedItemImgs,
     errMessage,
     detail,
     auctionRoomUrl,
-    getOrderingRef,
+    isLogined,
   } = useAuctionUpdateBox();
-
-  const [currentOrdering, setCurrentOrdering] = useState(items.length);
-  // const currentOrdering = useAppSelector(state => state.auctionUpdate.items).length;
-  // const currentOrdering = items.length;
-  const [itemList, setItemList] = useState<number[]>([]);
-  const addItem = () => {
-    setItemList(prevItem => [prevItem.length, ...prevItem]);
-  };
-  // console.log(getOrderingRef);
   return (
     <div
       css={{
@@ -65,7 +47,7 @@ export function AuctionUpdateBox() {
         color: colors.white,
       }}
     >
-      {detail && (
+      {detail && isLogined && (
         <div>
           <Text type="h2" content="경매 수정"></Text>
           <Spacing rem="2" />
@@ -256,21 +238,21 @@ export function AuctionUpdateBox() {
                 justifyContent: 'center',
               }}
             >
-              <ConfirmButton label="물품추가" onClick={addItem} />
+              {/* <ConfirmButton label="물품추가" onClick={addItem} /> */}
             </div>
 
-            {itemList.map((item, index) => {
+            {/* {itemList.map((item, index) => {
               return (
                 <div key={index}>
-                  <AuctionUpdateCreateCard ordering={getOrderingRef.current + 1} />
+                  <AuctionUpdateCreateCard ordering={currentOrdering + 1} />
                   <Spacing rem="2" />
                 </div>
               );
-            })}
+            })} */}
 
             {items.map((item, index) => {
               return (
-                <div key={item.ordering}>
+                <div key={index}>
                   <AuctionUpdateCard ordering={items.length - index} />
                   <Spacing rem="2" />
                 </div>
@@ -287,7 +269,7 @@ export function AuctionUpdateBox() {
       )}
       {!detail && (
         <div>
-          <Text type="h1" content="로딩중입니다" />
+          <Text type="h1" content="로그인이 필요한서비스입니다." />
         </div>
       )}
     </div>
