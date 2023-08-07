@@ -204,7 +204,7 @@ class AuctionServiceImplTest {
             .itemList(itemUpdateRequestList)
             .build();
         log.info("before changed = {}", find);
-        AuctionRoom auctionRoom = auctionService.updateAuctionRoom(find.getId(), req,
+        AuctionRoom auctionRoom = auctionService.updateAuctionRoom(member, find.getId(), req,
             auctionRoomImg2, itemImg2);
         log.info("after changed = {}", find);
 
