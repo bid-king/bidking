@@ -123,10 +123,10 @@ public class AuctionController {
         @AuthenticationPrincipal Member member,
         @RequestPart @Valid AuctionUpdateRequest auctionUpdateRequest,
         @PathVariable Long auctionId,
-        @RequestPart(name = "auctionRoomImg") MultipartFile auctionRoomImg,
-        @RequestPart(name = "itemImgs") MultipartFile[] itemImgs
+        @RequestPart(name = "auctionRoomImg", required = false) MultipartFile auctionRoomImg,
+        @RequestPart(name = "itemImgs", required = false) MultipartFile[] itemImgs
     ) throws IOException {
-        auctionService.updateAuctionRoom(auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
+        auctionService.updateAuctionRoom(member, auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -135,7 +135,7 @@ public class AuctionController {
         @AuthenticationPrincipal Member member,
         @PathVariable Long auctionId
     ) {
-        auctionService.deleteAuctionRoom(auctionId);
+        auctionService.deleteAuctionRoom(member, auctionId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
