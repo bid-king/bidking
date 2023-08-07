@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
@@ -24,10 +24,14 @@ export function Nav({ theme = 'light' }: Props) {
   const id = useAppSelector(state => state.user.id);
   const { showModal, isLogined, handleMouseEnter, handleMouseLeave } = useNavBar();
 
-  // sse 요청 부분
-  // if (isLogined && id) {
-  //   useAlarmEvent(id.toString());
-  // }
+  // const alarmEvent = useAlarmEvent(id.toString());
+
+  // useEffect(() => {
+  //   if (isLogined && id !== null) {
+  //     useAlarmEvent(id.toString());
+  //     console.log('1111');
+  //   }
+  // }, [id]);
 
   const alarms = useAppSelector(state => state.alarm);
 

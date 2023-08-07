@@ -8,14 +8,14 @@ export function useAlarmEvent(memberId: string) {
     content: string;
     alarmType: string;
   };
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${memberId}`);
 
   eventSource.onmessage = (res: MessageEvent) => {
     const notification: AlarmEvent = JSON.parse(res.data);
     console.log(res);
-    dispatch(addNotification(notification)); // 알림 추가 액션 디스패치
+    // dispatch(addNotification(notification)); // 알림 추가 액션 디스패치
   };
 
   eventSource.onerror = error => {
