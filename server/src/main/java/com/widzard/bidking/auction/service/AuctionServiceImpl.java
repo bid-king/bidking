@@ -1,5 +1,8 @@
 package com.widzard.bidking.auction.service;
 
+import com.widzard.bidking.alarm.entity.AlarmType;
+import com.widzard.bidking.alarm.entity.Content;
+import com.widzard.bidking.alarm.service.AlarmService;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
@@ -54,6 +57,7 @@ public class AuctionServiceImpl implements AuctionService {
     private final ImageService imageService;
     private final BookmarkRepository bookmarkRepository;
     private final OrderItemRepository orderItemRepository;
+    private final AlarmService alarmService;
 
     @Override
     public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
@@ -163,6 +167,9 @@ public class AuctionServiceImpl implements AuctionService {
             auctionRoom.addItem(item);
         }
 
+        //알림 보내기
+        alarmService.send(seller, Content.AUCTION_REGISTERED, AlarmType.AUCTION);
+
         return savedAuctionRoom;
     }
 
@@ -185,11 +192,12 @@ public class AuctionServiceImpl implements AuctionService {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
         log.info("auctionRoom ItemList={}",auctionRoom.getItemList().toString());
+
         //auctionRoom 기본자료형 필드 업데이트
         auctionRoom.update(req);
 
         //경매썸네일 변경 요청 존재
-        if (!auctionRoomImg.isEmpty()) {
+        if (auctionRoomImg != null && !auctionRoomImg.isEmpty()) {
             Image auctionImage = auctionRoom.getImage();
             imageService.modifyImage(auctionRoomImg, auctionImage.getId());
         }

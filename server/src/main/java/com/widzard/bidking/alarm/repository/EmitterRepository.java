@@ -23,7 +23,7 @@ public class EmitterRepository {
         emitters.remove(id);
     }
 
-    public SseEmitter get(String id) {
+    public SseEmitter findByMemberId(String id) {
         return emitters.get(id);
     }
 

@@ -10,10 +10,12 @@ import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -25,40 +27,48 @@ public class AlarmServiceImpl implements AlarmService {
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
 
     @Override
-    public SseEmitter subscribe(Member member, String lastEventId) {
+    public SseEmitter subscribe(Long memberId, String lastEventId) {
         // 고유 식별자 부여
-        String id = member.getId() + "_" + System.currentTimeMillis();
+        String id = memberId + "_" + System.currentTimeMillis();
 
-        SseEmitter emitter = emitterRepository.save( id, new SseEmitter(DEFAULT_TIMEOUT));
+        // 이미 존재하는 연결이 있다면 이전 연결 끊기
+        SseEmitter existingEmitter = emitterRepository.findByMemberId(String.valueOf(memberId));
+        if (existingEmitter != null) {
+            existingEmitter.complete(); // 기존 연결 끊기
+        }
+
+        SseEmitter emitter = emitterRepository.save(id, new SseEmitter(DEFAULT_TIMEOUT));
 
         //예외 상황에 emitter 삭제
         emitter.onCompletion(() -> emitterRepository.deleteById(id));
         emitter.onTimeout(() -> emitterRepository.deleteById(id));
 
         // 503 에러를 방지하기 위한 더미 이벤트 전송
-        sendToClient(emitter, id, "EventStream Created. [userId=" + member.getId() + "]");
+        sendToClient(emitter, id, "EventStream Created. [userId=" + memberId + "]");
 
         // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
         if (!lastEventId.isEmpty()) {
-            Map<String, Object> events = emitterRepository.findAllEventCacheStartWithId(String.valueOf(
-                member.getId()));
+            Map<String, Object> events = emitterRepository.findAllEventCacheStartWithId(
+                String.valueOf(memberId));
             events.entrySet().stream()
                 .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
                 .forEach(entry -> sendToClient(emitter, entry.getKey(), entry.getValue()));
         }
-
+        log.info("연결 요청 끝");
         return emitter;
     }
-    public void send(Member member, Content content, AlarmType alarmType){
-        Alarm alarm = Alarm.create(member,content,alarmType);
+
+    @Override
+    public void send(Member member, Content content, AlarmType alarmType) {
+        Alarm alarm = Alarm.create(member, content, alarmType);
         String id = String.valueOf(member.getId());
         // 로그인 한 유저의 SseEmitter 모두 가져오기
-        Map<String,SseEmitter> sseEmitterMap = emitterRepository.findAllStartWithById(id);
+        Map<String, SseEmitter> sseEmitterMap = emitterRepository.findAllStartWithById(id);
         sseEmitterMap.forEach(
-            (key,emitter) -> {
+            (key, emitter) -> {
                 // 데이터 캐시 저장(유실된 데이터 처리하기 위함)
-                emitterRepository.saveEventCache(key,alarm);
-                sendToClient(emitter,key,AlarmResponse.from(alarm));
+                emitterRepository.saveEventCache(key, alarm);
+                sendToClient(emitter, key, AlarmResponse.from(alarm));
             }
         );
     }
@@ -67,7 +77,7 @@ public class AlarmServiceImpl implements AlarmService {
         try {
             emitter.send(SseEmitter.event()
                 .id(id)
-                .name("sse")
+                .name("sse다!")
                 .data(data));
         } catch (IOException exception) {
             emitterRepository.deleteById(id);

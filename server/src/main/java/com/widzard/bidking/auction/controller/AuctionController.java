@@ -112,9 +112,13 @@ public class AuctionController {
         @AuthenticationPrincipal Member member,
         @RequestPart @Valid AuctionUpdateRequest auctionUpdateRequest,
         @PathVariable Long auctionId,
-        @RequestPart(name = "auctionRoomImg") MultipartFile auctionRoomImg,
-        @RequestPart(name = "itemImgs") MultipartFile[] itemImgs
+        @RequestPart(name = "auctionRoomImg", required = false) MultipartFile auctionRoomImg,
+        @RequestPart(name = "itemImgs", required = false) MultipartFile[] itemImgs
     ) throws IOException {
+        log.info("auctionRoomImg={}" , auctionRoomImg);
+        if(auctionRoomImg == null) {
+            System.out.println("널입니다");
+        }
         auctionService.updateAuctionRoom(auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

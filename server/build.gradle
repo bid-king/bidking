@@ -51,6 +51,12 @@ dependencies {
 	// slf4j API
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	//로컬 캐시
+	implementation("org.infinispan:infinispan-core:12.0.1.Final")
+	implementation("org.infinispan:infinispan-commons:12.0.1.Final")
+	implementation("org.infinispan:infinispan-marshaller-protostuff:12.0.1.Final")
+	implementation("org.jboss.marshalling:jboss-marshalling-osgi:2.0.10.Final")
 }
 
 tasks.named('test') {
