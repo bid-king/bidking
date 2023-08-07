@@ -9,7 +9,7 @@ import {
   setItemPermissionChecked,
   resetAuctionCreate,
 } from '../../store/slices/auctionCreateSlice';
-import { getToken, API_URL } from '../util/http';
+import { getToken, ROOT } from '../util/http';
 import { useNavigate } from 'react-router-dom';
 
 export function useAuctionCreateBox() {
@@ -88,7 +88,7 @@ export function useAuctionCreateBox() {
       const token = await getToken();
 
       axios
-        .post(`${API_URL}/api/v1/auctions`, formData, {
+        .post(`${ROOT}/api/v1/auctions`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',

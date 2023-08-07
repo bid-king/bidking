@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const ROOT = process.env.REACT_APP_API_ROOT;
+export const ROOT = process.env.REACT_APP_API_ROOT;
 
 const httpAxios = Axios.create({
   baseURL: ROOT,
