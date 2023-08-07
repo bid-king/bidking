@@ -7,7 +7,7 @@ export default {
   //회원정보수정
   // delete: (memberId: number) => http.delete(`${API_URL}/api/v1/members/${memberId}`), //회원탈퇴
   // //회원탈퇴
-  // nicknameValidate: (data: MemberNicknameDuplicateResponce) =>
+  // nicknameValidate: (data: MemberNicknameDuplicateResponse) =>
   //   http.post(`${API_URL}/api/v1/members/check/nickname`, data),
 
   // //닉네임 중복검사, 중복이면 true
@@ -33,11 +33,11 @@ export default {
     }),
 
   // res.data 에 접근하려 하면 AxiosResponse 타입 사용
-  idValidate: (userData: { userId: string }) => http.post<DuplicateResponce>('/api/v1/members/check/userId', userData),
+  idValidate: (userData: { userId: string }) => http.post<DuplicateResponse>('/api/v1/members/check/userId', userData),
   nicknameValidate: (nicknameData: { nickname: string }) =>
-    http.post<DuplicateResponce>('/api/v1/members/check/nickname', nicknameData),
+    http.post<DuplicateResponse>('/api/v1/members/check/nickname', nicknameData),
   phoneVerification: (phoneData: { phoneNumber: string }) =>
-    http.post<PhoneVerificationResponce>('/api/v1/members/check/phoneNumber', phoneData),
+    http.post<PhoneVerificationResponse>('/api/v1/members/check/phoneNumber', phoneData),
 };
 
 interface LoginResponse {
@@ -49,11 +49,11 @@ interface LoginResponse {
 interface SignupResponse {
   id: string;
 }
-interface DuplicateResponce {
+interface DuplicateResponse {
   duplicated: boolean;
 }
 
-interface PhoneVerificationResponce {
+interface PhoneVerificationResponse {
   certifiedNumber: string;
 }
 

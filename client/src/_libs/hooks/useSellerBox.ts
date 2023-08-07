@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import auction, { SellerAuctionRoomListResponce, ItemListDto } from '../../api/auction';
+import auction, { SellerAuctionRoomListResponse, ItemListDto } from '../../api/auction';
 import { useAppSelector } from '../../store/hooks';
 
 export function useSellerBox() {
-  const [auctionListBeforeLive, setAuctionListBeforeLive] = useState<SellerAuctionRoomListResponce[]>([]);
-  const [auctionListAfterLive, setAuctionListAfterLive] = useState<SellerAuctionRoomListResponce[]>([]);
+  const [auctionListBeforeLive, setAuctionListBeforeLive] = useState<SellerAuctionRoomListResponse[]>([]);
+  const [auctionListAfterLive, setAuctionListAfterLive] = useState<SellerAuctionRoomListResponse[]>([]);
   const isLogined = useAppSelector(state => state.user.isLogined);
 
   useEffect(() => {
