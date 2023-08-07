@@ -7,7 +7,7 @@ module.exports = app => {
   // Redis 연결
   const redisClient = redis.createClient({
     // redis[s]://[[username][:password]@][host][:port][/db-number]
-    url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`,
+    // url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`,
     legacyMode: true, // 반드시 설정 !!
   });
 
