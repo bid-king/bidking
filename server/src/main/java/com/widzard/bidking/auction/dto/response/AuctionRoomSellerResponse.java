@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +38,7 @@ public class AuctionRoomSellerResponse {
 
     private String auctionRoomSesion;
 
+    @Default
     private List<ItemSellerDto> itemList = new ArrayList<>();
 
     public static AuctionRoomSellerResponse from(AuctionRoom auctionRoom,

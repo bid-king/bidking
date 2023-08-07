@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,7 @@ public class AuctionRoomResponse {
 
     private String imageURL; // (썸네일)
 
+    @Default
     private List<ItemDto> itemList = new ArrayList<>();
 
 
