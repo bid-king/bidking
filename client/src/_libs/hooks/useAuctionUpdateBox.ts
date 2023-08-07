@@ -13,7 +13,7 @@ import {
   addItemToList,
 } from '../../store/slices/auctionUpdateSlice';
 
-import { getToken, API_URL } from '../util/http';
+import { getToken, ROOT } from '../util/http';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { transformToAuctionItem, OriginalItem, AuctionItem } from '../util/transformToAuctionItem';
@@ -134,7 +134,7 @@ export function useAuctionUpdateBox() {
       const token = await getToken();
 
       axios
-        .put(`${API_URL}/api/v1/auctions/${auctionId}`, formData, {
+        .put(`${ROOT}/api/v1/auctions/${auctionId}`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
