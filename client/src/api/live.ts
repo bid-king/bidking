@@ -4,11 +4,13 @@ import { ws } from '../_libs/util/ws';
 export default {
   enter: async (auctionId: number) => https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`),
   //경매방 입장
-  connect: async (roomId: number, nickname: string) => ws.emit('enterRoom', { nickname, roomId }),
-  //소켓 연결신청
   req: {
+    connect: async (roomId: number, nickname: string) => ws.emit('enterRoom', { nickname, roomId }),
     chat: async (roomId: number, nickname: string, msg: string) => ws.emit('chat', { nickname, roomId, msg }),
-    leave: async (roomId: number, nickname: string) => ws.emit('leaveRoom', { nickname, roomId }),
+    leave: async (roomId: number, nickname: string) => {
+      ws.emit('leaveRoom', { nickname, roomId });
+      ws.disconnect();
+    },
     notice: async (roomId: number, msg: string) => ws.emit('notice', { roomId, msg }),
   },
   res: {

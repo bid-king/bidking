@@ -16,7 +16,7 @@ export function useLiveSocketConnection(roomId: number) {
         // userNickname = await store.getState().user.nickname;
         if (!isLogined) throw new Error('403');
         else {
-          socket.current.connect(roomId, userNickname);
+          socket.current.req.connect(roomId, userNickname);
         }
       } catch (err) {
         setSocketConnectionErr(err);
