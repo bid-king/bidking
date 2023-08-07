@@ -8,6 +8,7 @@ import lombok.Getter;
 public class AuthInfo {
 
     private Long id;
+    private String nickname;
     private String token;
 
 }

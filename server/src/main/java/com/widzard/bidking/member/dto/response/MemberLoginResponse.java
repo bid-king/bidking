@@ -11,11 +11,13 @@ import lombok.Getter;
 public class MemberLoginResponse {
 
     private Long id;
+    private String nickname;
     private String grantType;
     private String accessToken;
 
     public static MemberLoginResponse from(AuthInfo authInfo) {
-        return new MemberLoginResponse(authInfo.getId(), TOKEN_HEADER_PREFIX, authInfo.getToken());
+        return new MemberLoginResponse(authInfo.getId(), authInfo.getNickname(),
+            TOKEN_HEADER_PREFIX, authInfo.getToken());
     }
 
 }
