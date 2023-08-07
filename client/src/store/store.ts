@@ -6,7 +6,6 @@ import auctionCreateReducer from './slices/auctionCreateSlice';
 import auctionCreateItemImgReducer from './slices/auctionCreateItemImgSlice';
 import auctionUpdateReducer from './slices/auctionUpdateSlice';
 import auctionUpdateItemImgReducer from './slices/auctionUpdateItemImgSlice';
-import alarmReducer from './slices/alarmSlice';
 
 const persistConfig = {
   key: 'root',
@@ -20,7 +19,6 @@ export const rootReducer = combineReducers({
   auctionCreateItemImgs: auctionCreateItemImgReducer,
   auctionUpdate: auctionUpdateReducer,
   auctionUpdateItemImgs: auctionUpdateItemImgReducer,
-  alarm: alarmReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

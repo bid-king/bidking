@@ -3,6 +3,7 @@ import member from '../../api/member';
 import { useAppDispatch } from '../../store/hooks';
 import { getUserInformation } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { useAlarmEvent } from './useAlarmEvent';
 
 export function useLogin() {
   const dispatch = useAppDispatch();
@@ -29,6 +30,8 @@ export function useLogin() {
         .login(userId, password)
         .then(res => {
           dispatch(getUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true }));
+          // const { alarm } = useAlarmEvent(res.id.toString());
+          // console.log(alarm);
           navigate('/');
         })
         .catch(err => {
