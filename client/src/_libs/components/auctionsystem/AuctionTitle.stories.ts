@@ -12,5 +12,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: { theme: 'dark', nickname: '김성용', auctionType: '네덜란드', title: '제목' },
+  args: { theme: 'dark', nickname: '김성용', auctionRoomType: '네덜란드', title: '제목' },
 };
