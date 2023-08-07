@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +38,7 @@ public class AuctionUpdateRequest {
     private Boolean deliveryRulesChecked; // 배송 규정 확인 여부
 
     @Valid
+    @Default
     private List<ItemUpdateRequest> itemList = new ArrayList<>(); // 상품 리스트
 
 }

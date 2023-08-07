@@ -2,9 +2,7 @@ package com.widzard.bidking.auction.dto.response;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
-import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.item.dto.AuctionListItemDto;
-import com.widzard.bidking.item.dto.ItemDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +10,7 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +30,7 @@ public class AuctionResponse {
 
     private AuctionRoomLiveState auctionRoomLiveState; //옥션 진행 상태
 
+    @Default
     private List<AuctionListItemDto> itemListDto = new ArrayList<>(); // 옥션 리스트 아이템 리스트
 
     public static AuctionResponse from(AuctionRoom auctionRoom) {
