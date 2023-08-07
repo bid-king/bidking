@@ -1,4 +1,6 @@
 import { http, https } from '../_libs/util/http';
+import axios from 'axios';
+import { API_URL } from '../_libs/util/http';
 
 export default {
   get: (auctionId: number) => http.get<AuctionRoomResponse>(`/api/v1/auctions/${auctionId}`),
@@ -10,6 +12,12 @@ export default {
   delete: (auctionId: number) => https.delete(`/api/v1/auctions/${auctionId}`),
   //경매 삭제
   getCategoryList: () => http.get<CategoryListResponse>('/api/v1/items/categories'),
+  getAuctionList: (data: AuctionRoomListRequest) =>
+    http.post<AuctionRoomListResponce[]>(`${API_URL}/api/v1/auctions/status`, data),
+  getSellerAuctionListBeforeLive: () =>
+    https.get<SellerAuctionRoomListResponce[]>(`${API_URL}/api/v1/auctions/seller/before-live`),
+  getSellerAuctionListAfterLive: () =>
+    https.get<SellerAuctionRoomListResponce[]>(`${API_URL}/api/v1/auctions/seller/after-live`),
 };
 
 export interface AuctionRoomResponse {
@@ -86,4 +94,42 @@ export interface Category {
 
 export interface CategoryListResponse {
   categoryList: Category[];
+}
+
+// 옥션룸리스트 타입
+export interface AuctionRoomListRequest {
+  categoryList: number[];
+  keyword: string;
+  page: number;
+  perPage: number;
+}
+
+interface ItemCategory {
+  id: number;
+  name: string;
+}
+
+export interface ItemListDto {
+  id: number;
+  name: string;
+  itemCategory: ItemCategory;
+}
+
+export interface AuctionRoomListResponce {
+  id: number;
+  name: string;
+  imageUrl: string;
+  startedAt: string;
+  auctionRoomLiveState: string;
+  itemListDto: ItemListDto[];
+  bookmarked: boolean;
+}
+
+export interface SellerAuctionRoomListResponce {
+  id: number;
+  name: string;
+  imageUrl: string;
+  startedAt: string;
+  auctionRoomLiveState: string;
+  itemListDto: ItemListDto[];
 }
