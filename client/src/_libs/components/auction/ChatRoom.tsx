@@ -11,9 +11,10 @@ import { ChatMessage } from './ChatMessage';
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
   userType: 'order' | 'seller';
+  socket?: unknown;
 }
 
-export function ChatRoom({ theme = 'light', userType = 'order' }: Props) {
+export function ChatRoom({ theme = 'light', userType = 'order', socket }: Props) {
   return (
     <div
       css={{

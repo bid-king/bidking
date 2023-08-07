@@ -3,29 +3,19 @@ import { useParams } from 'react-router-dom';
 import live from '../../api/live';
 import { store } from '../../store/store';
 
-interface Item {
-  itemId: number;
-  imageUrl: string;
-  name: string;
-  description: string;
-  startPrice: number;
-}
-
-export function useAuctionLiveEnter() {
+export function useLiveEnter() {
   const [userId, setUserId] = useState<number>(0);
   const [auctionRoomId, setAuctionRoomId] = useState<number>(0);
   const [nickname, setNickname] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [auctionRoomType, setAuctionRoomType] = useState<string>('');
-  const [currentItemId, setCurrentItemId] = useState<number>(0);
-  const [itemList, setItemList] = useState<Array<Item> | null>(null);
-  const [err, setErr] = useState<unknown>(null);
+  const [liveAuthErr, setLiveAuthErr] = useState<unknown>(null);
 
   useEffect(() => {
     try {
       const auctionId = useParams<string>();
 
-      async () => {
+      (async () => {
         const isLogined = await store.getState().user.isLogined;
         if (!isLogined) throw new Error('403');
         else {
@@ -36,14 +26,12 @@ export function useAuctionLiveEnter() {
           setNickname(data.nickname);
           setTitle(data.title);
           setAuctionRoomType(data.auctionRoomType);
-          setCurrentItemId(data.currentItemId);
-          setItemList(data.itemList);
         }
-      };
+      })();
     } catch (err) {
-      setErr(err);
+      setLiveAuthErr(err);
     }
   });
 
-  return { userId, auctionRoomId, auctionRoomType, nickname, title, currentItemId, itemList, setCurrentItemId, err };
+  return { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr };
 }

@@ -5,22 +5,19 @@ import { AuctionNotice } from '../../_libs/components/auctionsystem/AuctionNotic
 import { AuctionSystem } from '../../_libs/components/auctionsystem/AuctionSystem';
 import { AuctionTitle } from '../../_libs/components/auctionsystem/AuctionTitle';
 import { Spacing } from '../../_libs/components/common/Spacing';
-import { SellerStream } from '../../_libs/components/meeting/SellerStream';
+import { OrderStream } from '../../_libs/components/meeting/OrderStream';
 import colors from '../../_libs/design/colors';
+import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
+import { useLiveSocketConnection } from '../../_libs/hooks/useLiveSocketConnection';
 
-export function SellerAuction() {
-  const auctionId = 123;
-  const auctionRoomType = '네덜란드';
-  const title = '떡락각이다';
-  const userId = 4;
-  const nickname = '정예지';
-  const userType = 'seller';
-  const notice = '여긴 판매자가 채팅으로 입력한 공지사항입니다';
+export function Live() {
+  const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter();
+  const { socket, socketConnectionErr } = useLiveSocketConnection(auctionRoomId);
 
   return (
-    <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
+    <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>
       <div css={{ width: '75%', padding: '1.5rem 0.75rem 1.5rem 1.5rem' }}>
-        <AuctionTitle theme="dark" nickname={nickname} auctionRoomType={auctionRoomType} title={title} />
+        <AuctionTitle theme="light" nickname={nickname} auctionRoomType={auctionRoomType} title={title} />
         <div
           css={{
             display: 'flex',
@@ -30,9 +27,13 @@ export function SellerAuction() {
             justifyContent: 'center',
           }}
         >
-          <SellerStream auctionId={auctionId} userId={userId} userType={userType} />
+          <OrderStream
+            err={socketConnectionErr || liveAuthErr || null}
+            auctionId={auctionRoomId}
+            userId={userId}
+            userType="order"
+          />
           <Spacing rem="1" />
-          <AuctionNotice notice={notice} userType={userType} />
         </div>
       </div>
       <div
@@ -45,9 +46,9 @@ export function SellerAuction() {
           padding: '1.5rem 1.5rem 1.5rem 0.75rem',
         }}
       >
-        <AuctionSystem theme="dark" />
+        <AuctionSystem theme="light" />
         <Spacing rem="1.5" />
-        <ChatRoom theme="dark" userType="seller" />
+        <ChatRoom theme="light" userType="order" socket={socket} />
       </div>
     </div>
   );

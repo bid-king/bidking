@@ -1,20 +1,78 @@
 import { https } from '../_libs/util/http';
-import { wss } from '../_libs/util/wss';
+import { ws } from '../_libs/util/ws';
 
 export default {
   enter: async (auctionId: number) => https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`),
   //경매방 입장
-  next: () => {},
-  //판매자 다음 아이템 경매개시
-  bid: () => {},
-  //구매자 입찰
-  //라이브 소켓 커넥션 요청
-  chat: () => {},
-  //구매자 채팅
-  notice: () => {},
-  //판매자 공지
-  end: () => {},
-  //판매자 나가기
+  connect: async (roomId: number, nickname: string) => ws.emit('enterRoom', { nickname, roomId }),
+  //소켓 연결신청
+  req: {
+    chat: async (roomId: number, nickname: string, msg: string) => ws.emit('chat', { nickname, roomId, msg }),
+    leave: async (roomId: number, nickname: string) => ws.emit('leaveRoom', { nickname, roomId }),
+    notice: async (roomId: number, msg: string) => ws.emit('notice', { roomId, msg }),
+  },
+  res: {
+    chat: async () => {
+      //채팅 수신
+      const chat = { nickname: '', msg: '' };
+      ws.on('chat', data => {
+        chat.nickname = data.nickname;
+        chat.msg = data.msg;
+      });
+      return chat;
+    },
+    notice: async () => {
+      //공지 수신
+      let notice: string = '';
+      ws.on('notice', data => {
+        notice = data;
+      });
+      return notice;
+    },
+    updateBid: async () => {
+      //입찰가 업데이트 결과 수신
+      const bidInfo = { nickname: '', price: '' };
+      ws.on('updateBid', data => {
+        bidInfo.nickname = data.user.nickname;
+        bidInfo.price = data.price;
+      });
+      return bidInfo;
+    },
+    successBid: async () => {
+      //낙찰
+      const bidInfo = { nickname: '', itemName: '', price: '' };
+      ws.on('updateBid', data => {
+        bidInfo.nickname = data.user.nickname;
+        bidInfo.itemName = data.item.itemName;
+        bidInfo.price = data.price;
+      });
+      return bidInfo;
+    },
+    failBid: async () => {
+      //유찰
+      let itemName = '';
+      ws.on('failBid', data => {
+        itemName = data.itemName;
+      });
+      return itemName;
+    },
+    next: async () => {
+      //다음 아이템 진행하기를 판매자가 누른 경우
+      let itemName = '';
+      ws.on('next', data => {
+        itemName = data.itemName;
+      });
+      return itemName;
+    },
+    start: async () => {
+      //경매 개시를 판매자가 누른 경우
+      let itemName = '';
+      ws.on('start', data => {
+        itemName = data.itemName;
+      });
+      return itemName;
+    },
+  },
 };
 
 export interface AuctionEnterResponse {
