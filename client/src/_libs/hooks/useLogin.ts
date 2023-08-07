@@ -32,8 +32,8 @@ export function useLogin() {
           navigate('/');
         })
         .catch(err => {
-          if (err) {
-            setErrorMessage(err.response.data.message);
+          if (err.response?.data.message) {
+            setErrorMessage(err.response?.data.message);
             setErrorOccured(true);
           }
         });

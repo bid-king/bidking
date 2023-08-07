@@ -22,30 +22,30 @@ export function MainBox() {
     );
   };
 
-  useEffect(() => {
-    auction
-      .getCategoryList()
-      .then(data => {
-        setCategoryList(data.categoryList);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, []);
-  const data = {
-    categoryList: [],
-    keyword: '',
-    page: 1,
-    perPage: 10,
-  };
-  useEffect(() => {
-    auction
-      .getAuctionList(data)
-      .then(res => console.log(res))
-      .catch(err => {
-        console.log(err);
-      });
-  });
+  // useEffect(() => {
+  //   auction
+  //     .getCategoryList()
+  //     .then(data => {
+  //       setCategoryList(data.categoryList);
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  // }, []);
+  // const data = {
+  //   categoryList: [],
+  //   keyword: '',
+  //   page: 1,
+  //   perPage: 10,
+  // };
+  // useEffect(() => {
+  //   auction
+  //     .getAuctionList(data)
+  //     .then(res => console.log(res))
+  //     .catch(err => {
+  //       console.log(err);
+  //     });
+  // });
 
   return (
     <div>

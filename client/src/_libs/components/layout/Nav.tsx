@@ -12,6 +12,7 @@ import { Icon } from '../common/Icon';
 import { useNavBar } from '../../hooks/useNavBar';
 import { NavBarModal } from './NavBarModal';
 import { useAppSelector } from '../../../store/hooks';
+import { useAlarmEvent } from '../../hooks/useAlarmEvent';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -22,6 +23,15 @@ export function Nav({ theme = 'light' }: Props) {
   const mq = breakpoints.map(bp => `@media (min-width: ${bp}px)`);
   const id = useAppSelector(state => state.user.id);
   const { showModal, isLogined, handleMouseEnter, handleMouseLeave } = useNavBar();
+
+  // sse 요청 부분
+  // if (isLogined && id) {
+  //   useAlarmEvent(id.toString());
+  // }
+
+  const alarms = useAppSelector(state => state.alarm);
+
+  console.log(alarms);
 
   return (
     <div>
