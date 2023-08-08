@@ -25,10 +25,19 @@ module.exports = (server, app, sessionMiddleware) => {
       io.to(roomId).emit('chat', { nickname: 'System', msg: `${nickname} 입장` });
     });
 
-    socket.on('leaveRoom', data => {
-      const { roomId } = data;
-      socket.leave(data.roomId);
-      io.to(roomId).emit('chat', { nickname: 'System', msg: `${nickname} 퇴장` });
+    socket.on('leaveRoom', ({ roomId }) => {
+      if (socket.id === roomOwners[`${roomId}`]) {
+        console.log(socket.adapter.rooms.get(roomId)); // room의 참여자 socket.id
+        io.to(roomId).emit('roomClosed');
+        // TODO: roomId 방 종료됐다고 알려줌 to Spring
+      } else {
+        socket.leave(roomId);
+        io.to(roomId).emit('chat', { nickname: 'System', msg: `${nickname} 퇴장` });
+      }
+    });
+
+    socket.on('roomClosed', ({ roomId }) => {
+      socket.leave(roomId);
     });
 
     socket.on('chat', data => {
