@@ -29,7 +29,9 @@ export function useLogin() {
       member
         .login(userId, password)
         .then(res => {
-          dispatch(getUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true }));
+          dispatch(
+            getUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true, nickname: res.nickname })
+          );
           // const { alarm } = useAlarmEvent(res.id.toString());
           // console.log(alarm);
           navigate('/');
