@@ -9,9 +9,12 @@ export function useAlarmEvent(memberId: string) {
     content: string;
     alarmType: string;
   };
-  // const dispatch = useAppDispatch();
 
   const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${memberId}`);
+
+  eventSource.onopen = e => {
+    console.log(e);
+  };
 
   eventSource.onmessage = (res: MessageEvent) => {
     const notification: AlarmEvent = JSON.parse(res.data);

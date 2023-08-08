@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
@@ -12,6 +12,7 @@ import { Icon } from '../common/Icon';
 import { useNavBar } from '../../hooks/useNavBar';
 import { NavBarModal } from './NavBarModal';
 import { useAppSelector } from '../../../store/hooks';
+import { ROOT } from '../../util/http';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -22,6 +23,30 @@ export function Nav({ theme = 'light' }: Props) {
   const mq = breakpoints.map(bp => `@media (min-width: ${bp}px)`);
   const id = useAppSelector(state => state.user.id);
   const { showModal, isLogined, handleMouseEnter, handleMouseLeave } = useNavBar();
+
+  type AlarmEvent = {
+    content: string;
+    alarmType: string;
+  };
+  const [alarm, setAlarm] = useState<AlarmEvent[]>([]);
+
+  const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
+
+  // eventSource.onopen = e => {
+  //   console.log(e);
+  // };
+
+  // eventSource.onmessage = res => {
+  //   console.log('1111111111');
+  //   console.log(res);
+  //   const notification: AlarmEvent = JSON.parse(res.data);
+  //   console.log(notification);
+  // };
+
+  // eventSource.onerror = error => {
+  //   console.error('EventSource failed:', error);
+  //   eventSource.close();
+  // };
 
   return (
     <div>
