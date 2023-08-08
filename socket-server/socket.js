@@ -6,13 +6,22 @@ module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, { path: '/socket.io' });
   app.set('io', io);
 
+  const roomOwners = {};
+
   io.on('connection', socket => {
     console.log('socket 접속');
 
-    socket.on('enterRoom', data => {
-      const { nickname, roomId } = data;
+    socket.on('enterRoom', ({ nickname, roomId, seller }) => {
+      if (seller === true) {
+        roomOwners[`${roomId}`] = socket.id;
+      }
+
       socket.join(roomId);
       socket['nickname'] = nickname;
+
+      // TODO: roomId에 해당하는 itemList 요청 to Spring
+      // GET /api/v1/auctions/{auctionId}/items
+
       io.to(roomId).emit('chat', { nickname: 'System', msg: `${nickname} 입장` });
     });
 
