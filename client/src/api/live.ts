@@ -2,6 +2,7 @@ import { https } from '../_libs/util/http';
 import { ws } from '../_libs/util/ws';
 
 export default {
+  ws: ws,
   enter: async (auctionId: number) => https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`),
   //경매방 입장
   req: {

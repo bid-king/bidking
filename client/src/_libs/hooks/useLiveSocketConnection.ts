@@ -12,11 +12,14 @@ export function useLiveSocketConnection(roomId: number) {
 
     async function auth() {
       try {
-        setUserNickname(store.getState().user.nickname);
-        if (!userNickname) throw new Error('403');
-        else {
-          socket.current.req.connect(roomId, userNickname);
-        }
+        // setUserNickname(store.getState().user.nickname);
+        // if (!userNickname) throw new Error('403');
+        // else {
+        socket.current.req.connect(roomId, userNickname);
+        console.log(socket.current.ws);
+
+        console.log('우와 연결이 되었어요');
+        // }
       } catch (err) {
         setSocketConnectionErr(err);
       }
@@ -25,6 +28,6 @@ export function useLiveSocketConnection(roomId: number) {
     return () => {
       live.req.leave(roomId, userNickname);
     }; //unmount시 채팅방 나가야함
-  }, [roomId]);
+  }, []);
   return { socket: socket.current, socketConnectionErr };
 }

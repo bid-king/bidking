@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect } from 'react';
+import { io } from 'socket.io-client';
 import { ChatRoom } from '../../_libs/components/auction/ChatRoom';
 import { AuctionNotice } from '../../_libs/components/auctionsystem/AuctionNotice';
 import { AuctionSystem } from '../../_libs/components/auctionsystem/AuctionSystem';
@@ -11,8 +12,22 @@ import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
 import { useLiveSocketConnection } from '../../_libs/hooks/useLiveSocketConnection';
 
 export function Live() {
-  const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter();
-  const { socket, socketConnectionErr } = useLiveSocketConnection(auctionRoomId);
+  // const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter();
+  const userId = 1;
+  const auctionRoomId = 1;
+  const auctionRoomType = 'GENERAL';
+  const nickname = '정예지';
+  const title = '아 이거 팔자';
+  const liveAuthErr = null;
+
+  // const { socket, socketConnectionErr } = useLiveSocketConnection(auctionRoomId);
+
+  useEffect(() => {
+    const socket = io('http://localhost:8005', {
+      withCredentials: true,
+    });
+    socket.emit('enterRoom', { nickname: '정예지', roomId: 1 });
+  }, []);
 
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>
@@ -27,12 +42,12 @@ export function Live() {
             justifyContent: 'center',
           }}
         >
-          <OrderStream
+          {/* <OrderStream
             err={socketConnectionErr || liveAuthErr || null}
             auctionId={auctionRoomId}
             userId={userId}
             userType="order"
-          />
+          /> */}
           <Spacing rem="1" />
         </div>
       </div>
@@ -48,7 +63,7 @@ export function Live() {
       >
         <AuctionSystem theme="light" />
         <Spacing rem="1.5" />
-        <ChatRoom theme="light" userType="order" socket={socket} />
+        <ChatRoom theme="light" userType="order" />
       </div>
     </div>
   );
