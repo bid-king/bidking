@@ -53,9 +53,9 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on('start', async ({ roomId }) => {
       const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
-      const price = await redisCli.get(`auction:${roomId}:onLiveItem:price`);
+      const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
       io.to(`${roomId}`).emit('start', { itemId, price });
-      startCountdownTimer(io, roomId);
+      startCountdownTimer(app, roomId);
     });
 
     socket.on('disconnect', () => {
@@ -63,17 +63,43 @@ module.exports = (server, app, sessionMiddleware) => {
     });
   });
 
-  function countdownTimer(io, roomId) {
+  function countdownTimer(app, roomId) {
+    const io = app.get('io');
     let seconds = 10;
 
-    function updateTimer() {
+    async function updateTimer() {
       io.to(`${roomId}`).emit('time', seconds);
       seconds--;
 
       if (seconds < 0) {
         clearInterval(timerInterval[roomId]);
-        // TODO: 자바로 물품 종료 post 보내기 (axios)
-        // TODO: response로 온 정보 client로 전송
+
+        const redisCli = app.get('redisCli');
+
+        // 1. onLiveItem.itemId 가져오고 -1로 덮어쓰기
+        const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
+        await redisCli.set(`auction:${roomId}:onLiveItem:itemId`, -1);
+
+        // 2. bidding 확인. 있으면 낙찰, 없으면 유찰
+        const userId = await redisCli.get(`item:${itemId}:bidding:userId`);
+        const nickname = await redisCli.get(`item:${itemId}:bidding:nickname`);
+        const price = await redisCli.get(`item:${itemId}:bidding:price`);
+        const time = await redisCli.get(`item:${itemId}:bidding:time`);
+
+        // 3. redis에  afterBidResult 저장
+        if (userId === null) {
+          // 유찰
+          await redisCli.set(`item:${itemId}:afterBidResult:type`, 'fail');
+          io.to(`${roomId}`).emit('failBid', { itemId });
+        } else {
+          // 낙찰
+          await redisCli.set(`item:${itemId}:afterBidResult:type`, 'success');
+          await redisCli.set(`item:${itemId}:afterBidResult:userId`, userId);
+          await redisCli.set(`item:${itemId}:afterBidResult:nickname`, nickname);
+          await redisCli.set(`item:${itemId}:afterBidResult:price`, price);
+          await redisCli.set(`item:${itemId}:afterBidResult:time`, time);
+          io.to(`${roomId}`).emit('successBid', { itemId, userId, nickname, price, time });
+        }
       }
     }
 
@@ -81,8 +107,8 @@ module.exports = (server, app, sessionMiddleware) => {
     timerInterval[roomId] = setInterval(updateTimer, 1000);
   }
 
-  function startCountdownTimer(io, roomId) {
+  function startCountdownTimer(app, roomId) {
     clearInterval(timerInterval[roomId]);
-    countdownTimer(io, roomId);
+    countdownTimer(app, roomId);
   }
 };

@@ -62,17 +62,17 @@
       messageList.appendChild(messageTag);
     });
 
-    socket.on('successBid', bidInfo => {
+    socket.on('successBid', ({ itemId, userId, nickname, price, time }) => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
-      messageTag.innerText = `${bidInfo.item.itemName}이 ${bidInfo.user.nickname}님께 ${bidInfo.price}원에 낙찰`;
+      messageTag.innerText = `물품 ${itemId}이 ${nickname}(${userId})님께 ${price}원에 낙찰 at ${time}`;
       messageList.appendChild(messageTag);
     });
 
-    socket.on('failBid', item => {
+    socket.on('failBid', ({ itemId }) => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
-      messageTag.innerText = ` ${item.itemName}이 유찰됨`;
+      messageTag.innerText = `물품 ${itemId}이 유찰됨`;
       messageList.appendChild(messageTag);
     });
 
