@@ -3,7 +3,13 @@ const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
 
 module.exports = (server, app, sessionMiddleware) => {
-  const io = SocketIO(server, { path: '/socket.io' });
+  const io = SocketIO(server, {
+    path: '/socket.io',
+    cors: {
+      origin: 'http://localhost:3000',
+      credentials: true,
+    },
+  });
   app.set('io', io);
 
   const redisCli = app.get('redisCli');
