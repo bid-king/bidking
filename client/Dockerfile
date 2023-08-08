@@ -1,10 +1,16 @@
 FROM nginx
-EXPOSE 3000
+
+WORKDIR /app
+
+RUN mkdir ./build
+
+COPY ./build ./build
 
 # 기존 빌드 파일 삭제
-RUN rm -rf /usr/share/nginx/html/*
+RUN rm -rf /etc/nginx/conf.d/default.conf
 
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY ./build /usr/share/nginx/html
+
+EXPOSE 3000
 
 CMD [ "nginx", "-g", "daemon off;" ]

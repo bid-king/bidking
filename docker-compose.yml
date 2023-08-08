@@ -1,38 +1,41 @@
-version: '3'
+version: "3"
 
 services:
-  client:
+  react:
     image: dajeongyun/docker-client
-    container_name: bidking_client
     build:
       dockerfile: Dockerfile
       context: ./client
     volumes:
-      - /client:/app
+      - /client:/app/build
+    ports:
+      - 3000:3000
     stdin_open: true
 
-  server:
+  springboot:
     image: dajeongyun/docker-springboot-server
-    container_name: bidking_server
     build: 
       dockerfile: Dockerfile
       context: ./server
     volumes:
       - ./server:/app
     ports:
-      - "5000:5000"
+      - 5000:5000
 
-  live:
-    image: dajeongyun/docker-socket-server
-    container_name: bidking_live
+  nodejs:
+    image: dajeongyun/docker-nodejs-server
+    build: 
+      dockerfile: Dockerfile
+      context: ./socket-server
     volumes:
       - /app/node_modules
-      - ./live:/app
+      - ./socket-server:/app
     mem_limit: 128m
+    ports:
+      - 8005:8005
 
   redis:
-    container_name: bidking_redis
-    image: redis:7.0.5
+    image: redis
     ports:
-      - "16379:16379"
+      - 16379:16379
   
