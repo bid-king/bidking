@@ -6,7 +6,10 @@ module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, { path: '/socket.io' });
   app.set('io', io);
 
+  const redisCli = app.get('redisCli');
+
   const roomOwners = {};
+  const timerInterval = {};
 
   io.on('connection', socket => {
     console.log('socket 접속');
@@ -48,8 +51,38 @@ module.exports = (server, app, sessionMiddleware) => {
       io.to(roomId).emit('notice', { msg });
     });
 
+    socket.on('start', async ({ roomId }) => {
+      const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
+      const price = await redisCli.get(`auction:${roomId}:onLiveItem:price`);
+      io.to(`${roomId}`).emit('start', { itemId, price });
+      startCountdownTimer(io, roomId);
+    });
+
     socket.on('disconnect', () => {
       console.log('socket 접속 해제');
     });
   });
+
+  function countdownTimer(io, roomId) {
+    let seconds = 10;
+
+    function updateTimer() {
+      io.to(`${roomId}`).emit('time', seconds);
+      seconds--;
+
+      if (seconds < 0) {
+        clearInterval(timerInterval[roomId]);
+        // TODO: 자바로 물품 종료 post 보내기 (axios)
+        // TODO: response로 온 정보 client로 전송
+      }
+    }
+
+    updateTimer();
+    timerInterval[roomId] = setInterval(updateTimer, 1000);
+  }
+
+  function startCountdownTimer(io, roomId) {
+    clearInterval(timerInterval[roomId]);
+    countdownTimer(io, roomId);
+  }
 };
