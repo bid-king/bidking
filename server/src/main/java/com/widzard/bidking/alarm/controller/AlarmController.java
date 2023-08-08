@@ -2,6 +2,7 @@ package com.widzard.bidking.alarm.controller;
 
 import com.widzard.bidking.alarm.service.AlarmService;
 import com.widzard.bidking.member.entity.Member;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,12 +22,11 @@ public class AlarmController {
     private final AlarmService alarmService;
 
     @GetMapping(value = "/subscribe/{id}", produces = "text/event-stream")
-    public SseEmitter subscribe(
+    public CompletableFuture subscribe(
         @PathVariable("id") Long memberId,
         @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId){
 
         log.info("연결 요청 옴, Last-Event-id={}, memberId={}", lastEventId, memberId);
         return alarmService.subscribe(memberId, lastEventId);
     }
-
 }

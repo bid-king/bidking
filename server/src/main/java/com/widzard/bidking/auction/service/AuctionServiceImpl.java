@@ -250,7 +250,7 @@ public class AuctionServiceImpl implements AuctionService {
                 updateRequest.getItemCategoryId()).orElseThrow(
                 ItemCategoryNotFoundException::new);
             item.update(updateRequest, category);
-            
+
             //요청이 false이면 컨티뉴
             if (!updateRequest.getIsChanged()) {
                 continue;

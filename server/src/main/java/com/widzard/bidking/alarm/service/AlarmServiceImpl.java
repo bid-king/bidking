@@ -9,8 +9,10 @@ import com.widzard.bidking.alarm.repository.EmitterRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -27,7 +29,8 @@ public class AlarmServiceImpl implements AlarmService {
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
 
     @Override
-    public SseEmitter subscribe(Long memberId, String lastEventId) {
+    @Async
+    public CompletableFuture subscribe(Long memberId, String lastEventId) {
         // 고유 식별자 부여
         String id = memberId + "_" + System.currentTimeMillis();
 
@@ -55,7 +58,7 @@ public class AlarmServiceImpl implements AlarmService {
                 .forEach(entry -> sendToClient(emitter, entry.getKey(), entry.getValue()));
         }
         log.info("연결 요청 끝");
-        return emitter;
+        return CompletableFuture.completedFuture(emitter);
     }
 
     @Override
@@ -77,7 +80,7 @@ public class AlarmServiceImpl implements AlarmService {
         try {
             emitter.send(SseEmitter.event()
                 .id(id)
-                .name("sse다!")
+                .name("sseEvent")
                 .data(data));
         } catch (IOException exception) {
             emitterRepository.deleteById(id);
