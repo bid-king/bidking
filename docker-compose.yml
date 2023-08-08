@@ -2,24 +2,17 @@ version: '3'
 
 services:
   client:
+    image: dajeongyun/docker-client
     container_name: bidking_client
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
       context: ./client
     volumes:
       - /client:/app
     stdin_open: true
 
-  nginx:
-    container_name: bidking_nginx
-    restart: always
-    build: 
-      dockerfile: Dockerfile
-      context: ./nginx
-    ports:
-      - "3000:80"
-
   server:
+    image: dajeongyun/docker-springboot-server
     container_name: bidking_server
     build: 
       dockerfile: Dockerfile
@@ -27,24 +20,19 @@ services:
     volumes:
       - ./server:/app
     ports:
-      - "8080:8080"
+      - "5000:5000"
 
-  db:
-    container_name: bidking_database
-    build: ./mysql
-    restart: unless-stopped
-    ports:
-      - "13306:3306"
+  live:
+    image: dajeongyun/docker-socket-server
+    container_name: bidking_live
     volumes:
-      - ./mysql/mysql_data:/var/lib/mysql
-      - ./mysql/sqls/:/docker-entrypoint-initdb.d/
-    environment:
-      MYSQL_DATABASE: "${MYSQL_DATABASE}"
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      - /app/node_modules
+      - ./live:/app
+    mem_limit: 128m
 
   redis:
     container_name: bidking_redis
     image: redis:7.0.5
     ports:
-      - "16379:6379"
+      - "16379:16379"
   
