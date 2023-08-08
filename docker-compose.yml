@@ -35,7 +35,7 @@ services:
       - 8005:8005
 
   redis:
-    image: redis:4.6.7
+    image: redis
     ports:
       - 16379:16379
   
