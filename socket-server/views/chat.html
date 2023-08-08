@@ -57,7 +57,8 @@
     socket.on('updateBid', bidInfo => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
-      messageTag.innerText = `${bidInfo.user.nickname}님이 ${bidInfo.item.itemName}에 ${bidInfo.price}원 압찰`;
+      const { itemId, userId, nickname, price, time } = bidInfo;
+      messageTag.innerText = `${nickname}(${userId})님이 물품 ${itemId}에 ${price}원 입찰 at ${time}`;
       messageList.appendChild(messageTag);
     });
 

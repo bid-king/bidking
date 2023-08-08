@@ -41,10 +41,16 @@ router.get('/redis/get/json', async (req, res, next) => {
 });
 
 router.post('/update', async (req, res, next) => {
+  const redisCli = req.app.get('redisCli');
   const io = req.app.get('io');
-  const { roomId, bidInfo } = req.body;
-  io.to(`${roomId}`).emit('updateBid', bidInfo);
-  startCountdownTimer(req, roomId);
+  const { roomId, itemId } = req.body;
+
+  const userId = await redisCli.get(`item:${itemId}:bidding:userId`);
+  const nickname = await redisCli.get(`item:${itemId}:bidding:nickname`);
+  const price = await redisCli.get(`item:${itemId}:bidding:price`);
+  const time = await redisCli.get(`item:${itemId}:bidding:time`);
+
+  io.to(`${roomId}`).emit('updateBid', { itemId, userId, nickname, price, time });
   res.send('ok');
 });
 
