@@ -5,6 +5,6 @@ import com.widzard.bidking.member.entity.Member;
 
 public interface BookmarkService {
 
-    Long updateBookmark(Member member, BookmarkStatusRequest request);
+    void updateBookmark(Member member, BookmarkStatusRequest request);
 
 }
