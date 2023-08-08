@@ -66,9 +66,8 @@ router.post('/fail', async (req, res, next) => {
 
 router.post('/next', async (req, res, next) => {
   const io = req.app.get('io');
-  const { roomId, item } = req.body;
-  io.to(`${roomId}`).emit('next', item);
-  // TODO: 라이브창에 물품 다섯개 주는거 해야됨 req.body
+  const { roomId, itemId } = req.body;
+  io.to(`${roomId}`).emit('next', itemId);
   res.send('ok');
 });
 
