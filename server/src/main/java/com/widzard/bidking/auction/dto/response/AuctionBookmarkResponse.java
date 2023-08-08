@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +32,7 @@ public class AuctionBookmarkResponse {
 
     private boolean isBookmarked; // 북마크 여부
 
+    @Default
     private List<AuctionListItemDto> itemListDto = new ArrayList<>(); // 옥션 리스트 아이템 리스트
 
     public static AuctionBookmarkResponse from(AuctionRoom auctionRoom, boolean isAdded) {

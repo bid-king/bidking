@@ -4,12 +4,14 @@ interface UserState {
   id: number | null;
   isLogined?: boolean;
   accessToken?: string;
+  nickname: string;
 }
 
 const initialState: UserState = {
   id: null,
   isLogined: false,
   accessToken: '',
+  nickname: '',
 };
 
 export const user = createSlice({
@@ -20,6 +22,7 @@ export const user = createSlice({
       state.isLogined = action.payload.isLogined;
       state.accessToken = action.payload.accessToken;
       state.id = action.payload.id;
+      state.nickname = action.payload.nickname;
     },
   },
 });

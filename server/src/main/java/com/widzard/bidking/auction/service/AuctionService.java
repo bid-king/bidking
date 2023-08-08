@@ -30,10 +30,10 @@ public interface AuctionService {
         MultipartFile auctionRoomImg, MultipartFile[] itemImgs)
         throws IOException;
 
-    AuctionRoom updateAuctionRoom(Long auctionId, AuctionUpdateRequest req,
+    AuctionRoom updateAuctionRoom(Member member, Long auctionId, AuctionUpdateRequest req,
         MultipartFile auctionRoomImg, MultipartFile[] itemImgs) throws IOException;
 
-    void deleteAuctionRoom(Long auctionId);
+    void deleteAuctionRoom(Member member, Long auctionId);
 
     List<AuctionRoom> readAuctionOffLive(Member member);
 

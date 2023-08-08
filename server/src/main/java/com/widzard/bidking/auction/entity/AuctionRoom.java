@@ -33,6 +33,7 @@ import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -97,6 +98,7 @@ public class AuctionRoom extends BaseEntity {
     @JoinColumn(name = "image_id", nullable = false)
     private Image image; // (썸네일)
 
+    @Default
     @OneToMany(mappedBy = "auctionRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> itemList = new ArrayList<>();
 
