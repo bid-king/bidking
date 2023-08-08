@@ -11,7 +11,7 @@ const ejs = require('ejs');
 dotenv.config();
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
-const redis = require('./redis');
+const redis = require('./config/redis');
 
 const app = express();
 app.set('port', process.env.PORT || 8005);
