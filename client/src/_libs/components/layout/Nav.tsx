@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';

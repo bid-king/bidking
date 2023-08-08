@@ -3,6 +3,7 @@ import member from '../../api/member';
 import { useAppDispatch } from '../../store/hooks';
 import { getUserInformation } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { useAlarmEvent } from './useAlarmEvent';
 
 export function useLogin() {
   const dispatch = useAppDispatch();
@@ -28,12 +29,16 @@ export function useLogin() {
       member
         .login(userId, password)
         .then(res => {
-          dispatch(getUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true }));
+          dispatch(
+            getUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true, nickname: res.nickname })
+          );
+          // const { alarm } = useAlarmEvent(res.id.toString());
+          // console.log(alarm);
           navigate('/');
         })
         .catch(err => {
-          if (err) {
-            setErrorMessage(err.response.data.message);
+          if (err.response?.data.message) {
+            setErrorMessage(err.response?.data.message);
             setErrorOccured(true);
           }
         });

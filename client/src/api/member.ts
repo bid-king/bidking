@@ -44,6 +44,7 @@ interface LoginResponse {
   id: number;
   grantType: 'Bearer';
   accessToken: string;
+  nickname: string;
 }
 
 interface SignupResponse {
