@@ -47,7 +47,7 @@
       messageList.appendChild(messageTag);
     });
 
-    socket.on('notice', msg => {
+    socket.on('notice', ({ msg }) => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
       messageTag.innerText = `판매자 : ${msg}`;
