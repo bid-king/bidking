@@ -1,92 +1,26 @@
 /** @jsxImportSource @emotion/react */
-import React, { HTMLAttributes, useEffect, useState } from 'react';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import main, { AuctionRoomListResponse, BookmarkStatusRequest } from '../../api/main';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { Text } from '../../_libs/components/common/Text';
 import colors from '../../_libs/design/colors';
 import { AuctionList } from '../../_libs/components/auction/AuctionList';
 import { RoundButton } from '../../_libs/components/common/RoundButton';
-import auction from '../../api/auction';
 import { auctionDateParse } from '../../_libs/util/auctionDateParse';
 import { IconButton } from '../../_libs/components/common/IconButton';
-import { useAppSelector } from '../../store/hooks';
+import { useMainBox } from '../../_libs/hooks/useMainBox';
 
 export function MainBox() {
-  const isLogined = useAppSelector(state => state.user.isLogined);
-  const [categoryList, setCategoryList] = useState<Category[]>([]);
-  const [buttonCategoryList, setButtonCategoryList] = useState<number[]>([]);
-  const [auctionListBookmarked, setAuctionListBookmarked] = useState<AuctionRoomListResponse[]>([]);
-  const [auctionListBeforeLive, setAuctionListBeforeLive] = useState<AuctionRoomListResponse[]>([]);
-  const [auctionListAfterLive, setAuctionListAfterLive] = useState<AuctionRoomListResponse[]>([]);
-
-  const handleCategoryButtonClick = (categoryId: number) => {
-    setButtonCategoryList(prevList =>
-      prevList.includes(categoryId) ? prevList.filter(id => id !== categoryId) : [...prevList, categoryId]
-    );
-  };
-
-  const handleBookmark = ({ auctionRoomId: auctionId }: BookmarkStatusRequest) => {
-    // console.log(JSON.stringify({ auctionRoomId: auctionId }));
-    main.bookmark({ auctionRoomId: auctionId }).then(res => {
-      console.log(res);
-    });
-  };
-  // 카테고리 리스트
-  interface Category {
-    id: number;
-    name: string;
-  }
-  useEffect(() => {
-    auction
-      .getCategoryList()
-      .then(data => {
-        setCategoryList(data.categoryList);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, []);
-
-  // 진행중, 진행예정 경매 정보
-  const searchAuctionList = {
-    categoryList: buttonCategoryList,
-    keyword: '',
-    page: 1,
-    perPage: 8,
-  };
-  useEffect(() => {
-    main
-      .get(searchAuctionList)
-      .then(res => {
-        const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
-        const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
-        // const bookmarked = res.filter(item => item.bookmarked === true);
-        setAuctionListBeforeLive(beforeLive);
-        setAuctionListAfterLive(afterLive);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, [buttonCategoryList]);
-
-  // 북마크한 경매정보
-  const bookmarkList = {
-    categoryList: buttonCategoryList,
-    keyword: '',
-    page: 1,
-    perPage: 8,
-  };
-  useEffect(() => {
-    main
-      .getBookmarked(bookmarkList)
-      .then(res => {
-        setAuctionListBookmarked(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, [buttonCategoryList]);
+  const {
+    isLogined,
+    categoryList,
+    buttonCategoryList,
+    auctionListBookmarked,
+    handleCategoryButtonClick,
+    handleBookmark,
+    auctionListBeforeLive,
+    auctionListAfterLive,
+  } = useMainBox();
 
   return (
     <div>
@@ -177,6 +111,15 @@ export function MainBox() {
                 }}
                 key={auction.id}
               >
+                {isLogined && (
+                  <IconButton
+                    type={auction.bookmarked ? 'starFilled' : 'star'}
+                    color="confirm"
+                    background="light"
+                    size="small"
+                    onClick={() => handleBookmark({ auctionRoomId: auction.id })}
+                  />
+                )}
                 <Link to={`seller/detail/${auction.id}`}>
                   <AuctionList
                     title={auction.name}
