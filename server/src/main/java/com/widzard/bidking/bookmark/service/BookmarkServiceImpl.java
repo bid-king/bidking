@@ -23,7 +23,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     @Transactional
-    public Long updateBookmark(Member member, BookmarkStatusRequest request) {
+    public void updateBookmark(Member member, BookmarkStatusRequest request) {
         long auctionRoomId = Long.parseLong(request.getAuctionRoomId());
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomId)
             .orElseThrow(() -> new AuctionRoomNotFoundException());
@@ -37,6 +37,5 @@ public class BookmarkServiceImpl implements BookmarkService {
             Bookmark bookmark = Bookmark.createBookmark(member, auctionRoom);
             bookmarkRepository.save(bookmark);
         }
-        return auctionRoom.getId();
     }
 }
