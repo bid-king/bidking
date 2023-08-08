@@ -1,7 +1,6 @@
 const express = require('express');
 
 const router = express.Router();
-const timerInterval = {};
 
 router.get('/', async (req, res, next) => {
   res.render('index');
@@ -11,11 +10,47 @@ router.get('/chat', async (req, res, next) => {
   res.render('chat');
 });
 
+router.get('/redis/set', async (req, res, next) => {
+  const redisCli = req.app.get('redisCli');
+  await redisCli.set('bidking', 'a706');
+  res.send('ok');
+});
+
+router.get('/redis/get', async (req, res, next) => {
+  const redisCli = req.app.get('redisCli');
+  const result = await redisCli.get('bidking');
+  res.send(result);
+});
+
+router.get('/redis/set/json', async (req, res, next) => {
+  const redisCli = req.app.get('redisCli');
+  const data = {
+    model: 'Deimosasdfasf',
+    brand: 'Ergonom',
+    type: 'Enduro bikes',
+    price: 4972,
+  };
+  const result = await redisCli.set('bike:1', JSON.stringify(data));
+  res.send(result);
+});
+
+router.get('/redis/get/json', async (req, res, next) => {
+  const redisCli = req.app.get('redisCli');
+  const fields = await redisCli.get('bike:1');
+  res.send(JSON.parse(fields));
+});
+
 router.post('/update', async (req, res, next) => {
+  const redisCli = req.app.get('redisCli');
   const io = req.app.get('io');
-  const { roomId, bidInfo } = req.body;
-  io.to(`${roomId}`).emit('updateBid', bidInfo);
-  startCountdownTimer(req, roomId);
+  const { roomId, itemId } = req.body;
+
+  const userId = await redisCli.get(`item:${itemId}:bidding:userId`);
+  const nickname = await redisCli.get(`item:${itemId}:bidding:nickname`);
+  const price = await redisCli.get(`item:${itemId}:bidding:price`);
+  const time = await redisCli.get(`item:${itemId}:bidding:time`);
+
+  io.to(`${roomId}`).emit('updateBid', { itemId, userId, nickname, price, time });
   res.send('ok');
 });
 
@@ -36,45 +71,9 @@ router.post('/fail', async (req, res, next) => {
 
 router.post('/next', async (req, res, next) => {
   const io = req.app.get('io');
-  const { roomId, item } = req.body;
-  io.to(`${roomId}`).emit('next', item);
-  // TODO: 라이브창에 물품 다섯개 주는거 해야됨 req.body
+  const { roomId, itemId } = req.body;
+  io.to(`${roomId}`).emit('next', itemId);
   res.send('ok');
 });
-
-router.post('/start', async (req, res, next) => {
-  const io = req.app.get('io');
-  const { roomId, item } = req.body;
-  io.to(`${roomId}`).emit('start', item);
-
-  startCountdownTimer(req, roomId);
-
-  res.send('ok');
-});
-
-function countdownTimer(req, roomId) {
-  const io = req.app.get('io');
-
-  let seconds = 10;
-
-  function updateTimer() {
-    io.to(`${roomId}`).emit('time', seconds);
-    seconds--;
-
-    if (seconds < 0) {
-      clearInterval(timerInterval[roomId]);
-      // TODO: 자바로 물품 종료 post 보내기 (axios)
-      // TODO: response로 온 정보 client로 전송
-    }
-  }
-
-  updateTimer();
-  timerInterval[roomId] = setInterval(updateTimer, 1000);
-}
-
-function startCountdownTimer(req, roomId) {
-  clearInterval(timerInterval[roomId]);
-  countdownTimer(req, roomId);
-}
 
 module.exports = router;
