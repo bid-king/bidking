@@ -40,14 +40,12 @@ module.exports = (server, app, sessionMiddleware) => {
       socket.leave(roomId);
     });
 
-    socket.on('chat', data => {
-      const { roomId, msg } = data;
+    socket.on('chat', ({ roomId, msg }) => {
       io.to(roomId).emit('chat', { nickname: socket.nickname, msg });
     });
 
-    socket.on('notice', data => {
-      const { roomId, msg } = data;
-      io.to(roomId).emit('notice', msg);
+    socket.on('notice', ({ roomId, msg }) => {
+      io.to(roomId).emit('notice', { msg });
     });
 
     socket.on('disconnect', () => {
