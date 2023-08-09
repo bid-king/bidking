@@ -5,30 +5,18 @@ import { Text } from '../common/Text';
 import { ProfileImage } from '../common/ProfileImage';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../store/hooks';
+import { Checkbox } from '../common/Checkbox';
 import { Spacing } from '../common/Spacing';
-import member from '../../../api/member';
-import { useAppDispatch } from '../../../store/hooks';
-import { getUserInformation } from '../../../store/slices/userSlice';
-import { useNavigate } from 'react-router-dom';
 
-export function NavBarModal({ theme = 'light' }: Props) {
+export function AlarmBox({ theme = 'light' }: Props) {
   const id = useAppSelector(state => state.user.id);
-  const isLogined = useAppSelector(state => state.user.isLogined);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    if (isLogined) {
-      member.logout;
-      dispatch(getUserInformation({ id: null, accessToken: '', isLogined: false, nickname: '' }));
-      navigate('/');
-    }
-  };
   return (
     <div
       css={{
         margin: '1rem',
         borderRadius: '0.5rem',
         padding: '1rem',
+
         ...THEME_VARIANT[theme],
       }}
     >
@@ -39,39 +27,51 @@ export function NavBarModal({ theme = 'light' }: Props) {
           alignItems: 'center',
         }}
       >
-        <Text type="h2" content="NickName" />
+        <Text type="h2" content="알림" />
       </div>
       <Spacing rem="1" />
-      <div
-        className="dashBoard"
-        css={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignContent: 'center',
-        }}
-      >
-        대쉬보드 컴포넌트
-      </div>
-      <Spacing rem="1" />
+
       <div
         css={{
           display: 'flex',
           flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <Link to={`/mypage/${id}`}>
-          <Text type="bold" content="개인정보 수정" />
-        </Link>
-        <Spacing rem="1" />
-
         <div
           css={{
-            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
           }}
-          onClick={handleLogout}
         >
-          <Text type="bold" content="로그아웃" />
+          <Text type="bold" content="결제시한이 2일 남았습니다." />
+          <Spacing rem="1" dir="h" />
+          <Checkbox theme={theme} id="1" value="alarmcheck" />
         </div>
+        <Spacing rem="1" />
+        <div
+          css={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Text type="bold" content="결제시한이 2일 남았습니다." />
+          <Spacing rem="1" dir="h" />
+          <Checkbox theme={theme} id="1" value="alarmcheck" />
+        </div>
+        <Spacing rem="1" />
+        <div
+          css={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Text type="bold" content="결제시한이 2일 남았습니다." />
+          <Spacing rem="1" dir="h" />
+          <Checkbox theme={theme} id="1" value="alarmcheck" />
+        </div>
+        <Spacing rem="1" />
       </div>
     </div>
   );

@@ -5,16 +5,18 @@ import { ROOT } from '../_libs/util/http';
 export default {
   get: (auctionId: number) => http.get<AuctionRoomResponse>(`/api/v1/auctions/${auctionId}`),
   //경매 상세 정보
-  post: (data: AuctionCreateRequest) => https.post('/api/v1/auctions', data),
+  post: (data: AuctionCreateRequest, token: string) => https.post('/api/v1/auctions', token, data),
   //경매 등록
-  put: (auctionId: number, data: AuctionUpdateRequest) => https.put(`/api/v1/auctions/${auctionId}`, data),
+  put: (auctionId: number, data: AuctionUpdateRequest, token: string) =>
+    https.put(`/api/v1/auctions/${auctionId}`, token, data),
   //경매 수정
-  delete: (auctionId: number) => https.delete(`/api/v1/auctions/${auctionId}`),
+  delete: (auctionId: number, token: string) => https.delete(`/api/v1/auctions/${auctionId}`, token),
   //경매 삭제
   getCategoryList: () => http.get<CategoryListResponse>('/api/v1/items/categories'),
-  getSellerAuctionListBeforeLive: () =>
-    https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/before-live'),
-  getSellerAuctionListAfterLive: () => https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/after-live'),
+  getSellerAuctionListBeforeLive: (token: string) =>
+    https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/before-live', token),
+  getSellerAuctionListAfterLive: (token: string) =>
+    https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/after-live', token),
 };
 
 export interface AuctionRoomResponse {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import live from '../../api/live';
 import { store } from '../../store/store';
+import { useAppSelector } from '../../store/hooks';
 
 interface Item {
   itemId: number;
@@ -20,6 +21,7 @@ export function useAuctionLiveEnter() {
   const [currentItemId, setCurrentItemId] = useState<number>(0);
   const [itemList, setItemList] = useState<Array<Item> | null>(null);
   const [err, setErr] = useState<unknown>(null);
+  const { accessToken } = useAppSelector(state => state.user);
 
   useEffect(() => {
     try {
@@ -30,7 +32,7 @@ export function useAuctionLiveEnter() {
         if (!isLogined) throw new Error('403');
         else {
           const uid = (await store.getState().user.id) || 0;
-          const data = await live.enter(Number(auctionId));
+          const data = await live.enter(Number(auctionId), accessToken);
           setUserId(uid);
           setAuctionRoomId(data.auctionRoomId);
           setNickname(data.nickname);

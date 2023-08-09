@@ -5,9 +5,10 @@ import auction from '../../api/auction';
 import { auctionDateParse } from '../util/auctionDateParse';
 import { IconButton } from '../components/common/IconButton';
 import { useAppSelector } from '../../store/hooks';
+import { useLogin } from './useLogin';
 
 export function useMainBox() {
-  const isLogined = useAppSelector(state => state.user.isLogined);
+  const { isLogined, accessToken } = useAppSelector(state => state.user);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [buttonCategoryList, setButtonCategoryList] = useState<number[]>([]);
   const [auctionListBookmarked, setAuctionListBookmarked] = useState<AuctionRoomListResponse[]>([]);
@@ -19,7 +20,6 @@ export function useMainBox() {
   const [page, setPage] = useState(1); // 초기 값은 1로 설정
   const [isFetching, setFetching] = useState(false);
   const [hasNextPage, setNextPage] = useState(true);
-  console.log(page);
 
   // 스크롤 이벤트 핸들러
   useEffect(() => {
@@ -50,7 +50,7 @@ export function useMainBox() {
           if (!isLogined) {
             res = await main.get({ ...searchAuctionList, page });
           } else {
-            res = await main.getLogined({ ...searchAuctionList, page });
+            res = await main.getLogined({ ...searchAuctionList, page }, accessToken);
           }
           const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
           const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
@@ -80,7 +80,7 @@ export function useMainBox() {
 
   const handleBookmark = ({ auctionRoomId: auctionId }: BookmarkStatusRequest) => {
     main
-      .bookmark({ auctionRoomId: auctionId })
+      .bookmark({ auctionRoomId: auctionId }, accessToken)
       .then(res => {
         setAuctionListBeforeLive(prevAuctions =>
           prevAuctions.map(auction =>
@@ -161,7 +161,7 @@ export function useMainBox() {
   };
   useEffect(() => {
     main
-      .getBookmarked(bookmarkList)
+      .getBookmarked(bookmarkList, accessToken)
       .then(res => {
         setAuctionListBookmarked(res);
       })

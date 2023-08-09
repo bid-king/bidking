@@ -5,11 +5,11 @@ import { useAppSelector } from '../../store/hooks';
 export function useSellerBox() {
   const [auctionListBeforeLive, setAuctionListBeforeLive] = useState<SellerAuctionRoomListResponse[]>([]);
   const [auctionListAfterLive, setAuctionListAfterLive] = useState<SellerAuctionRoomListResponse[]>([]);
-  const isLogined = useAppSelector(state => state.user.isLogined);
+  const { isLogined, accessToken } = useAppSelector(state => state.user);
 
   useEffect(() => {
     auction
-      .getSellerAuctionListBeforeLive()
+      .getSellerAuctionListBeforeLive(accessToken)
       .then(data => {
         setAuctionListBeforeLive(data);
       })
@@ -17,7 +17,7 @@ export function useSellerBox() {
         console.log(err);
       });
     auction
-      .getSellerAuctionListAfterLive()
+      .getSellerAuctionListAfterLive(accessToken)
       .then(data => {
         setAuctionListAfterLive(data);
       })

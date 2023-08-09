@@ -25,7 +25,7 @@ export function useMyPageBox() {
   const [phoneNumberErrorMessage, setPhoneNumberErrorMessage] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
-  const isLogined = useAppSelector(state => state.user.isLogined);
+  const { isLogined, accessToken } = useAppSelector(state => state.user);
   const [imgSrc, setImgSrc] = useState('/image/profile.png');
   const navigate = useNavigate();
   const memberId = useAppSelector(state => state.user.id);
@@ -142,7 +142,7 @@ export function useMyPageBox() {
   useEffect(() => {
     if (memberId && isLogined) {
       member
-        .get(memberId)
+        .get(memberId, accessToken)
         .then(data => {
           console.log(data);
           setUserId(data.userId);

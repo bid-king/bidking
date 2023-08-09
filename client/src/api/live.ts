@@ -2,7 +2,8 @@ import { https } from '../_libs/util/http';
 import { wss } from '../_libs/util/wss';
 
 export default {
-  enter: async (auctionId: number) => https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`),
+  enter: async (auctionId: number, token: string) =>
+    https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`, token),
   //경매방 입장
   next: () => {},
   //판매자 다음 아이템 경매개시
