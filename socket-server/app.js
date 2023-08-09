@@ -11,7 +11,6 @@ const ejs = require('ejs');
 dotenv.config();
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
-const redis = require('./config/redis');
 
 const app = express();
 app.set('port', process.env.PORT || 8005);
@@ -66,5 +65,4 @@ const server = app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기 중');
 });
 
-redis(app);
 webSocket(server, app, sessionMiddleware);

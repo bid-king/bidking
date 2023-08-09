@@ -1,6 +1,31 @@
-version: "3"
+version: '3'
 
 services:
+  redis-server:
+    image: 'redis:latest'
+    ports:
+      - '16379:6379' # 호스트의 16379 포트와 컨테이너 내부의 6379 포트를 매핑
+    networks:
+      - my-network
+
+  nodejs:
+    image: dajeongyun/docker-nodejs-server
+    build:
+      context: ./socket-server
+      dockerfile: Dockerfile
+    depends_on:
+      - redis-server
+    volumes:
+      - /app/node_modules
+      - ./socket-server:/app
+    ports:
+      - '8005:8005'
+    environment:
+      - REDIS_HOST=redis-server
+      - REDIS_PORT=6379
+    networks:
+      - my-network
+
   react:
     image: dajeongyun/docker-client
     build:
@@ -9,42 +34,18 @@ services:
     volumes:
       - /client:/app/build
     ports:
-      - "3000:3000"
+      - '3000:3000'
     stdin_open: true
 
   springboot:
     image: dajeongyun/docker-springboot-server
-    build: 
+    build:
       context: ./server
       dockerfile: Dockerfile
     volumes:
       - ./server:/app
     ports:
-      - "5000:5000"
+      - '5000:5000'
 
-  redis-server:
-    image: dajeongyun/docker-redis
-    build: 
-      context: ./redis
-      dockerfile: Dockerfile
-    volumes:
-      # - redis-data:/data
-      - ./redis:/data
-    ports:
-      - "16379:6379"
-      
-  
-  nodejs:
-    image: dajeongyun/docker-nodejs-server
-    build: 
-      context: ./socket-server
-      dockerfile: Dockerfile
-    volumes:
-      - /app/node_modules
-      - ./socket-server:/app
-    mem_limit: 128m
-    ports:
-      - "8005:8005"
-
-# volumes:
-#   redis-data:
+networks:
+  my-network:
