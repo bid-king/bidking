@@ -1,51 +1,26 @@
 /** @jsxImportSource @emotion/react */
-import React, { HTMLAttributes, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import auction, { AuctionRoomResponse } from '../../api/auction';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { Text } from '../../_libs/components/common/Text';
 import colors from '../../_libs/design/colors';
 import { AuctionList } from '../../_libs/components/auction/AuctionList';
 import { RoundButton } from '../../_libs/components/common/RoundButton';
+import { auctionDateParse } from '../../_libs/util/auctionDateParse';
+import { IconButton } from '../../_libs/components/common/IconButton';
+import { useMainBox } from '../../_libs/hooks/useMainBox';
 
 export function MainBox() {
-  interface Category {
-    id: number;
-    name: string;
-  }
-  const [categoryList, setCategoryList] = useState<Category[]>([]);
-  const [buttonCategoryList, setButtonCategoryList] = useState<number[]>([]);
-
-  const handleCategoryButtonClick = (categoryId: number) => {
-    setButtonCategoryList(prevList =>
-      prevList.includes(categoryId) ? prevList.filter(id => id !== categoryId) : [...prevList, categoryId]
-    );
-  };
-
-  // useEffect(() => {
-  //   auction
-  //     .getCategoryList()
-  //     .then(data => {
-  //       setCategoryList(data.categoryList);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-  // }, []);
-  // const data = {
-  //   categoryList: [],
-  //   keyword: '',
-  //   page: 1,
-  //   perPage: 10,
-  // };
-  // useEffect(() => {
-  //   auction
-  //     .getAuctionList(data)
-  //     .then(res => console.log(res))
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // });
+  const {
+    isLogined,
+    categoryList,
+    buttonCategoryList,
+    auctionListBookmarked,
+    handleCategoryButtonClick,
+    handleBookmark,
+    auctionListBeforeLive,
+    auctionListAfterLive,
+  } = useMainBox();
 
   return (
     <div>
@@ -83,7 +58,6 @@ export function MainBox() {
         }}
       >
         <div>
-          <Spacing rem="1" />
           <Text type="h1" content="관심 경매" />
           <div
             css={{
@@ -91,56 +65,131 @@ export function MainBox() {
               flexWrap: 'wrap',
             }}
           >
-            <div
-              css={{
-                marginRight: '1rem',
-              }}
-            >
-              <Spacing rem="1" />
-              <AuctionList></AuctionList>
-            </div>
-            <div
-              css={{
-                marginRight: '1rem',
-              }}
-            >
-              <Spacing rem="1" />
-              <AuctionList></AuctionList>
-            </div>
+            {auctionListBookmarked.map((auction, index) => (
+              <div
+                css={{
+                  marginRight: '1rem',
+                }}
+                key={auction.id}
+              >
+                <Link to={`seller/detail/${auction.id}`}>
+                  <AuctionList
+                    title={auction.name}
+                    date={auctionDateParse(auction.startedAt)}
+                    items={auction.itemListDto.map(item => item.name)}
+                    img={auction.imageUrl}
+                  />
+                </Link>
+                <Spacing rem="1" />
+              </div>
+            ))}
+            {auctionListBookmarked.length === 0 && (
+              <div
+                css={{
+                  height: '20rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Text type="h2" content="관심 경매를 추가하세요" />
+              </div>
+            )}
           </div>
         </div>
         <div>
-          <Spacing rem="1" />
           <Text type="h1" content="진행 중인 경매" />
-          <Spacing rem="1" />
           <div
             css={{
               display: 'flex',
+              flexWrap: 'wrap',
             }}
           >
-            <AuctionList></AuctionList>
-            <Spacing rem="1" dir="h" />
-            <AuctionList></AuctionList>
-            <Spacing rem="1" dir="h" />
-            <AuctionList></AuctionList>
-            <Spacing rem="1" dir="h" />
+            {auctionListAfterLive.map((auction, index) => (
+              <div
+                css={{
+                  marginRight: '1rem',
+                }}
+                key={auction.id}
+              >
+                {isLogined && (
+                  <IconButton
+                    type={auction.bookmarked ? 'starFilled' : 'star'}
+                    color="confirm"
+                    background="light"
+                    size="small"
+                    onClick={() => handleBookmark({ auctionRoomId: auction.id })}
+                  />
+                )}
+                <Link to={`seller/detail/${auction.id}`}>
+                  <AuctionList
+                    title={auction.name}
+                    date={auctionDateParse(auction.startedAt)}
+                    items={auction.itemListDto.map(item => item.name)}
+                    img={auction.imageUrl}
+                  />
+                </Link>
+                <Spacing rem="1" />
+              </div>
+            ))}
+            {auctionListAfterLive.length === 0 && (
+              <div
+                css={{
+                  height: '20rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Text type="h2" content="진행중인 경매가 존재하지 않습니다" />
+              </div>
+            )}
           </div>
         </div>
         <div>
-          <Spacing rem="1" />
           <Text type="h1" content="진행 예정 경매" />
-          <Spacing rem="1" />
           <div
             css={{
               display: 'flex',
+              flexWrap: 'wrap',
             }}
           >
-            <AuctionList></AuctionList>
-            <Spacing rem="1" dir="h" />
-            <AuctionList></AuctionList>
-            <Spacing rem="1" dir="h" />
-            <AuctionList></AuctionList>
-            <Spacing rem="1" dir="h" />
+            {auctionListBeforeLive.map((auction, index) => (
+              <div
+                css={{
+                  marginRight: '1rem',
+                }}
+                key={auction.id}
+              >
+                {isLogined && (
+                  <IconButton
+                    type={auction.bookmarked ? 'starFilled' : 'star'}
+                    color="confirm"
+                    background="light"
+                    size="small"
+                    onClick={() => handleBookmark({ auctionRoomId: auction.id })}
+                  />
+                )}
+                <Link to={`seller/detail/${auction.id}`}>
+                  <AuctionList
+                    title={auction.name}
+                    date={auctionDateParse(auction.startedAt)}
+                    items={auction.itemListDto.map(item => item.name)}
+                    img={auction.imageUrl}
+                  />
+                </Link>
+                <Spacing rem="1" />
+              </div>
+            ))}
+            {auctionListBeforeLive.length === 0 && (
+              <div
+                css={{
+                  height: '20rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <Text type="h2" content="진행중인 경매가 존재하지 않습니다" />
+              </div>
+            )}
           </div>
         </div>
       </div>

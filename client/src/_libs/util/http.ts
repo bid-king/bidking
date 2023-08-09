@@ -29,7 +29,7 @@ const httpsAxios = async () => {
   const BEARER_TOKEN = await getToken();
   return Axios.create({
     baseURL: ROOT,
-    headers: { Authorization: `Bearer ${BEARER_TOKEN}`, 'Content-Type': 'multipart/form-data' },
+    headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
   });
 };
 

@@ -62,7 +62,13 @@ export function SellerBox() {
                   </div>
                 ))}
                 {auctionListBeforeLive.length === 0 && (
-                  <div>
+                  <div
+                    css={{
+                      height: '20rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
                     <Text type="h2" content="진행중인 경매가 존재하지 않습니다" />
                   </div>
                 )}
@@ -95,7 +101,13 @@ export function SellerBox() {
                   </div>
                 ))}
                 {auctionListAfterLive.length === 0 && (
-                  <div>
+                  <div
+                    css={{
+                      height: '20rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
                     <Text type="h2" content="완료된 경매가 존재하지 않습니다" />
                   </div>
                 )}
@@ -110,12 +122,14 @@ export function SellerBox() {
             display: 'flex',
             flexDirection: 'column',
             textAlign: 'center',
-            height: ' 100vh',
-            alignItems: 'center',
+            height: ' 91.5vh',
+            justifyContent: 'center',
           }}
         >
           <Link to={'/login'}>
-            <Text type="h2" content="로그인이 필요한 서비스입니다." />
+            <div>
+              <Text type="h2" content="로그인이 필요한 서비스입니다." />
+            </div>
           </Link>
         </div>
       )}
