@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserState {
   id: number | null;
-  isLogined?: boolean;
-  accessToken?: string;
+  isLogined: boolean;
+  accessToken: string;
   nickname: string;
 }
 

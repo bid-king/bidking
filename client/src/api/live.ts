@@ -3,7 +3,8 @@ import { https } from '../_libs/util/http';
 
 export function live(ws: Socket) {
   return {
-    enter: async (auctionId: number) => https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`),
+    enter: async (auctionId: number, token: string) =>
+      https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`, token),
     //경매방 입장
     req: {
       connect: async (roomId: number, nickname: string) => ws.emit('enterRoom', { nickname, roomId }),

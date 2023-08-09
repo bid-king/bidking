@@ -57,45 +57,47 @@ export function MainBox() {
           justifyContent: 'center',
         }}
       >
-        <div>
-          <Text type="h1" content="관심 경매" />
-          <div
-            css={{
-              display: 'flex',
-              flexWrap: 'wrap',
-            }}
-          >
-            {auctionListBookmarked.map((auction, index) => (
-              <div
-                css={{
-                  marginRight: '1rem',
-                }}
-                key={auction.id}
-              >
-                <Link to={`seller/detail/${auction.id}`}>
-                  <AuctionList
-                    title={auction.name}
-                    date={auctionDateParse(auction.startedAt)}
-                    items={auction.itemListDto.map(item => item.name)}
-                    img={auction.imageUrl}
-                  />
-                </Link>
-                <Spacing rem="1" />
-              </div>
-            ))}
-            {auctionListBookmarked.length === 0 && (
-              <div
-                css={{
-                  height: '20rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <Text type="h2" content="관심 경매를 추가하세요" />
-              </div>
-            )}
+        {isLogined && (
+          <div>
+            <Text type="h1" content="관심 경매" />
+            <div
+              css={{
+                display: 'flex',
+                flexWrap: 'wrap',
+              }}
+            >
+              {auctionListBookmarked.map((auction, index) => (
+                <div
+                  css={{
+                    marginRight: '1rem',
+                  }}
+                  key={auction.id}
+                >
+                  <Link to={`seller/detail/${auction.id}`}>
+                    <AuctionList
+                      title={auction.name}
+                      date={auctionDateParse(auction.startedAt)}
+                      items={auction.itemListDto.map(item => item.name)}
+                      img={auction.imageUrl}
+                    />
+                  </Link>
+                  <Spacing rem="1" />
+                </div>
+              ))}
+              {auctionListBookmarked.length === 0 && (
+                <div
+                  css={{
+                    height: '20rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text type="h2" content="관심 경매를 추가하세요" />
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <div>
           <Text type="h1" content="진행 중인 경매" />
           <div

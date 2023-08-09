@@ -9,7 +9,7 @@ import {
   setItemPermissionChecked,
   resetAuctionCreate,
 } from '../../store/slices/auctionCreateSlice';
-import { getToken, ROOT } from '../util/http';
+import { ROOT } from '../util/http';
 import { useNavigate } from 'react-router-dom';
 
 export function useAuctionCreateBox() {
@@ -18,6 +18,7 @@ export function useAuctionCreateBox() {
   const { auctionTitle, startedAt, auctionRoomType, itemPermissionChecked, deliveryRulesChecked, items } =
     useAppSelector(state => state.auctionCreate);
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
+  const token = useAppSelector(state => state.user.accessToken);
 
   const handleAuctionTitle = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setAuctionTitle(e.target.value));
@@ -84,8 +85,6 @@ export function useAuctionCreateBox() {
       getOrderedItemImgs(itemImgs).forEach(file => {
         formData.append('itemImgs', file);
       });
-
-      const token = await getToken();
 
       axios
         .post(`${ROOT}/api/v1/auctions`, formData, {

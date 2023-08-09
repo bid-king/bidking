@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { useAppSelector } from '../../store/hooks';
 
 export const ROOT = process.env.REACT_APP_API_ROOT;
 
@@ -15,29 +16,20 @@ export const http = {
   delete: <Response = unknown>(url: string) => httpAxios.delete<Response>(url).then(res => res.data),
 };
 
-export async function getToken() {
-  const persistedState = sessionStorage.getItem('persist:root');
-  if (persistedState) {
-    const state = JSON.parse(persistedState);
-    const user = JSON.parse(state.user);
-    return user?.accessToken;
-  }
-  return null;
-}
-
-const httpsAxios = async () => {
-  const BEARER_TOKEN = await getToken();
+const httpsAxios = async (token: string) => {
   return Axios.create({
     baseURL: ROOT,
-    headers: { Authorization: `Bearer ${BEARER_TOKEN}` },
+    headers: { Authorization: `Bearer ${token}` },
   });
 };
 
 export const https = {
-  get: async <Response = unknown>(url: string) => (await httpsAxios()).get<Response>(url).then(res => res.data),
-  post: async <Response = unknown, Request = unknown>(url: string, body?: Request) =>
-    (await httpsAxios()).post<Response>(url, body).then(res => res.data),
-  put: async <Response = unknown, Request = unknown>(url: string, body?: Request) =>
-    (await httpsAxios()).put<Response>(url, body).then(res => res.data),
-  delete: async <Response = unknown>(url: string) => (await httpsAxios()).delete<Response>(url).then(res => res.data),
+  get: async <Response = unknown>(url: string, token: string) =>
+    (await httpsAxios(token)).get<Response>(url).then(res => res.data),
+  post: async <Response = unknown, Request = unknown>(url: string, token: string, body?: Request) =>
+    (await httpsAxios(token)).post<Response>(url, body).then(res => res.data),
+  put: async <Response = unknown, Request = unknown>(url: string, token: string, body?: Request) =>
+    (await httpsAxios(token)).put<Response>(url, body).then(res => res.data),
+  delete: async <Response = unknown>(url: string, token: string) =>
+    (await httpsAxios(token)).delete<Response>(url).then(res => res.data),
 };
