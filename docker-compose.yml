@@ -43,7 +43,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     volumes:
-      - ./server:/app
+      - ./server/build/libs:/app/build/libs
     ports:
       - '5000:5000'
 
