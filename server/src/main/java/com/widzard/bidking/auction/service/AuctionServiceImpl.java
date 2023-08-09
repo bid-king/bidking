@@ -13,6 +13,7 @@ import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.exception.ImageNotSufficientException;
+import com.widzard.bidking.auction.exception.UnauthorizedAuctionRoomAccessException;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.bookmark.entity.Bookmark;
@@ -29,8 +30,11 @@ import com.widzard.bidking.item.exception.ItemNotFoundException;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
+import com.widzard.bidking.member.exception.MemberNotFoundException;
+import com.widzard.bidking.member.repository.MemberRepository;
 import com.widzard.bidking.orderItem.entity.OrderItem;
 import com.widzard.bidking.orderItem.repository.OrderItemRepository;
+import java.awt.print.Book;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -57,6 +61,7 @@ public class AuctionServiceImpl implements AuctionService {
     private final ImageService imageService;
     private final BookmarkRepository bookmarkRepository;
     private final OrderItemRepository orderItemRepository;
+    private final MemberRepository memberRepository;
     private final AlarmService alarmService;
 
     @Override
@@ -184,6 +189,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     @Transactional
     public AuctionRoom updateAuctionRoom(
+        Member member,
         Long auctionId,
         AuctionUpdateRequest req,
         MultipartFile auctionRoomImg,
@@ -191,10 +197,18 @@ public class AuctionServiceImpl implements AuctionService {
     ) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
-        log.info("auctionRoom ItemList={}",auctionRoom.getItemList().toString());
-
+        log.info("auctionRoom ItemList={}", auctionRoom.getItemList().toString());
         //auctionRoom 기본자료형 필드 업데이트
         auctionRoom.update(req);
+
+        //경매방 소유권 검사
+        Member loginMember = memberRepository.findById(member.getId()).orElseThrow(
+            MemberNotFoundException::new);
+        Member seller = memberRepository.findById(auctionRoom.getSeller().getId())
+            .orElseThrow(MemberNotFoundException::new);
+        if (loginMember != seller) {
+            throw new UnauthorizedAuctionRoomAccessException();
+        }
 
         //경매썸네일 변경 요청 존재
         if (auctionRoomImg != null && !auctionRoomImg.isEmpty()) {
@@ -236,7 +250,8 @@ public class AuctionServiceImpl implements AuctionService {
                         updateRequest.getItemCategoryId())
                     .orElseThrow(ItemCategoryNotFoundException::new);
                 Image image = imageService.uploadImage(itemImgs[imageCnt++]);
-                Item item = Item.create(auctionRoom, updateRequest.getStartPrice(), updateRequest.getItemName()
+                Item item = Item.create(auctionRoom, updateRequest.getStartPrice(),
+                    updateRequest.getItemName()
                     , updateRequest.getDescription(), itemCategory, curOrdering,
                     image);
                 itemRepository.save(item);
@@ -251,24 +266,57 @@ public class AuctionServiceImpl implements AuctionService {
                 ItemCategoryNotFoundException::new);
             item.update(updateRequest, category);
 
-            //요청이 false이면 컨티뉴
+            //이미지 변경 요청 false
             if (!updateRequest.getIsChanged()) {
                 continue;
             }
             //썸네일 변경
             MultipartFile curFileImg = itemImgs[imageCnt++];
-            log.info("file={}",curFileImg.toString());
+            log.info("file={}", curFileImg.toString());
             imageService.modifyImage(curFileImg, item.getImage().getId());
         }
         auctionRoom.isValid();
+        //알림 전송
+        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(auctionRoom);
+        for (Optional<Bookmark> bookmark: bookmarkList
+        ) {
+            if(bookmark.isPresent()){
+                alarmService.send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK, AlarmType.AUCTION);
+            }
+        }
         return auctionRoom;
     }
 
     @Override
     @Transactional
-    public void deleteAuctionRoom(Long auctionId) {
+    public void deleteAuctionRoom(
+        Member member,
+        Long auctionId
+        ) {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
+
+        //경매방 소유권 검사
+        Member loginMember = memberRepository.findById(member.getId()).orElseThrow(
+            MemberNotFoundException::new);
+        Member seller = memberRepository.findById(auctionRoom.getSeller().getId())
+            .orElseThrow(MemberNotFoundException::new);
+        if (loginMember != seller) {
+            throw new UnauthorizedAuctionRoomAccessException();
+        }
+
+        //북마크 삭제
+        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(auctionRoom);
+
+        for (Optional<Bookmark> bookmark: bookmarkList
+        ) {
+            if(bookmark.isPresent()){
+                bookmarkRepository.deleteById(bookmark.get().getId());
+            }
+        }
+
+        //경매방 삭제
+        auctionRoomRepository.deleteById(auctionId);
 
         //s3에 올라가있는 image byte stream 삭제를 겸해야 하므로 cascade만으로 처리 불가
         //s3 옥션룸 썸네일 삭제
@@ -279,7 +327,14 @@ public class AuctionServiceImpl implements AuctionService {
             Item curItem = itemList.get(i);
             imageService.deleteImage(curItem.getImage());
         }
-        auctionRoomRepository.deleteById(auctionId);
+
+        //북마크 삭제 알림 전송
+        for (Optional<Bookmark> bookmark: bookmarkList
+        ) {
+            if(bookmark.isPresent()){
+                alarmService.send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK, AlarmType.AUCTION);
+            }
+        }
     }
 
     @Override
@@ -287,7 +342,6 @@ public class AuctionServiceImpl implements AuctionService {
         List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllByAuctionRoomLiveStateAndSeller(
             member, AuctionRoomLiveState.OFF_LIVE);
         return auctionRoomList;
-
     }
 
     @Override

@@ -11,14 +11,15 @@ import { BidWon } from './BidWon';
 interface Props extends HTMLAttributes<HTMLDivElement> {
   align: 'left' | 'right' | 'center';
   theme: 'dark' | 'light';
+  price: string;
 }
 //price는 시험용 변수로, 실적용 시 삭제하고 useBidPrice()를 활성화해야합니다.
-export function BidPrice({ align = 'center', theme = 'light' }: Props) {
+export function BidPrice({ align = 'center', theme = 'light', price }: Props) {
   // const [priceArr, prev, curr, err] = useBidPrice();
   const [priceArr, setPriceArr] = useState<string[]>(['0']);
   useEffect(() => {
-    setPriceArr(bidPriceParse('909090909').split('')); //중간에 테스트할 숫자를 입력하고 테스트하면됩니다
-  }, [priceArr]);
+    setPriceArr(bidPriceParse(String(price)).split('')); //중간에 테스트할 숫자를 입력하고 테스트하면됩니다
+  }, [price]);
   //여기까지를 주석 처리해야합니다.
   return (
     <div css={{ width: '100%', height: '2.75rem', position: 'relative' }}>

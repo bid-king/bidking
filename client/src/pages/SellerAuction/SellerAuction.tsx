@@ -10,7 +10,7 @@ import colors from '../../_libs/design/colors';
 
 export function SellerAuction() {
   const auctionId = 123;
-  const auctionType = '네덜란드';
+  const auctionRoomType = '네덜란드';
   const title = '떡락각이다';
   const userId = 4;
   const nickname = '정예지';
@@ -20,7 +20,7 @@ export function SellerAuction() {
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
       <div css={{ width: '75%', padding: '1.5rem 0.75rem 1.5rem 1.5rem' }}>
-        <AuctionTitle theme="dark" nickname={nickname} auctionType={auctionType} title={title} />
+        <AuctionTitle theme="dark" nickname={nickname} auctionRoomType={auctionRoomType} title={title} />
         <div
           css={{
             display: 'flex',

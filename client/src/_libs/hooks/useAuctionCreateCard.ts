@@ -5,12 +5,13 @@ import { setItemImg } from '../../store/slices/auctionCreateItemImgSlice';
 import axios from 'axios';
 import auction from '../../api/auction';
 
-const useAuctionCreateCard = (ordering: number) => {
+export function useAuctionCreateCard(ordering: number) {
   const [name, setName] = useState('');
-  const [itemCategory, setItemCategory] = useState('');
+  const [itemCategory, setItemCategory] = useState('1');
   const [startPrice, setStartPrice] = useState('');
   const [description, setDescription] = useState('');
   const [itemOrdering] = useState(ordering);
+  const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
   const dispatch = useAppDispatch();
 
   interface Category {
@@ -37,7 +38,6 @@ const useAuctionCreateCard = (ordering: number) => {
 
   const handleItemCategory = (e: ChangeEvent<HTMLSelectElement>) => {
     setItemCategory(e.target.value);
-    console.log(itemCategory);
   };
   const handleStartPrice = (e: ChangeEvent<HTMLInputElement>) => {
     setStartPrice(e.target.value);
@@ -50,11 +50,13 @@ const useAuctionCreateCard = (ordering: number) => {
   const handleItemImg = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       dispatch(setItemImg({ id: itemOrdering.toString(), file: e.target.files[0] }));
+      const url = URL.createObjectURL(e.target.files[0]);
+      setPreviewImageURL(url);
     }
   };
 
   useEffect(() => {
-    if (name && itemCategory && startPrice && description) {
+    if (name && startPrice && description) {
       dispatch(
         addItemToList({
           name: name,
@@ -65,7 +67,7 @@ const useAuctionCreateCard = (ordering: number) => {
         })
       );
     }
-  }, [name, itemCategory, startPrice, description]);
+  }, [name, startPrice, description]);
 
   return {
     name,
@@ -79,7 +81,8 @@ const useAuctionCreateCard = (ordering: number) => {
     handleDescription,
     itemOrdering,
     categoryList,
+    previewImageURL,
   };
-};
+}
 
 export default useAuctionCreateCard;

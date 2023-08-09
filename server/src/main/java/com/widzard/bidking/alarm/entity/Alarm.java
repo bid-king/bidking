@@ -41,7 +41,7 @@ public class Alarm extends BaseEntity {
     private Member member; // ( 수신 고객 )
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 50)
     private Content content; // ( 내용 )
 
     @Column(nullable = false)
@@ -64,6 +64,7 @@ public class Alarm extends BaseEntity {
             .content(content)
             .isSend(true)
             .isRead(false)
+            .mediaType(MediaType.NOTIFICATION)
             .alarmType(alarmType)
             .build();
     }

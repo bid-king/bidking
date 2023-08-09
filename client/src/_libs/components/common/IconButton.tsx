@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import colors from '../../design/colors';
 import { HTMLAttributes } from 'react';
 import { Icon } from './Icon';
@@ -15,6 +15,7 @@ export function IconButton({ type, background = 'transparent', color = 'lightgre
         ...BACKGROUND_VARIANT[background],
         ...SIZE_VARIANT[size],
       }}
+      onClick={onClick}
     >
       <Icon type={type} color={color} rem={size === 'small' ? '1.25' : '2'} />
     </button>
@@ -43,6 +44,7 @@ const SIZE_VARIANT = {
 };
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   color: 'light' | 'dark' | 'black' | 'white' | 'lightgrey' | 'confirm' | 'warn' | 'progress' | 'ok';
   background?: 'light' | 'dark' | 'black' | 'white' | 'transparent' | 'confirm' | 'warn' | 'progress' | 'ok';
   size: 'small' | 'large';

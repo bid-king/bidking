@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect, ChangeEvent } from 'react';
 import member from '../../api/member';
 import { useAppSelector } from '../../store/hooks';
-import { getToken, API_URL } from '../util/http';
+import { getToken, ROOT } from '../util/http';
 import { useNavigate } from 'react-router-dom';
 
 export function useMyPageBox() {
@@ -24,8 +24,9 @@ export function useMyPageBox() {
   const [newPassword, setNewPassword] = useState('');
   const [phoneNumberErrorMessage, setPhoneNumberErrorMessage] = useState('');
   const [image, setImage] = useState<File | null>(null);
+  const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
   const isLogined = useAppSelector(state => state.user.isLogined);
-  const [imgSrc, setImgSrc] = useState('');
+  const [imgSrc, setImgSrc] = useState('/image/profile.png');
   const navigate = useNavigate();
   const memberId = useAppSelector(state => state.user.id);
 
@@ -63,8 +64,11 @@ export function useMyPageBox() {
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedImage = e.target.files ? e.target.files[0] : null;
-    setImage(selectedImage);
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+      const url = URL.createObjectURL(e.target.files[0]);
+      setPreviewImageURL(url);
+    }
   };
 
   // Functions
@@ -112,7 +116,7 @@ export function useMyPageBox() {
       }
       const token = await getToken();
       axios
-        .put(`${API_URL}/api/v1/members/${memberId}`, formData, {
+        .put(`${ROOT}/api/v1/members/${memberId}`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
@@ -208,5 +212,6 @@ export function useMyPageBox() {
     requestCerificated,
     memberUpdate,
     imgSrc,
+    previewImageURL,
   };
 }

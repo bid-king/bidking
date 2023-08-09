@@ -110,9 +110,7 @@ public class MemberServiceImpl implements MemberService {
             .orElseThrow(MemberNotFoundException::new);
         comparePassword(request.getPassword(), member.getPassword());
         String loginToken = tokenProvider.generateAccessToken(member);
-
-
-        return new AuthInfo(member.getId(), loginToken);
+        return new AuthInfo(member.getId(), member.getNickname(), loginToken);
     }
 
 

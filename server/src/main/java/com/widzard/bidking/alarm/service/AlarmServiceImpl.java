@@ -35,10 +35,10 @@ public class AlarmServiceImpl implements AlarmService {
         String id = memberId + "_" + System.currentTimeMillis();
 
         // 이미 존재하는 연결이 있다면 이전 연결 끊기
-        SseEmitter existingEmitter = emitterRepository.findByMemberId(String.valueOf(memberId));
-        if (existingEmitter != null) {
-            existingEmitter.complete(); // 기존 연결 끊기
-        }
+//        SseEmitter existingEmitter = emitterRepository.findByMemberId(String.valueOf(memberId));
+//        if (existingEmitter != null) {
+//            existingEmitter.complete(); // 기존 연결 끊기
+//        }
 
         SseEmitter emitter = emitterRepository.save(id, new SseEmitter(DEFAULT_TIMEOUT));
 
@@ -74,6 +74,7 @@ public class AlarmServiceImpl implements AlarmService {
                 sendToClient(emitter, key, AlarmResponse.from(alarm));
             }
         );
+        alarmRepository.save(alarm);
     }
 
     private void sendToClient(SseEmitter emitter, String id, Object data) {
@@ -84,7 +85,7 @@ public class AlarmServiceImpl implements AlarmService {
                 .data(data));
         } catch (IOException exception) {
             emitterRepository.deleteById(id);
-            throw new RuntimeException("연결 오류!");
+            throw new RuntimeException("클라이언트와 연결 오류");
         }
     }
 }

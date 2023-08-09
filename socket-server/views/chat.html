@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CHAT</title>
+  </head>
+  <body>
+    <div>
+      닉네임 <input type="text" name="nickname" id="nickname" /> <br />
+      경매방<input type="number" name="roomId" id="roomId" /> <br />
+      <button onclick="enterRoom()">입장</button>
+      <button onclick="leaveRoom()">퇴장</button>
+    </div>
+    <hr />
+    <div>
+      <input type="text" name="message" id="message" />
+      <button onclick="sendMsg()">채팅</button><br />
+      <input type="text" name="notice" id="notice" />
+      <button onclick="sendNotice()">공지</button><br />
+      <button onclick="startAuction()">시작</button>
+    </div>
+    <div>
+      <h3 id="timer"></h3>
+    </div>
+    <div>
+      <ul id="messages"></ul>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    var nickname;
+    var roomId;
+
+    socket.on('time', time => {
+      var timer = document.getElementById('timer');
+      timer.innerText = time;
+    });
+
+    socket.on('chat', data => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      const { nickname, msg } = data;
+      messageTag.innerText = `${nickname} : ${msg}`;
+      messageList.appendChild(messageTag);
+    });
+
+    socket.on('notice', ({ msg }) => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = `판매자 : ${msg}`;
+      messageList.appendChild(messageTag);
+    });
+
+    socket.on('updateBid', bidInfo => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      const { itemId, userId, nickname, price, time } = bidInfo;
+      messageTag.innerText = `${nickname}(${userId})님이 물품 ${itemId}에 ${price}원 입찰 at ${time}`;
+      messageList.appendChild(messageTag);
+    });
+
+    socket.on('successBid', ({ itemId, userId, nickname, price, time }) => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = `물품 ${itemId}이 ${nickname}(${userId})님께 ${price}원에 낙찰 at ${time}`;
+      messageList.appendChild(messageTag);
+    });
+
+    socket.on('failBid', ({ itemId }) => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = `물품 ${itemId}이 유찰됨`;
+      messageList.appendChild(messageTag);
+    });
+
+    socket.on('next', item => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = ` ${item.itemName} 경매 설명 시작!`;
+      messageList.appendChild(messageTag);
+    });
+
+    socket.on('start', data => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = ` ${data.itemId} 경매 시작! : ${data.price}원`;
+      messageList.appendChild(messageTag);
+    });
+
+    function enterRoom() {
+      nickname = document.getElementById('nickname').value;
+      roomId = document.getElementById('roomId').value;
+      socket.emit('enterRoom', {
+        nickname,
+        roomId,
+      });
+    }
+
+    function leaveRoom() {
+      nickname = document.getElementById('nickname');
+      roomId = document.getElementById('roomId');
+      socket.emit('leaveRoom', {
+        nickname: nickname.value,
+        roomId: roomId.value,
+      });
+      nickname.value = '';
+      roomId.value = '';
+    }
+
+    function sendMsg() {
+      var msg = document.getElementById('message');
+      socket.emit('chat', {
+        nickname,
+        roomId,
+        msg: msg.value,
+      });
+      msg.value = '';
+    }
+
+    function sendNotice() {
+      var msg = document.getElementById('notice');
+      socket.emit('notice', {
+        roomId,
+        msg: msg.value,
+      });
+      msg.value = '';
+    }
+
+    function startAuction() {
+      socket.emit('start', {
+        roomId,
+      });
+    }
+  </script>
+</html>
