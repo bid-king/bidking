@@ -2,10 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import main, { AuctionRoomListResponse, BookmarkStatusRequest } from '../../api/main';
 import auction from '../../api/auction';
-import { auctionDateParse } from '../util/auctionDateParse';
-import { IconButton } from '../components/common/IconButton';
 import { useAppSelector } from '../../store/hooks';
-import { useLogin } from './useLogin';
 
 export function useMainBox() {
   const { isLogined, accessToken } = useAppSelector(state => state.user);
