@@ -4,38 +4,47 @@ services:
   react:
     image: dajeongyun/docker-client
     build:
-      dockerfile: Dockerfile
       context: ./client
+      dockerfile: Dockerfile
     volumes:
       - /client:/app/build
     ports:
-      - 3000:3000
+      - "3000:3000"
     stdin_open: true
 
   springboot:
     image: dajeongyun/docker-springboot-server
     build: 
-      dockerfile: Dockerfile
       context: ./server
+      dockerfile: Dockerfile
     volumes:
       - ./server:/app
     ports:
-      - 5000:5000
+      - "5000:5000"
 
+  redis-server:
+    image: dajeongyun/docker-redis
+    build: 
+      context: ./redis
+      dockerfile: Dockerfile
+    volumes:
+      # - redis-data:/data
+      - ./redis:/data
+    ports:
+      - "16379:6379"
+      
+  
   nodejs:
     image: dajeongyun/docker-nodejs-server
     build: 
-      dockerfile: Dockerfile
       context: ./socket-server
+      dockerfile: Dockerfile
     volumes:
       - /app/node_modules
       - ./socket-server:/app
     mem_limit: 128m
     ports:
-      - 8005:8005
+      - "8005:8005"
 
-  redis:
-    image: redis
-    ports:
-      - 16379:16379
-  
+# volumes:
+#   redis-data:
