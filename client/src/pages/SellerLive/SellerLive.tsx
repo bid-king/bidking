@@ -8,7 +8,7 @@ import { Spacing } from '../../_libs/components/common/Spacing';
 import { SellerStream } from '../../_libs/components/meeting/SellerStream';
 import colors from '../../_libs/design/colors';
 
-export function SellerAuction() {
+export function SellerLive() {
   const auctionId = 123;
   const auctionRoomType = '네덜란드';
   const title = '떡락각이다';

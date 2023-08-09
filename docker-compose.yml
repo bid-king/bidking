@@ -23,9 +23,13 @@ services:
       - "5000:5000"
 
   redis-server:
-    image: redis
+    image: dajeongyun/docker-redis
+    build: 
+      context: ./redis
+      dockerfile: Dockerfile
     volumes:
-      - redis-data:/data
+      # - redis-data:/data
+      - ./redis:/data
     ports:
       - "16379:6379"
       
@@ -38,9 +42,8 @@ services:
     volumes:
       - /app/node_modules
       - ./socket-server:/app
-    mem_limit: 128m
     ports:
       - "8005:8005"
 
-volumes:
-  redis-data:
+# volumes:
+#   redis-data:

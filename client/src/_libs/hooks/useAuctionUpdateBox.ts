@@ -13,7 +13,7 @@ import {
   addItemToList,
 } from '../../store/slices/auctionUpdateSlice';
 
-import { getToken, ROOT } from '../util/http';
+import { ROOT } from '../util/http';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { transformToAuctionItem, OriginalItem, AuctionItem } from '../util/transformToAuctionItem';
@@ -28,6 +28,7 @@ export function useAuctionUpdateBox() {
   const isLogined = useAppSelector(state => state.user.isLogined);
   const params = useParams<string>();
   const auctionId = Number(params.auctionId);
+  const token = useAppSelector(state => state.user.accessToken);
 
   // 2. State
   const [image, setImage] = useState<File[]>([]);
@@ -110,8 +111,6 @@ export function useAuctionUpdateBox() {
       getOrderedItemImgs(itemImgs).forEach((file, index) => {
         formData.append('itemImgs', file);
       });
-
-      const token = await getToken();
 
       axios
         .put(`${ROOT}/api/v1/auctions/${auctionId}`, formData, {

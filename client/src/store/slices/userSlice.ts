@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const url = 'http://70.12.247.192:8080/api/v1/oauth/kakao/login';
-
 interface UserState {
   id: number | null;
   isLogined: boolean;

@@ -16,11 +16,6 @@ export const http = {
   delete: <Response = unknown>(url: string) => httpAxios.delete<Response>(url).then(res => res.data),
 };
 
-export async function getToken() {
-  const token = useAppSelector(state => state.user.accessToken);
-  return token;
-}
-
 const httpsAxios = async (token: string) => {
   return Axios.create({
     baseURL: ROOT,
