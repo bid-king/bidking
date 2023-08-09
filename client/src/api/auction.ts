@@ -12,8 +12,6 @@ export default {
   delete: (auctionId: number) => https.delete(`/api/v1/auctions/${auctionId}`),
   //경매 삭제
   getCategoryList: () => http.get<CategoryListResponse>('/api/v1/items/categories'),
-  getAuctionList: (data: AuctionRoomListRequest) =>
-    http.post<AuctionRoomListResponse[]>('/api/v1/auctions/status', data),
   getSellerAuctionListBeforeLive: () =>
     https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/before-live'),
   getSellerAuctionListAfterLive: () => https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/after-live'),

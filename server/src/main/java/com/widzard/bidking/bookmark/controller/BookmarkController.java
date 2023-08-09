@@ -1,6 +1,7 @@
 package com.widzard.bidking.bookmark.controller;
 
 import com.widzard.bidking.bookmark.dto.request.BookmarkStatusRequest;
+import com.widzard.bidking.bookmark.dto.response.BookmarkStatusResponse;
 import com.widzard.bidking.bookmark.service.BookmarkService;
 import com.widzard.bidking.member.entity.Member;
 import javax.validation.Valid;
@@ -21,10 +22,10 @@ public class BookmarkController {
     private final BookmarkService bookmarkService;
 
     @PostMapping
-    public ResponseEntity<?> changeBookmarkStatus(
+    public ResponseEntity<BookmarkStatusResponse> changeBookmarkStatus(
         @AuthenticationPrincipal Member member,
         @RequestBody @Valid BookmarkStatusRequest request) {
-        bookmarkService.updateBookmark(member, request);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Long auctionId = bookmarkService.updateBookmark(member, request);
+        return new ResponseEntity<>(BookmarkStatusResponse.from(auctionId), HttpStatus.OK);
     }
 }
