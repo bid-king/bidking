@@ -41,7 +41,15 @@ export function useMainBox() {
     perPage: 8,
   };
 
-  // 로딩 상태와 다음 페이지 상태에 따른 데이터 요청
+  useEffect(() => {
+    // 카테고리가 변경될 때 페이지와 리스트 상태를 초기화
+    setPage(1);
+    setNextPage(true);
+    setAuctionListBeforeLive([]);
+    setAuctionListAfterLive([]);
+    setFetching(true); // 카테고리 변경 시 바로 데이터를 가져오도록 설정
+  }, [buttonCategoryList]);
+
   useEffect(() => {
     if (isFetching && hasNextPage) {
       const fetchMoreData = async () => {
@@ -115,7 +123,25 @@ export function useMainBox() {
       });
   }, []);
 
-  // // 진행중, 진행예정 경매 정보
+  // 북마크한 경매정보
+  const bookmarkList = {
+    categoryList: buttonCategoryList,
+    keyword: '',
+    page: 1,
+    perPage: 8,
+  };
+  useEffect(() => {
+    main
+      .getBookmarked(bookmarkList, accessToken)
+      .then(res => {
+        setAuctionListBookmarked(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, [buttonCategoryList, refreshTrigger]);
+
+  // 진행중, 진행예정 경매 정보
   // const searchAuctionList = {
   //   categoryList: buttonCategoryList,
   //   keyword: '',
@@ -138,7 +164,7 @@ export function useMainBox() {
   //       });
   //   } else if (isLogined) {
   //     main
-  //       .getLogined(searchAuctionList)
+  //       .getLogined(searchAuctionList, accessToken)
   //       .then(res => {
   //         const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
   //         const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
@@ -151,24 +177,6 @@ export function useMainBox() {
   //       });
   //   }
   // }, [buttonCategoryList, isFetching]);
-
-  // 북마크한 경매정보
-  const bookmarkList = {
-    categoryList: buttonCategoryList,
-    keyword: '',
-    page: 1,
-    perPage: 8,
-  };
-  useEffect(() => {
-    main
-      .getBookmarked(bookmarkList, accessToken)
-      .then(res => {
-        setAuctionListBookmarked(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, [buttonCategoryList, refreshTrigger]);
 
   return {
     isLogined,
