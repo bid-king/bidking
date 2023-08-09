@@ -15,6 +15,63 @@ export function useMainBox() {
   const [auctionListAfterLive, setAuctionListAfterLive] = useState<AuctionRoomListResponse[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+  // 무한 스크롤링을 위한 상태
+  const [page, setPage] = useState(1); // 초기 값은 1로 설정
+  const [isFetching, setFetching] = useState(false);
+  const [hasNextPage, setNextPage] = useState(true);
+  console.log(page);
+
+  // 스크롤 이벤트 핸들러
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, offsetHeight } = document.documentElement;
+      if (window.innerHeight + scrollTop >= offsetHeight - 500) {
+        // 여기서 500은 미리 불러올 픽셀 수를 나타냅니다.
+        setFetching(true);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  // 진행중, 진행예정 경매 정보
+  const searchAuctionList = {
+    categoryList: buttonCategoryList,
+    keyword: '',
+    page: page,
+    perPage: 8,
+  };
+
+  // 로딩 상태와 다음 페이지 상태에 따른 데이터 요청
+  useEffect(() => {
+    if (isFetching && hasNextPage) {
+      const fetchMoreData = async () => {
+        try {
+          let res;
+          if (!isLogined) {
+            res = await main.get({ ...searchAuctionList, page });
+          } else {
+            res = await main.getLogined({ ...searchAuctionList, page });
+          }
+          const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
+          const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
+
+          // 현재 리스트에 추가로 받아온 데이터를 추가합니다.
+          setAuctionListBeforeLive(prev => [...prev, ...beforeLive]);
+          setAuctionListAfterLive(prev => [...prev, ...afterLive]);
+
+          // 다음 페이지 정보를 업데이트 합니다.
+          setPage(prev => prev + 1);
+          setNextPage(res.length > 0); // 데이터가 더 있다면 true, 없다면 false로 설정합니다.
+          setFetching(false);
+        } catch (err) {
+          console.log(err);
+          setFetching(false);
+        }
+      };
+      fetchMoreData();
+    }
+  }, [isFetching, buttonCategoryList]);
+
   const handleCategoryButtonClick = (categoryId: number) => {
     setButtonCategoryList(prevList =>
       prevList.includes(categoryId) ? prevList.filter(id => id !== categoryId) : [...prevList, categoryId]
@@ -58,42 +115,42 @@ export function useMainBox() {
       });
   }, []);
 
-  // 진행중, 진행예정 경매 정보
-  const searchAuctionList = {
-    categoryList: buttonCategoryList,
-    keyword: '',
-    page: 1,
-    perPage: 8,
-  };
-  useEffect(() => {
-    if (!isLogined) {
-      main
-        .get(searchAuctionList)
-        .then(res => {
-          const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
-          const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
-          // const bookmarked = res.filter(item => item.bookmarked === true);
-          setAuctionListBeforeLive(beforeLive);
-          setAuctionListAfterLive(afterLive);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    } else if (isLogined) {
-      main
-        .getLogined(searchAuctionList)
-        .then(res => {
-          const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
-          const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
-          // const bookmarked = res.filter(item => item.bookmarked === true);
-          setAuctionListBeforeLive(beforeLive);
-          setAuctionListAfterLive(afterLive);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-  }, [buttonCategoryList]);
+  // // 진행중, 진행예정 경매 정보
+  // const searchAuctionList = {
+  //   categoryList: buttonCategoryList,
+  //   keyword: '',
+  //   page: 1,
+  //   perPage: 8,
+  // };
+  // useEffect(() => {
+  //   if (!isLogined) {
+  //     main
+  //       .get(searchAuctionList)
+  //       .then(res => {
+  //         const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
+  //         const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
+  //         // const bookmarked = res.filter(item => item.bookmarked === true);
+  //         setAuctionListBeforeLive(beforeLive);
+  //         setAuctionListAfterLive(afterLive);
+  //       })
+  //       .catch(err => {
+  //         console.log(err);
+  //       });
+  //   } else if (isLogined) {
+  //     main
+  //       .getLogined(searchAuctionList)
+  //       .then(res => {
+  //         const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
+  //         const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
+  //         // const bookmarked = res.filter(item => item.bookmarked === true);
+  //         setAuctionListBeforeLive(beforeLive);
+  //         setAuctionListAfterLive(afterLive);
+  //       })
+  //       .catch(err => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [buttonCategoryList, isFetching]);
 
   // 북마크한 경매정보
   const bookmarkList = {

@@ -8,7 +8,7 @@ function App() {
   return (
     <>
       <Global styles={globalStyle} />
-      <LinkDebug />
+      {/* <LinkDebug /> */}
       <AppRouter />
     </>
   );

@@ -30,23 +30,24 @@ export function Nav({ theme = 'light' }: Props) {
   };
   const [alarm, setAlarm] = useState<AlarmEvent[]>([]);
 
-  const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
+  if (isLogined) {
+    const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
+    eventSource.onopen = e => {
+      console.log(e);
+    };
 
-  // eventSource.onopen = e => {
-  //   console.log(e);
-  // };
+    eventSource.onmessage = res => {
+      console.log('1111111111');
+      console.log(res);
+      const notification: AlarmEvent = JSON.parse(res.data);
+      console.log(notification);
+    };
 
-  // eventSource.onmessage = res => {
-  //   console.log('1111111111');
-  //   console.log(res);
-  //   const notification: AlarmEvent = JSON.parse(res.data);
-  //   console.log(notification);
-  // };
-
-  // eventSource.onerror = error => {
-  //   console.error('EventSource failed:', error);
-  //   eventSource.close();
-  // };
+    eventSource.onerror = error => {
+      console.error('EventSource failed:', error);
+      eventSource.close();
+    };
+  }
 
   return (
     <div>
