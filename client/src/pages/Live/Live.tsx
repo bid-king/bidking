@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect } from 'react';
-import { io } from 'socket.io-client';
+import React, { useEffect, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 import { ChatRoom } from '../../_libs/components/auction/ChatRoom';
 import { AuctionNotice } from '../../_libs/components/auctionsystem/AuctionNotice';
 import { AuctionSystem } from '../../_libs/components/auctionsystem/AuctionSystem';
@@ -22,12 +22,7 @@ export function Live() {
 
   // const { socket, socketConnectionErr } = useLiveSocketConnection(auctionRoomId);
 
-  useEffect(() => {
-    const socket = io('http://localhost:8005', {
-      withCredentials: true,
-    });
-    socket.emit('enterRoom', { nickname: '정예지', roomId: 1 });
-  }, []);
+  const { socket, socketConnectionErr } = useLiveSocketConnection(auctionRoomId);
 
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>

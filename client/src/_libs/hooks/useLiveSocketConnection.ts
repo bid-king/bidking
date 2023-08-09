@@ -1,33 +1,29 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import live from '../../api/live';
+import { io, Socket } from 'socket.io-client';
+import { live } from '../../api/live';
 import { store } from '../../store/store';
 
 export function useLiveSocketConnection(roomId: number) {
-  const socket = useRef(live);
+  const socket = useRef<Socket | null>(null);
   const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
   const [userNickname, setUserNickname] = useState<string>('');
   useEffect(() => {
-    auth();
+    socketConfig(roomId);
 
-    async function auth() {
+    async function socketConfig(roomId: number) {
       try {
-        // setUserNickname(store.getState().user.nickname);
-        // if (!userNickname) throw new Error('403');
-        // else {
-        socket.current.req.connect(roomId, userNickname);
-        console.log(socket.current.ws);
-
-        console.log('우와 연결이 되었어요');
-        // }
+        socket.current = await io('http://localhost:8005', {
+          withCredentials: true,
+        });
+        const socketApi = live(socket.current);
+        socketApi.req.connect(roomId, '정예지짱');
       } catch (err) {
         setSocketConnectionErr(err);
       }
     }
 
-    return () => {
-      live.req.leave(roomId, userNickname);
-    }; //unmount시 채팅방 나가야함
-  }, []);
+    return () => {}; //unmount시 채팅방 나가야함
+  }, [roomId]);
   return { socket: socket.current, socketConnectionErr };
 }
