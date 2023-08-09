@@ -7,7 +7,7 @@ module.exports = app => {
     // redis[s]://[[username][:password]@][host][:port][/db-number]
     // url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`,
     host: 'redis-server',
-    port: 6379,
+    port: 16379,
     legacyMode: true, // 반드시 설정 !!
   });
   
