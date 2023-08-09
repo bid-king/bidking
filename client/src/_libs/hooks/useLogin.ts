@@ -1,8 +1,14 @@
 import { useState, useEffect, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import member from '../../api/member';
-import { useAppDispatch } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getUserInformation } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { ROOT } from '../util/http';
+
+type AlarmEvent = {
+  content: string;
+  alarmType: string;
+};
 
 export function useLogin() {
   const dispatch = useAppDispatch();
@@ -28,12 +34,14 @@ export function useLogin() {
       member
         .login(userId, password)
         .then(res => {
-          dispatch(getUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true }));
+          dispatch(
+            getUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true, nickname: res.nickname })
+          );
           navigate('/');
         })
         .catch(err => {
-          if (err) {
-            setErrorMessage(err.response.data.message);
+          if (err.response?.data.message) {
+            setErrorMessage(err.response?.data.message);
             setErrorOccured(true);
           }
         });

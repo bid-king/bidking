@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,10 +31,6 @@ public class AuctionUpdateRequest {
     @NotNull(message = "경매 방식을 선택하세요")
     private AuctionRoomType auctionRoomType; //경매 방식
 
-
-    @NotNull(message = "경매 썸네일을 등록하세요")
-    private String imageUrl; //이미지
-
     @AssertTrue(message = "금지 품목 규정 확인 여부를 체크하세요")
     private Boolean itemPermissionChecked; // 금지 품목 규정 확인 여부
 
@@ -41,5 +38,7 @@ public class AuctionUpdateRequest {
     private Boolean deliveryRulesChecked; // 배송 규정 확인 여부
 
     @Valid
+    @Default
     private List<ItemUpdateRequest> itemList = new ArrayList<>(); // 상품 리스트
+
 }

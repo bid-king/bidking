@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
@@ -11,7 +11,9 @@ import { ProfileImage } from '../common/ProfileImage';
 import { Icon } from '../common/Icon';
 import { useNavBar } from '../../hooks/useNavBar';
 import { NavBarModal } from './NavBarModal';
+import { AlarmBox } from './AlarmBox';
 import { useAppSelector } from '../../../store/hooks';
+import { ROOT } from '../../util/http';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -21,7 +23,40 @@ export function Nav({ theme = 'light' }: Props) {
   const breakpoints = [576, 768, 992, 1200];
   const mq = breakpoints.map(bp => `@media (min-width: ${bp}px)`);
   const id = useAppSelector(state => state.user.id);
-  const { showModal, setShowModal, isLogined, handleMouseEnter, handleMouseLeave } = useNavBar();
+  const {
+    showModal,
+    isLogined,
+    handleMouseEnter,
+    handleMouseLeave,
+    showAlarm,
+    handleAlarmMouseEnter,
+    handleAlarmMouseLeave,
+  } = useNavBar();
+
+  // type AlarmEvent = {
+  //   content: string;
+  //   alarmType: string;
+  // };
+  // const [alarm, setAlarm] = useState<AlarmEvent[]>([]);
+
+  // if (isLogined) {
+  //   const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
+  //   eventSource.onopen = e => {
+  //     console.log(e);
+  //   };
+
+  //   eventSource.onmessage = res => {
+  //     console.log('1111111111');
+  //     console.log(res);
+  //     const notification: AlarmEvent = JSON.parse(res.data);
+  //     console.log(notification);
+  //   };
+
+  //   eventSource.onerror = error => {
+  //     console.error('EventSource failed:', error);
+  //     eventSource.close();
+  //   };
+  // }
 
   return (
     <div>
@@ -97,7 +132,9 @@ export function Nav({ theme = 'light' }: Props) {
                 <RoundButton label="내 경매" size="small" color="white" />
               </Link>
               <Spacing rem="2" dir="h" />
-              <Icon type="noti" color="black" rem="1.5" />
+              <div onMouseEnter={handleAlarmMouseEnter} onMouseLeave={handleAlarmMouseLeave}>
+                <Icon type="noti" color="black" rem="1.5" />
+              </div>
               <Spacing rem="1" dir="h" />
               <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <ProfileImage />
@@ -118,6 +155,19 @@ export function Nav({ theme = 'light' }: Props) {
           onMouseLeave={handleMouseLeave}
         >
           <NavBarModal theme={theme} />
+        </div>
+      )}
+      {showAlarm && (
+        <div
+          css={{
+            position: 'absolute',
+            right: 0,
+            zIndex: 1,
+          }}
+          onMouseEnter={handleAlarmMouseEnter}
+          onMouseLeave={handleAlarmMouseLeave}
+        >
+          <AlarmBox theme={theme} />
         </div>
       )}
     </div>

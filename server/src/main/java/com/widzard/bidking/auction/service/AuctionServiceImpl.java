@@ -10,6 +10,7 @@ import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.exception.ImageNotSufficientException;
+import com.widzard.bidking.auction.exception.UnauthorizedAuctionRoomAccessException;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.bookmark.entity.Bookmark;
@@ -26,6 +27,8 @@ import com.widzard.bidking.item.exception.ItemNotFoundException;
 import com.widzard.bidking.item.repository.ItemCategoryRepository;
 import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
+import com.widzard.bidking.member.exception.MemberNotFoundException;
+import com.widzard.bidking.member.repository.MemberRepository;
 import com.widzard.bidking.orderItem.entity.OrderItem;
 import com.widzard.bidking.orderItem.repository.OrderItemRepository;
 import java.io.IOException;
@@ -54,6 +57,7 @@ public class AuctionServiceImpl implements AuctionService {
     private final ImageService imageService;
     private final BookmarkRepository bookmarkRepository;
     private final OrderItemRepository orderItemRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
@@ -151,6 +155,7 @@ public class AuctionServiceImpl implements AuctionService {
                 .orElseThrow(ItemCategoryNotFoundException::new);
 
             Item item = Item.create(
+                savedAuctionRoom,
                 itemCreateRequest.getStartPrice(),
                 itemCreateRequest.getName(),
                 itemCreateRequest.getDescription(),
@@ -176,6 +181,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     @Transactional
     public AuctionRoom updateAuctionRoom(
+        Member member,
         Long auctionId,
         AuctionUpdateRequest req,
         MultipartFile auctionRoomImg,
@@ -183,11 +189,21 @@ public class AuctionServiceImpl implements AuctionService {
     ) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
+        log.info("auctionRoom ItemList={}", auctionRoom.getItemList().toString());
         //auctionRoom 기본자료형 필드 업데이트
         auctionRoom.update(req);
 
+        //경매방 소유권 검사
+        Member loginMember = memberRepository.findById(member.getId()).orElseThrow(
+            MemberNotFoundException::new);
+        Member seller = memberRepository.findById(auctionRoom.getSeller().getId())
+            .orElseThrow(MemberNotFoundException::new);
+        if (loginMember != seller) {
+            throw new UnauthorizedAuctionRoomAccessException();
+        }
+
         //경매썸네일 변경 요청 존재
-        if (!auctionRoomImg.isEmpty()) {
+        if (auctionRoomImg != null && !auctionRoomImg.isEmpty()) {
             Image auctionImage = auctionRoom.getImage();
             imageService.modifyImage(auctionRoomImg, auctionImage.getId());
         }
@@ -212,21 +228,22 @@ public class AuctionServiceImpl implements AuctionService {
         }
 
         //2. 아이템 신규 등록, 기존 아이템 수정
+        int imageCnt = 0;
         for (int i = 0; i < itemUpdateRequestList.size(); i++) {
             int curOrdering = i + 1;
 
             ItemUpdateRequest updateRequest = itemUpdateRequestList.get(i);
             updateRequest.setOrdering(curOrdering);
-
+            log.info("isChanged={}", updateRequest.toString());
             Long itemId = updateRequest.getId();
             //2-1 아이템 신규 등록(신규 등록인 아이템은 아이디가 null)
             if (itemId == null) {
                 ItemCategory itemCategory = itemCategoryRepository.findById(
                         updateRequest.getItemCategoryId())
                     .orElseThrow(ItemCategoryNotFoundException::new);
-                //TODO imageService.uploadImage(itemImgs[i])에서 itemImgs[i]가 null이어도 들어가나 확인
-                Image image = imageService.uploadImage(itemImgs[i]);
-                Item item = Item.create(updateRequest.getStartPrice(), updateRequest.getItemName()
+                Image image = imageService.uploadImage(itemImgs[imageCnt++]);
+                Item item = Item.create(auctionRoom, updateRequest.getStartPrice(),
+                    updateRequest.getItemName()
                     , updateRequest.getDescription(), itemCategory, curOrdering,
                     image);
                 itemRepository.save(item);
@@ -241,12 +258,13 @@ public class AuctionServiceImpl implements AuctionService {
                 ItemCategoryNotFoundException::new);
             item.update(updateRequest, category);
 
-            MultipartFile curFileImg = itemImgs[i];
-            //동일 인덱스의 사진이 null이면 썸네일 유지
-            if (curFileImg.isEmpty()) {
+            //요청이 false이면 컨티뉴
+            if (!updateRequest.getIsChanged()) {
                 continue;
             }
             //썸네일 변경
+            MultipartFile curFileImg = itemImgs[imageCnt++];
+            log.info("file={}", curFileImg.toString());
             imageService.modifyImage(curFileImg, item.getImage().getId());
         }
         auctionRoom.isValid();
@@ -255,9 +273,21 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     @Transactional
-    public void deleteAuctionRoom(Long auctionId) {
+    public void deleteAuctionRoom(
+        Member member,
+        Long auctionId
+        ) {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
+
+        //경매방 소유권 검사
+        Member loginMember = memberRepository.findById(member.getId()).orElseThrow(
+            MemberNotFoundException::new);
+        Member seller = memberRepository.findById(auctionRoom.getSeller().getId())
+            .orElseThrow(MemberNotFoundException::new);
+        if (loginMember != seller) {
+            throw new UnauthorizedAuctionRoomAccessException();
+        }
 
         //s3에 올라가있는 image byte stream 삭제를 겸해야 하므로 cascade만으로 처리 불가
         //s3 옥션룸 썸네일 삭제
@@ -276,7 +306,6 @@ public class AuctionServiceImpl implements AuctionService {
         List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllByAuctionRoomLiveStateAndSeller(
             member, AuctionRoomLiveState.OFF_LIVE);
         return auctionRoomList;
-
     }
 
     @Override
@@ -319,15 +348,16 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Transactional
     @Override
-    public void startBidding(Member seller, Long auctionId, Long itemId) {
-        // 1. 사용자 및 경매방 검증
+    public void startBidding(Member member, Long auctionId, Long itemId) {
+        // 1. 사용자/경매방 검증
         // 2. 경매 진행될 수 있는 아이템 검증
         // 3. 해당 아이템 경매 진행으로 변경
         // 4. 경매 진행 첫번째 상품이면 tradestate => in progress로 상태 변경
-        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(auctionId, seller)
+        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(auctionId, member)
             .orElseThrow(AuctionRoomNotFoundException::new);
 
         Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+
 
     }
 

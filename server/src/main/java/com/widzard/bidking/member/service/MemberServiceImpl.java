@@ -20,6 +20,8 @@ import com.widzard.bidking.order.repository.OrderRepository;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
@@ -27,7 +29,9 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,6 +59,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
+    SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
     @Value("${coolsms.api_key}")
     private String API_KEY;
@@ -104,7 +109,7 @@ public class MemberServiceImpl implements MemberService {
             .orElseThrow(MemberNotFoundException::new);
         comparePassword(request.getPassword(), member.getPassword());
         String loginToken = tokenProvider.generateAccessToken(member);
-        return new AuthInfo(member.getId(), loginToken);
+        return new AuthInfo(member.getId(), member.getNickname(), loginToken);
     }
 
 
@@ -217,10 +222,20 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMember(Long userId) {
         Member member = memberRepository.findById(userId)
-            .orElseThrow(() -> new MemberNotFoundException());
+            .orElseThrow(MemberNotFoundException::new);
         member.changeToUnavailable();
         memberRepository.save(member);
     }
+
+    @Override
+    public void logout(
+        Authentication authentication,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) {
+        logoutHandler.logout(request, response, authentication);
+    }
+
 
     private void comparePassword(String rawPassword, String encodedPassword) {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {

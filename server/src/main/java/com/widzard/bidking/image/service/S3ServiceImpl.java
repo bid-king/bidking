@@ -100,6 +100,7 @@ public class S3ServiceImpl implements ImageService {
     public Image modifyImage(MultipartFile multipartFile, Long imageId) throws IOException {
         //S3업로드
         String originalFilename = multipartFile.getOriginalFilename();
+        log.info("OfileName={}",originalFilename);
         String fileName = UUID.randomUUID() + "_" + originalFilename;
 
         ObjectMetadata metadata = new ObjectMetadata();

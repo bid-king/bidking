@@ -5,9 +5,24 @@ import { Text } from '../common/Text';
 import { ProfileImage } from '../common/ProfileImage';
 import { Link } from 'react-router-dom';
 import { useAppSelector } from '../../../store/hooks';
+import { Spacing } from '../common/Spacing';
+import member from '../../../api/member';
+import { useAppDispatch } from '../../../store/hooks';
+import { getUserInformation } from '../../../store/slices/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 export function NavBarModal({ theme = 'light' }: Props) {
   const id = useAppSelector(state => state.user.id);
+  const isLogined = useAppSelector(state => state.user.isLogined);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    if (isLogined) {
+      member.logout;
+      dispatch(getUserInformation({ id: null, accessToken: '', isLogined: false, nickname: '' }));
+      navigate('/');
+    }
+  };
   return (
     <div
       css={{
@@ -26,17 +41,18 @@ export function NavBarModal({ theme = 'light' }: Props) {
       >
         <Text type="h2" content="NickName" />
       </div>
+      <Spacing rem="1" />
       <div
         className="dashBoard"
         css={{
           display: 'flex',
           justifyContent: 'center',
           alignContent: 'center',
-          margin: '1rem',
         }}
       >
         대쉬보드 컴포넌트
       </div>
+      <Spacing rem="1" />
       <div
         css={{
           display: 'flex',
@@ -46,9 +62,16 @@ export function NavBarModal({ theme = 'light' }: Props) {
         <Link to={`/mypage/${id}`}>
           <Text type="bold" content="개인정보 수정" />
         </Link>
-        <Link to={'/'}>
+        <Spacing rem="1" />
+
+        <div
+          css={{
+            cursor: 'pointer',
+          }}
+          onClick={handleLogout}
+        >
           <Text type="bold" content="로그아웃" />
-        </Link>
+        </div>
       </div>
     </div>
   );
@@ -60,7 +83,8 @@ interface Props {
 
 const THEME_VARIANT = {
   light: {
-    backgroundColor: colors.backgroundLight,
+    backgroundColor: colors.backgroundLight2,
+    border: `1px solid ${colors.backgroundLight}`,
   },
   dark: {
     backgroundColor: colors.backgroundDark2,

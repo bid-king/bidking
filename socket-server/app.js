@@ -6,13 +6,17 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
 const hpp = require('hpp');
+const ejs = require('ejs');
 
 dotenv.config();
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
+const redis = require('./config/redis');
 
 const app = express();
 app.set('port', process.env.PORT || 8005);
+app.set('views', __dirname + '/views');
+app.engine('html', ejs.renderFile);
 app.set('view engine', 'html');
 
 const sessionOption = {
@@ -43,7 +47,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(sessionMiddleware);
 
-app.use('/', indexRouter);
+app.use('/live/v1', indexRouter);
 
 app.use((req, res, next) => {
   const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
@@ -62,4 +66,5 @@ const server = app.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기 중');
 });
 
+redis(app);
 webSocket(server, app, sessionMiddleware);

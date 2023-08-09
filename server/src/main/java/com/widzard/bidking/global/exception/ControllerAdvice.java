@@ -13,6 +13,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class ControllerAdvice {
 
+    // TODO 401, 403, validation error
+
     /*
      * business custom exception 발생
      */
@@ -50,8 +52,6 @@ public class ControllerAdvice {
         log.error("NoHandlerFoundException: {}", e.getMessage());
         return createErrorResponseEntity(ErrorCode.NOT_FOUND);
     }
-
-    // 401, 403, valid TODO
 
     private ResponseEntity<ErrorResponse> createErrorResponseEntity(ErrorCode errorCode) {
         return new ResponseEntity<>(ErrorResponse.of(errorCode), errorCode.getStatus());

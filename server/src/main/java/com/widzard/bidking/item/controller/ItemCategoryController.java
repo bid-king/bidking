@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/items")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/items")
 public class ItemCategoryController {
 
     private final ItemCategoryService itemCategoryService;
@@ -23,4 +23,5 @@ public class ItemCategoryController {
         List<ItemCategory> categoryList = itemCategoryService.getCategoryList();
         return new ResponseEntity<>(ItemCategoryListResponse.from(categoryList), HttpStatus.OK);
     }
+
 }

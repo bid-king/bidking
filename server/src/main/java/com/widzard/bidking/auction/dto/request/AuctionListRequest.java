@@ -2,6 +2,7 @@ package com.widzard.bidking.auction.dto.request;
 
 import com.widzard.bidking.item.entity.ItemCategory;
 import java.util.List;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,12 +18,19 @@ public class AuctionListRequest {
 
     private String keyword; // 검색어
 
-    @NotNull
     private int page; // 현재 페이지
 
-    @NotNull
     private int perPage; // 페이지당 경매
 
-    @NotNull
     private List<Long> categoryList; // 적용된 카테고리
+
+    public static AuctionListRequest create(String keyword, int page, int perPage,
+        List<Long> categoryList) {
+        return AuctionListRequest.builder()
+            .keyword(keyword)
+            .page(page)
+            .perPage(perPage)
+            .categoryList(categoryList)
+            .build();
+    }
 }

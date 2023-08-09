@@ -20,7 +20,7 @@ interface AuctionCreate {
 const initialState: AuctionCreate = {
   auctionTitle: '',
   startedAt: '',
-  auctionRoomType: 'GENERAL',
+  auctionRoomType: 'COMMON',
   itemPermissionChecked: false,
   deliveryRulesChecked: false,
   items: [],
@@ -53,7 +53,14 @@ export const auctionCreateSlice = createSlice({
         state.items.push(action.payload);
       }
     },
-    resetAuctionCreate: state => initialState,
+    resetAuctionCreate: state => {
+      state.auctionTitle = initialState.auctionTitle;
+      state.startedAt = initialState.startedAt;
+      state.auctionRoomType = initialState.auctionRoomType;
+      state.itemPermissionChecked = initialState.itemPermissionChecked;
+      state.deliveryRulesChecked = initialState.deliveryRulesChecked;
+      state.items = initialState.items;
+    },
   },
 });
 

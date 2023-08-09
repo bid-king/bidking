@@ -55,7 +55,7 @@ const THEME_VARIENT = {
     color: colors.black,
   },
   dark: {
-    backgroundColor: colors.backgroundDark2,
+    backgroundColor: colors.backgroundDark3,
     border: '1px solid transparent',
     color: colors.white,
     '::placeholder': { color: colors.whitegrey },

@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 // const OPENVIDU_SERVER_SECRET = 'MY_SECRET';
-const OPENVIDU_SERVER_SECRET = 'bidking';
+
+const OPENVIDU_SERVER_SECRET = process.env.REACT_APP_OPENVIDU_KEY;
+const OPENVIDU_SERVER_URL = process.env.REACT_APP_OPENVIDU_ROOT;
 
 // const OPENVIDU_SERVER_URL = 'http://localhost:4443';
-const OPENVIDU_SERVER_URL = 'https://i9a706.p.ssafy.io';
 
 // export function getSellerToken(roomId: string): Promise<string> {
 //   return createSession(roomId).then(roomId => createToken(roomId));

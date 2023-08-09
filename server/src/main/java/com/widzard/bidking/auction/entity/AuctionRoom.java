@@ -23,27 +23,45 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
-@Builder
-@Getter
 @Entity
+@Getter
+@Slf4j
+@Builder
+@ToString
+@DynamicInsert
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "auction_room")
-@Slf4j
-@ToString
+@Table(
+    name = "auction_room",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "UniqueMemberAndStartedAt",
+            columnNames = {"member_id", "started_at"}
+        )
+    },
+    indexes = {
+        @Index(name = "idx__auction_live_state__auction_room_trade_state__member_id",
+            columnList = "auction_live_state,auction_room_trade_state,member_id")
+    }
+)
 public class AuctionRoom extends BaseEntity {
 
     @Id
@@ -52,30 +70,37 @@ public class AuctionRoom extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member seller; //
 
+    @Column(nullable = false, length = 50)
     private String name; //(방이름)
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("'BEFORE_LIVE'")
+    @Column(name = "auction_live_state", nullable = false, length = 20)
     private AuctionRoomLiveState auctionRoomLiveState; // (라이브 상태)
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("'BEFORE_PROGRESS'")
+    @Column(name = "auction_room_trade_state", nullable = false, length = 20)
     private AuctionRoomTradeState auctionRoomTradeState; //(거래 상태)
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("'COMMON'")
+    @Column(nullable = false, length = 10)
     private AuctionRoomType auctionRoomType; // (경매방식)
 
+    @Column(name = "started_at", nullable = false)
     private LocalDateTime startedAt; //경매방 시작시간
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
+    @JoinColumn(name = "image_id", nullable = false)
     private Image image; // (썸네일)
 
+    @Default
     @OneToMany(mappedBy = "auctionRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> itemList = new ArrayList<>();
-
-    private boolean isSessionCreated;
 
     public static AuctionRoom createAuctionRoom(
         String name,
@@ -93,7 +118,6 @@ public class AuctionRoom extends BaseEntity {
             .startedAt(startedAt)
             .image(auctionRoomImg)
             .itemList(new ArrayList<>())
-            .isSessionCreated(false)
             .build();
     }
 
@@ -111,7 +135,6 @@ public class AuctionRoom extends BaseEntity {
         this.name = req.getAuctionTitle();
         this.startedAt = req.getStartedAt();
         this.auctionRoomType = req.getAuctionRoomType();
-//        updateImg(req.getImageDto());
     }
 
     public void changeLiveState(AuctionRoomLiveState state) {
@@ -120,10 +143,6 @@ public class AuctionRoom extends BaseEntity {
 
     public void changeTradeState(AuctionRoomTradeState state) {
         this.auctionRoomTradeState = state;
-    }
-
-    public void changeIsSessionCreated(boolean state) {
-        this.isSessionCreated = state;
     }
 
     public void changeStartedAt(LocalDateTime startedAt) {
@@ -166,3 +185,4 @@ public class AuctionRoom extends BaseEntity {
         }
     }
 }
+

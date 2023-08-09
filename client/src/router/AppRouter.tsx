@@ -1,17 +1,17 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { Main } from '../pages/Main';
+import { Main } from '../pages/Main/Main';
 import { Login } from '../pages/Login/Login';
 import { SignUp } from '../pages/Signup/SignUp';
 import { MyPage } from '../pages/MyPage/MyPage';
 import { Purchased } from '../pages/Purchased/Purchased';
 import { Detail } from '../pages/Detail/Detail';
-
 import { Seller } from '../pages/Seller/Seller';
-import { Auction } from '../pages/Auction/Auction';
-import { SellerAuction } from '../pages/SellerAuction/SellerAuction';
+import { Live } from '../pages/Live/Live';
+import { SellerLive } from '../pages/SellerLive/SellerLive';
 import { SellerCreateAuction } from '../pages/SellerCreateAuction/SellerCreateAuction';
+import { SellerUpdateAuction } from '../pages/SellerUpdateAuction/SellerUpdateAuction';
 import { SellerDetail } from '../pages/SellerDetail/SellerDetail';
 import { Layout } from '../pages/Layout';
 import { SellerLayout } from '../pages/SellerLayout';
@@ -27,15 +27,16 @@ export function AppRouter() {
         <Route path="/mypage/:id" element={<MyPage />} />
         <Route path="/purchased" element={<Purchased />} />
         <Route path="/detail/:auctionId" element={<Detail />} />
-        <Route path="/auction/:auctionId" element={<Auction />} />
+        <Route path="/auction/:auctionId" element={<Live />} />
       </Route>
 
       {/* 판매자 라우터 페이지 */}
       <Route element={<SellerLayout />}>
         <Route path="/seller/create-auction" element={<SellerCreateAuction />} />
+        <Route path="/seller/update-auction/:auctionId" element={<SellerUpdateAuction />} />
         <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
         <Route path="/seller" element={<Seller />}></Route>
-        <Route path="/seller/auction/:auctionId" element={<SellerAuction />} />
+        <Route path="/seller/auction/:auctionId" element={<SellerLive />} />
       </Route>
 
       {/* 네브바가 안들어가는 페이지 및 판매페이지 */}

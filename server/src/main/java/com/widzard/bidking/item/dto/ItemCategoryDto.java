@@ -8,12 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemCategoryDto {
 
     private Long id;
+
     private String name;
 
     public static ItemCategoryDto create(ItemCategory itemCategory) {
@@ -22,4 +23,5 @@ public class ItemCategoryDto {
             .name(itemCategory.getName())
             .build();
     }
+
 }

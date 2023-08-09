@@ -12,7 +12,9 @@ import lombok.ToString;
 public class AlarmResponse {
 
     private String content;
+
     private String alarmType;
+
     private String mediaType;
 
     private AlarmResponse(final Content content){

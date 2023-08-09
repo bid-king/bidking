@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,20 +45,27 @@ public class AuctionController {
 
     @GetMapping
     public ResponseEntity<List<AuctionResponse>> readAuctionList(
-        @RequestBody @Valid AuctionListRequest auctionListRequest
+        @RequestParam(value = "keyword", required = false) String keyword,
+        @RequestParam(value = "page") int page,
+        @RequestParam(value = "perPage") int perPage,
+        @RequestParam(value = "categoryList") List<Long> categoryList
     ) {
         List<AuctionResponse> auctionResponseList = getAuctionResponseList(
-            auctionService.readAuctionRoomList(auctionListRequest));
+            auctionService.readAuctionRoomList(
+                AuctionListRequest.create(keyword, page, perPage, categoryList)));
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
 
     @GetMapping("/status")
     public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListWithLoginStatus(
         @AuthenticationPrincipal Member member,
-        @RequestBody @Valid AuctionListRequest auctionListRequest
+        @RequestParam(value = "keyword", required = false) String keyword,
+        @RequestParam(value = "page") int page,
+        @RequestParam(value = "perPage") int perPage,
+        @RequestParam(value = "categoryList") List<Long> categoryList
     ) {
         List<AuctionBookmarkResponse> auctionBookmarkResponseList = auctionService.readAuctionRoomListWithLoginStatus(
-            auctionListRequest, member);
+            AuctionListRequest.create(keyword, page, perPage, categoryList), member);
 
         return new ResponseEntity<>(auctionBookmarkResponseList, HttpStatus.OK);
     }
@@ -65,10 +73,13 @@ public class AuctionController {
     @GetMapping("/bookmarks")
     public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListOnlyBookmarked(
         @AuthenticationPrincipal Member member,
-        @RequestBody @Valid AuctionListRequest auctionListRequest
+        @RequestParam(value = "keyword", required = false) String keyword,
+        @RequestParam(value = "page") int page,
+        @RequestParam(value = "perPage") int perPage,
+        @RequestParam(value = "categoryList") List<Long> categoryList
     ) {
         List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomListOnlyBookmarked(
-            auctionListRequest, member);
+            AuctionListRequest.create(keyword, page, perPage, categoryList), member);
         List<AuctionBookmarkResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
         ) {
@@ -81,7 +92,7 @@ public class AuctionController {
     public ResponseEntity<AuctionBookmarkCountResponse> readBookmarkTotalCount(
         @AuthenticationPrincipal Member member
     ) {
-        return new ResponseEntity<AuctionBookmarkCountResponse>(
+        return new ResponseEntity<>(
             AuctionBookmarkCountResponse.from(auctionService.getTotalBookmarkCount(member)),
             HttpStatus.OK);
     }
@@ -112,10 +123,10 @@ public class AuctionController {
         @AuthenticationPrincipal Member member,
         @RequestPart @Valid AuctionUpdateRequest auctionUpdateRequest,
         @PathVariable Long auctionId,
-        @RequestPart(name = "auctionRoomImg") MultipartFile auctionRoomImg,
-        @RequestPart(name = "itemImgs") MultipartFile[] itemImgs
+        @RequestPart(name = "auctionRoomImg", required = false) MultipartFile auctionRoomImg,
+        @RequestPart(name = "itemImgs", required = false) MultipartFile[] itemImgs
     ) throws IOException {
-        auctionService.updateAuctionRoom(auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
+        auctionService.updateAuctionRoom(member, auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -124,7 +135,7 @@ public class AuctionController {
         @AuthenticationPrincipal Member member,
         @PathVariable Long auctionId
     ) {
-        auctionService.deleteAuctionRoom(auctionId);
+        auctionService.deleteAuctionRoom(member, auctionId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -133,7 +144,7 @@ public class AuctionController {
         @AuthenticationPrincipal Member member) {
         List<AuctionResponse> auctionResponseList = getAuctionResponseList(
             auctionService.readAuctionOffLive(member));
-        return new ResponseEntity<List<AuctionResponse>>(auctionResponseList, HttpStatus.OK);
+        return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
 
     @GetMapping("/seller/before-live")
@@ -141,7 +152,7 @@ public class AuctionController {
         @AuthenticationPrincipal Member member) {
         List<AuctionResponse> auctionResponseList = getAuctionResponseList(
             auctionService.readAuctionBeforeLive(member));
-        return new ResponseEntity<List<AuctionResponse>>(auctionResponseList, HttpStatus.OK);
+        return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
 
     @GetMapping("/{auctionId}/seller/after-live")
@@ -154,7 +165,7 @@ public class AuctionController {
         return new ResponseEntity<>(auctionRoomSellerResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/{auctionId}/items/{itemId}/bid")
+    @PostMapping("/{auctionId}/item/{itemId}/start")
     public ResponseEntity<String> startBidding(
         @AuthenticationPrincipal Member member,
         @PathVariable("auctionId") Long auctionId,

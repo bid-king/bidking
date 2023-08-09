@@ -1,27 +1,37 @@
 const express = require('express');
-const cors = require('cors');
-const csrf = require('csrf');
+const { startCountdownTimer } = require('../middlewares/timer');
 
 const router = express.Router();
 
-const csrfProtection = csrf({ cookie: true });
-
-const whitelist = ['http://localhost:5000', 'http://localhost:3000'];
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not Allowed Origin!'));
-    }
-  },
-  credentials: true,
-};
-
-router.use(cors(corsOptions));
-
 router.get('/', async (req, res, next) => {
-  return res.status(200).send('ok');
+  res.render('index');
+});
+
+router.get('/chat', async (req, res, next) => {
+  res.render('chat');
+});
+
+router.post('/update', async (req, res, next) => {
+  const redisCli = req.app.get('redisCli');
+  const io = req.app.get('io');
+  const { roomId, itemId } = req.body;
+
+  const userId = await redisCli.get(`item:${itemId}:bidding:userId`);
+  const nickname = await redisCli.get(`item:${itemId}:bidding:nickname`);
+  const price = await redisCli.get(`item:${itemId}:bidding:price`);
+  const time = await redisCli.get(`item:${itemId}:bidding:time`);
+
+  io.to(`${roomId}`).emit('updateBid', { itemId, userId, nickname, price, time });
+
+  startCountdownTimer(req.app, roomId);
+  res.send('ok');
+});
+
+router.post('/next', async (req, res, next) => {
+  const io = req.app.get('io');
+  const { roomId, itemId } = req.body;
+  io.to(`${roomId}`).emit('next', itemId);
+  res.send('ok');
 });
 
 module.exports = router;
