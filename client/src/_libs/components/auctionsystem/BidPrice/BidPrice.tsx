@@ -47,8 +47,8 @@ export function BidPrice({ align = 'center', theme = 'light', price }: Props) {
       >
         {/* <div css={{ color: colors.warn, width: '0.5rem', marginRight: '1rem' }}>▲</div> */}
         {priceArr.map((item, idx) => {
-          if (item === ',') return <BidComma />;
-          else return <BidNumber n={Number(item)} o={priceArr.length - idx} />;
+          if (item === ',') return <BidComma key={idx} />;
+          else return <BidNumber key={idx} n={Number(item)} o={priceArr.length - idx} />;
         })}
         <BidWon />
       </div>
