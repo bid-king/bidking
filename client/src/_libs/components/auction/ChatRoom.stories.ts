@@ -15,5 +15,6 @@ export const Primary: Story = {
   args: {
     theme: 'light',
     userType: 'order',
+    api: {},
   },
 };

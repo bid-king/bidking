@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useState } from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { IconButton } from '../common/IconButton';
@@ -8,13 +8,8 @@ import { RoundButton } from '../common/RoundButton';
 import { Spacing } from '../common/Spacing';
 import { ChatMessage } from './ChatMessage';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  theme?: 'light' | 'dark';
-  userType: 'order' | 'seller';
-  socket?: unknown;
-}
-
-export function ChatRoom({ theme = 'light', userType = 'order', socket }: Props) {
+export function ChatRoom({ theme = 'light', userType = 'order', api }: Props) {
+  const [chats, setChats] = useState([]);
   return (
     <div
       css={{
@@ -66,3 +61,9 @@ const THEME_VARIANT = {
     color: colors.white,
   },
 };
+
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  theme?: 'light' | 'dark';
+  userType: 'order' | 'seller';
+  api: unknown;
+}

@@ -1,11 +1,10 @@
 import { Socket } from 'socket.io-client';
 import { https } from '../_libs/util/http';
-
+export async function enter(auctionId: number, token: string) {
+  return https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`, token);
+}
 export function live(ws: Socket) {
   return {
-    enter: async (auctionId: number, token: string) =>
-      https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`, token),
-    //경매방 입장
     req: {
       connect: async (roomId: number, nickname: string) => ws.emit('enterRoom', { nickname, roomId }),
       chat: async (roomId: number, nickname: string, msg: string) => ws.emit('chat', { nickname, roomId, msg }),
