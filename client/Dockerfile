@@ -1,16 +1,14 @@
-FROM nginx
-
+# Build Stage
+FROM node:18-alpine as builder
 WORKDIR /app
+RUN apk update && apk add --no-cache yarn
+COPY package.json yarn.lock ./
+RUN yarn
+COPY . .
+RUN yarn build
 
-RUN mkdir ./build
-
-COPY ./build ./build
-
-# 기존 빌드 파일 삭제
-RUN rm -rf /etc/nginx/conf.d/default.conf
-
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-
+# Production Stage
+FROM nginx
 EXPOSE 3000
-
-CMD [ "nginx", "-g", "daemon off;" ]
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/build /usr/share/nginx/html

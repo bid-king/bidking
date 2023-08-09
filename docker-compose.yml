@@ -17,7 +17,7 @@ services:
       - redis-server
     volumes:
       - /app/node_modules
-      - ./socket-server:/app
+      - ./socket-server:/app/data
     ports:
       - '8005:8005'
     environment:
@@ -32,7 +32,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
     volumes:
-      - /client:/app/build
+      - ./client:/app/data
     ports:
       - '3000:3000'
     stdin_open: true
@@ -43,7 +43,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     volumes:
-      - ./server/build/libs:/app/build/libs
+      - ./server/build/libs:/app/data
     ports:
       - '5000:5000'
 
