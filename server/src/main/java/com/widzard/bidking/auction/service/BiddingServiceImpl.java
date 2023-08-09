@@ -11,6 +11,7 @@ public class BiddingServiceImpl implements BiddingService{
 
     private final BiddingRepository biddingRepository;
 
+    @Override
     public void bidding(Long itemId, Long price) {
         // 아이템 경매가 조회
         Bidding bidding = biddingRepository.findByItemId(itemId).orElseThrow();
