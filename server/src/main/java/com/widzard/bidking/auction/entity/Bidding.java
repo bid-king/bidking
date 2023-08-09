@@ -39,4 +39,11 @@ public class Bidding extends BaseEntity {
 
     @Column(nullable = false)
     private Long price;
+
+    public void raisePrice(Long price) {
+        if (this.price <= price ) {
+            throw new RuntimeException("현재 입찰가보다 더 높은 가격을 제시해야 합니다.");
+        }
+        this.price = price;
+    }
 }
