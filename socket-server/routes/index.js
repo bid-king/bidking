@@ -10,36 +10,6 @@ router.get('/chat', async (req, res, next) => {
   res.render('chat');
 });
 
-router.get('/redis/set', async (req, res, next) => {
-  const redisCli = req.app.get('redisCli');
-  await redisCli.set('bidking', 'a706');
-  res.send('ok');
-});
-
-router.get('/redis/get', async (req, res, next) => {
-  const redisCli = req.app.get('redisCli');
-  const result = await redisCli.get('bidking');
-  res.send(result);
-});
-
-router.get('/redis/set/json', async (req, res, next) => {
-  const redisCli = req.app.get('redisCli');
-  const data = {
-    model: 'Deimosasdfasf',
-    brand: 'Ergonom',
-    type: 'Enduro bikes',
-    price: 4972,
-  };
-  const result = await redisCli.set('bike:1', JSON.stringify(data));
-  res.send(result);
-});
-
-router.get('/redis/get/json', async (req, res, next) => {
-  const redisCli = req.app.get('redisCli');
-  const fields = await redisCli.get('bike:1');
-  res.send(JSON.parse(fields));
-});
-
 router.post('/update', async (req, res, next) => {
   const redisCli = req.app.get('redisCli');
   const io = req.app.get('io');
