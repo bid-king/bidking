@@ -10,4 +10,6 @@ public interface AlarmService {
     CompletableFuture subscribe(Long memberId, String lastEventId);
 
     void send(Member member, Content content, AlarmType alarmType);
+
+    void changeState(Long alarmId);
 }

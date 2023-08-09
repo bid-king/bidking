@@ -11,7 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class EmitterRepository {
 
     private final Map<String, SseEmitter> emitters = new HashMap<>();
-    private final Map<String, Object> eventCache  = new HashMap<>();
+    private final Map<String, Object> eventCache = new HashMap<>();
 
     public SseEmitter save(String id, SseEmitter emitter) {
         emitters.put(id, emitter);

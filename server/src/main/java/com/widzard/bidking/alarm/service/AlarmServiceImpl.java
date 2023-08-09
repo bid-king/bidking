@@ -4,11 +4,14 @@ import com.widzard.bidking.alarm.dto.response.AlarmResponse;
 import com.widzard.bidking.alarm.entity.Alarm;
 import com.widzard.bidking.alarm.entity.AlarmType;
 import com.widzard.bidking.alarm.entity.Content;
+import com.widzard.bidking.alarm.exception.AlarmNotFoundException;
+import com.widzard.bidking.alarm.exception.ClientConnectionException;
 import com.widzard.bidking.alarm.repository.AlarmRepository;
 import com.widzard.bidking.alarm.repository.EmitterRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,12 +37,6 @@ public class AlarmServiceImpl implements AlarmService {
         // 고유 식별자 부여
         String id = memberId + "_" + System.currentTimeMillis();
 
-        // 이미 존재하는 연결이 있다면 이전 연결 끊기
-//        SseEmitter existingEmitter = emitterRepository.findByMemberId(String.valueOf(memberId));
-//        if (existingEmitter != null) {
-//            existingEmitter.complete(); // 기존 연결 끊기
-//        }
-
         SseEmitter emitter = emitterRepository.save(id, new SseEmitter(DEFAULT_TIMEOUT));
 
         //예외 상황에 emitter 삭제
@@ -64,6 +61,7 @@ public class AlarmServiceImpl implements AlarmService {
     @Override
     public void send(Member member, Content content, AlarmType alarmType) {
         Alarm alarm = Alarm.create(member, content, alarmType);
+        alarmRepository.save(alarm);
         String id = String.valueOf(member.getId());
         // 로그인 한 유저의 SseEmitter 모두 가져오기
         Map<String, SseEmitter> sseEmitterMap = emitterRepository.findAllStartWithById(id);
@@ -74,6 +72,13 @@ public class AlarmServiceImpl implements AlarmService {
                 sendToClient(emitter, key, AlarmResponse.from(alarm));
             }
         );
+    }
+
+    @Override
+    public void changeState(Long alarmId) {
+        Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(
+            AlarmNotFoundException::new);
+        alarm.read();
         alarmRepository.save(alarm);
     }
 
@@ -85,7 +90,7 @@ public class AlarmServiceImpl implements AlarmService {
                 .data(data));
         } catch (IOException exception) {
             emitterRepository.deleteById(id);
-            throw new RuntimeException("클라이언트와 연결 오류");
+            throw new ClientConnectionException();
         }
     }
 }

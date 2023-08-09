@@ -277,11 +277,13 @@ public class AuctionServiceImpl implements AuctionService {
         }
         auctionRoom.isValid();
         //알림 전송
-        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(auctionRoom);
-        for (Optional<Bookmark> bookmark: bookmarkList
+        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+            auctionRoom);
+        for (Optional<Bookmark> bookmark : bookmarkList
         ) {
-            if(bookmark.isPresent()){
-                alarmService.send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK, AlarmType.AUCTION);
+            if (bookmark.isPresent()) {
+                alarmService.send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK,
+                    AlarmType.AUCTION);
             }
         }
         return auctionRoom;
@@ -292,7 +294,7 @@ public class AuctionServiceImpl implements AuctionService {
     public void deleteAuctionRoom(
         Member member,
         Long auctionId
-        ) {
+    ) {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
 
@@ -306,11 +308,12 @@ public class AuctionServiceImpl implements AuctionService {
         }
 
         //북마크 삭제
-        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(auctionRoom);
+        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+            auctionRoom);
 
-        for (Optional<Bookmark> bookmark: bookmarkList
+        for (Optional<Bookmark> bookmark : bookmarkList
         ) {
-            if(bookmark.isPresent()){
+            if (bookmark.isPresent()) {
                 bookmarkRepository.deleteById(bookmark.get().getId());
             }
         }
@@ -329,10 +332,11 @@ public class AuctionServiceImpl implements AuctionService {
         }
 
         //북마크 삭제 알림 전송
-        for (Optional<Bookmark> bookmark: bookmarkList
+        for (Optional<Bookmark> bookmark : bookmarkList
         ) {
-            if(bookmark.isPresent()){
-                alarmService.send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK, AlarmType.AUCTION);
+            if (bookmark.isPresent()) {
+                alarmService.send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK,
+                    AlarmType.AUCTION);
             }
         }
     }

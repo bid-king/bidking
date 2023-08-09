@@ -22,7 +22,7 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
         @Param("member") Member member
     );
 
-    @Query("select b from Bookmark b where b.auctionRoom = :auctionRoom")
+    @Query("select b from Bookmark b where b.auctionRoom = :auctionRoom and b.isAdded = true")
     List<Optional<Bookmark>> findBookmarkByAuctionRoom(
         @Param("auctionRoom") AuctionRoom auctionRoom
     );

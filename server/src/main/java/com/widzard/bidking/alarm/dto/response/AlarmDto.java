@@ -14,13 +14,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AlarmDto {
+
     private Member member;
 
     private Content content;
 
     private AlarmType alarmType;
 
-    public static AlarmDto create(Member member, Content content, AlarmType alarmType){
+    public static AlarmDto create(Member member, Content content, AlarmType alarmType) {
         return AlarmDto.builder()
             .member(member)
             .content(content)

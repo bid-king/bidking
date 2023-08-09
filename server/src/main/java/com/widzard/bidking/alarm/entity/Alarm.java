@@ -68,4 +68,8 @@ public class Alarm extends BaseEntity {
             .alarmType(alarmType)
             .build();
     }
+
+    public void read() {
+        this.isRead = true;
+    }
 }

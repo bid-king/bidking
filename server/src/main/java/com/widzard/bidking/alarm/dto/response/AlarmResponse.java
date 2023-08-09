@@ -17,12 +17,15 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AlarmResponse {
 
+    private Long id;
+
     private String content;
 
     private AlarmType alarmType;
 
-    public static AlarmResponse from(Alarm alarm){
+    public static AlarmResponse from(Alarm alarm) {
         return AlarmResponse.builder()
+            .id(alarm.getId())
             .content(alarm.getContent().getContent())
             .alarmType(alarm.getAlarmType())
             .build();
