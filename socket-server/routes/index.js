@@ -1,4 +1,5 @@
 const express = require('express');
+const { startCountdownTimer } = require('../middlewares/timer');
 
 const router = express.Router();
 
@@ -21,6 +22,8 @@ router.post('/update', async (req, res, next) => {
   const time = await redisCli.get(`item:${itemId}:bidding:time`);
 
   io.to(`${roomId}`).emit('updateBid', { itemId, userId, nickname, price, time });
+
+  startCountdownTimer(req.app, roomId);
   res.send('ok');
 });
 
