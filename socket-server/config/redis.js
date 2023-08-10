@@ -1,34 +1,30 @@
-// const dotenv = require('dotenv');
 const { createClient } = require('redis');
 
-module.exports = app => {
-  // Redis 연결
-  const redisClient = createClient({
-    // redis[s]://[[username][:password]@][host][:port][/db-number]
-    // url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`,
-    host: 'redis-server',
-    port: 16379,
-    legacyMode: true, // 반드시 설정 !!
-  });
-  
+// Redis 클라이언트 생성 및 반환하는 함수
+const createRedisClient = app => {
+  const redisClient = createClient(
+    {
+      host: 'redis-server', // Docker Compose 내에서 정의한 서비스명
+      port: 6379, // Redis 서버의 포트
+    },
+    {
+      legacyMode: true, // v3 버전에서 legacyMode 활성화
+    }
+  );
+
+  app.set('redisClient', redisClient); // app 객체에 저장
+
   redisClient.on('connect', () => {
     console.info('Redis connected!');
   });
-  
+
   redisClient.on('error', err => {
     console.error('Redis Client Error', err);
   });
 
-  // redis v4 연결 (비동기)re
-  // redisClient.connect();
-  
-  // 기본 redisClient 객체 사용
-  app.set('redisClient', redisClient);
-  
-  // 기본 redisClient 객체는 콜백기반인데 v4버젼은 프로미스 기반이라 사용
-  const redisCli = redisClient.v4;
-  
-  app.set('redisCli', redisCli);
+  return redisClient;
 };
 
-
+module.exports = {
+  createRedisClient,
+};
