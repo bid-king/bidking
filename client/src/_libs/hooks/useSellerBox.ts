@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import auction, { SellerAuctionRoomListResponse, ItemListDto } from '../../api/auction';
 import { useAppSelector } from '../../store/hooks';
-import { useSellerDetail } from './useSellerDetail';
+import { useSellerDetailOffLive } from './useSellerDetailOffLive';
 export function useSellerBox() {
   const [auctionListBeforeLive, setAuctionListBeforeLive] = useState<SellerAuctionRoomListResponse[]>([]);
   const [auctionListAfterLive, setAuctionListAfterLive] = useState<SellerAuctionRoomListResponse[]>([]);
