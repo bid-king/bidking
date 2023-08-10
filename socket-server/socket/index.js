@@ -2,7 +2,6 @@ const SocketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
 const { startCountdownTimer } = require('../middlewares/timer');
-const { createRedisClient } = require('../config/redis'); // Redis 클라이언트 모듈 가져오기
 
 module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, {
@@ -18,8 +17,6 @@ module.exports = (server, app, sessionMiddleware) => {
 
   io.on('connection', socket => {
     console.log('socket 접속');
-
-    const redisCli = createRedisClient(app);
 
     socket.on('enterRoom', ({ nickname, roomId, seller }) => {
       if (seller === true) {
@@ -63,12 +60,12 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on('start', async ({ roomId }) => {
       const redisCli = app.get('redisCli');
-      await redisCli.connect();
+      // await redisCli.connect();
 
       const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
       const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
 
-      await redisCli.disconnect();
+      // await redisCli.disconnect();
 
       io.to(`${roomId}`).emit('start', { itemId, price });
       startCountdownTimer(app, roomId);
