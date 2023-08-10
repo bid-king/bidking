@@ -8,7 +8,7 @@ import { useAppSelector } from '../../../store/hooks';
 import { Spacing } from '../common/Spacing';
 import member from '../../../api/member';
 import { useAppDispatch } from '../../../store/hooks';
-import { getUserInformation } from '../../../store/slices/userSlice';
+import { setUserInformation } from '../../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 export function NavBarModal({ theme = 'light' }: Props) {
@@ -19,7 +19,7 @@ export function NavBarModal({ theme = 'light' }: Props) {
   const handleLogout = () => {
     if (isLogined) {
       member.logout;
-      dispatch(getUserInformation({ id: null, accessToken: '', isLogined: false, nickname: '' }));
+      dispatch(setUserInformation({ id: null, accessToken: '', isLogined: false, nickname: '' }));
       navigate('/');
     }
   };
