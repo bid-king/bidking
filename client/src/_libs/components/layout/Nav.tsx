@@ -13,7 +13,7 @@ import { useNavBar } from '../../hooks/useNavBar';
 import { NavBarModal } from './NavBarModal';
 import { AlarmBox } from './AlarmBox';
 import { useAppSelector } from '../../../store/hooks';
-import { ROOT } from '../../util/http';
+import member from '../../../api/member';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -31,6 +31,8 @@ export function Nav({ theme = 'light' }: Props) {
     showAlarm,
     handleAlarmMouseEnter,
     handleAlarmMouseLeave,
+    imgSrc,
+    accessToken,
   } = useNavBar();
 
   // type AlarmEvent = {
@@ -137,7 +139,7 @@ export function Nav({ theme = 'light' }: Props) {
               </div>
               <Spacing rem="1" dir="h" />
               <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                <ProfileImage />
+                <ProfileImage src={imgSrc ? imgSrc : ''} />
               </div>
               <Spacing rem="2" dir="h" />
             </>
