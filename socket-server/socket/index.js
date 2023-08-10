@@ -2,6 +2,7 @@ const SocketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
 const { startCountdownTimer } = require('../middlewares/timer');
+const { createRedisClient } = require('../config/redis'); // Redis 클라이언트 모듈 가져오기
 
 module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, {
@@ -18,6 +19,8 @@ module.exports = (server, app, sessionMiddleware) => {
   io.on('connection', socket => {
     console.log('socket 접속');
 
+    const redisCli = createRedisClient(app);
+
     socket.on('enterRoom', ({ nickname, roomId, seller }) => {
       if (seller === true) {
         roomOwners[`${roomId}`] = socket.id;
@@ -29,7 +32,10 @@ module.exports = (server, app, sessionMiddleware) => {
       // TODO: roomId에 해당하는 itemList 요청 to Spring
       // GET /api/v1/auctions/{auctionId}/items
 
-      io.to(roomId).emit('chat', { nickname: 'System', msg: `${nickname} 입장` });
+      io.to(roomId).emit('chat', {
+        nickname: 'System',
+        msg: `${nickname} 입장마ㅓ닝리ㅏㅓㅁ;ㄴ이럼ㄴ러ㅏㅣㄴ멀;ㅣㅏㄴ`,
+      });
     });
 
     socket.on('leaveRoom', ({ roomId }) => {

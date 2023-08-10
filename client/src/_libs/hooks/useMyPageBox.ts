@@ -27,6 +27,7 @@ export function useMyPageBox() {
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
   const { isLogined, accessToken } = useAppSelector(state => state.user);
   const [imgSrc, setImgSrc] = useState('/image/profile.png');
+  const [errMessage, setErrMessage] = useState('');
   const navigate = useNavigate();
   const memberId = useAppSelector(state => state.user.id);
 
@@ -122,7 +123,7 @@ export function useMyPageBox() {
           },
         })
         .then(res => navigate('/'))
-        .catch(err => console.log(err));
+        .catch(err => setErrMessage(err.response.data.message));
     }
   };
 
@@ -211,5 +212,6 @@ export function useMyPageBox() {
     memberUpdate,
     imgSrc,
     previewImageURL,
+    errMessage,
   };
 }

@@ -38,6 +38,7 @@ export function MyPageBox() {
     memberUpdate,
     imgSrc,
     previewImageURL,
+    errMessage,
   } = useMyPageBox();
 
   return (
@@ -166,6 +167,7 @@ export function MyPageBox() {
         />
       </div>
       <Spacing rem="2" />
+      {errMessage && <Text type="bold" content={errMessage} />}
 
       {isButtonDisabled && <ConfirmButton btnType="disabled" label="완료" />}
 

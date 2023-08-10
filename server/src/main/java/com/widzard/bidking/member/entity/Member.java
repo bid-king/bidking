@@ -64,11 +64,11 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private Address address; // 기본배송지
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private Image image; // 프로필 사진
 
-    @Column(nullable = false, columnDefinition="tinyint(1) default 1")
+    @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     private boolean available; // 활성화 여부 (탈퇴 시 false)
 
     @Enumerated(EnumType.STRING)

@@ -15,7 +15,7 @@ export function useMainBox() {
 
   // 무한 스크롤링을 위한 상태
   const [page, setPage] = useState(1); // 초기 값은 1로 설정
-  const [isFetching, setFetching] = useState(false);
+  const [isFetching, setFetching] = useState(true);
   const [hasNextPage, setNextPage] = useState(true);
 
   // 스크롤 이벤트 핸들러
@@ -37,15 +37,6 @@ export function useMainBox() {
     page: page,
     perPage: 8,
   };
-
-  useEffect(() => {
-    // 카테고리가 변경될 때 페이지와 리스트 상태를 초기화
-    setPage(1);
-    setNextPage(true);
-    setAuctionListBeforeLive([]);
-    setAuctionListAfterLive([]);
-    setFetching(true); // 카테고리 변경 시 바로 데이터를 가져오도록 설정
-  }, [buttonCategoryList]);
 
   useEffect(() => {
     if (isFetching && hasNextPage) {
@@ -81,6 +72,11 @@ export function useMainBox() {
     setButtonCategoryList(prevList =>
       prevList.includes(categoryId) ? prevList.filter(id => id !== categoryId) : [...prevList, categoryId]
     );
+    setPage(1);
+    setNextPage(true);
+    setAuctionListBeforeLive([]);
+    setAuctionListAfterLive([]);
+    setFetching(true); // 카테고리 변경 시 바로 데이터를 가져오도록 설정
   };
 
   const handleBookmark = ({ auctionRoomId: auctionId }: BookmarkStatusRequest) => {
