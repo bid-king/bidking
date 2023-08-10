@@ -62,20 +62,16 @@ module.exports = (server, app, sessionMiddleware) => {
     });
 
     socket.on('start', async ({ roomId }) => {
-      try {
-        const redisCli = createRedisClient(app); // Redis 클라이언트 생성
+      const redisCli = app.get('redisCli');
+      await redisCli.connect();
 
-        const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
-        const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
-        io.to(`${roomId}`).emit('start', { itemId, price });
-        startCountdownTimer(app, roomId);
-      } catch (error) {
-        console.error('Error retrieving data from Redis:', error);
-      } finally {
-        if (redisCli) {
-          redisCli.quit(); // 클라이언트 닫기
-        }
-      }
+      const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
+      const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
+
+      await redisCli.disconnect();
+
+      io.to(`${roomId}`).emit('start', { itemId, price });
+      startCountdownTimer(app, roomId);
     });
 
     socket.on('disconnect', () => {

@@ -9,6 +9,7 @@ const hpp = require('hpp');
 const ejs = require('ejs');
 
 dotenv.config();
+const redis = require('./config/redis');
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
 
@@ -45,6 +46,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(sessionMiddleware);
+
+redis(app);
 
 app.use('/live/v1', indexRouter);
 
