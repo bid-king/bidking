@@ -54,13 +54,7 @@ const client = redis.createClient({
   },
 });
 
-// client.set('number', 0);
 app.get('/redis/test', async (req, res) => {
-  // client.get('number', (err, number) => {
-  //   client.set('number', parseInt(number) + 1);
-  //   res.send('숫자가 1씩 올라갑니다. 숫자: ' + number);
-  // });
-
   await client.connect();
   let number = await client.get('number');
   if (number === null) {
