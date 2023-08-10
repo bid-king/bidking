@@ -1,5 +1,6 @@
 package com.widzard.bidking.member.service;
 
+import com.widzard.bidking.alarm.service.AlarmServiceImpl;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.SendingMessageFailureException;
