@@ -13,14 +13,20 @@ import { useNavigate } from 'react-router-dom';
 
 export function NavBarModal({ theme = 'light' }: Props) {
   const id = useAppSelector(state => state.user.id);
-  const isLogined = useAppSelector(state => state.user.isLogined);
+  const { isLogined, accessToken } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
     if (isLogined) {
-      member.logout;
-      dispatch(setUserInformation({ id: null, accessToken: '', isLogined: false, nickname: '' }));
-      navigate('/');
+      member
+        .logout(accessToken)
+        .then(() => {
+          dispatch(setUserInformation({ id: null, accessToken: '', isLogined: false, nickname: '' }));
+          navigate('/');
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   };
   return (

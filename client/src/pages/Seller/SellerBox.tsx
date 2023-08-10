@@ -50,7 +50,7 @@ export function SellerBox() {
                     }}
                     key={auction.id}
                   >
-                    <Link to={`seller/detail/${auction.id}`}>
+                    <Link to={`/seller/detail/${auction.id}`}>
                       <AuctionList
                         title={auction.name}
                         date={auction.startedAt}
@@ -89,7 +89,7 @@ export function SellerBox() {
                     }}
                     key={auction.id}
                   >
-                    <Link to={`seller/detail/${auction.id}`}>
+                    <Link to={`/seller/detail/${auction.id}`}>
                       <AuctionList
                         title={auction.name}
                         date={auction.startedAt}

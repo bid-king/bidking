@@ -9,6 +9,7 @@ export function Seller() {
       css={{
         backgroundColor: colors.backgroundDark,
         color: colors.white,
+        minHeight: '100vh',
       }}
     >
       <SellerBox />

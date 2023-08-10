@@ -8,6 +8,7 @@ export function Main() {
     <div
       css={{
         backgroundColor: colors.backgroundLight,
+        minHeight: '100vh',
       }}
     >
       <MainBox />

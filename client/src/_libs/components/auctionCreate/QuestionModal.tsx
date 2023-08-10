@@ -8,9 +8,10 @@ import { Spacing } from '../common/Spacing';
 interface QuestionModalProps {
   content1: string;
   content2: string;
+  theme?: 'light' | 'dark';
 }
 
-export function QuestionModal({ content1, content2 = '' }: QuestionModalProps) {
+export function QuestionModal({ content1, content2 = '', theme = 'dark' }: QuestionModalProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -24,12 +25,12 @@ export function QuestionModal({ content1, content2 = '' }: QuestionModalProps) {
         <div
           css={{
             position: 'absolute',
-            backgroundColor: colors.backgroundDark3,
             color: colors.white,
             padding: '10px',
             borderRadius: '5px',
             zIndex: '1',
             width: '500px',
+            ...THEME_VARIANTS[theme],
           }}
         >
           <div>
@@ -44,3 +45,12 @@ export function QuestionModal({ content1, content2 = '' }: QuestionModalProps) {
     </div>
   );
 }
+
+const THEME_VARIANTS = {
+  dark: {
+    backgroundColor: colors.backgroundDark3,
+  },
+  light: {
+    backgroundColor: colors.backgroundLight3,
+  },
+};
