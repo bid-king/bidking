@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useEffect } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
 import { ProfileImage } from '../common/ProfileImage';
@@ -10,6 +10,7 @@ import member from '../../../api/member';
 import { useAppDispatch } from '../../../store/hooks';
 import { setUserInformation } from '../../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { DashBoard } from '../common/DashBoard';
 
 export function NavBarModal({ theme = 'light' }: Props) {
   const id = useAppSelector(state => state.user.id);
@@ -29,6 +30,7 @@ export function NavBarModal({ theme = 'light' }: Props) {
         });
     }
   };
+
   return (
     <div
       css={{
@@ -56,7 +58,7 @@ export function NavBarModal({ theme = 'light' }: Props) {
           alignContent: 'center',
         }}
       >
-        대쉬보드 컴포넌트
+        <DashBoard theme="light" type="small" />
       </div>
       <Spacing rem="1" />
       <div

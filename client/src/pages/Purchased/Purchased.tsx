@@ -1,5 +1,11 @@
+/** @jsxImportSource @emotion/react */
 import React from 'react';
+import { DashBoard } from '../../_libs/components/common/DashBoard';
 
 export function Purchased() {
-  return <div>마이페이지-구매내역입니다.</div>;
+  return (
+    <div>
+      <DashBoard theme="light" />
+    </div>
+  );
 }

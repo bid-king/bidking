@@ -6,6 +6,7 @@ import { Text } from '../../_libs/components/common/Text';
 import colors from '../../_libs/design/colors';
 import { AuctionList } from '../../_libs/components/auction/AuctionList';
 import { useSellerBox } from '../../_libs/hooks/useSellerBox';
+import { DashBoard } from '../../_libs/components/common/DashBoard';
 
 export function SellerBox() {
   const { auctionListBeforeLive, auctionListAfterLive, isLogined } = useSellerBox();
@@ -17,6 +18,7 @@ export function SellerBox() {
     >
       {isLogined && (
         <div>
+          <Spacing rem="1" />
           <div
             css={{
               display: 'flex',
@@ -25,8 +27,9 @@ export function SellerBox() {
               color: colors.white,
             }}
           >
-            대쉬보드 자리
+            <DashBoard theme="dark" />
           </div>
+          <Spacing rem="1" />
           <div
             css={{
               padding: '1rem',
