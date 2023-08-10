@@ -11,12 +11,11 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   msg: string;
 }
 
-export function ChatMessage({ type = 'normal', nickname = '정예지', msg = '저는 입찰왕입니다.' }: Props) {
+export function ChatMessage({ type = 'normal', nickname, msg }: Props) {
   return (
-    <div css={{ ...COLOR_VARIANT[type] }}>
+    <div css={{ ...COLOR_VARIANT[type], paddingBottom: '0.125rem' }}>
       <Text type="bold" content={nickname} />
       <Text content={' ' + msg} />
-      <Spacing dir="v" rem="0.5" />
     </div>
   );
 }

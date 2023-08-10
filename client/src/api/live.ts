@@ -1,77 +1,76 @@
 import { Socket } from 'socket.io-client';
 import { https } from '../_libs/util/http';
-
-export function live(ws: Socket) {
+export function enter(auctionId: number, token: string) {
+  return https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`, token);
+}
+export function live(ws: Socket | null) {
   return {
-    enter: async (auctionId: number, token: string) =>
-      https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`, token),
-    //경매방 입장
     req: {
-      connect: async (roomId: number, nickname: string) => ws.emit('enterRoom', { nickname, roomId }),
-      chat: async (roomId: number, nickname: string, msg: string) => ws.emit('chat', { nickname, roomId, msg }),
-      leave: async (roomId: number, nickname: string) => {
-        ws.emit('leaveRoom', { nickname, roomId });
-        ws.disconnect();
+      connect: (roomId: number, nickname: string) => ws?.emit('enterRoom', { nickname, roomId }),
+      chat: (roomId: number, nickname: string, msg: string) => ws?.emit('chat', { nickname, roomId, msg }),
+      leave: (roomId: number, nickname: string) => {
+        ws?.emit('leaveRoom', { nickname, roomId });
+        ws?.disconnect();
       },
-      notice: async (roomId: number, msg: string) => ws.emit('notice', { roomId, msg }),
+      notice: (roomId: number, msg: string) => ws?.emit('notice', { roomId, msg }),
     },
     res: {
-      chat: async () => {
+      chat: () => {
         //채팅 수신
         const chat = { nickname: '', msg: '' };
-        ws.on('chat', data => {
+        ws?.on('chat', data => {
           chat.nickname = data.nickname;
           chat.msg = data.msg;
         });
         return chat;
       },
-      notice: async () => {
+      notice: () => {
         //공지 수신
         let notice: string = '';
-        ws.on('notice', data => {
+        ws?.on('notice', data => {
           notice = data;
         });
         return notice;
       },
-      updateBid: async () => {
+      updateBid: () => {
         //입찰가 업데이트 결과 수신
         const bidInfo = { nickname: '', price: '' };
-        ws.on('updateBid', data => {
+        ws?.on('updateBid', data => {
           bidInfo.nickname = data.user.nickname;
           bidInfo.price = data.price;
         });
         return bidInfo;
       },
-      successBid: async () => {
+      successBid: () => {
         //낙찰
         const bidInfo = { nickname: '', itemName: '', price: '' };
-        ws.on('updateBid', data => {
+        ws?.on('updateBid', data => {
           bidInfo.nickname = data.user.nickname;
           bidInfo.itemName = data.item.itemName;
           bidInfo.price = data.price;
         });
         return bidInfo;
       },
-      failBid: async () => {
+      failBid: () => {
         //유찰
         let itemName = '';
-        ws.on('failBid', data => {
+        ws?.on('failBid', data => {
           itemName = data.itemName;
         });
         return itemName;
       },
-      next: async () => {
+      next: () => {
         //다음 아이템 진행하기를 판매자가 누른 경우
         let itemName = '';
-        ws.on('next', data => {
+        ws?.on('next', data => {
           itemName = data.itemName;
         });
         return itemName;
       },
-      start: async () => {
+      start: () => {
         //경매 개시를 판매자가 누른 경우
         let itemName = '';
-        ws.on('start', data => {
+        ws?.on('start', data => {
           itemName = data.itemName;
         });
         return itemName;
@@ -93,4 +92,22 @@ export interface AuctionEnterResponse {
     description: string;
     startPrice: number;
   }>;
+}
+
+export interface SocketAPI {
+  req: {
+    connect: (roomId: number, nickname: string) => Socket;
+    chat: (roomId: number, nickname: string, msg: string) => void;
+    leave: (roomId: number, nickname: string) => void;
+    notice: (roomId: number, msg: string) => void;
+  };
+  res: {
+    chat: () => { nickname: string; msg: string };
+    notice: () => string;
+    updateBid: () => { nickname: string; price: string };
+    successBid: () => { nickname: string; itemName: string; price: string };
+    failBid: () => string;
+    next: () => string;
+    start: () => string;
+  };
 }
