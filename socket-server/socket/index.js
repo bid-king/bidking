@@ -2,7 +2,6 @@ const SocketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
 const { startCountdownTimer } = require('../middlewares/timer');
-const { createRedisClient } = require('../config/redis'); // Redis 클라이언트 모듈 가져오기
 
 module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, {
@@ -19,8 +18,6 @@ module.exports = (server, app, sessionMiddleware) => {
   io.on('connection', socket => {
     console.log('socket 접속');
 
-    const redisCli = createRedisClient(app);
-
     socket.on('enterRoom', ({ nickname, roomId, seller }) => {
       if (seller === true) {
         roomOwners[`${roomId}`] = socket.id;
@@ -34,7 +31,7 @@ module.exports = (server, app, sessionMiddleware) => {
 
       io.to(roomId).emit('chat', {
         nickname: 'System',
-        msg: `${nickname} 입장마ㅓ닝리ㅏㅓㅁ;ㄴ이럼ㄴ러ㅏㅣㄴ멀;ㅣㅏㄴ`,
+        msg: `${nickname} 입장`,
       });
     });
 
@@ -45,7 +42,7 @@ module.exports = (server, app, sessionMiddleware) => {
         // TODO: roomId 방 종료됐다고 알려줌 to Spring
       } else {
         socket.leave(roomId);
-        io.to(roomId).emit('chat', { nickname: 'System', msg: `${nickname} 퇴장` });
+        io.to(roomId).emit('chat', { nickname: 'System', msg: `${socket.nickname} 퇴장` });
       }
     });
 
@@ -63,12 +60,12 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on('start', async ({ roomId }) => {
       const redisCli = app.get('redisCli');
-      await redisCli.connect();
+      // await redisCli.connect();
 
       const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
       const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
 
-      await redisCli.disconnect();
+      // await redisCli.disconnect();
 
       io.to(`${roomId}`).emit('start', { itemId, price });
       startCountdownTimer(app, roomId);

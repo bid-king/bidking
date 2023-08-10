@@ -16,14 +16,14 @@ router.post('/update', async (req, res, next) => {
   const { roomId, itemId } = req.body;
 
   const redisCli = req.app.get('redisCli');
-  await redisCli.connect();
+  // await redisCli.connect();
 
   const userId = await redisCli.get(`item:${itemId}:bidding:userId`);
   const nickname = await redisCli.get(`item:${itemId}:bidding:nickname`);
   const price = await redisCli.get(`item:${itemId}:bidding:price`);
   const time = await redisCli.get(`item:${itemId}:bidding:time`);
 
-  await redisCli.disconnect();
+  // await redisCli.disconnect();
 
   io.to(`${roomId}`).emit('updateBid', { itemId, userId, nickname, price, time });
 
