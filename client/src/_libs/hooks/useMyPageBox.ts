@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect, ChangeEvent } from 'react';
 import member from '../../api/member';
 import { useAppSelector } from '../../store/hooks';
-import { getToken, ROOT } from '../util/http';
+import { ROOT } from '../util/http';
 import { useNavigate } from 'react-router-dom';
 
 export function useMyPageBox() {
@@ -25,8 +25,9 @@ export function useMyPageBox() {
   const [phoneNumberErrorMessage, setPhoneNumberErrorMessage] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
-  const isLogined = useAppSelector(state => state.user.isLogined);
+  const { isLogined, accessToken } = useAppSelector(state => state.user);
   const [imgSrc, setImgSrc] = useState('/image/profile.png');
+  const [errMessage, setErrMessage] = useState('');
   const navigate = useNavigate();
   const memberId = useAppSelector(state => state.user.id);
 
@@ -114,16 +115,15 @@ export function useMyPageBox() {
       if (image) {
         formData.append('image', image);
       }
-      const token = await getToken();
       axios
         .put(`${ROOT}/api/v1/members/${memberId}`, formData, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'multipart/form-data',
           },
         })
         .then(res => navigate('/'))
-        .catch(err => console.log(err));
+        .catch(err => setErrMessage(err.response.data.message));
     }
   };
 
@@ -142,9 +142,8 @@ export function useMyPageBox() {
   useEffect(() => {
     if (memberId && isLogined) {
       member
-        .get(memberId)
+        .get(memberId, accessToken)
         .then(data => {
-          console.log(data);
           setUserId(data.userId);
           setNickname(data.nickname);
           setPhoneNumber(data.phoneNumber);
@@ -213,5 +212,6 @@ export function useMyPageBox() {
     memberUpdate,
     imgSrc,
     previewImageURL,
+    errMessage,
   };
 }

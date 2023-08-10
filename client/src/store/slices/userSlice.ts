@@ -1,11 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const url = 'http://70.12.247.192:8080/api/v1/oauth/kakao/login';
-
 interface UserState {
   id: number | null;
-  isLogined?: boolean;
-  accessToken?: string;
+  isLogined: boolean;
+  accessToken: string;
   nickname: string;
 }
 
@@ -20,7 +18,7 @@ export const user = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    getUserInformation(state, action: PayloadAction<UserState>) {
+    setUserInformation(state, action: PayloadAction<UserState>) {
       state.isLogined = action.payload.isLogined;
       state.accessToken = action.payload.accessToken;
       state.id = action.payload.id;
@@ -29,6 +27,6 @@ export const user = createSlice({
   },
 });
 
-export const { getUserInformation } = user.actions;
+export const { setUserInformation } = user.actions;
 
 export default user.reducer;

@@ -126,7 +126,8 @@ public class AuctionController {
         @RequestPart(name = "auctionRoomImg", required = false) MultipartFile auctionRoomImg,
         @RequestPart(name = "itemImgs", required = false) MultipartFile[] itemImgs
     ) throws IOException {
-        auctionService.updateAuctionRoom(member, auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
+        auctionService.updateAuctionRoom(member, auctionId, auctionUpdateRequest, auctionRoomImg,
+            itemImgs);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

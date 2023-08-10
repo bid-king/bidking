@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
-import { AuctionEnterResponse } from '../../api/live';
+import React, { useEffect, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 import { ChatRoom } from '../../_libs/components/auction/ChatRoom';
 import { AuctionNotice } from '../../_libs/components/auctionsystem/AuctionNotice';
 import { AuctionSystem } from '../../_libs/components/auctionsystem/AuctionSystem';
@@ -8,11 +8,22 @@ import { AuctionTitle } from '../../_libs/components/auctionsystem/AuctionTitle'
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { OrderStream } from '../../_libs/components/meeting/OrderStream';
 import colors from '../../_libs/design/colors';
-import { useAuctionLiveEnter } from '../../_libs/hooks/useAuctionLiveEnter';
+import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
+import { useLiveSocketConnection } from '../../_libs/hooks/useLiveSocketConnection';
 
-export function Auction() {
-  const { userId, auctionRoomId, auctionRoomType, nickname, title, currentItemId, itemList, setCurrentItemId, err } =
-    useAuctionLiveEnter();
+export function Live() {
+  // const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter();
+  const userId = 1;
+  const auctionRoomId = 1;
+  const auctionRoomType = 'GENERAL';
+  const nickname = '정예지';
+  const title = '아 이거 팔자';
+  const liveAuthErr = null;
+
+  // const { socket, socketConnectionErr } = useLiveSocketConnection(auctionRoomId);
+
+  const { socket, socketConnectionErr } = useLiveSocketConnection(auctionRoomId);
+
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>
       <div css={{ width: '75%', padding: '1.5rem 0.75rem 1.5rem 1.5rem' }}>
@@ -26,7 +37,12 @@ export function Auction() {
             justifyContent: 'center',
           }}
         >
-          <OrderStream auctionId={auctionRoomId} userId={userId} userType="order" />
+          {/* <OrderStream
+            err={socketConnectionErr || liveAuthErr || null}
+            auctionId={auctionRoomId}
+            userId={userId}
+            userType="order"
+          /> */}
           <Spacing rem="1" />
         </div>
       </div>

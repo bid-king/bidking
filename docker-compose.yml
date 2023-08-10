@@ -49,3 +49,29 @@ services:
 
 networks:
   my-network:
+
+  redis-server:
+    image: dajeongyun/docker-redis
+    build: 
+      context: ./redis
+      dockerfile: Dockerfile
+    volumes:
+      # - redis-data:/data
+      - ./redis:/data
+    ports:
+      - "16379:6379"
+      
+  
+  nodejs:
+    image: dajeongyun/docker-nodejs-server
+    build: 
+      context: ./socket-server
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./socket-server:/app
+    ports:
+      - "8005:8005"
+
+# volumes:
+#   redis-data:

@@ -8,6 +8,7 @@ public class AuctionRoomIsAlreadyStartedException extends CustomBaseException {
     public AuctionRoomIsAlreadyStartedException() {
         super(ErrorCode.ALREADY_STARTED_AUCTIONROOM);
     }
+
     public AuctionRoomIsAlreadyStartedException(ErrorCode errorCode) {
         super(errorCode);
     }
