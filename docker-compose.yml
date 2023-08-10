@@ -3,11 +3,10 @@ version: '3'
 services:
   redis-server:
     image: redis
-    command: ['redis-server', '--bind', 'redis', '--port', '6379']
+    # command: ['redis-server', '--bind', 'redis', '--port', '6379']
     container_name: redis
     ports:
       - '6379:6379'
-    restart: always
 
   react:
     image: dajeongyun/docker-client

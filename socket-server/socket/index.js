@@ -62,6 +62,8 @@ module.exports = (server, app, sessionMiddleware) => {
       const redisCli = app.get('redisCli');
       // await redisCli.connect();
 
+      console.log(redisCli);
+
       const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
       const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
 
