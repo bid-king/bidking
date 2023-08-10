@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   react:
@@ -7,43 +7,38 @@ services:
       context: ./client
       dockerfile: Dockerfile
     volumes:
-      - /client:/app/build
+      - /client:/app
     ports:
-      - "3000:3000"
+      - '3000:3000'
     stdin_open: true
 
   springboot:
     image: dajeongyun/docker-springboot-server
-    build: 
+    build:
       context: ./server
       dockerfile: Dockerfile
     volumes:
       - ./server:/app
     ports:
-      - "5000:5000"
+      - '5000:5000'
 
   redis-server:
-    image: dajeongyun/docker-redis
-    build: 
-      context: ./redis
-      dockerfile: Dockerfile
-    volumes:
-      # - redis-data:/data
-      - ./redis:/data
-    ports:
-      - "16379:6379"
-      
-  
+    image: redis
+
   nodejs:
     image: dajeongyun/docker-nodejs-server
-    build: 
+    build:
       context: ./socket-server
       dockerfile: Dockerfile
+    depends_on:
+      - redis-server
     volumes:
       - /app/node_modules
       - ./socket-server:/app
     ports:
-      - "8005:8005"
-
+      - '8005:8005'
+    environment:
+      - REDIS_HOST=redis-server
+      - REDIS_PORT=6379
 # volumes:
 #   redis-data:
