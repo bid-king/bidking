@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -26,7 +28,9 @@ import org.hibernate.annotations.DynamicInsert;
 
 @Getter
 @Entity
+@Builder
 @DynamicInsert
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
     name = "orders",
@@ -59,4 +63,18 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
+    public static Order create(AuctionRoom auctionRoom, Member orderer, Boolean isSuccess) {
+        OrderState orderState;
+        if (isSuccess) {
+            orderState = OrderState.PAYMENT_WAITING;
+        } else {
+            orderState = OrderState.ORDER_FAILED;
+        }
+
+        return Order.builder()
+            .orderer(orderer)
+            .orderState(orderState)
+            .auctionRoom(auctionRoom)
+            .build();
+    }
 }
