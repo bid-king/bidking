@@ -53,6 +53,7 @@ const client = redis.createClient({
     port: 6379,
   },
 });
+app.set('redisCli', client);
 
 app.get('/redis/test', async (req, res) => {
   await client.connect();

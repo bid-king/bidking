@@ -14,6 +14,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
       clearInterval(timerInterval[roomId]);
 
       const redisCli = app.get('redisCli');
+      await redisCli.connect();
 
       // 1. onLiveItem.itemId 가져오고 -1로 덮어쓰기
       const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
@@ -39,6 +40,8 @@ module.exports.startCountdownTimer = (app, roomId) => {
         await redisCli.set(`item:${itemId}:afterBidResult:time`, time);
         io.to(`${roomId}`).emit('successBid', { itemId, userId, nickname, price, time });
       }
+
+      await redisCli.disconnect();
     }
   }
 

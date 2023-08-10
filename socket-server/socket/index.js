@@ -13,8 +13,6 @@ module.exports = (server, app, sessionMiddleware) => {
   });
   app.set('io', io);
 
-  const redisCli = app.get('redisCli');
-
   const roomOwners = {};
 
   io.on('connection', socket => {
@@ -58,8 +56,14 @@ module.exports = (server, app, sessionMiddleware) => {
     });
 
     socket.on('start', async ({ roomId }) => {
+      const redisCli = app.get('redisCli');
+      await redisCli.connect();
+
       const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
       const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
+
+      await redisCli.disconnect();
+
       io.to(`${roomId}`).emit('start', { itemId, price });
       startCountdownTimer(app, roomId);
     });
