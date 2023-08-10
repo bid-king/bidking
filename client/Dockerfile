@@ -2,9 +2,8 @@
 FROM node:18-alpine as builder
 WORKDIR /app
 RUN apk update && apk add --no-cache yarn
-COPY package.json yarn.lock ./
+COPY ./ ./
 RUN yarn
-COPY . .
 RUN yarn build
 
 # Production Stage
