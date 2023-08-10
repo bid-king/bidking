@@ -10,7 +10,6 @@ import {
   setItemPermissionChecked,
   resetAuctionUpdate,
   setAuctionItem,
-  addItemToList,
 } from '../../store/slices/auctionUpdateSlice';
 
 import { ROOT } from '../util/http';
@@ -121,12 +120,13 @@ export function useAuctionUpdateBox() {
         })
         .then(res => {
           console.log(res);
-          navigate(`/seller/detail/${res.data.id}`);
+          navigate(`/seller/detail/${auctionId}`);
         })
         .catch(err => {
           console.log(data);
+          console.log(err);
           SetErrMessage(err.response.data.message);
-          navigate('/login/loading'); // 404페이지로 넘어가야함
+          // navigate('/login/loading'); // 404페이지로 넘어가야함
         });
     }
   }
@@ -154,6 +154,7 @@ export function useAuctionUpdateBox() {
   }, [dispatch]);
 
   return {
+    auctionId,
     auctionTitle,
     startedAt,
     auctionRoomType,

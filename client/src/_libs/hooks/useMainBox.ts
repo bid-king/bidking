@@ -49,7 +49,7 @@ export function useMainBox() {
             res = await main.getLogined({ ...searchAuctionList, page }, accessToken);
           }
           const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
-          const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
+          const afterLive = res.filter(item => item.auctionRoomLiveState === 'ON_LIVE');
 
           // 현재 리스트에 추가로 받아온 데이터를 추가합니다.
           setAuctionListBeforeLive(prev => [...prev, ...beforeLive]);

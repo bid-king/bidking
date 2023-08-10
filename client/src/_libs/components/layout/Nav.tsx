@@ -78,9 +78,16 @@ export function Nav({ theme = 'light' }: Props) {
             alignItems: 'center',
           }}
         >
-          <div className="logo">
-            <Link to={'/'}>입찰왕</Link>
-          </div>
+          {theme === 'light' && (
+            <div className="logo">
+              <Link to={'/'}>입찰왕</Link>
+            </div>
+          )}
+          {theme === 'dark' && (
+            <div className="logo">
+              <Link to={'/seller'}>입찰왕</Link>
+            </div>
+          )}
 
           <div>
             {theme === 'dark' && (
@@ -127,6 +134,17 @@ export function Nav({ theme = 'light' }: Props) {
               {theme === 'light' && (
                 <Link to={'/seller'}>
                   <RoundButton label="판매" size="small" color="white" />
+                </Link>
+              )}
+              {theme === 'dark' && (
+                <Link to={'/seller/create-auction'}>
+                  <RoundButton label="경매방 생성" size="small" color="white" />
+                </Link>
+              )}
+              <Spacing rem="0.5" dir="h" />
+              {theme === 'dark' && (
+                <Link to={'/'}>
+                  <RoundButton label="구매" size="small" color="white" />
                 </Link>
               )}
               <Spacing rem="0.5" dir="h" />

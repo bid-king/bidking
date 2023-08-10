@@ -23,7 +23,7 @@ export interface AuctionRoomResponse {
   id: number;
   sellerId: number;
   name: string;
-  auctionRoomLiveState: 'BEFORE_LIVE';
+  auctionRoomLiveState: 'BEFORE_LIVE' | 'ON_LIVE' | 'OFF_LIVE';
   auctionRoomUrl: string;
   auctionRoomTradeState: 'BEFORE_PROGRESS';
   auctionRoomType: 'COMMON';
