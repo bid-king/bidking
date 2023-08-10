@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState } from 'react';
+import React, { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { HTMLAttributes } from 'react';
+import { Socket } from 'socket.io-client';
+import { live, SocketAPI } from '../../../api/live';
 import colors from '../../design/colors';
 import { IconButton } from '../common/IconButton';
 import { Input } from '../common/Input';
@@ -8,8 +10,30 @@ import { RoundButton } from '../common/RoundButton';
 import { Spacing } from '../common/Spacing';
 import { ChatMessage } from './ChatMessage';
 
-export function ChatRoom({ theme = 'light', userType = 'order', api }: Props) {
-  const [chats, setChats] = useState([]);
+export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order', socket }: Props) {
+  const [chats, setChats] = useState<Chatting[]>([]);
+  const [input, setInput] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    socket.current?.on('chat', data => {
+      setChats([...chats, data]);
+    });
+  }, [socket.current, chats]);
+
+  useEffect(() => {
+    scroll();
+    function scroll() {
+      chatRef.current?.scrollIntoView();
+    }
+  }, [chats]);
+
+  useEffect(() => {
+    return () => {
+      live(socket.current).req.leave(roomId, nickname);
+    };
+  }, []);
   return (
     <div
       css={{
@@ -19,11 +43,17 @@ export function ChatRoom({ theme = 'light', userType = 'order', api }: Props) {
         padding: '1.5rem',
         position: 'relative',
         ...THEME_VARIANT[theme],
-        overflowY: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      <div>
-        <ChatMessage nickname="김동현" msg="또 나야?" />
+      <div css={{ overflowY: 'auto', height: '35vh' }}>
+        <div css={{ paddingBottom: '1rem' }}>
+          {chats.map((chat, idx) => (
+            <ChatMessage key={idx} nickname={chat.nickname} msg={chat.msg} />
+          ))}
+          <div ref={chatRef} />
+        </div>
       </div>
       <div
         className="inputArea"
@@ -38,11 +68,34 @@ export function ChatRoom({ theme = 'light', userType = 'order', api }: Props) {
       >
         {userType === 'order' && (
           <div css={{ width: '100%' }}>
-            <form>
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                setIsLoading(true);
+                if (isLoading && input.length > 0) live(socket.current).req.chat(roomId, nickname, input);
+                setIsLoading(false);
+              }}
+            >
               <div css={{ display: 'flex', width: '100%', alignItems: 'center' }}>
-                <Input id="chat" placeholder="" shape="round" size="small" />
+                <Input
+                  id="chat"
+                  placeholder=""
+                  shape="round"
+                  size="small"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                />
                 <Spacing rem="0.5" dir="h" />
-                <IconButton type="arrowRight" color="black" background="confirm" size="small" />
+                <IconButton
+                  type="arrowRight"
+                  color="black"
+                  background="confirm"
+                  size="small"
+                  onClick={e => {
+                    live(socket.current).req.chat(roomId, nickname, input);
+                    setInput('');
+                  }}
+                />
               </div>
             </form>
           </div>
@@ -62,8 +115,15 @@ const THEME_VARIANT = {
   },
 };
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+interface Props {
+  roomId: number;
+  nickname: string;
   theme?: 'light' | 'dark';
   userType: 'order' | 'seller';
-  api: unknown;
+  socket: MutableRefObject<Socket | null>;
+}
+
+interface Chatting {
+  nickname: string;
+  msg: string;
 }

@@ -13,8 +13,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
+    roomId: 1,
+    nickname: '정예지',
     theme: 'light',
     userType: 'order',
-    api: {},
+    socket: { current: null },
   },
 };
