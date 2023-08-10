@@ -7,9 +7,9 @@ const dotenv = require('dotenv');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const ejs = require('ejs');
-const redis = require('redis');
 
 dotenv.config();
+const redis = require('./config/redis');
 const webSocket = require('./socket');
 const indexRouter = require('./routes');
 
@@ -47,27 +47,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(sessionMiddleware);
 
-const client = redis.createClient({
-  socket: {
-    host: 'redis-server',
-    port: 6379,
-  },
-});
-app.set('redisCli', client);
-
-app.get('/redis/test', async (req, res) => {
-  await client.connect();
-  let number = await client.get('number');
-  if (number === null) {
-    number = 0;
-  }
-
-  console.log(`Number : ${number}`);
-  res.send(`숫자가 1씩 올라갑니다. 숫자 : ${number}`);
-
-  await client.set('number', parseInt(number) + 1);
-  await client.disconnect();
-});
+redis(app);
 
 app.use('/live/v1', indexRouter);
 
