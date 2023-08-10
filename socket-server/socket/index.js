@@ -31,7 +31,7 @@ module.exports = (server, app, sessionMiddleware) => {
 
       io.to(roomId).emit('chat', {
         nickname: 'System',
-        msg: `${nickname} 입장마ㅓ닝리ㅏㅓㅁ;ㄴ이럼ㄴ러ㅏㅣㄴ멀;ㅣㅏㄴ`,
+        msg: `${nickname} 입장`,
       });
     });
 
@@ -42,7 +42,7 @@ module.exports = (server, app, sessionMiddleware) => {
         // TODO: roomId 방 종료됐다고 알려줌 to Spring
       } else {
         socket.leave(roomId);
-        io.to(roomId).emit('chat', { nickname: 'System', msg: `${nickname} 퇴장` });
+        io.to(roomId).emit('chat', { nickname: 'System', msg: `${socket.nickname} 퇴장` });
       }
     });
 
@@ -61,8 +61,6 @@ module.exports = (server, app, sessionMiddleware) => {
     socket.on('start', async ({ roomId }) => {
       const redisCli = app.get('redisCli');
       // await redisCli.connect();
-
-      console.log(redisCli);
 
       const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
       const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
