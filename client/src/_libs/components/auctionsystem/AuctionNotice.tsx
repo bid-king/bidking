@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes, MutableRefObject } from 'react';
+import { Socket } from 'socket.io-client';
 import colors from '../../design/colors';
 import { Text } from '../../components/common/Text';
 import { Input } from '../common/Input';
 
-export function AuctionNotice({ notice, userType }: Props) {
+export function AuctionNotice({ socket, userType }: Props) {
   return (
     <div
       css={{
@@ -16,7 +17,7 @@ export function AuctionNotice({ notice, userType }: Props) {
       }}
     >
       {userType === 'order' ? (
-        <Text content={notice} type="bold" />
+        <Text content={'zz'} type="bold" />
       ) : (
         <Input placeholder="공지를 입력하세요." size="large" theme="dark" shape="round" />
       )}
@@ -25,6 +26,6 @@ export function AuctionNotice({ notice, userType }: Props) {
 }
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  notice: string;
+  socket: MutableRefObject<Socket | null>;
   userType: 'order' | 'seller';
 }

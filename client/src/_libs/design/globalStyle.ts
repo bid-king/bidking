@@ -10,16 +10,16 @@ export const globalStyle = css`
     font-family: 'Pretendard';
     font-size: 100%;
     color: ${colors.black};
-    line-height: 1.55;
+    line-height: 1.2rem;
   }
   body {
-    font-size: 1.1rem;
+    font-size: 0.875rem;
   }
   input,
   textarea,
   button {
     font-family: 'Pretendard';
-    font-size: '1rem';
+    font-size: '0.85rem';
   }
   *,
   *::before,

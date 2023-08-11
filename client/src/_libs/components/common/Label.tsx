@@ -10,7 +10,7 @@ export function Label({ theme, htmlFor, value, display = 'inline' }: Props) {
         display: display,
         ...COLOR_VARIANT[theme],
         fontWeight: '600',
-        fontSize: '0.9rem',
+        fontSize: '0.85rem',
       }}
     >
       {value}

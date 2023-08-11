@@ -67,17 +67,17 @@ const SHAPE_VARIENT = {
     borderRadius: '3rem',
   },
   square: {
-    borderRadius: '1rem',
+    borderRadius: '0.85rem',
   },
 };
 
 const SIZE_VARIENT = {
   small: {
-    height: '2rem',
+    height: '1.75rem',
     fontSize: '0.9rem',
   },
   large: {
-    height: '3rem',
-    fontSize: '1.1rem',
+    height: '2.25rem',
+    fontSize: '0.95rem',
   },
 };
