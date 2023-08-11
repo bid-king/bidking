@@ -8,8 +8,14 @@ import com.widzard.bidking.alarm.exception.AlarmNotFoundException;
 import com.widzard.bidking.alarm.exception.ClientConnectionException;
 import com.widzard.bidking.alarm.repository.AlarmRepository;
 import com.widzard.bidking.alarm.repository.EmitterRepository;
+import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
+import com.widzard.bidking.auction.repository.AuctionRoomRepository;
+import com.widzard.bidking.bookmark.entity.Bookmark;
+import com.widzard.bidking.bookmark.repository.BookmarkRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -27,6 +33,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class AlarmServiceImpl implements AlarmService {
 
     private final AlarmRepository alarmRepository;
+    private final AuctionRoomRepository auctionRoomRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final EmitterRepository emitterRepository;
 
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
@@ -59,7 +67,63 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
-    public void send(Member member, Content content, AlarmType alarmType) {
+    public void sendAuctionCreateToSeller(Member member) {
+        send(member, Content.AUCTION_REGISTERED, AlarmType.AUCTION);
+    }
+
+    @Override
+    public void sendAuctionUpdateToBookmarkMember(Long auctionId) {
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId).orElseThrow(
+            AuctionRoomNotFoundException::new);
+        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+            auctionRoom);
+        for (Optional<Bookmark> bookmark : bookmarkList
+        ) {
+            if (bookmark.isPresent()) {
+                send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK,
+                    AlarmType.AUCTION);
+            }
+        }
+    }
+
+    @Override
+    public void sendAuctionDeleteToBookmarkMember(Long auctionId) {
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId).orElseThrow(
+            AuctionRoomNotFoundException::new);
+        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+            auctionRoom);
+        for (Optional<Bookmark> bookmark : bookmarkList
+        ) {
+            if (bookmark.isPresent()) {
+                send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK,
+                    AlarmType.AUCTION);
+            }
+        }
+    }
+
+    @Override
+    public void sendAuctionUpComingToSeller(Member seller) {
+        send(seller, Content.AUCTION_UPCOMING, AlarmType.AUCTION);
+    }
+
+    @Override
+    public void sendAuctionUpComingToBookmarkMember(AuctionRoom auctionRoom) {
+        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+            auctionRoom);
+        for (Optional<Bookmark> bookmark : bookmarkList
+        ) {
+            send(bookmark.get().getMember(), Content.AUCTION_UPCOMING_BOOKMARK, AlarmType.AUCTION);
+        }
+    }
+
+    @Override
+    public void changeState(Long alarmId) {
+        Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(AlarmNotFoundException::new);
+        alarm.read();
+        alarmRepository.save(alarm);
+    }
+
+    private void send(Member member, Content content, AlarmType alarmType) {
         Alarm alarm = Alarm.create(member, content, alarmType);
         alarmRepository.save(alarm);
         String id = String.valueOf(member.getId());
@@ -72,14 +136,6 @@ public class AlarmServiceImpl implements AlarmService {
                 sendToClient(emitter, key, AlarmResponse.from(alarm));
             }
         );
-    }
-
-    @Override
-    public void changeState(Long alarmId) {
-        Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(
-            AlarmNotFoundException::new);
-        alarm.read();
-        alarmRepository.save(alarm);
     }
 
     private void sendToClient(SseEmitter emitter, String id, Object data) {

@@ -63,7 +63,6 @@ public class AuctionServiceImpl implements AuctionService {
     private final BookmarkRepository bookmarkRepository;
     private final OrderItemRepository orderItemRepository;
     private final MemberRepository memberRepository;
-    private final AlarmService alarmService;
 
     @Override
     public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
@@ -173,9 +172,6 @@ public class AuctionServiceImpl implements AuctionService {
             auctionRoom.addItem(item);
         }
 
-        //알림 보내기
-        alarmService.send(seller, Content.AUCTION_REGISTERED, AlarmType.AUCTION);
-
         return savedAuctionRoom;
     }
 
@@ -277,16 +273,6 @@ public class AuctionServiceImpl implements AuctionService {
             imageService.modifyImage(curFileImg, item.getImage().getId());
         }
         auctionRoom.isValid();
-        //알림 전송
-        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
-            auctionRoom);
-        for (Optional<Bookmark> bookmark : bookmarkList
-        ) {
-            if (bookmark.isPresent()) {
-                alarmService.send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK,
-                    AlarmType.AUCTION);
-            }
-        }
         return auctionRoom;
     }
 
@@ -330,15 +316,6 @@ public class AuctionServiceImpl implements AuctionService {
         for (int i = 0; i < itemList.size(); i++) {
             Item curItem = itemList.get(i);
             imageService.deleteImage(curItem.getImage());
-        }
-
-        //북마크 삭제 알림 전송
-        for (Optional<Bookmark> bookmark : bookmarkList
-        ) {
-            if (bookmark.isPresent()) {
-                alarmService.send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK,
-                    AlarmType.AUCTION);
-            }
         }
     }
 
