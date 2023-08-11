@@ -74,7 +74,7 @@ const SHAPE_VARIENT = {
 const SIZE_VARIENT = {
   small: {
     height: '1.75rem',
-    fontSize: '0.9rem',
+    fontSize: '0.85rem',
   },
   large: {
     height: '2.25rem',

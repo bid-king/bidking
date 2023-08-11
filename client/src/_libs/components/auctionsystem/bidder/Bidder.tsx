@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect } from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../../design/colors';
-import { Spacing } from '../common/Spacing';
-import { Text } from '../common/Text';
+import colors from '../../../design/colors';
+import { Spacing } from '../../common/Spacing';
+import { Text } from '../../common/Text';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme: 'dark' | 'light';
 }
-export function TopBidder({ theme = 'light' }: Props) {
+export function Bidder({ theme = 'light' }: Props) {
   useEffect(() => {}, []);
   return (
     <div
@@ -25,8 +25,11 @@ export function TopBidder({ theme = 'light' }: Props) {
           }
         }
       >
-        <Text content="최고 입찰" />
-        <Text type="h2" content={'이연우'} />
+        <Text type="bold" content="최고 입찰" />
+        <Spacing rem="0.25" />
+        <div css={{ color: colors.confirm }}>
+          <Text type="h2" content={'이연우'} />
+        </div>
       </div>
     </div>
   );

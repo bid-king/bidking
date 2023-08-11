@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { TopBidder } from './TopBidder';
+import { Bidder } from './Bidder';
 
 const meta = {
-  title: 'Auction/System/TopBidder',
-  component: TopBidder,
+  title: 'Auction/System/Bidder',
+  component: Bidder,
   argTypes: {},
-} satisfies Meta<typeof TopBidder>;
+} satisfies Meta<typeof Bidder>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

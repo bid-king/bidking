@@ -6,6 +6,7 @@ import { Input } from '../common/Input';
 import itemState from '../../constants/itemState';
 import { Spacing } from '../common/Spacing';
 import { bidPriceParse } from '../../util/bidPriceParse';
+import { ItemList } from '../../../api/live';
 
 export function AuctionItemStatus({
   theme,
@@ -91,54 +92,65 @@ export function AuctionItemStatus({
       startPrice: 5000,
     },
   ],
+
   currentItemId = 2,
 }: Props) {
   return (
-    <div css={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-      <div css={{ ...THEME_VARIANT[theme], padding: '0 2rem 0 2rem', minWidth: '22rem', width: '100%' }}>
-        <div css={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <div
+      css={{
+        borderRadius: '2.25rem',
+        display: 'flex',
+        justifyContent: 'center',
+        ...THEME_VARIANT[theme],
+      }}
+    >
+      <div css={{ width: '100%', padding: '0 1rem 0 1rem', ...THEME_VARIANT[theme] }}>
+        <div css={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {itemList.map((item, idx) => {
             if (idx >= currentItemId - 2 && idx <= currentItemId + 2)
               return (
-                <div
-                  key={idx + 1}
-                  css={{
-                    background: `url(${item.itemImg}) no-repeat center center ${ITEM_STATUS_BG[item.status]}`,
-                    borderRadius: '0.75rem',
-                    border: '1px solid ' + colors.lightgrey,
-                    width: '3rem',
-                    height: '3rem',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    fontSize: '0.925rem',
-                    ...ITEM_STATUS_CSS[item.status],
-                  }}
-                >
-                  <Text type="bold" content={ITEM_STATUS_TEXT[item.status]} />
+                <div>
+                  <div
+                    key={idx}
+                    css={{
+                      background: `url(${item.itemImg}) no-repeat center center ${ITEM_STATUS_BG[item.status]}`,
+                      borderRadius: '0.75rem',
+                      border: '1px solid ' + colors.lightgrey,
+                      width: '2.5rem',
+                      height: '2.5rem',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      fontSize: '0.9rem',
+                      ...ITEM_STATUS_CSS[item.status],
+                    }}
+                  >
+                    <Text type="bold" content={ITEM_STATUS_TEXT[item.status]} />
+                  </div>
                 </div>
               );
           })}
         </div>
-        <Spacing rem="1.5" />
+        <Spacing rem="1" />
         <div>
           {itemList.map((item, idx) => {
             if (item.itemId === currentItemId)
               return (
-                <div key={idx} css={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div key={idx} css={{ display: 'flex', alignItems: 'center' }}>
                   <div
                     css={{
                       background: `url(${item.itemImg}) no-repeat center center`,
-                      borderRadius: '0.75rem',
+                      borderRadius: '1rem',
                       border: '1px solid ' + colors.ok,
-                      filter: `drop-shadow(0 0 0.15rem ${colors.ok})`,
-                      width: '4rem',
-                      height: '4rem',
+                      filter: `drop-shadow(0 0 0.075rem ${colors.ok})`,
+                      width: '3rem',
+                      height: '3rem',
                     }}
                   />
                   <Spacing rem="1" dir="h" />
                   <div css={{ display: 'flex', flexDirection: 'column' }}>
                     <Text type="h3" content={item.name} />
+                    <Spacing rem="0.25" />
                     <Text content={'경매 시작가 ' + bidPriceParse(String(item.startPrice)) + '원'} />
                   </div>
                 </div>
@@ -151,10 +163,10 @@ export function AuctionItemStatus({
 }
 const THEME_VARIANT = {
   light: {
-    background: 'transparent',
+    background: colors.backgroundLight2,
   },
   dark: {
-    background: 'transparent',
+    background: colors.backgroundDark2,
   },
 };
 const ITEM_STATUS_BG = {
@@ -178,13 +190,6 @@ const ITEM_STATUS_TEXT = {
 
 interface Props {
   theme: 'light' | 'dark';
-  itemList?: {
-    itemId: number;
-    itemImg: string;
-    name: string;
-    status: 'before' | 'in' | 'fail' | 'complete';
-    desc: string;
-    startPrice: number;
-  }[];
+  itemList?: ItemList;
   currentItemId: number;
 }

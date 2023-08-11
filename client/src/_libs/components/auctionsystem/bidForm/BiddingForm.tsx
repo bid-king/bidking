@@ -1,21 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../../design/colors';
-import { bidPriceParse } from '../../util/bidPriceParse';
-import { ConfirmButton } from '../common/ConfirmButton';
-import { Input } from '../common/Input';
+import colors from '../../../design/colors';
+import { bidPriceParse } from '../../../util/bidPriceParse';
+import { ConfirmButton } from '../../common/ConfirmButton';
+import { Input } from '../../common/Input';
 
-import { Spacing } from '../common/Spacing';
+import { Spacing } from '../../common/Spacing';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme: 'dark' | 'light';
   askingPrice: string;
-  onBid: Dispatch<SetStateAction<string>>;
+  onBid: (bidPrice: number) => void;
 }
 export function BiddingForm({ theme = 'light', askingPrice, onBid }: Props) {
   const [bidPrice, setBidPrice] = useState<string>('');
-  useEffect(() => {}, []);
+
   return (
     <div
       css={{
@@ -27,9 +27,9 @@ export function BiddingForm({ theme = 'light', askingPrice, onBid }: Props) {
     >
       <div css={{ display: 'flex', alignItems: 'center' }}>
         <ConfirmButton
-          btnType="warn"
+          btnType="progress"
           label={bidPriceParse(askingPrice) + '원 즉시입찰'}
-          onClick={() => onBid(askingPrice)}
+          onClick={() => onBid(Number(askingPrice))}
         />
       </div>
       <Spacing rem="0.5" />
@@ -37,9 +37,16 @@ export function BiddingForm({ theme = 'light', askingPrice, onBid }: Props) {
         <Input
           theme={theme}
           inputType="text"
-          placeholder={'입찰가 입력'}
+          placeholder={'입찰가'}
           value={bidPrice}
-          onChange={e => setBidPrice(e.target.value)}
+          onChange={e => {
+            const check = /^[0-9]+$/;
+            if (check.test(bidPrice)) setBidPrice(e.target.value);
+            else alert('숫자만 입력할 수 있어요');
+          }}
+          onKeyUp={e => {
+            if (e.key === 'enter') alert('안전을 위해 엔터로 입찰할 수 없어요');
+          }}
         />
         <Spacing rem="1" dir="h" />
         <ConfirmButton
@@ -47,11 +54,14 @@ export function BiddingForm({ theme = 'light', askingPrice, onBid }: Props) {
           label="입찰"
           onClick={() => {
             if (bidPrice.trim().length === 0) {
-              alert('똑바로 가격쓰세요ㅡㅡ');
+              alert('입찰가를 입력해야 해요');
               return;
             }
-            //무조건 현재 가격보다 더 크게써야함
-            onBid(bidPrice);
+            if (Number(bidPrice) >= Number(askingPrice)) {
+              alert('입찰가는 현재 가격보다 높아야 해요');
+              return;
+            }
+            onBid(Number(bidPrice));
             setBidPrice('');
           }}
         />

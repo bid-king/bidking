@@ -1,15 +1,23 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect } from 'react';
+import React, { MutableRefObject, useEffect, useState } from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../../design/colors';
-import { Spacing } from '../common/Spacing';
-import { Text } from '../common/Text';
+import { Socket } from 'socket.io-client';
+import colors from '../../../design/colors';
+import { Spacing } from '../../common/Spacing';
+import { Text } from '../../common/Text';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme: 'dark' | 'light';
+  socket: MutableRefObject<Socket | null>;
 }
-export function Timer({ theme = 'light' }: Props) {
-  useEffect(() => {}, []);
+export function Timer({ theme = 'light', socket }: Props) {
+  const [time, setTime] = useState<number>(10);
+  useEffect(() => {
+    socket.current?.on('time', data => {
+      setTime(data);
+    });
+  }, [time]);
+
   return (
     <div
       css={{
@@ -19,8 +27,9 @@ export function Timer({ theme = 'light' }: Props) {
       }}
     >
       <div css={{}}>
-        <Text content="남은 시간" />
-        <Text type="h2" content={10 + '초'} />
+        <Text type="bold" content="남은 시간" />
+        <Spacing rem="0.25" />
+        <Text type="h2" content={time + '초'} />
       </div>
       <Spacing rem="0.5" />
       <div
@@ -32,11 +41,11 @@ export function Timer({ theme = 'light' }: Props) {
       >
         <div
           css={{
-            width: '0%', //시간에 따른 동적 바인딩
+            width: `${10 * time}%`, //시간에 따른 동적 바인딩
             height: '0.35rem',
             borderRadius: '1rem',
             backgroundColor: colors.ok, //시간에 따른 동적 바인딩
-            transition: 'width 10s ease-out',
+            transition: 'width 1s ease-out',
           }}
         />
       </div>

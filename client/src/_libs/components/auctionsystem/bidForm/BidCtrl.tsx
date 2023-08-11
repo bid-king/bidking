@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { HTMLAttributes } from 'react';
 
-import { ConfirmButton } from '../common/ConfirmButton';
+import { ConfirmButton } from '../../common/ConfirmButton';
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
   status: string;

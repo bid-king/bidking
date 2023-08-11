@@ -2,7 +2,7 @@
 import React, { HTMLAttributes } from 'react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  rem: '0.5' | '1' | '1.5' | '2' | '3' | '4' | '5';
+  rem: '0.25' | '0.5' | '1' | '1.5' | '2' | '3' | '4' | '5';
   dir?: 'h' | 'v';
 }
 
