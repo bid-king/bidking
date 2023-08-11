@@ -2,6 +2,7 @@ const SocketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
 const { startCountdownTimer } = require('../middlewares/timer');
+const { getRedis } = require('../api/redis');
 
 module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, {
@@ -57,15 +58,6 @@ module.exports = (server, app, sessionMiddleware) => {
     socket.on('notice', ({ roomId, msg }) => {
       io.to(roomId).emit('notice', { msg });
     });
-
-    function getRedis(client, query) {
-      return new Promise((resolve, reject) => {
-        client.get(query, (err, res) => {
-          if (err) reject(err);
-          else resolve(res);
-        });
-      });
-    }
 
     socket.on('start', async ({ roomId }) => {
       const redisCli = app.get('redisCli');
