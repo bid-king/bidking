@@ -56,7 +56,9 @@ public class ItemSellerDto {
             .itemDescription(orderItem.getItem().getDescription())
             .itemOrdering(orderItem.getItem().getOrdering())
             .orderState(orderItem.getOrder().getOrderState())
-//           TODO order 구현 후 지정
+            .successTime(orderItem.getCreatedAt())
+            .successMemberId(orderItem.getOrder().getOrderer().getId())
+            .successMemberNickname(orderItem.getOrder().getOrderer().getNickname())
             .build();
     }
 

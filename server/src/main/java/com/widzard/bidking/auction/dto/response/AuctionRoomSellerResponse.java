@@ -36,8 +36,6 @@ public class AuctionRoomSellerResponse {
 
     private String imageURL; // (썸네일)
 
-    private String auctionRoomSesion;
-
     @Default
     private List<ItemSellerDto> itemList = new ArrayList<>();
 

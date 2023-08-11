@@ -63,14 +63,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
-    public static Order create(AuctionRoom auctionRoom, Member orderer, Boolean isSuccess) {
-        OrderState orderState;
-        if (isSuccess) {
-            orderState = OrderState.PAYMENT_WAITING;
-        } else {
-            orderState = OrderState.ORDER_FAILED;
-        }
-
+    public static Order create(AuctionRoom auctionRoom, Member orderer, OrderState orderState) {
         return Order.builder()
             .orderer(orderer)
             .orderState(orderState)

@@ -10,13 +10,16 @@ import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
 import com.widzard.bidking.order.entity.Order;
+import com.widzard.bidking.order.entity.OrderState;
 import com.widzard.bidking.order.repository.OrderRepository;
 import com.widzard.bidking.orderItem.entity.OrderItem;
 import com.widzard.bidking.orderItem.repository.OrderItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
@@ -27,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
 
     @Override
-    public Order createOrder(Long auctionRoomId, Long ordererId, Boolean isSuccess, Long itemId,
+    public Order createOrder(Long auctionRoomId, Long ordererId, OrderState orderState, Long itemId,
         Long price) {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomId).orElseThrow(
             AuctionRoomNotFoundException::new);
@@ -36,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
         Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
 
         //order 저장
-        Order order = Order.create(auctionRoom, orderer, isSuccess);
+        Order order = Order.create(auctionRoom, orderer, orderState);
         orderRepository.save(order);
 
         //orderItem 저장
