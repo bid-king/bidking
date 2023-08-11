@@ -97,7 +97,7 @@ export function SellerBox() {
                     }}
                     key={auction.id}
                   >
-                    <Link to={`/seller/detail/${auction.id}`}>
+                    <Link to={`/seller/detail/complete/${auction.id}`}>
                       <AuctionList
                         title={auction.name}
                         date={auction.startedAt}

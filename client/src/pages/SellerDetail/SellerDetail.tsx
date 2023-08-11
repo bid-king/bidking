@@ -70,7 +70,7 @@ export function SellerDetail() {
       <Spacing rem="3" />
       <div
         css={{
-          width: '50rem',
+          width: '50%',
           minHeight: '430px',
           padding: '0 1.5rem 0 1.5rem',
           backgroundColor: colors.backgroundDark2,

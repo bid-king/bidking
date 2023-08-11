@@ -17,6 +17,7 @@ export default {
     https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/before-live', token),
   getSellerAuctionListAfterLive: (token: string) =>
     https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/after-live', token),
+  getSeller: (auctionId: number) => http.get<SellerAuctionDetail>(`/api/v1/auctions/${auctionId}/seller/after-live`),
 };
 
 export interface AuctionRoomResponse {
@@ -53,6 +54,48 @@ export interface ItemList {
     invoiceNumber: string;
   };
 }
+
+// 판매자 경매 상세조회 SellerAuctionDetail
+export interface SellerAuctionDetail {
+  id: number;
+  sellerId: number;
+  name: string;
+  startedAt: string;
+  auctionRoomLiveState: string;
+  auctionRoomType: string;
+  sellerNickname: string;
+  imageURL: string;
+  itemList: Item[];
+}
+
+export interface Item {
+  itemId: number;
+  itemName: string;
+  category: string;
+  price: number;
+  itemImageUrl: string;
+  itemDescription: string;
+  itemOrdering: number;
+  successTime: string | null;
+  successMemberId: number | null;
+  successMemberNickname: string | null;
+  deliveryAddress: string | null;
+  deliveryMsg: string | null;
+  orderState:
+    | 'PAYMENT_WAITING'
+    | 'DELIVERY_WAITING'
+    | 'DELIVERING'
+    | 'COMPLETED'
+    | 'ORDER_CANCELED'
+    | 'DELIVERY_CANCELED'
+    | 'ORDER_FAILED';
+}
+
+// interface Invoice {
+//   courier: string;
+//   invoiceId: number;
+//   invoiceNumber: string;
+// }
 
 interface AuctionCreateRequest {
   auctionTitle: string;
