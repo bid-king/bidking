@@ -213,7 +213,6 @@ public class AuctionController {
     }
 
 
-
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomList
