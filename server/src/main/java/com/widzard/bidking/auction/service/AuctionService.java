@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.service;
 
 
+import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
@@ -41,7 +42,9 @@ public interface AuctionService {
 
     AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId);
 
-    boolean validateEnterRoom(Member seller, Long auctionId);
+    AuctionRoomEnterDto validateEnterRoom(Member seller, Long auctionId);
 
     void startBidding(Member member, Long auctionId, Long itemId);
+
+    AuctionRoom getLiveAuctionItemList(Long auctionId);
 }

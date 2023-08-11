@@ -1,5 +1,6 @@
 package com.widzard.bidking.auction.service;
 
+import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
@@ -328,30 +329,43 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Transactional
     @Override
-    public boolean validateEnterRoom(Member member, Long auctionId) {
+    public AuctionRoomEnterDto validateEnterRoom(Member member, Long auctionId) {
         // 1. 사용자 및 경매방 검증
         // 1) 현재 판매자가 생성한 경매가 있는지 검증 (판매자인지 아닌지 여부 결정)
         // 2) 해당 경매가 아직 진행되지 않은 경매인가 (이미 시작했던 / 끝난 경매방인지)
         // 3) 경매방이 시작될 수 있는 시간인가 (경매방 시작시간 20분전부터 해당 시간까지)
         boolean isSeller = true;
 
-        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(
-            auctionId,
-            member
-        ).orElse(null);
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
 
-        if (auctionRoom == null) {
+        if (auctionRoom.getSeller().getId() != member.getId()) {
             isSeller = false;
+            if (!auctionRoom.getAuctionRoomLiveState().equals(AuctionRoomLiveState.ON_LIVE)) {
+                throw new RuntimeException("아직 판매자가 시작하지 않은 경매방입니다.");
+            }
         } else {
-            log.info("해당 방을 생성한 판매자인가: {}", isSeller);
             auctionRoom.validateLive();
             // 2. 경매방 라이브로 상태 변경
             auctionRoom.changeOnLive();
             log.info("시작할 경매방 pk: {}", auctionRoom.getId());
         }
 
+        log.info("해당 방을 생성한 판매자인가: {}", isSeller);
         // 3. 결과 반환
-        return isSeller;
+        return new AuctionRoomEnterDto(
+            isSeller,
+            auctionId,
+            member.getNickname(),
+            auctionRoom.getAuctionRoomType(),
+            auctionRoom.getName()
+        );
+    }
+
+    @Override
+    public AuctionRoom getLiveAuctionItemList(Long auctionId) {
+        return auctionRoomRepository.findById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
     }
 
     @Transactional
@@ -368,5 +382,6 @@ public class AuctionServiceImpl implements AuctionService {
 
 
     }
+
 
 }
