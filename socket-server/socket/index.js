@@ -2,6 +2,7 @@ const SocketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
 const { startCountdownTimer } = require('../middlewares/timer');
+const { getRedis } = require('../api/redis');
 
 module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, {
@@ -60,12 +61,9 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on('start', async ({ roomId }) => {
       const redisCli = app.get('redisCli');
-      // await redisCli.connect();
 
-      const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
-      const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
-
-      // await redisCli.disconnect();
+      const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
+      const price = await getRedis(redisCli, `auction:${roomId}:onLiveItem:currentPrice`);
 
       io.to(`${roomId}`).emit('start', { itemId, price });
       startCountdownTimer(app, roomId);

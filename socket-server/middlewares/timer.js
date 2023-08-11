@@ -1,3 +1,5 @@
+const { getRedis } = require('../api/redis');
+
 const timerInterval = {};
 
 module.exports.startCountdownTimer = (app, roomId) => {
@@ -14,17 +16,16 @@ module.exports.startCountdownTimer = (app, roomId) => {
       clearInterval(timerInterval[roomId]);
 
       const redisCli = app.get('redisCli');
-      // await redisCli.connect();
 
       // 1. onLiveItem.itemId 가져오고 -1로 덮어쓰기
-      const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
+      const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
       await redisCli.set(`auction:${roomId}:onLiveItem:itemId`, -1);
 
       // 2. bidding 확인. 있으면 낙찰, 없으면 유찰
-      const userId = await redisCli.get(`item:${itemId}:bidding:userId`);
-      const nickname = await redisCli.get(`item:${itemId}:bidding:nickname`);
-      const price = await redisCli.get(`item:${itemId}:bidding:price`);
-      const time = await redisCli.get(`item:${itemId}:bidding:time`);
+      const userId = await getRedis(redisCli, `item:${itemId}:bidding:userId`);
+      const nickname = await getRedis(redisCli, `item:${itemId}:bidding:nickname`);
+      const price = await getRedis(redisCli, `item:${itemId}:bidding:price`);
+      const time = await getRedis(redisCli, `item:${itemId}:bidding:time`);
 
       // 3. redis에  afterBidResult 저장
       if (userId === null) {
@@ -40,8 +41,6 @@ module.exports.startCountdownTimer = (app, roomId) => {
         await redisCli.set(`item:${itemId}:afterBidResult:time`, time);
         io.to(`${roomId}`).emit('successBid', { itemId, userId, nickname, price, time });
       }
-
-      // await redisCli.disconnect();
     }
   }
 
