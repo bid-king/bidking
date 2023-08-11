@@ -1,9 +1,11 @@
-import { http } from '../_libs/util/http';
+import { http, https } from '../_libs/util/http';
+import { DashBoard } from '../_libs/components/common/DashBoard';
 
 export default {
   get: () => http.get('/api/v1/orders'),
   //낙찰 물품 조회
-  getStatus: () => http.get('/api/v1/members/dashboard'),
+  getStatus: (memberId: number, token: string) =>
+    https.get<DashBoardResponce>(`/api/v1/members/${memberId}/dashboard`, token),
   //대시보드
   postAddress: (data: DeilveryRequest) => http.post('/api/v1/deliveries', data),
   //배송정보 입력
@@ -21,4 +23,10 @@ interface DeilveryRequest {
   details: string;
   zipcode: string;
   message: string;
+}
+
+export interface DashBoardResponce {
+  paymentWaiting: number;
+  deliveryWaiting: number;
+  penalty: number;
 }

@@ -1,11 +1,12 @@
-import { http } from '../_libs/util/http';
+import { http, https } from '../_libs/util/http';
 
 export default {
   getScheduled: () => http.get('/api/v1/auctions/seller/before-live'),
   //진행 예정 경매 리스트 조회
   getFinished: () => http.get('/api/v1/auctions/seller/after-live'),
   //완료된 경매방 리스트 조회
-  getStatus: () => http.get('/api/v1/members/dashboard/seller'),
+  getStatus: (memberId: number, token: string) =>
+    https.get<SellerDashBoardResponce>(`/api/v1/members/${memberId}/dashboard/seller`, token),
   //대시보드
   getFinishedDetail: (auctionId: number) => http.get(`/api/v1/auctions/${auctionId}/seller/after-live`),
   //완료된 경매 상세조회
@@ -23,4 +24,10 @@ interface InvoiceRequest {
       courier: string;
     };
   };
+}
+
+export interface SellerDashBoardResponce {
+  paymentWaiting: number;
+  deliveryWaiting: number;
+  penalty: number;
 }

@@ -1,22 +1,24 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
 import { ProfileImage } from '../common/ProfileImage';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../../store/hooks';
 import { Spacing } from '../common/Spacing';
 import member from '../../../api/member';
-import { useAppDispatch } from '../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { setUserInformation } from '../../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { DashBoard } from '../common/DashBoard';
+import order, { DashBoardResponce } from '../../../api/order';
+import seller, { SellerDashBoardResponce } from '../../../api/seller';
 
 export function NavBarModal({ theme = 'light' }: Props) {
-  const id = useAppSelector(state => state.user.id);
-  const { isLogined, accessToken } = useAppSelector(state => state.user);
+  const { isLogined, accessToken, id } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [status, setStatus] = useState<SellerDashBoardResponce | DashBoardResponce | null>(null);
+
   const handleLogout = () => {
     if (isLogined) {
       member
@@ -30,6 +32,34 @@ export function NavBarModal({ theme = 'light' }: Props) {
         });
     }
   };
+
+  // 구매자 대쉬보드
+  useEffect(() => {
+    if (id && isLogined && theme === 'light') {
+      order
+        .getStatus(id, accessToken)
+        .then(res => {
+          setStatus(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [theme]);
+
+  // 판매자 대쉬보드
+  useEffect(() => {
+    if (id && isLogined && theme === 'dark') {
+      seller
+        .getStatus(id, accessToken)
+        .then(res => {
+          setStatus(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [theme]);
 
   return (
     <div
@@ -58,7 +88,13 @@ export function NavBarModal({ theme = 'light' }: Props) {
           alignContent: 'center',
         }}
       >
-        <DashBoard theme="light" type="small" />
+        <DashBoard
+          theme={theme}
+          type="small"
+          deliveryWaiting={status?.deliveryWaiting}
+          paymentWaiting={status?.paymentWaiting}
+          penalty={status?.penalty}
+        />
       </div>
       <Spacing rem="1" />
       <div

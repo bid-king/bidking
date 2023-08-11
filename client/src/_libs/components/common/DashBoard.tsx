@@ -9,15 +9,15 @@ interface Props {
   theme: 'light' | 'dark';
   paymentWaiting?: number;
   deliveryWaiting?: number;
-  orderCanceled?: number;
+  penalty?: number;
   type?: 'small' | 'big';
 }
 
 export function DashBoard({
   theme = 'light',
-  paymentWaiting = 3,
-  deliveryWaiting = 2,
-  orderCanceled = 1,
+  paymentWaiting = 0,
+  deliveryWaiting = 0,
+  penalty = 0,
   type = 'big',
 }: Props) {
   const isSmall = type === 'small';
@@ -58,7 +58,7 @@ export function DashBoard({
         <Spacing rem="0.5" dir="h" />
         <Text type={textSizeType} content="낙찰취소" />
         <Spacing rem="0.5" dir="h" />
-        <Text type={textSizeType} content={orderCanceled.toString()} />
+        <Text type={textSizeType} content={penalty.toString()} />
       </div>
     </div>
   );

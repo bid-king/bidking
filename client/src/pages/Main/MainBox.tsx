@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { Text } from '../../_libs/components/common/Text';
 import colors from '../../_libs/design/colors';
-import { AuctionList } from '../../_libs/components/auction/AuctionList';
+import { AuctionList } from '../../_libs/components/main/AuctionList';
 import { RoundButton } from '../../_libs/components/common/RoundButton';
 import { auctionDateParse } from '../../_libs/util/auctionDateParse';
 import { IconButton } from '../../_libs/components/common/IconButton';
