@@ -1,7 +1,7 @@
 const SocketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
-const { startCountdownTimer } = require('../middlewares/timer');
+const { startCountdownTimer } = require('../api/timer');
 const { getRedis } = require('../api/redis');
 
 module.exports = (server, app, sessionMiddleware) => {

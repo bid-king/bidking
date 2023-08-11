@@ -1,4 +1,4 @@
-const { getRedis } = require('../api/redis');
+const { getRedis } = require('./redis');
 
 const timerInterval = {};
 
