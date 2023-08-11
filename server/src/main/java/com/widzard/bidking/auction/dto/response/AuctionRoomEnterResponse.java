@@ -1,9 +1,7 @@
 package com.widzard.bidking.auction.dto.response;
 
-import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.entity.AuctionRoomType;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,24 +11,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuctionRoomEnterResponse {
 
+    private boolean isSeller;
     private Long auctionRoomId;
-    private String nickname;
+    private String nickname; // 방 들어온 사람 id
     private AuctionRoomType auctionRoomType;
     private String title;
-    private Long currentItemId;
-    private List<AuctionItemResponse> itemList;
 
-    public static AuctionRoomEnterResponse from(AuctionRoom auctionRoom) {
+    public static AuctionRoomEnterResponse from(AuctionRoomEnterDto dto) {
         return new AuctionRoomEnterResponse(
-            auctionRoom.getId(),
-            auctionRoom.getSeller().getNickname(),
-            auctionRoom.getAuctionRoomType(),
-            auctionRoom.getName(),
-            auctionRoom.getItemList().get(0).getId(),
-            auctionRoom.getItemList()
-                .stream()
-                .map(AuctionItemResponse::from)
-                .collect(Collectors.toList())
+            dto.isSeller(),
+            dto.getAuctionRoomId(),
+            dto.getNickname(),
+            dto.getAuctionRoomType(),
+            dto.getTitle()
         );
     }
 }
