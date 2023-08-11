@@ -1,5 +1,6 @@
 const express = require('express');
-const { startCountdownTimer } = require('../middlewares/timer');
+const { startCountdownTimer } = require('../api/timer');
+const { getRedis } = require('../api/redis');
 
 const router = express.Router();
 
@@ -12,14 +13,15 @@ router.get('/chat', async (req, res, next) => {
 });
 
 router.post('/update', async (req, res, next) => {
-  const redisCli = req.app.get('redisCli');
   const io = req.app.get('io');
   const { roomId, itemId } = req.body;
 
-  const userId = await redisCli.get(`item:${itemId}:bidding:userId`);
-  const nickname = await redisCli.get(`item:${itemId}:bidding:nickname`);
-  const price = await redisCli.get(`item:${itemId}:bidding:price`);
-  const time = await redisCli.get(`item:${itemId}:bidding:time`);
+  const redisCli = req.app.get('redisCli');
+
+  const userId = await getRedis(redisCli, `item:${itemId}:bidding:userId`);
+  const nickname = await getRedis(redisCli, `item:${itemId}:bidding:nickname`);
+  const price = await getRedis(redisCli, `item:${itemId}:bidding:price`);
+  const time = await getRedis(redisCli, `item:${itemId}:bidding:time`);
 
   io.to(`${roomId}`).emit('updateBid', { itemId, userId, nickname, price, time });
 

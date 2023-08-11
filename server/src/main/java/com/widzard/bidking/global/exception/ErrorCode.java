@@ -60,6 +60,12 @@ public enum ErrorCode {
     IMAGE_NOT_SUFFICIENT(HttpStatus.NOT_FOUND, "IMAGE_NOT_SUFFICIENT", "이미지의 수가 일치하지 않습니다."),
     ALREADY_STARTED_AUCTIONROOM(HttpStatus.BAD_REQUEST, "NOT_BEFORE_LIVE", "이미 진행한 경매방입니다."),
     UNABLE_START_AUCTIONROOM(HttpStatus.BAD_REQUEST, "UNABLE_TO_START", "경매방을 시작할 수 없는 시간입니다."),
+
+    /*
+     *  Alarm
+     */
+    ALARM_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "ALARM_NOT_FOUND_EXCEPTION","해당하는 알림이 존재하지 않습니다."),
+    CLIENT_CONNECTION_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR,"CLIENT_CONNECTION_EXCEPTION","클라이언트에게 알림을 보낼 수 없습니다.")
     ;
 
     private final HttpStatus status;

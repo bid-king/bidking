@@ -47,7 +47,7 @@ export function SellerLive() {
       >
         <AuctionSystem theme="dark" />
         <Spacing rem="1.5" />
-        <ChatRoom theme="dark" userType="seller" />
+        {/* <ChatRoom theme="dark" userType="seller" /> */}
       </div>
     </div>
   );

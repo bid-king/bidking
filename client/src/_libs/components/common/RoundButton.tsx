@@ -46,6 +46,14 @@ const COLOR_VARIANTS = {
       filter: 'brightness(0.9)',
     },
   },
+  delete: {
+    border: `1px solid ${colors.warn33}`,
+    color: colors.white,
+    backgroundColor: colors.warn,
+    '&:hover': {
+      filter: 'brightness(0.9)',
+    },
+  },
 };
 
 const SIZE_VARIANT = {
@@ -62,7 +70,7 @@ const SIZE_VARIANT = {
 };
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color?: 'confirm' | 'black' | 'white';
+  color?: 'confirm' | 'black' | 'white' | 'delete';
   size?: 'small' | 'large';
   label: string;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;

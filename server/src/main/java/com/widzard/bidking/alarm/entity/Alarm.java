@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -23,6 +25,8 @@ import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "alarm")
 public class Alarm extends BaseEntity {
@@ -37,7 +41,7 @@ public class Alarm extends BaseEntity {
     private Member member; // ( 수신 고객 )
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 50)
     private Content content; // ( 내용 )
 
     @Column(nullable = false)
@@ -53,4 +57,19 @@ public class Alarm extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
     private AlarmType alarmType; // ( 알림 메시지 타입 )
+
+    public static Alarm create(Member member, Content content, AlarmType alarmType) {
+        return Alarm.builder()
+            .member(member)
+            .content(content)
+            .isSend(true)
+            .isRead(false)
+            .mediaType(MediaType.NOTIFICATION)
+            .alarmType(alarmType)
+            .build();
+    }
+
+    public void read() {
+        this.isRead = true;
+    }
 }

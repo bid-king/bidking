@@ -1,6 +1,9 @@
 package com.widzard.bidking.auction.service;
 
 import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
+import com.widzard.bidking.alarm.entity.AlarmType;
+import com.widzard.bidking.alarm.entity.Content;
+import com.widzard.bidking.alarm.service.AlarmService;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
@@ -32,6 +35,7 @@ import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
 import com.widzard.bidking.orderItem.entity.OrderItem;
 import com.widzard.bidking.orderItem.repository.OrderItemRepository;
+import java.awt.print.Book;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,6 +63,7 @@ public class AuctionServiceImpl implements AuctionService {
     private final BookmarkRepository bookmarkRepository;
     private final OrderItemRepository orderItemRepository;
     private final MemberRepository memberRepository;
+    private final AlarmService alarmService;
 
     @Override
     public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
@@ -168,6 +173,9 @@ public class AuctionServiceImpl implements AuctionService {
             auctionRoom.addItem(item);
         }
 
+        //알림 보내기
+        alarmService.send(seller, Content.AUCTION_REGISTERED, AlarmType.AUCTION);
+
         return savedAuctionRoom;
     }
 
@@ -259,7 +267,7 @@ public class AuctionServiceImpl implements AuctionService {
                 ItemCategoryNotFoundException::new);
             item.update(updateRequest, category);
 
-            //요청이 false이면 컨티뉴
+            //이미지 변경 요청 false
             if (!updateRequest.getIsChanged()) {
                 continue;
             }
@@ -269,6 +277,16 @@ public class AuctionServiceImpl implements AuctionService {
             imageService.modifyImage(curFileImg, item.getImage().getId());
         }
         auctionRoom.isValid();
+        //알림 전송
+        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+            auctionRoom);
+        for (Optional<Bookmark> bookmark : bookmarkList
+        ) {
+            if (bookmark.isPresent()) {
+                alarmService.send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK,
+                    AlarmType.AUCTION);
+            }
+        }
         return auctionRoom;
     }
 
@@ -290,6 +308,20 @@ public class AuctionServiceImpl implements AuctionService {
             throw new UnauthorizedAuctionRoomAccessException();
         }
 
+        //북마크 삭제
+        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+            auctionRoom);
+
+        for (Optional<Bookmark> bookmark : bookmarkList
+        ) {
+            if (bookmark.isPresent()) {
+                bookmarkRepository.deleteById(bookmark.get().getId());
+            }
+        }
+
+        //경매방 삭제
+        auctionRoomRepository.deleteById(auctionId);
+
         //s3에 올라가있는 image byte stream 삭제를 겸해야 하므로 cascade만으로 처리 불가
         //s3 옥션룸 썸네일 삭제
         imageService.deleteImage(auctionRoom.getImage());
@@ -299,7 +331,15 @@ public class AuctionServiceImpl implements AuctionService {
             Item curItem = itemList.get(i);
             imageService.deleteImage(curItem.getImage());
         }
-        auctionRoomRepository.deleteById(auctionId);
+
+        //북마크 삭제 알림 전송
+        for (Optional<Bookmark> bookmark : bookmarkList
+        ) {
+            if (bookmark.isPresent()) {
+                alarmService.send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK,
+                    AlarmType.AUCTION);
+            }
+        }
     }
 
     @Override

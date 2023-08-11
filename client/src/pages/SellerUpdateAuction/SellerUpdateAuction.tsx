@@ -11,6 +11,7 @@ export function SellerUpdateAuction() {
         display: 'flex',
         justifyContent: 'center',
         padding: '2rem',
+        minHeight: '95vh',
       }}
     >
       <AuctionUpdateBox />

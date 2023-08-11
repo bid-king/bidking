@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import main, { AuctionRoomListResponse, BookmarkStatusRequest } from '../../api/main';
 import auction from '../../api/auction';
 import { useAppSelector } from '../../store/hooks';
+import { useLocation } from 'react-router-dom';
 
 export function useMainBox() {
   const { isLogined, accessToken } = useAppSelector(state => state.user);
@@ -13,9 +14,24 @@ export function useMainBox() {
   const [auctionListAfterLive, setAuctionListAfterLive] = useState<AuctionRoomListResponse[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
+  // 검색
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+  const query = useQuery();
+  const keyword = query.get('search');
+
+  useEffect(() => {
+    setAuctionListBeforeLive([]);
+    setAuctionListAfterLive([]);
+    setPage(1);
+    setNextPage(true);
+    setFetching(true);
+  }, [keyword]);
+
   // 무한 스크롤링을 위한 상태
   const [page, setPage] = useState(1); // 초기 값은 1로 설정
-  const [isFetching, setFetching] = useState(false);
+  const [isFetching, setFetching] = useState(true);
   const [hasNextPage, setNextPage] = useState(true);
 
   // 스크롤 이벤트 핸들러
@@ -33,19 +49,10 @@ export function useMainBox() {
   // 진행중, 진행예정 경매 정보
   const searchAuctionList = {
     categoryList: buttonCategoryList,
-    keyword: '',
+    keyword: keyword ? keyword : '',
     page: page,
     perPage: 8,
   };
-
-  useEffect(() => {
-    // 카테고리가 변경될 때 페이지와 리스트 상태를 초기화
-    setPage(1);
-    setNextPage(true);
-    setAuctionListBeforeLive([]);
-    setAuctionListAfterLive([]);
-    setFetching(true); // 카테고리 변경 시 바로 데이터를 가져오도록 설정
-  }, [buttonCategoryList]);
 
   useEffect(() => {
     if (isFetching && hasNextPage) {
@@ -58,7 +65,7 @@ export function useMainBox() {
             res = await main.getLogined({ ...searchAuctionList, page }, accessToken);
           }
           const beforeLive = res.filter(item => item.auctionRoomLiveState === 'BEFORE_LIVE');
-          const afterLive = res.filter(item => item.auctionRoomLiveState === 'AFTER_LIVE');
+          const afterLive = res.filter(item => item.auctionRoomLiveState === 'ON_LIVE');
 
           // 현재 리스트에 추가로 받아온 데이터를 추가합니다.
           setAuctionListBeforeLive(prev => [...prev, ...beforeLive]);
@@ -75,12 +82,17 @@ export function useMainBox() {
       };
       fetchMoreData();
     }
-  }, [isFetching, buttonCategoryList]);
+  }, [isFetching, buttonCategoryList, keyword]);
 
   const handleCategoryButtonClick = (categoryId: number) => {
     setButtonCategoryList(prevList =>
       prevList.includes(categoryId) ? prevList.filter(id => id !== categoryId) : [...prevList, categoryId]
     );
+    setPage(1);
+    setNextPage(true);
+    setAuctionListBeforeLive([]);
+    setAuctionListAfterLive([]);
+    setFetching(true); // 카테고리 변경 시 바로 데이터를 가져오도록 설정
   };
 
   const handleBookmark = ({ auctionRoomId: auctionId }: BookmarkStatusRequest) => {
@@ -184,5 +196,10 @@ export function useMainBox() {
     handleBookmark,
     auctionListBeforeLive,
     auctionListAfterLive,
+    setAuctionListBeforeLive,
+    setAuctionListAfterLive,
+    setPage,
+    setNextPage,
+    setFetching,
   };
 }

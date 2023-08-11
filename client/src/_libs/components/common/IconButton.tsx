@@ -8,6 +8,7 @@ export function IconButton({ type, background = 'transparent', color = 'lightgre
   return (
     <button
       css={{
+        type: 'button',
         cursor: 'pointer',
         borderRadius: '3rem',
         textAlign: 'center',

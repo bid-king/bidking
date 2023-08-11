@@ -1,28 +1,26 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
+import React from 'react';
+
 import { ChatRoom } from '../../_libs/components/auction/ChatRoom';
-import { AuctionNotice } from '../../_libs/components/auctionsystem/AuctionNotice';
 import { AuctionSystem } from '../../_libs/components/auctionsystem/AuctionSystem';
 import { AuctionTitle } from '../../_libs/components/auctionsystem/AuctionTitle';
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { OrderStream } from '../../_libs/components/meeting/OrderStream';
 import colors from '../../_libs/design/colors';
 import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
-import { useLiveSocketConnection } from '../../_libs/hooks/useLiveSocketConnection';
+import { useSocket } from '../../_libs/hooks/useSocket';
 
 export function Live() {
-  // const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter();
   const userId = 1;
   const auctionRoomId = 1;
   const auctionRoomType = 'GENERAL';
-  const nickname = '정예지';
+  const nickname = '김동현';
   const title = '아 이거 팔자';
   const liveAuthErr = null;
 
-  // const { socket, socketConnectionErr } = useLiveSocketConnection(auctionRoomId);
-
-  const { socket, socketConnectionErr } = useLiveSocketConnection(auctionRoomId);
+  // const { accessToken } = useAppSelector(state => state.user);
+  // const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter(accessToken);
+  const { SOCKET, error } = useSocket(auctionRoomId, nickname);
 
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>
@@ -58,7 +56,7 @@ export function Live() {
       >
         <AuctionSystem theme="light" />
         <Spacing rem="1.5" />
-        <ChatRoom theme="light" userType="order" />
+        <ChatRoom roomId={auctionRoomId} nickname={nickname} theme="light" userType="order" socket={SOCKET} />
       </div>
     </div>
   );

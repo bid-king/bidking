@@ -1,7 +1,7 @@
 import { useState, useEffect, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import member from '../../api/member';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { getUserInformation } from '../../store/slices/userSlice';
+import { setUserInformation } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { ROOT } from '../util/http';
 
@@ -35,7 +35,7 @@ export function useLogin() {
         .login(userId, password)
         .then(res => {
           dispatch(
-            getUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true, nickname: res.nickname })
+            setUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true, nickname: res.nickname })
           );
           navigate('/');
         })

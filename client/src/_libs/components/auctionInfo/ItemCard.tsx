@@ -4,6 +4,7 @@ import colors from '../../design/colors';
 import { Text } from '../common/Text';
 import { Input } from '../common/Input';
 import { Spacing } from '../common/Spacing';
+import { detailDateParse } from '../../util/detailDateParse';
 
 export function ItemCard({ theme = 'light', item }: Props) {
   const [detailDisplay, setDetailDisplay] = useState<boolean>(false);
@@ -29,33 +30,40 @@ export function ItemCard({ theme = 'light', item }: Props) {
         <Text type="bold" content={'순번 ' + item.itemOrdering} />
       </div>
       <Spacing rem="1" />
+      <Text type="bold" content={item.category} />
+      <Spacing rem="1" />
       <div className="cardBody-ItemName">
         <Text type="h3" content={item.itemName} />
       </div>
       <Spacing rem="1" />
-      <div
-        className="cardBody-orderInfo"
-        css={{
-          display: 'flex',
-          flexDirection: 'row',
-        }}
-      >
-        <div
-          css={{
-            width: '50%',
-          }}
-        >
-          <Text content={'낙찰자 '} />
-          <Text type="bold" content={item.successMemberNickname} />
-        </div>
+      {item.successMemberNickname && (
         <div>
-          <Text content={'낙찰가 '} />
-          <Text type="bold" content={String(item.successPrice)} />
+          <div
+            className="cardBody-orderInfo"
+            css={{
+              display: 'flex',
+              flexDirection: 'row',
+            }}
+          >
+            <div
+              css={{
+                width: '50%',
+              }}
+            >
+              <Text content={'낙찰자 '} />
+              <Text type="bold" content={String(item.successMemberNickname)} />
+            </div>
+            <div>
+              <Text content={'낙찰가 '} />
+              <Text type="bold" content={String(item.successPrice)} />
+            </div>
+          </div>
+          <div>
+            <Text type="bold" content={detailDateParse(item.successTime) + ' 낙찰'} />
+          </div>
         </div>
-      </div>
-      <div>
-        <Text type="bold" content={item.successTime + ' 낙찰'} />
-      </div>
+      )}
+
       <Spacing rem="1" />
       {/*이 아래는 접으면 접히는 부분*/}
       <div
@@ -70,7 +78,7 @@ export function ItemCard({ theme = 'light', item }: Props) {
             css={{
               borderRadius: '1rem',
               width: '100%',
-              maxHeight: '15rem',
+              // maxHeight: '20rem',
             }}
           />
           <Spacing rem="1" />
@@ -92,7 +100,7 @@ export function ItemCard({ theme = 'light', item }: Props) {
 const THEME_VARIENT = {
   light: {
     backgroundColor: colors.backgroundLight2,
-    border: `1px solid ${colors.grey}`,
+    border: `1px solid ${colors.backgroundLight3}`,
     color: colors.black,
   },
   dark: {

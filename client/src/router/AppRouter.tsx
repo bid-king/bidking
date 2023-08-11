@@ -13,6 +13,7 @@ import { SellerLive } from '../pages/SellerLive/SellerLive';
 import { SellerCreateAuction } from '../pages/SellerCreateAuction/SellerCreateAuction';
 import { SellerUpdateAuction } from '../pages/SellerUpdateAuction/SellerUpdateAuction';
 import { SellerDetail } from '../pages/SellerDetail/SellerDetail';
+import { SellerDetailOffLive } from '../pages/SellerDetail/SellerDetailOffLive';
 import { Layout } from '../pages/Layout';
 import { SellerLayout } from '../pages/SellerLayout';
 
@@ -25,7 +26,7 @@ export function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/mypage/:id" element={<MyPage />} />
-        <Route path="/purchased" element={<Purchased />} />
+        <Route path="/purchased/:memberId" element={<Purchased />} />
         <Route path="/detail/:auctionId" element={<Detail />} />
         <Route path="/auction/:auctionId" element={<Live />} />
       </Route>
@@ -35,6 +36,7 @@ export function AppRouter() {
         <Route path="/seller/create-auction" element={<SellerCreateAuction />} />
         <Route path="/seller/update-auction/:auctionId" element={<SellerUpdateAuction />} />
         <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
+        <Route path="/seller/detail/complete/:auctionId" element={<SellerDetailOffLive />} />
         <Route path="/seller" element={<Seller />}></Route>
         <Route path="/seller/auction/:auctionId" element={<SellerLive />} />
       </Route>

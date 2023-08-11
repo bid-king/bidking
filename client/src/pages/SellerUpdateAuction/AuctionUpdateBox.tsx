@@ -13,6 +13,8 @@ import { RadioButton } from '../../_libs/components/common/RadioButton';
 import { Image } from '../../_libs/components/common/Image';
 import { AuctionUpdateCreateCard } from '../../_libs/components/auctionUpdate/AuctionUpdateCreateCard';
 import { useAppSelector } from '../../store/hooks';
+import { RoundButton } from '../../_libs/components/common/RoundButton';
+import { Link } from 'react-router-dom';
 
 export function AuctionUpdateBox() {
   const {
@@ -34,6 +36,7 @@ export function AuctionUpdateBox() {
     detail,
     auctionRoomUrl,
     isLogined,
+    auctionId,
   } = useAuctionUpdateBox();
   return (
     <div
@@ -49,7 +52,25 @@ export function AuctionUpdateBox() {
     >
       {detail && isLogined && (
         <div>
-          <Text type="h2" content="경매 수정"></Text>
+          <div
+            css={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Text type="h1" content="경매 정보" />
+            <div
+              css={{
+                display: 'flex',
+              }}
+            >
+              <Link to={`/seller/detail/${auctionId}`}>
+                <RoundButton label="상세" size="small" color="white" />
+              </Link>
+              <Spacing rem="0.5" dir="h" />
+            </div>
+          </div>
           <Spacing rem="2" />
           <div
             css={{
