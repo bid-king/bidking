@@ -1,7 +1,5 @@
 package com.widzard.bidking.auction.service.facade;
 
-import com.widzard.bidking.auction.service.AuctionService;
-import com.widzard.bidking.item.service.ItemService;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class RedissonLockAuctionFacade {
 
     private final RedissonClient redissonClient;
-    private final ItemService itemService;
+//    private final ItemService itemService;
 
     public void bidding(Long itemId, Long price) {
         RLock lock = redissonClient.getLock(itemId.toString());
@@ -28,7 +26,7 @@ public class RedissonLockAuctionFacade {
                 return;
             }
 
-            itemService.testBid(itemId, price);
+//            itemService.testBid(itemId, price);
 
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -126,7 +125,8 @@ public class AuctionController {
         @RequestPart(name = "auctionRoomImg", required = false) MultipartFile auctionRoomImg,
         @RequestPart(name = "itemImgs", required = false) MultipartFile[] itemImgs
     ) throws IOException {
-        auctionService.updateAuctionRoom(member, auctionId, auctionUpdateRequest, auctionRoomImg, itemImgs);
+        auctionService.updateAuctionRoom(member, auctionId, auctionUpdateRequest, auctionRoomImg,
+            itemImgs);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -178,18 +178,20 @@ public class AuctionController {
         );
     }
 
+    /*
+     * 경매방 입장 (유저 인증 및 셀러 여부 반환)
+     */
     @GetMapping("/{auctionId}/enter")
     public ResponseEntity<AuctionRoomEnterResponse> validateEnteringRoom(
         @AuthenticationPrincipal Member member,
         @PathVariable("auctionId") Long auctionId
     ) {
-        AuctionRoom liveAuctionRoom = auctionService.validateEnterRoom(member, auctionId);
+        boolean isSeller = auctionService.validateEnterRoom(member, auctionId);
         return new ResponseEntity<>(
-            AuctionRoomEnterResponse.from(liveAuctionRoom),
+            AuctionRoomEnterResponse.from(isSeller),
             HttpStatus.OK
         );
     }
-
 
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
         List<AuctionResponse> auctionResponseList = new ArrayList<>();

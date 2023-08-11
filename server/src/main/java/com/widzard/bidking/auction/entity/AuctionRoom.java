@@ -171,7 +171,7 @@ public class AuctionRoom extends BaseEntity {
         this.auctionRoomLiveState = AuctionRoomLiveState.ON_LIVE;
     }
 
-    public void canLive() {
+    public void validateLive() {
         LocalDateTime now = LocalDateTime.now();
         if (now.isBefore(this.startedAt.minusMinutes(20L)) || now.isAfter(this.startedAt)) {
             throw new UnableToStartAuctionException();

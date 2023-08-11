@@ -41,7 +41,7 @@ public interface AuctionService {
 
     AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId);
 
-    AuctionRoom validateEnterRoom(Member seller, Long auctionId);
+    boolean validateEnterRoom(Member seller, Long auctionId);
 
     void startBidding(Member member, Long auctionId, Long itemId);
 }
