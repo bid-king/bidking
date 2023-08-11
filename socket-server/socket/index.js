@@ -75,37 +75,6 @@ module.exports = (server, app, sessionMiddleware) => {
 
       io.to(`${roomId}`).emit('start', { itemId, price });
       startCountdownTimer(app, roomId);
-
-      // try {
-      //   const itemId = await new Promise((resolve, reject) => {
-      //     redisCli.get(`auction:${roomId}:onLiveItem:itemId`, (error, result) => {
-      //       if (error) {
-      //         console.error('Error getting itemId:', error);
-      //         reject(error);
-      //       } else {
-      //         console.log('Retrieved itemId:', result);
-      //         resolve(result);
-      //       }
-      //     });
-      //   });
-
-      //   const price = await new Promise((resolve, reject) => {
-      //     redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`, (error, result) => {
-      //       if (error) {
-      //         console.error('Error getting price:', error);
-      //         reject(error);
-      //       } else {
-      //         console.log('Retrieved price:', result);
-      //         resolve(result);
-      //       }
-      //     });
-      //   });
-
-      //   io.to(roomId).emit('start', { itemId, price });
-      //   startCountdownTimer(app, roomId);
-      // } catch (error) {
-      //   console.error('Error starting auction:', error);
-      // }
     });
 
     socket.on('disconnect', () => {
