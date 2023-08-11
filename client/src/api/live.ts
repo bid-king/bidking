@@ -85,13 +85,6 @@ export interface AuctionEnterResponse {
   title: string;
   auctionRoomId: number;
   currentItemId: number;
-  itemList: Array<{
-    itemId: number;
-    imageUrl: string;
-    name: string;
-    description: string;
-    startPrice: number;
-  }>;
 }
 
 export interface SocketAPI {
@@ -111,3 +104,11 @@ export interface SocketAPI {
     start: () => string;
   };
 }
+export type ItemList = Array<{
+  itemId: number;
+  itemImg: string;
+  name: string;
+  status: 'before' | 'in' | 'fail' | 'complete';
+  desc: string;
+  startPrice: number;
+}>;
