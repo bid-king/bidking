@@ -201,7 +201,7 @@ public class AuctionController {
     /*
      * 인증된 유저에게 필요한 경매방, 아이템 리스트 반환
      */
-    @GetMapping("{auctionId}/items")
+    @GetMapping("/{auctionId}/items")
     public ResponseEntity<AuctionRoomEnterItemsResponse> getLiveAuctionItemList(
         @PathVariable("auctionId") Long auctionId
     ) {

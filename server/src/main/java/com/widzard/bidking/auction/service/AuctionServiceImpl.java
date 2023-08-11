@@ -338,6 +338,8 @@ public class AuctionServiceImpl implements AuctionService {
 
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
+        log.info("memberId: {}", member.getId());
+        log.info("sellerId: {}", auctionRoom.getSeller().getId());
 
         if (auctionRoom.getSeller().getId() != member.getId()) {
             isSeller = false;
