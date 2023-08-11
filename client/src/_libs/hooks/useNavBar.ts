@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, ChangeEvent, FormEvent, MouseEvent } from 'react';
 import { useAppSelector } from '../../store/hooks';
 import member from '../../api/member';
+import { useNavigate } from 'react-router-dom';
 
 export function useNavBar() {
   const { isLogined, accessToken, id } = useAppSelector(state => state.user);
@@ -9,7 +10,6 @@ export function useNavBar() {
   const AlarmTimer = useRef<NodeJS.Timeout | null>(null);
   const [showAlarm, setAlarm] = useState(false);
   const [imgSrc, setImgSrc] = useState('');
-
   const handleMouseEnter = () => {
     if (timer.current) {
       clearTimeout(timer.current);
@@ -53,6 +53,26 @@ export function useNavBar() {
     }
   }, [id, isLogined]);
 
+  // 검색
+  const [keyword, setKeyword] = useState('');
+  const navigate = useNavigate();
+  const handleKeyword = (e: ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  };
+  const searchKeyword = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (keyword) {
+      navigate(`/?search=${keyword}`);
+    }
+  };
+
+  const searchClickKeyword = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (keyword) {
+      navigate(`/?search=${keyword}`);
+    }
+  };
+
   return {
     showModal,
     isLogined,
@@ -63,5 +83,10 @@ export function useNavBar() {
     handleAlarmMouseLeave,
     imgSrc,
     accessToken,
+    keyword,
+    handleKeyword,
+    searchKeyword,
+    id,
+    searchClickKeyword,
   };
 }

@@ -1,5 +1,6 @@
 package com.widzard.bidking.auction.controller;
 
+import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
@@ -10,6 +11,7 @@ import com.widzard.bidking.auction.dto.response.AuctionResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomEnterResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
+import com.widzard.bidking.auction.dto.response.AuctionRoomEnterItemsResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.service.AuctionService;
 import com.widzard.bidking.member.entity.Member;
@@ -28,7 +30,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -179,17 +180,38 @@ public class AuctionController {
         );
     }
 
+    /*
+     * 경매방 입장 (유저 인증 및 셀러 여부 반환)
+     */
     @GetMapping("/{auctionId}/enter")
     public ResponseEntity<AuctionRoomEnterResponse> validateEnteringRoom(
         @AuthenticationPrincipal Member member,
         @PathVariable("auctionId") Long auctionId
     ) {
-        AuctionRoom liveAuctionRoom = auctionService.validateEnterRoom(member, auctionId);
+        AuctionRoomEnterDto dto = auctionService.validateEnterRoom(
+            member,
+            auctionId
+        );
         return new ResponseEntity<>(
-            AuctionRoomEnterResponse.from(liveAuctionRoom),
+            AuctionRoomEnterResponse.from(dto),
             HttpStatus.OK
         );
     }
+
+    /*
+     * 인증된 유저에게 필요한 경매방, 아이템 리스트 반환
+     */
+    @GetMapping("/{auctionId}/items")
+    public ResponseEntity<AuctionRoomEnterItemsResponse> getLiveAuctionItemList(
+        @PathVariable("auctionId") Long auctionId
+    ) {
+        AuctionRoom auctionRoom = auctionService.getLiveAuctionItemList(auctionId);
+        return new ResponseEntity<>(
+            AuctionRoomEnterItemsResponse.from(auctionRoom),
+            HttpStatus.OK
+        );
+    }
+
 
 
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {

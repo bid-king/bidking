@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import main, { AuctionRoomListResponse, BookmarkStatusRequest } from '../../api/main';
 import auction from '../../api/auction';
 import { useAppSelector } from '../../store/hooks';
+import { useLocation } from 'react-router-dom';
 
 export function useMainBox() {
   const { isLogined, accessToken } = useAppSelector(state => state.user);
@@ -12,6 +13,21 @@ export function useMainBox() {
   const [auctionListBeforeLive, setAuctionListBeforeLive] = useState<AuctionRoomListResponse[]>([]);
   const [auctionListAfterLive, setAuctionListAfterLive] = useState<AuctionRoomListResponse[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  // 검색
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+  const query = useQuery();
+  const keyword = query.get('search');
+
+  useEffect(() => {
+    setAuctionListBeforeLive([]);
+    setAuctionListAfterLive([]);
+    setPage(1);
+    setNextPage(true);
+    setFetching(true);
+  }, [keyword]);
 
   // 무한 스크롤링을 위한 상태
   const [page, setPage] = useState(1); // 초기 값은 1로 설정
@@ -33,7 +49,7 @@ export function useMainBox() {
   // 진행중, 진행예정 경매 정보
   const searchAuctionList = {
     categoryList: buttonCategoryList,
-    keyword: '',
+    keyword: keyword ? keyword : '',
     page: page,
     perPage: 8,
   };
@@ -66,7 +82,7 @@ export function useMainBox() {
       };
       fetchMoreData();
     }
-  }, [isFetching, buttonCategoryList]);
+  }, [isFetching, buttonCategoryList, keyword]);
 
   const handleCategoryButtonClick = (categoryId: number) => {
     setButtonCategoryList(prevList =>
@@ -180,5 +196,10 @@ export function useMainBox() {
     handleBookmark,
     auctionListBeforeLive,
     auctionListAfterLive,
+    setAuctionListBeforeLive,
+    setAuctionListAfterLive,
+    setPage,
+    setNextPage,
+    setFetching,
   };
 }

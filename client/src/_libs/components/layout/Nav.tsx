@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { HTMLAttributes } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
@@ -12,8 +12,6 @@ import { Icon } from '../common/Icon';
 import { useNavBar } from '../../hooks/useNavBar';
 import { NavBarModal } from './NavBarModal';
 import { AlarmBox } from './AlarmBox';
-import { useAppSelector } from '../../../store/hooks';
-import member from '../../../api/member';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -22,7 +20,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 export function Nav({ theme = 'light' }: Props) {
   const breakpoints = [576, 768, 992, 1200];
   const mq = breakpoints.map(bp => `@media (min-width: ${bp}px)`);
-  const id = useAppSelector(state => state.user.id);
+
   const {
     showModal,
     isLogined,
@@ -32,7 +30,11 @@ export function Nav({ theme = 'light' }: Props) {
     handleAlarmMouseEnter,
     handleAlarmMouseLeave,
     imgSrc,
-    accessToken,
+    keyword,
+    handleKeyword,
+    searchKeyword,
+    id,
+    searchClickKeyword,
   } = useNavBar();
 
   // type AlarmEvent = {
@@ -97,15 +99,24 @@ export function Nav({ theme = 'light' }: Props) {
             )}
           </div>
           <Spacing rem="1" dir="h" />
-          <div css={{ display: 'flex' }}>
-            <div>
-              <Input shape="round" theme={theme} placeholder="경매방을 검색하세요" size="small" />
-            </div>
-            <Spacing rem="0.5" dir="h" />
-            <div>
-              <RoundButton label="검색" size="small" />
-            </div>
-          </div>
+          {theme === 'light' && (
+            <form css={{ display: 'flex' }} onSubmit={searchKeyword}>
+              <div>
+                <Input
+                  shape="round"
+                  theme={theme}
+                  onChange={handleKeyword}
+                  placeholder="경매방을 검색하세요"
+                  size="small"
+                  value={keyword}
+                />
+              </div>
+              <Spacing rem="0.5" dir="h" />
+              <div>
+                <RoundButton onClick={searchClickKeyword} label="검색" size="small" />
+              </div>
+            </form>
+          )}
         </div>
         <Spacing rem="1" dir="h" />
         <div
