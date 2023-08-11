@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { ItemCard } from '../../_libs/components/auctionInfo/ItemCard';
+import { ItemCardSeller } from '../../_libs/components/auctionInfo/ItemCardSeller';
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { Text } from '../../_libs/components/common/Text';
 import colors from '../../_libs/design/colors';
@@ -11,10 +11,10 @@ import auctionRoomLiveState from '../../_libs/constants/auctionRoomLiveState';
 import { detailDateParse } from '../../_libs/util/detailDateParse';
 import { Link } from 'react-router-dom';
 import { RoundButton } from '../../_libs/components/common/RoundButton';
-import { useSellerDetail } from '../../_libs/hooks/useSellerDetail';
+import { useSellerDetailOffLive } from '../../_libs/hooks/useSellerDetailOffLive';
 
-export function SellerDetail() {
-  const { auctionId, detail, error, isLogined, handleCheck, handleDelete, isChecked } = useSellerDetail();
+export function SellerDetailOffLive() {
+  const { auctionId, detail, error, isLogined, handleCheck, handleDelete, isChecked } = useSellerDetailOffLive();
   if (!detail) {
     return (
       <div
@@ -85,16 +85,12 @@ export function SellerDetail() {
             justifyContent: 'space-between',
           }}
         >
-          <Text type="h1" content="경매 정보" />
+          <Text type="h1" content="경매 완료" />
           <div
             css={{
               display: 'flex',
             }}
           >
-            <Link to={`/seller/update-auction/${auctionId}`}>
-              <RoundButton label="수정" size="small" color="white" />
-            </Link>
-            <Spacing rem="0.5" dir="h" />
             <RoundButton onClick={handleDelete} label="삭제" size="small" color="delete" />
           </div>
         </div>
@@ -133,69 +129,23 @@ export function SellerDetail() {
             <Spacing rem="1" dir="h" />
           </div>
         </div>
-        {detail.auctionRoomLiveState === 'BEFORE_LIVE' && (
-          <div>
-            <Spacing rem="1" />
-            <Text type="h3" content={`${detailDateParse(detail.startedAt)} 시작`} />
-          </div>
+        <div>
+          <Spacing rem="1" />
+          <Text type="h3" content={`${detailDateParse(detail.startedAt)} 시작`} />
+        </div>
+        <Spacing rem="1" />
+        {detail.itemList.some(item =>
+          ['PAYMENT_WAITING', 'DELIVERY_WAITING', 'DELIVERING'].includes(item.orderState)
+        ) && <ConfirmButton btnType="progress" label="결제/배송중" />}
+
+        {detail.itemList.every(item => item.orderState === 'COMPLETED') && (
+          <Link to={'/'}>
+            <ConfirmButton btnType="ok" label="수령 완료" />
+          </Link>
         )}
 
         <Spacing rem="1" />
         <Text type="h1" content="경매 물품" />
-        <Spacing rem="1" />
-
-        {detail.auctionRoomLiveState === 'BEFORE_LIVE' && (
-          <ConfirmButton btnType="disabled" label={auctionRoomLiveState.BEFORE_LIVE} />
-        )}
-
-        {detail.auctionRoomLiveState === 'ON_LIVE' && (
-          <div>
-            <div
-              className="auctionEnterPermission"
-              css={{
-                display: 'flex',
-                color: colors.warn,
-                alignItems: 'center',
-              }}
-            >
-              <Text type="p" content="판매 주의사항에 동의해주세요" />
-              <Spacing rem="1" dir="h" />
-              <div
-                css={{
-                  marginTop: '0.2rem',
-                }}
-              >
-                <QuestionModal
-                  content1="일반경매(English Auction): 이는 우리가 흔히 생각하는, 가장 전통적인 경매 방식입니다. 경매가 시작될 때 최소 입찰가격이 설정되며, 이후 참여자들은 그 가격보다 높은 가격으로 입찰합니다. 가장 높은 가격을 제시한 참여자가 물건을 얻게 됩니다."
-                  content2="네덜란드 경매(Dutch Auction): 이 경매 방식은 일반적인 경매와는 반대로, 가장 높은 가격에서 시작하여 점차 가격을 낮추는 방식입니다. 참가자들은 가격이 내려갈수록 입찰을 기다리다가, 자신이 원하는 가격에 도달했을 때 입찰을 합니다. 처음으로 입찰한 사람이 물건을 얻게 됩니다. 이 방식은 일반적으로 꽃이나 농산물 등 시간이 지날수록 가치가 떨어지는 상품을 판매할 때 사용됩니다."
-                />
-              </div>
-              <Spacing rem="1" dir="h" />
-              <div
-                css={{
-                  paddingTop: '0.5rem',
-                }}
-              >
-                <Checkbox
-                  theme="light"
-                  id="auctionEnterPermission"
-                  value="auctionEnterPermission"
-                  onChange={handleCheck}
-                />
-              </div>
-            </div>
-            {!isChecked && <ConfirmButton btnType="disabled" label="판매 주의사항에 동의 해주세요" />}
-            {isChecked && (
-              <Link to={`/seller/auction/${auctionId}`}>
-                <ConfirmButton btnType="confirm" label={auctionRoomLiveState.ON_LIVE} />
-              </Link>
-            )}
-          </div>
-        )}
-        {detail.auctionRoomLiveState === 'OFF_LIVE' && (
-          <ConfirmButton btnType="disabled" label={auctionRoomLiveState.OFF_LIVE} />
-        )}
-
         <Spacing rem="1" />
         <div
           css={{
@@ -206,7 +156,7 @@ export function SellerDetail() {
           {error && <Text content={error.message} />}
           {detail.itemList.map((item, idx) => (
             <div key={idx}>
-              <ItemCard theme="dark" item={item} />
+              <ItemCardSeller theme="dark" item={item} />
               <Spacing rem="1" />
             </div>
           ))}

@@ -7,6 +7,9 @@ export function LinkDebug() {
       <nav>
         <ul>
           <li>
+            <Link to="/seller/detail/complete/1">판매자완료물품상세</Link>
+          </li>
+          <li>
             <Link to="/purchased">구매내역</Link>
           </li>
           <li>
