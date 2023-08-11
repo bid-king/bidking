@@ -1,5 +1,5 @@
 const express = require('express');
-const { startCountdownTimer } = require('../middlewares/timer');
+const { startCountdownTimer } = require('../api/timer');
 const { getRedis } = require('../api/redis');
 
 const router = express.Router();

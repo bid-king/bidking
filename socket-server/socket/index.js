@@ -1,7 +1,7 @@
 const SocketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
-const { startCountdownTimer } = require('../middlewares/timer');
+const { startCountdownTimer } = require('../api/timer');
 const { getRedis } = require('../api/redis');
 
 module.exports = (server, app, sessionMiddleware) => {
@@ -29,11 +29,6 @@ module.exports = (server, app, sessionMiddleware) => {
 
       // TODO: roomId에 해당하는 itemList 요청 to Spring
       // GET /api/v1/auctions/{auctionId}/items
-
-      io.to(roomId).emit('chat', {
-        nickname: 'System',
-        msg: `${nickname} 입장`,
-      });
     });
 
     socket.on('leaveRoom', ({ roomId }) => {
