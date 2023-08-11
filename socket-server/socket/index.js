@@ -58,17 +58,54 @@ module.exports = (server, app, sessionMiddleware) => {
       io.to(roomId).emit('notice', { msg });
     });
 
+    function getRedis(client, query) {
+      return new Promise((resolve, reject) => {
+        client.get(query, (err, res) => {
+          if (err) reject(err);
+          else resolve(res);
+        });
+      });
+    }
+
     socket.on('start', async ({ roomId }) => {
       const redisCli = app.get('redisCli');
-      // await redisCli.connect();
 
-      const itemId = await redisCli.get(`auction:${roomId}:onLiveItem:itemId`);
-      const price = await redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`);
-
-      // await redisCli.disconnect();
+      const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
+      const price = await getRedis(redisCli, `auction:${roomId}:onLiveItem:currentPrice`);
 
       io.to(`${roomId}`).emit('start', { itemId, price });
       startCountdownTimer(app, roomId);
+
+      // try {
+      //   const itemId = await new Promise((resolve, reject) => {
+      //     redisCli.get(`auction:${roomId}:onLiveItem:itemId`, (error, result) => {
+      //       if (error) {
+      //         console.error('Error getting itemId:', error);
+      //         reject(error);
+      //       } else {
+      //         console.log('Retrieved itemId:', result);
+      //         resolve(result);
+      //       }
+      //     });
+      //   });
+
+      //   const price = await new Promise((resolve, reject) => {
+      //     redisCli.get(`auction:${roomId}:onLiveItem:currentPrice`, (error, result) => {
+      //       if (error) {
+      //         console.error('Error getting price:', error);
+      //         reject(error);
+      //       } else {
+      //         console.log('Retrieved price:', result);
+      //         resolve(result);
+      //       }
+      //     });
+      //   });
+
+      //   io.to(roomId).emit('start', { itemId, price });
+      //   startCountdownTimer(app, roomId);
+      // } catch (error) {
+      //   console.error('Error starting auction:', error);
+      // }
     });
 
     socket.on('disconnect', () => {
