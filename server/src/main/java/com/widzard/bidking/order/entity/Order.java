@@ -35,8 +35,8 @@ import org.hibernate.annotations.DynamicInsert;
 @Table(
     name = "orders",
     indexes = {
-        @Index(name = "idx__order_state__member_id",
-            columnList = "order_state, member_id")
+        @Index(name = "idx__order_state__orderer_id__seller_id",
+            columnList = "order_state, orderer_id, seller_id")
     }
 )
 public class Order extends BaseEntity {
@@ -47,8 +47,12 @@ public class Order extends BaseEntity {
     private Long id; // (주문코드)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "orderer_id", nullable = false)
     private Member orderer;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id", nullable = false)
+    private Member seller;
 
     @Enumerated(EnumType.STRING)
     @ColumnDefault("'PAYMENT_WAITING'")
@@ -66,6 +70,7 @@ public class Order extends BaseEntity {
     public static Order create(AuctionRoom auctionRoom, Member orderer, OrderState orderState) {
         return Order.builder()
             .orderer(orderer)
+            .seller(auctionRoom.getSeller())
             .orderState(orderState)
             .auctionRoom(auctionRoom)
             .build();
