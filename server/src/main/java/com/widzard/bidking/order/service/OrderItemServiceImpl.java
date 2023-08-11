@@ -1,8 +1,9 @@
-package com.widzard.bidking.orderItem.service;
+package com.widzard.bidking.order.service;
 
 import com.widzard.bidking.member.entity.Member;
-import com.widzard.bidking.orderItem.entity.OrderItem;
-import com.widzard.bidking.orderItem.repository.OrderItemRepository;
+import com.widzard.bidking.order.entity.OrderItem;
+import com.widzard.bidking.order.repository.OrderItemRepository;
+import com.widzard.bidking.order.service.OrderItemService;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

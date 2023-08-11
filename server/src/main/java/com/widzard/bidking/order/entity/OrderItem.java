@@ -1,10 +1,8 @@
-package com.widzard.bidking.orderItem.entity;
+package com.widzard.bidking.order.entity;
 
 
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.item.entity.Item;
-import com.widzard.bidking.order.entity.Order;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

@@ -1,10 +1,9 @@
-package com.widzard.bidking.orderItem.controller;
+package com.widzard.bidking.order.controller;
 
 import com.widzard.bidking.member.entity.Member;
-import com.widzard.bidking.orderItem.dto.response.SuccessItemResponse;
-import com.widzard.bidking.order.service.OrderService;
-import com.widzard.bidking.orderItem.entity.OrderItem;
-import com.widzard.bidking.orderItem.service.OrderItemService;
+import com.widzard.bidking.order.dto.response.SuccessItemResponse;
+import com.widzard.bidking.order.entity.OrderItem;
+import com.widzard.bidking.order.service.OrderItemService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/orderItems")
-public class OrderItemController {
+@RequestMapping("/api/v1/orders")
+public class OrderController {
 
     private final OrderItemService orderItemService;
 

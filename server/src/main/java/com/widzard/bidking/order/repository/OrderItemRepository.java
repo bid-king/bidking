@@ -1,8 +1,8 @@
-package com.widzard.bidking.orderItem.repository;
+package com.widzard.bidking.order.repository;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.member.entity.Member;
-import com.widzard.bidking.orderItem.entity.OrderItem;
+import com.widzard.bidking.order.entity.OrderItem;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

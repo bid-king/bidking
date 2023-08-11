@@ -1,9 +1,9 @@
-package com.widzard.bidking.orderItem.dto.response;
+package com.widzard.bidking.order.dto.response;
 
 import com.widzard.bidking.global.entity.Address;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.order.entity.OrderState;
-import com.widzard.bidking.orderItem.entity.OrderItem;
+import com.widzard.bidking.order.entity.OrderItem;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
