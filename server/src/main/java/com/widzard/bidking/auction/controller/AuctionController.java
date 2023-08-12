@@ -8,12 +8,13 @@ import com.widzard.bidking.auction.dto.response.AuctionBookmarkCountResponse;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionResponse;
+import com.widzard.bidking.auction.dto.response.AuctionRoomEnterItemsResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomEnterResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
-import com.widzard.bidking.auction.dto.response.AuctionRoomEnterItemsResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.service.AuctionService;
+import com.widzard.bidking.auction.service.facade.StartBiddingFacade;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuctionController {
 
     private final AuctionService auctionService;
+    private final StartBiddingFacade startBiddingFacade;
 
     @GetMapping
     public ResponseEntity<List<AuctionResponse>> readAuctionList(
@@ -167,13 +169,13 @@ public class AuctionController {
         return new ResponseEntity<>(auctionRoomSellerResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/{auctionId}/item/{itemId}/start")
+    @PostMapping("/{auctionId}/item/{itemId}/bid-start")
     public ResponseEntity<String> startBidding(
         @AuthenticationPrincipal Member member,
         @PathVariable("auctionId") Long auctionId,
         @PathVariable("itemId") Long itemId
     ) {
-        auctionService.startBidding(member, auctionId, itemId);
+        startBiddingFacade.startBidding(member, auctionId, itemId);
         return new ResponseEntity<>(
             null,
             HttpStatus.OK
@@ -205,6 +207,7 @@ public class AuctionController {
     public ResponseEntity<AuctionRoomEnterItemsResponse> getLiveAuctionItemList(
         @PathVariable("auctionId") Long auctionId
     ) {
+
         AuctionRoom auctionRoom = auctionService.getLiveAuctionItemList(auctionId);
         return new ResponseEntity<>(
             AuctionRoomEnterItemsResponse.from(auctionRoom),

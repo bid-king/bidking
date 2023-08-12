@@ -1,10 +1,11 @@
 package com.widzard.bidking.item.entity;
 
 
-import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
+import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
+import com.widzard.bidking.item.exception.AlreadyBiddingException;
 import com.widzard.bidking.orderItem.entity.OrderItem;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -129,5 +130,16 @@ public class Item extends BaseEntity {
             .append("\nthis.getItemState()")
             .append(this.getItemState())
             .toString();
+    }
+
+    public void isBiddable() {
+        if (this.itemState != ItemState.BEFORE_AUCTION) {
+            throw new AlreadyBiddingException();
+        }
+    }
+
+    public void changeOnBid() {
+        this.itemState = ItemState.IN_AUCTION;
+
     }
 }
