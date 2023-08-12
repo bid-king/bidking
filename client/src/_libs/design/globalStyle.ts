@@ -8,13 +8,11 @@ export const globalStyle = css`
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     font-family: 'Pretendard';
-    font-size: 100%;
+    font-size: 77.5%;
     color: ${colors.black};
     line-height: 1.2rem;
   }
-  body {
-    font-size: 0.875rem;
-  }
+
   input,
   textarea,
   button {
