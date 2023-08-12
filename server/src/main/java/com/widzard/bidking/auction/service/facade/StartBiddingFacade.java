@@ -23,7 +23,7 @@ public class StartBiddingFacade {
         Long startPrice = auctionService.startBidding(member, auctionId, itemId);
 
         // redis 저장
-        redisTemplate.opsForValue().setIfAbsent(
+        redisTemplate.opsForValue().set(
             generateKey(auctionId),
             itemId,
             Duration.ofDays(1)
