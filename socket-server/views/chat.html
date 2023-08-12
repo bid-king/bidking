@@ -86,7 +86,7 @@
     socket.on('start', data => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
-      messageTag.innerText = ` ${data.itemId} 경매 시작! : ${data.price}원`;
+      messageTag.innerText = `${data.itemId} 경매 시작! : ${data.price}원`;
       messageList.appendChild(messageTag);
     });
 
@@ -94,14 +94,7 @@
       console.log(data);
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
-      messageTag.innerText = ` ${data}`;
-      messageList.appendChild(messageTag);
-    });
-
-    socket.on('redis-update', msg => {
-      var messageList = document.getElementById('messages');
-      var messageTag = document.createElement('li');
-      messageTag.innerText = msg;
+      messageTag.innerText = `${data}`;
       messageList.appendChild(messageTag);
     });
 
