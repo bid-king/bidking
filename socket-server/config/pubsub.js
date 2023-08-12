@@ -1,23 +1,35 @@
 const redis = require('redis');
+const { startCountdownTimer } = require('../api/timer');
 
 module.exports = app => {
+  const io = app.get('io');
+
   // docker
-  // const client = redis.createClient({
+  // const subscriber = redis.createClient({
   //   url: 'redis://redis:6379',
   // });
 
   // local
   const subscriber = redis.createClient();
-  const io = app.get('io');
 
-  subscriber.subscribe('auction-updates');
+  subscriber.subscribe('StartAuctionItem');
+  subscriber.subscribe('UpdateAuctionPrice');
 
   subscriber.on('message', (channel, message) => {
-    if (channel === 'auction-updates') {
-      const [auctionId, itemId, newPrice] = message.split(':');
-      // 갱신된 입찰가를 이용하여 노드 서버에서 처리
-      console.log(`Auction ${auctionId} price updated to ${newPrice}`);
-      io.to(`${auctionId}`).emit('redis-update', `${itemId}가 ${newPrice}원으로 갱신`);
+    if (channel === 'StartAuctionItem') {
+      const [roomId, itemId, price] = message.split(':');
+      console.log(`AuctionRoom ${roomId}의 Item ${itemId}가 ${price}원부터 시작`);
+      io.to(`${roomId}`).emit('next', { itemId, price });
+    }
+
+    if (channel === 'UpdateAuctionPrice') {
+      const [roomId, itemId, userId, nickname, price, time] = message.split(':');
+      console.log(
+        `AuctionRoom ${roomId}의 Item ${itemId}가 ${nickname}(${userId})에 의해 ${price}원으로 갱신 at ${time}`
+      );
+      io.to(`${roomId}`).emit('updateBid', { itemId, userId, nickname, price, time });
+
+      startCountdownTimer(app, roomId);
     }
   });
 };
