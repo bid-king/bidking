@@ -12,6 +12,7 @@ import { Checkbox } from '../../_libs/components/common/Checkbox';
 import auctionRoomLiveState from '../../_libs/constants/auctionRoomLiveState';
 import { detailDateParse } from '../../_libs/util/detailDateParse';
 import { Link } from 'react-router-dom';
+import { useAppSelector } from '../../store/hooks';
 
 export function Detail() {
   const params = useParams<string>();
@@ -20,6 +21,7 @@ export function Detail() {
   const [detail, setDetail] = useState<AuctionRoomResponse | undefined>(undefined);
   const [error, setError] = useState<Error | null>(null);
   const [isChecked, setChecked] = useState(false);
+  const { accessToken } = useAppSelector(state => state.user);
 
   const handleCheck = () => {
     setChecked(!isChecked);
@@ -27,11 +29,14 @@ export function Detail() {
 
   useEffect(() => {
     auction
-      .get(auctionId)
+      .get(auctionId, accessToken)
       .then(data => {
         setDetail(data);
       })
-      .catch(err => setError(err));
+      .catch(err => {
+        setError(err);
+        console.log(err);
+      });
   }, [auctionId]);
 
   if (!detail) {
@@ -49,7 +54,6 @@ export function Detail() {
       </div>
     );
   }
-  console.log(detail.auctionRoomLiveState);
 
   return (
     <div
