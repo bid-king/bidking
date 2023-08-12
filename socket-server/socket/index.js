@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
 const { startCountdownTimer } = require('../api/timer');
 const { getRedis } = require('../api/redis');
+const { http } = require('../api/http');
 
 module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, {
@@ -27,15 +28,15 @@ module.exports = (server, app, sessionMiddleware) => {
       socket.join(roomId);
       socket['nickname'] = nickname;
 
-      // TODO: roomId에 해당하는 itemList 요청 to Spring
-      // GET /api/v1/auctions/{auctionId}/items
+      http.get(`/api/v1/auctions/${roomId}/items`).then(itemList => {
+        io.to(roomId).emit('init', itemList);
+      });
     });
 
     socket.on('leaveRoom', ({ roomId }) => {
       if (socket.id === roomOwners[`${roomId}`]) {
         console.log(socket.adapter.rooms.get(roomId)); // room의 참여자 socket.id
         io.to(roomId).emit('roomClosed');
-        // TODO: roomId 방 종료됐다고 알려줌 to Spring
       } else {
         socket.leave(roomId);
         io.to(roomId).emit('chat', { nickname: 'System', msg: `${socket.nickname} 퇴장` });

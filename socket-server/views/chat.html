@@ -90,6 +90,21 @@
       messageList.appendChild(messageTag);
     });
 
+    socket.on('init', data => {
+      console.log(data);
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = ` ${data}`;
+      messageList.appendChild(messageTag);
+    });
+
+    socket.on('redis-update', msg => {
+      var messageList = document.getElementById('messages');
+      var messageTag = document.createElement('li');
+      messageTag.innerText = msg;
+      messageList.appendChild(messageTag);
+    });
+
     function enterRoom() {
       nickname = document.getElementById('nickname').value;
       roomId = document.getElementById('roomId').value;
