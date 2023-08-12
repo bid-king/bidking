@@ -24,7 +24,8 @@ export function NavBarModal({ theme = 'light' }: Props) {
       member
         .logout(accessToken)
         .then(() => {
-          dispatch(setUserInformation({ id: null, accessToken: '', isLogined: false, nickname: '' }));
+          const logOutState = { id: null, accessToken: '', isLogined: false, nickname: '', refreshToken: '' };
+          dispatch(setUserInformation(logOutState));
           navigate('/');
         })
         .catch(err => {

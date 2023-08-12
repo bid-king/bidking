@@ -5,6 +5,7 @@ interface UserState {
   isLogined: boolean;
   accessToken: string;
   nickname: string;
+  refreshToken: string;
 }
 
 const initialState: UserState = {
@@ -12,6 +13,7 @@ const initialState: UserState = {
   isLogined: false,
   accessToken: '',
   nickname: '',
+  refreshToken: '',
 };
 
 export const user = createSlice({
@@ -23,6 +25,7 @@ export const user = createSlice({
       state.accessToken = action.payload.accessToken;
       state.id = action.payload.id;
       state.nickname = action.payload.nickname;
+      state.refreshToken = action.payload.refreshToken;
     },
   },
 });
