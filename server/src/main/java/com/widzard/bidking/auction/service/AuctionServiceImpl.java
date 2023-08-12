@@ -1,9 +1,9 @@
 package com.widzard.bidking.auction.service;
 
-import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.alarm.entity.AlarmType;
 import com.widzard.bidking.alarm.entity.Content;
 import com.widzard.bidking.alarm.service.AlarmService;
+import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
@@ -12,6 +12,7 @@ import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
+import com.widzard.bidking.auction.exception.AuctionRoomNotStartedException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.exception.ImageNotSufficientException;
 import com.widzard.bidking.auction.exception.UnauthorizedAuctionRoomAccessException;
@@ -35,7 +36,6 @@ import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
 import com.widzard.bidking.orderItem.entity.OrderItem;
 import com.widzard.bidking.orderItem.repository.OrderItemRepository;
-import java.awt.print.Book;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -384,7 +384,7 @@ public class AuctionServiceImpl implements AuctionService {
         if (auctionRoom.getSeller().getId() != member.getId()) {
             isSeller = false;
             if (!auctionRoom.getAuctionRoomLiveState().equals(AuctionRoomLiveState.ON_LIVE)) {
-                throw new RuntimeException("아직 판매자가 시작하지 않은 경매방입니다.");
+                throw new AuctionRoomNotStartedException();
             }
         } else {
             auctionRoom.validateLive();
