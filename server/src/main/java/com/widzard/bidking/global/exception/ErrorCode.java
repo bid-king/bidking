@@ -44,7 +44,7 @@ public enum ErrorCode {
         "경매방이 존재하지 않습니다."),
     UNAUTHORIZED_AUCTIONROOM_ACCESS(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_AUCTIONROOM_ACCESS",
         "경매방 접근 권한이 없습니다."),
-    AUCTION_ROOM_NOT_STARTED(HttpStatus.UNAUTHORIZED, "AUCTION_ROOM_NOT_STARTED",
+    AUCTION_ROOM_NOT_STARTED(HttpStatus.BAD_REQUEST, "AUCTION_ROOM_NOT_STARTED",
         "아직 판매자가 시작하지 않은 경매방입니다."),
     /*
      * Item
