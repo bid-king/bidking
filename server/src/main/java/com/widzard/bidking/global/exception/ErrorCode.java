@@ -47,6 +47,11 @@ public enum ErrorCode {
     AUCTION_ROOM_NOT_STARTED(HttpStatus.BAD_REQUEST, "AUCTION_ROOM_NOT_STARTED",
         "아직 판매자가 시작하지 않은 경매방입니다."),
     /*
+     * Bid
+     */
+    INVALID_BID_PRICE(HttpStatus.BAD_REQUEST, "AUCTION_ROOM_NOT_STARTED",
+        "현재 입찰가보다 더 높은 가격을 제시해야 합니다."),
+    /*
      * Item
      */
     Empty_Item_List(HttpStatus.NOT_FOUND, "EMPTY_ITEM_LIST", "아이템이 없습니다."),

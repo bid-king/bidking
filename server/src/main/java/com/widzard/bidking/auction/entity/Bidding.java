@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.entity;
 
 
+import com.widzard.bidking.auction.exception.InvalidBidPriceException;
 import com.widzard.bidking.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,7 +42,7 @@ public class Bidding extends BaseEntity {
 
     public void raisePrice(Long price) {
         if (this.price <= price) {
-            throw new RuntimeException("현재 입찰가보다 더 높은 가격을 제시해야 합니다.");
+            throw new InvalidBidPriceException();
         }
         this.price = price;
     }
