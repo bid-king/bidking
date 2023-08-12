@@ -122,7 +122,8 @@ export function MainBox() {
                     onClick={() => handleBookmark({ auctionRoomId: auction.id })}
                   />
                 )}
-                <Link to={`seller/detail/${auction.id}`}>
+
+                <Link to={isLogined ? `/detail/${auction.id}` : '/login'}>
                   <AuctionList
                     title={auction.name}
                     date={auctionDateParse(auction.startedAt)}
@@ -170,7 +171,7 @@ export function MainBox() {
                     onClick={() => handleBookmark({ auctionRoomId: auction.id })}
                   />
                 )}
-                <Link to={`detail/${auction.id}`}>
+                <Link to={isLogined ? `/detail/${auction.id}` : '/login'}>
                   <AuctionList
                     title={auction.name}
                     date={auctionDateParse(auction.startedAt)}

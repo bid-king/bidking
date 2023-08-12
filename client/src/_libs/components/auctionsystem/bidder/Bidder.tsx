@@ -1,15 +1,17 @@
 /** @jsxImportSource @emotion/react */
+import { keyframes } from '@emotion/react';
 import React, { useEffect } from 'react';
 import { HTMLAttributes } from 'react';
-import colors from '../../design/colors';
-import { Spacing } from '../common/Spacing';
-import { Text } from '../common/Text';
+import colors from '../../../design/colors';
+import { Spacing } from '../../common/Spacing';
+import { Text } from '../../common/Text';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme: 'dark' | 'light';
+  bidder: string;
 }
-export function TopBidder({ theme = 'light' }: Props) {
-  useEffect(() => {}, []);
+
+export function Bidder({ theme = 'light', bidder = '김성용' }: Props) {
   return (
     <div
       css={{
@@ -18,15 +20,10 @@ export function TopBidder({ theme = 'light' }: Props) {
         ...THEME_VARIANT[theme],
       }}
     >
-      <div
-        css={
-          {
-            /* 값 바뀌면 애니메이션 */
-          }
-        }
-      >
+      <div>
         <Text content="최고 입찰" />
-        <Text type="h2" content={'이연우'} />
+        <Spacing rem="0.5" />
+        <Text type="h2" content={bidder} />
       </div>
     </div>
   );

@@ -6,20 +6,20 @@ import { store } from '../../store/store';
 
 export function useSocket(roomId: number, nickname: string) {
   const socket = useRef<Socket | null>(null);
-  const API = useRef<SocketAPI | null>(null);
   const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
 
   useEffect(() => {
     socket.current = io('http://localhost:8005', {
       withCredentials: true,
     });
-    const SOCKET_API = live(socket.current);
 
-    SOCKET_API.req.connect(roomId, nickname);
+    const SOCKET_API = live(socket.current);
+    SOCKET_API.send.connect(roomId, nickname);
 
     return () => {
-      SOCKET_API.req.leave(roomId, nickname);
+      SOCKET_API.send.leave(roomId, nickname);
     }; //unmount시 채팅방 나갑니다
   }, [roomId, nickname]);
-  return { SOCKET: socket, API, error: socketConnectionErr };
+
+  return { SOCKET: socket, error: socketConnectionErr };
 }

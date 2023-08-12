@@ -24,19 +24,19 @@ const FONT_TYPE = {
   },
   h1: {
     fontWeight: '600',
-    fontSize: '1.75rem',
+    fontSize: '1.5rem',
   },
   h2: {
     fontWeight: '700',
-    fontSize: '1.5rem',
+    fontSize: '1.25rem',
   },
   h3: {
     fontWeight: '700',
-    fontSize: '1.25rem',
+    fontSize: '1rem',
   },
   p: {
     fontWeight: '400',
-    fontSize: '1rem',
+    fontSize: '0.9rem',
   },
 };
 

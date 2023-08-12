@@ -58,14 +58,14 @@ const COLOR_VARIANTS = {
 
 const SIZE_VARIANT = {
   small: {
-    height: '2rem',
-    padding: '0 1rem 0 1rem',
+    height: '1.75rem',
+    padding: '0 0.75rem 0 0.75rem',
     fontSize: '0.9rem',
   },
   large: {
-    height: '3rem',
-    padding: '0 1.5rem 0 1.5rem',
-    fontSize: '1.1rem',
+    height: '2.25rem',
+    padding: '0 1.15rem 0 1.15rem',
+    fontSize: '0.95rem',
   },
 };
 

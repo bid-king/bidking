@@ -50,12 +50,14 @@ public class SecurityConfig {
                 "/api/v1/members/signup",
                 "/api/v1/items/categories",
                 "/api/v1/auctions/**/items",
-                "api/v1/refresh",
+                "/api/v1/auctions",
+                "/api/v1/auctions/status",
+                "/api/v1/auctions/bookmarks/count",
+                "/api/v1/refresh",
                 "/redisTest/**",
                 "/api/v1/alarms/**",
                 "/api/v1/auctions/bid/**"
             ).permitAll()
-            .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -83,6 +85,5 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 }

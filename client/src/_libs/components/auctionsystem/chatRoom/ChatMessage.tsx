@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 import { HTMLAttributes } from 'react';
-import { Text } from '../common/Text';
-import colors from '../../design/colors';
-import { Spacing } from '../common/Spacing';
+import { Text } from '../../common/Text';
+import colors from '../../../design/colors';
+import { Spacing } from '../../common/Spacing';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   type?: 'normal' | 'notice';

@@ -5,7 +5,7 @@ export function enter(auctionId: number, token: string) {
 }
 export function live(ws: Socket | null) {
   return {
-    req: {
+    send: {
       connect: (roomId: number, nickname: string) => ws?.emit('enterRoom', { nickname, roomId }),
       chat: (roomId: number, nickname: string, msg: string) => ws?.emit('chat', { nickname, roomId, msg }),
       leave: (roomId: number, nickname: string) => {
@@ -14,7 +14,15 @@ export function live(ws: Socket | null) {
       },
       notice: (roomId: number, msg: string) => ws?.emit('notice', { roomId, msg }),
     },
-    res: {
+    receive: {
+      init: () => {
+        //초기화
+        let initData = {};
+        ws?.on('init', data => {
+          initData = { ...data };
+        });
+        return initData;
+      },
       chat: () => {
         //채팅 수신
         const chat = { nickname: '', msg: '' };
@@ -85,13 +93,6 @@ export interface AuctionEnterResponse {
   title: string;
   auctionRoomId: number;
   currentItemId: number;
-  itemList: Array<{
-    itemId: number;
-    imageUrl: string;
-    name: string;
-    description: string;
-    startPrice: number;
-  }>;
 }
 
 export interface SocketAPI {
@@ -111,3 +112,12 @@ export interface SocketAPI {
     start: () => string;
   };
 }
+export interface LiveItem {
+  itemImg: string;
+  itemId: number;
+  name: string;
+  status: 'before' | 'in' | 'fail' | 'complete' | 'dummy';
+  desc: string;
+  startPrice: number;
+}
+export type liveItemList = Array<LiveItem>;

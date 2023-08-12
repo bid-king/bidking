@@ -5,11 +5,6 @@ import { setUserInformation } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { ROOT } from '../util/http';
 
-type AlarmEvent = {
-  content: string;
-  alarmType: string;
-};
-
 export function useLogin() {
   const dispatch = useAppDispatch();
 
@@ -35,7 +30,13 @@ export function useLogin() {
         .login(userId, password)
         .then(res => {
           dispatch(
-            setUserInformation({ id: res.id, accessToken: res.accessToken, isLogined: true, nickname: res.nickname })
+            setUserInformation({
+              id: res.id,
+              accessToken: res.accessToken,
+              isLogined: true,
+              nickname: res.nickname,
+              refreshToken: res.refreshToken,
+            })
           );
           navigate('/');
         })

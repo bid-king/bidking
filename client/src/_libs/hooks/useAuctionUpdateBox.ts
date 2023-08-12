@@ -133,7 +133,7 @@ export function useAuctionUpdateBox() {
 
   useEffect(() => {
     auction
-      .get(auctionId)
+      .get(auctionId, token)
       .then(data => {
         setDetail(data);
         dispatch(setAuctionTitle(data.name));

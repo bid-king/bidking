@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const ejs = require('ejs');
+const redisSub = require('./config/pubsub');
 
 dotenv.config();
 const redis = require('./config/redis');
@@ -69,3 +70,4 @@ const server = app.listen(app.get('port'), () => {
 });
 
 webSocket(server, app, sessionMiddleware);
+redisSub(app);

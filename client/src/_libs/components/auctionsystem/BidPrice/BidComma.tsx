@@ -6,15 +6,15 @@ export function BidComma() {
     <div
       css={{
         // border: '1px solid black',
-        width: '0.65rem',
-        height: '2.5rem',
+        width: '0.6rem',
+        height: '2rem',
         textAlign: 'center',
         fontWeight: '600',
         fontFeatureSettings: '"tnum"',
-        fontSize: '2.25rem',
+        fontSize: '2rem',
         overflow: 'hidden',
         position: 'relative',
-        lineHeight: '2.5rem',
+        lineHeight: '1.75rem',
       }}
     >
       <div css={{ height: '10em', position: 'absolute', left: '-0.05rem' }}>
