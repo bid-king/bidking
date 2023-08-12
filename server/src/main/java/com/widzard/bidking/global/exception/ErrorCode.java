@@ -44,6 +44,8 @@ public enum ErrorCode {
         "경매방이 존재하지 않습니다."),
     UNAUTHORIZED_AUCTIONROOM_ACCESS(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_AUCTIONROOM_ACCESS",
         "경매방 접근 권한이 없습니다."),
+    AUCTION_ROOM_NOT_STARTED(HttpStatus.UNAUTHORIZED, "AUCTION_ROOM_NOT_STARTED",
+        "아직 판매자가 시작하지 않은 경매방입니다."),
     /*
      * Item
      */
@@ -64,9 +66,10 @@ public enum ErrorCode {
     /*
      *  Alarm
      */
-    ALARM_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "ALARM_NOT_FOUND_EXCEPTION","해당하는 알림이 존재하지 않습니다."),
-    CLIENT_CONNECTION_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR,"CLIENT_CONNECTION_EXCEPTION","클라이언트에게 알림을 보낼 수 없습니다.")
-    ;
+    ALARM_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "ALARM_NOT_FOUND_EXCEPTION",
+        "해당하는 알림이 존재하지 않습니다."),
+    CLIENT_CONNECTION_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "CLIENT_CONNECTION_EXCEPTION",
+        "클라이언트에게 알림을 보낼 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;
