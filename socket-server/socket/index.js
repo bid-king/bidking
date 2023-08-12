@@ -9,7 +9,7 @@ module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, {
     path: '/socket.io',
     cors: {
-      origin: 'http://localhost:3000',
+      origin: process.env.NODE_APP_CLIENT_ROOT,
       credentials: true,
     },
   });
@@ -57,11 +57,11 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on('start', async ({ roomId }) => {
       const redisCli = app.get('redisCli');
-
       const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
       const price = await getRedis(redisCli, `auction:${roomId}:onLiveItem:currentPrice`);
 
       io.to(`${roomId}`).emit('start', { itemId, price });
+
       startCountdownTimer(app, roomId);
     });
 
