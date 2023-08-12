@@ -62,7 +62,7 @@ const ICON_URL = {
 };
 interface Props extends HTMLAttributes<HTMLDivElement> {
   color: 'light' | 'dark' | 'black' | 'white' | 'lightgrey' | 'confirm' | 'warn' | 'progress' | 'ok';
-  rem?: '1' | '1.25' | '1.5' | '2' | '3';
+  rem?: string;
   type:
     | 'arrowRight'
     | 'check'

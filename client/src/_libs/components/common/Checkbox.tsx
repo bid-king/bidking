@@ -13,10 +13,10 @@ export function Checkbox({ theme, id, value, onChange }: Props) {
       css={{
         appearance: 'none',
         cursor: 'pointer',
-        width: '1.25rem',
-        height: '1.25rem',
+        width: '1.15rem',
+        height: '1.15rem',
         border: `1px solid ${colors.confirm}`,
-        borderRadius: '0.35rem',
+        borderRadius: '0.3rem',
         '&:checked': {
           backgroundImage: 'url("/image/check.svg")',
           backgroundPosition: 'center center',

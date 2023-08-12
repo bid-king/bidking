@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent } from 'react';
 import colors from '../../design/colors';
 import { HTMLAttributes } from 'react';
 
@@ -12,6 +12,7 @@ interface Props extends HTMLAttributes<HTMLInputElement> {
   placeholder: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
@@ -25,6 +26,7 @@ export function Input({
   value,
   onChange,
   onBlur,
+  onKeyDown,
 }: Props) {
   return (
     <input
@@ -44,6 +46,7 @@ export function Input({
       }}
       onChange={onChange}
       onBlur={onBlur}
+      onKeyDown={onKeyDown}
     />
   );
 }
@@ -67,17 +70,17 @@ const SHAPE_VARIENT = {
     borderRadius: '3rem',
   },
   square: {
-    borderRadius: '1rem',
+    borderRadius: '0.85rem',
   },
 };
 
 const SIZE_VARIENT = {
   small: {
-    height: '2rem',
-    fontSize: '0.9rem',
+    height: '1.75rem',
+    fontSize: '0.85rem',
   },
   large: {
-    height: '3rem',
-    fontSize: '1.1rem',
+    height: '2.25rem',
+    fontSize: '0.95rem',
   },
 };

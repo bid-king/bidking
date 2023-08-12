@@ -5,8 +5,8 @@ import { useOpenviduSeller } from '../../hooks/useOpenviduSeller';
 import { useStream } from '../../hooks/useStream';
 import { Text } from '../common/Text';
 
-export function SellerStream({ auctionId, userId, userType = 'seller' }: Props) {
-  // const { publisher, onChangeCameraStatus, onChangeMicStatus } = useOpenviduSeller(userId, roomId);
+export function SellerStream({ auctionRoomId, userId, userType = 'seller' }: Props) {
+  // const { publisher, onChangeCameraStatus, onChangeMicStatus } = useOpenviduSeller(userId, auctionRoomId);
   // const { speaking, micStatus, videoStatus, videoRef } = useStream(publisher || undefined);
 
   // useEffect(() => {
@@ -56,7 +56,7 @@ export function SellerStream({ auctionId, userId, userType = 'seller' }: Props) 
 }
 
 interface Props {
-  auctionId: number;
+  auctionRoomId: number;
   userId: number;
   userType: 'seller';
 }

@@ -22,7 +22,7 @@ export function TextArea({
       value={value}
       css={{
         fontFamily: 'Pretendard',
-        fontSize: '1rem',
+        fontSize: '0.95rem',
         lineHeight: '1.6',
         width: '100%',
         height: '12rem',
