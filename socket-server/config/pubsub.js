@@ -11,9 +11,16 @@ module.exports = app => {
   const subscriber = redis.createClient();
   const io = app.get('io');
 
+  subscriber.subscribe('StartAuctionItem');
   subscriber.subscribe('UpdateAuctionPrice');
 
   subscriber.on('message', (channel, message) => {
+    if (channel === 'StartAuctionItem') {
+      const [roomId, itemId, price] = message.split(':');
+      console.log(`AuctionRoom ${roomId}의 Item ${itemId}가 ${price}원부터 시작`);
+      io.to(`${roomId}`).emit('next', { itemId, price });
+    }
+
     if (channel === 'UpdateAuctionPrice') {
       const [roomId, itemId, userId, nickname, price, time] = message.split(':');
       console.log(

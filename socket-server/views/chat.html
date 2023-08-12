@@ -76,10 +76,10 @@
       messageList.appendChild(messageTag);
     });
 
-    socket.on('next', item => {
+    socket.on('next', ({ itemId, price }) => {
       var messageList = document.getElementById('messages');
       var messageTag = document.createElement('li');
-      messageTag.innerText = ` ${item.itemName} 경매 설명 시작!`;
+      messageTag.innerText = `Item ${itemId} 경매 설명 시작! from ${price}원`;
       messageList.appendChild(messageTag);
     });
 
