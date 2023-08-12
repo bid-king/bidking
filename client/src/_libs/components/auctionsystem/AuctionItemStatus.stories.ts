@@ -97,5 +97,6 @@ export const Primary: Story = {
       },
     ],
     currentItemId: 3,
+    order: 2,
   },
 };

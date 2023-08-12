@@ -32,7 +32,7 @@ export function Live() {
               nickname={nickname}
               auctionRoomType={auctionRoomType}
               title={title}
-              type="order"
+              userType="order"
             />
           </div>
         </div>
@@ -44,7 +44,7 @@ export function Live() {
             userType="order"
           />
           <Spacing rem="0.5" />
-          <AuctionNotice userType="order" socket={SOCKET} />
+          <AuctionNotice auctionRoomId={auctionRoomId} userType="order" socket={SOCKET} />
         </div>
       </div>
       <div
@@ -55,7 +55,13 @@ export function Live() {
           padding: '0 0.5rem 0.5rem 0.25rem',
         }}
       >
-        <AuctionSystem nickname={nickname} auctionRoomId={auctionRoomId} theme="light" socket={SOCKET} />
+        <AuctionSystem
+          userType="order"
+          nickname={nickname}
+          auctionRoomId={auctionRoomId}
+          theme="light"
+          socket={SOCKET}
+        />
       </div>
     </div>
   );

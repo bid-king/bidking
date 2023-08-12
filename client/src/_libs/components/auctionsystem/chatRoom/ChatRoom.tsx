@@ -29,7 +29,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
 
   useEffect(() => {
     return () => {
-      live(socket.current).req.leave(roomId, nickname);
+      live(socket.current).send.leave(roomId, nickname);
     };
   }, []);
   return (
@@ -70,7 +70,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
               onSubmit={e => {
                 e.preventDefault();
                 setIsLoading(true);
-                if (isLoading && input.length > 0) live(socket.current).req.chat(roomId, nickname, input);
+                if (isLoading && input.length > 0) live(socket.current).send.chat(roomId, nickname, input);
                 setIsLoading(false);
               }}
             >
@@ -90,7 +90,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   background="confirm"
                   size="small"
                   onClick={e => {
-                    live(socket.current).req.chat(roomId, nickname, input);
+                    live(socket.current).send.chat(roomId, nickname, input);
                     setInput('');
                   }}
                 />

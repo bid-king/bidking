@@ -26,7 +26,7 @@ export function SellerLive() {
         <div css={{ display: 'flex', position: 'fixed', bottom: '1rem', width: 'calc(100vw - 22.5rem)' }}>
           <div>
             <AuctionHeader
-              type="seller"
+              userType="seller"
               theme="dark"
               nickname={nickname}
               auctionRoomType={auctionRoomType}
@@ -37,7 +37,7 @@ export function SellerLive() {
         <div css={{ width: '100%', height: '100%' }}>
           <SellerStream auctionRoomId={auctionRoomId} userId={userId} userType={userType} />
           <Spacing rem="0.5" />
-          <AuctionNotice userType="seller" socket={SOCKET} />
+          <AuctionNotice auctionRoomId={auctionRoomId} userType="seller" socket={SOCKET} />
         </div>
       </div>
       <div
@@ -48,7 +48,13 @@ export function SellerLive() {
           padding: '0 0.5rem 0.5rem 0.25rem',
         }}
       >
-        <AuctionSystem nickname={nickname} auctionRoomId={auctionRoomId} theme="dark" socket={SOCKET} />
+        <AuctionSystem
+          userType="seller"
+          nickname={nickname}
+          auctionRoomId={auctionRoomId}
+          theme="dark"
+          socket={SOCKET}
+        />
       </div>
     </div>
   );

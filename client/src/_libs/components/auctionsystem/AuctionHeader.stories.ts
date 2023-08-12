@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    type: 'order',
+    userType: 'order',
     theme: 'dark',
     nickname: '김성용',
     auctionRoomType: 'REVERSE',

@@ -8,16 +8,9 @@ import { Text } from '../../common/Text';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme: 'dark' | 'light';
-  socket: MutableRefObject<Socket | null>;
+  time: number;
 }
-export function Timer({ theme = 'light', socket }: Props) {
-  const [time, setTime] = useState<number>(10);
-  useEffect(() => {
-    socket.current?.on('time', data => {
-      setTime(data);
-    });
-  }, [time]);
-
+export function Timer({ theme = 'light', time }: Props) {
   return (
     <div
       css={{
@@ -26,12 +19,8 @@ export function Timer({ theme = 'light', socket }: Props) {
         ...THEME_VARIANT[theme],
       }}
     >
-      <div css={{}}>
-        <Text type="bold" content="남은 시간" />
-        <Spacing rem="0.25" />
-        <Text type="h2" content={time + '초'} />
-      </div>
-      <Spacing rem="0.5" />
+      <Text type="bold" content={`남은 시간 ${time + '초'}`} />
+      <Spacing rem="0.25" />
       <div
         css={{
           height: '0.35rem',
@@ -44,8 +33,8 @@ export function Timer({ theme = 'light', socket }: Props) {
             width: `${10 * time}%`, //시간에 따른 동적 바인딩
             height: '0.35rem',
             borderRadius: '1rem',
-            backgroundColor: colors.ok, //시간에 따른 동적 바인딩
-            transition: 'width 1s ease-out',
+            backgroundColor: `${time >= 5 ? colors.ok : time < 3 ? colors.confirm : colors.warn}`, //시간에 따른 동적 바인딩
+            transition: 'width 1s',
           }}
         />
       </div>
