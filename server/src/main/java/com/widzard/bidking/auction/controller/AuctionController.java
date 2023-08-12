@@ -169,13 +169,29 @@ public class AuctionController {
         return new ResponseEntity<>(auctionRoomSellerResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/{auctionId}/item/{itemId}/bid-start")
+    /*
+     * 상품 경매 시작
+     */
+    @PostMapping("/bid/{auctionId}/items/{itemId}/start")
     public ResponseEntity<String> startBidding(
         @AuthenticationPrincipal Member member,
         @PathVariable("auctionId") Long auctionId,
         @PathVariable("itemId") Long itemId
     ) {
         startBiddingFacade.startBidding(member, auctionId, itemId);
+        return new ResponseEntity<>(
+            null,
+            HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/bid/{auctionId}/items/{itemId}/test")
+    public ResponseEntity<String> startBiddingTest(
+        @AuthenticationPrincipal Member member,
+        @PathVariable("auctionId") Long auctionId,
+        @PathVariable("itemId") Long itemId
+    ) {
+        startBiddingFacade.test(member, auctionId, itemId);
         return new ResponseEntity<>(
             null,
             HttpStatus.OK
@@ -207,7 +223,6 @@ public class AuctionController {
     public ResponseEntity<AuctionRoomEnterItemsResponse> getLiveAuctionItemList(
         @PathVariable("auctionId") Long auctionId
     ) {
-
         AuctionRoom auctionRoom = auctionService.getLiveAuctionItemList(auctionId);
         return new ResponseEntity<>(
             AuctionRoomEnterItemsResponse.from(auctionRoom),

@@ -52,7 +52,8 @@ public class SecurityConfig {
                 "/api/v1/auctions/**/items",
                 "api/v1/refresh",
                 "/redisTest/**",
-                "/api/v1/alarms/**"
+                "/api/v1/alarms/**",
+                "/api/v1/auctions/bid/**"
             ).permitAll()
             .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
             .anyRequest().authenticated()
