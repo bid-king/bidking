@@ -10,8 +10,8 @@ import { useSocket } from '../../_libs/hooks/useSocket';
 import { AuctionNotice } from '../../_libs/components/auctionSystem/chatRoom/AuctionNotice';
 
 export function Live() {
-  const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter();
-  const { SOCKET, error } = useSocket(auctionRoomId, nickname);
+  const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr, seller, SOCKET, error } =
+    useLiveEnter();
 
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>

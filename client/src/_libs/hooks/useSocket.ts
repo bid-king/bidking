@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client';
 import { live, SocketAPI } from '../../api/live';
 import { store } from '../../store/store';
 
-export function useSocket(roomId: number, nickname: string) {
+export function useSocket(roomId: number, nickname: string, seller: boolean) {
   const socket = useRef<Socket | null>(null);
   const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
 
@@ -14,7 +14,7 @@ export function useSocket(roomId: number, nickname: string) {
     });
 
     const SOCKET_API = live(socket.current);
-    SOCKET_API.send.connect(roomId, nickname);
+    SOCKET_API.send.connect(roomId, nickname, seller);
 
     return () => {
       SOCKET_API.send.leave(roomId, nickname);

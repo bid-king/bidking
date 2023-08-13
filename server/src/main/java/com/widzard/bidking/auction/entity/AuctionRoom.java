@@ -184,5 +184,11 @@ public class AuctionRoom extends BaseEntity {
             throw new AuctionRoomIsAlreadyStartedException();
         }
     }
+
+    public void TradeStart() {
+        if (this.auctionRoomTradeState == AuctionRoomTradeState.BEFORE_PROGRESS) {
+            this.auctionRoomTradeState = AuctionRoomTradeState.IN_PROGRESS;
+        }
+    }
 }
 

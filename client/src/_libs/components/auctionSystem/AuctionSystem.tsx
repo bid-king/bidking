@@ -36,13 +36,15 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
         <Spacing rem="1.5" />
         {userType === 'order' ? (
           <BiddingForm
+            auctionRoomId={auctionRoomId}
+            itemId={currId}
             theme={theme}
+            currPrice={currPrice}
             askingPrice={askingPriceParse(currPrice)}
             disable={disable}
-            onBid={() => alert('API')}
           />
         ) : (
-          <BidCtrl liveStatus={liveStatus} />
+          <BidCtrl liveStatus={liveStatus} auctionRoomId={auctionRoomId} itemId={currId} />
         )}
       </div>
       <Spacing rem="0.5" />
@@ -68,5 +70,5 @@ interface Props {
   nickname: string;
   auctionRoomId: number;
   socket: MutableRefObject<Socket | null>;
-  setNotice?: () => void;
+  setNotice?: () => Promise<unknown>;
 }

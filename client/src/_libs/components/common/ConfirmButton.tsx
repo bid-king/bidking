@@ -27,6 +27,11 @@ export function ConfirmButton({
         '&:hover': {
           filter: 'brightness(0.9)',
         },
+        '&:disabled': {
+          background: colors.disabled,
+          color: colors.grey,
+          cursor: 'not-allowed',
+        },
         ...BTN_TYPES[btnType],
       }}
     >

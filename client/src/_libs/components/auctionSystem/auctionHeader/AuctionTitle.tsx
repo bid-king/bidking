@@ -16,7 +16,7 @@ export function AuctionTitle({ theme, nickname, title, auctionRoomType }: Props)
           css={{
             padding: '0.2rem 1rem 0.2rem 1rem',
             borderRadius: '1.5rem',
-            backgroundColor: auctionRoomType === 'COMMON' ? colors.progress : colors.warn,
+            backgroundColor: auctionRoomType === 'common' ? colors.progress : colors.warn,
             color: colors.white,
           }}
         >
@@ -45,6 +45,6 @@ const THEME_VARIANT = {
 interface Props {
   theme: 'light' | 'dark';
   nickname: string;
-  auctionRoomType: 'COMMON' | 'REVERSE';
+  auctionRoomType: 'common' | 'reverse';
   title: string;
 }

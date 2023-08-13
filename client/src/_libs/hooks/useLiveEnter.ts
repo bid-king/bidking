@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { enter } from '../../api/live';
+import { io, Socket } from 'socket.io-client';
+import { enter, live } from '../../api/live';
 import { useAppSelector } from '../../store/hooks';
 import { store } from '../../store/store';
 
@@ -9,30 +10,60 @@ export function useLiveEnter() {
   const [auctionRoomId, setAuctionRoomId] = useState<number>(0);
   const [nickname, setNickname] = useState<string>('');
   const [title, setTitle] = useState<string>('');
-  const [auctionRoomType, setAuctionRoomType] = useState<'COMMON' | 'REVERSE'>('COMMON');
+  const [auctionRoomType, setAuctionRoomType] = useState<'common' | 'reverse'>('common');
   const [liveAuthErr, setLiveAuthErr] = useState<unknown>(null);
+  const [seller, setSeller] = useState<boolean>(false);
   const { accessToken } = useAppSelector(state => state.user);
-  const auctionId = useParams<string>();
+  const { auctionId } = useParams<string>();
+  const socket = useRef<Socket | null>(null);
+  const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
 
   useEffect(() => {
+    async function getRoomInfo() {
+      const isLogined = await store.getState().user.isLogined;
+      if (!isLogined) return;
+      else {
+        const uid = (await store.getState().user.id) || 0;
+        enter(Number(auctionId), accessToken)
+          .then(data => {
+            setUserId(uid);
+            setAuctionRoomId(data.auctionRoomId);
+            setNickname(data.nickname);
+            setSeller(data.seller);
+            setTitle(data.title);
+            setAuctionRoomType(data.auctionRoomType);
+          })
+          .catch(err => setLiveAuthErr(err));
+      }
+    }
+    async function connectSocket() {
+      socket.current = io('http://localhost:8005', {
+        withCredentials: true,
+      });
+      live(socket.current).send.connect(auctionRoomId, nickname, seller);
+    }
     try {
       (async () => {
-        const isLogined = await store.getState().user.isLogined;
-        if (!isLogined) return;
-        else {
-          const uid = (await store.getState().user.id) || 0;
-          const data = await enter(Number(auctionId), accessToken);
-          setUserId(uid);
-          setAuctionRoomId(data.auctionRoomId);
-          setNickname(data.nickname);
-          setTitle(data.title);
-          setAuctionRoomType(data.auctionRoomType);
-        }
+        await getRoomInfo();
+        await connectSocket();
       })();
     } catch (err) {
       setLiveAuthErr(err);
     }
+    return () => {
+      live(socket.current).send.leave(auctionRoomId, nickname);
+    }; //unmount시 채팅방 나갑니다
   }, [auctionId]);
 
-  return { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr };
+  return {
+    userId,
+    auctionRoomId,
+    auctionRoomType,
+    nickname,
+    title,
+    liveAuthErr,
+    seller,
+    SOCKET: socket,
+    error: socketConnectionErr,
+  };
 }

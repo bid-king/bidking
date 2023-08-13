@@ -38,6 +38,6 @@ interface Props {
   userType: 'order' | 'seller';
   theme: 'light' | 'dark';
   nickname: string;
-  auctionRoomType: 'COMMON' | 'REVERSE';
+  auctionRoomType: 'common' | 'reverse';
   title: string;
 }

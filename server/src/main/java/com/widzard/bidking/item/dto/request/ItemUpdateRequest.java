@@ -38,8 +38,5 @@ public class ItemUpdateRequest {
 
     private Boolean isChanged; // 이미지 수정 여부
 
-//    @NotNull(message = "이미지를 설정하세요")
-//    private ImageDto imageDto;
-
 //    private InvoiceDto invoice; //TODO invoice 구현 후
 }

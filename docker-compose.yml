@@ -3,8 +3,7 @@ version: '3'
 services:
   redis-server:
     image: redis
-    # command: ['redis-server', '--bind', 'redis', '--port', '6379']
-    container_name: redis
+    hostname: redis
     ports:
       - '6379:6379'
 
@@ -28,6 +27,8 @@ services:
       - ./server:/app
     ports:
       - '5000:5000'
+    depends_on:
+      - 'redis-server'
 
   nodejs:
     image: dajeongyun/docker-nodejs-server

@@ -11,7 +11,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   bidder: string;
 }
 
-export function Bidder({ theme = 'light', bidder = '김성용' }: Props) {
+export function Bidder({ theme = 'light', bidder }: Props) {
   return (
     <div
       css={{
