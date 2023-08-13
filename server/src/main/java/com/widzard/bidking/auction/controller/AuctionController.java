@@ -1,5 +1,6 @@
 package com.widzard.bidking.auction.controller;
 
+import com.widzard.bidking.alarm.service.AlarmService;
 import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
@@ -43,6 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuctionController {
 
     private final AuctionService auctionService;
+    private final AlarmService alarmService;
 
     @GetMapping
     public ResponseEntity<List<AuctionResponse>> readAuctionList(
@@ -107,6 +109,8 @@ public class AuctionController {
     ) throws IOException {
         AuctionRoom auctionRoom = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImgs);
+
+        alarmService.sendAuctionCreateToSeller(member);
         return new ResponseEntity<>(AuctionCreateResponse.from(auctionRoom), HttpStatus.OK);
     }
 
@@ -129,6 +133,8 @@ public class AuctionController {
     ) throws IOException {
         auctionService.updateAuctionRoom(member, auctionId, auctionUpdateRequest, auctionRoomImg,
             itemImgs);
+
+        alarmService.sendAuctionUpdateToBookmarkMember(auctionId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -138,6 +144,8 @@ public class AuctionController {
         @PathVariable Long auctionId
     ) {
         auctionService.deleteAuctionRoom(member, auctionId);
+
+        alarmService.sendAuctionDeleteToBookmarkMember(auctionId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
