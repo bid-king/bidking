@@ -1,8 +1,5 @@
 package com.widzard.bidking.auction.service;
 
-import com.widzard.bidking.alarm.entity.AlarmType;
-import com.widzard.bidking.alarm.entity.Content;
-import com.widzard.bidking.alarm.service.AlarmService;
 import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
@@ -34,8 +31,8 @@ import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
-import com.widzard.bidking.orderItem.entity.OrderItem;
-import com.widzard.bidking.orderItem.repository.OrderItemRepository;
+import com.widzard.bidking.order.entity.OrderItem;
+import com.widzard.bidking.order.repository.OrderItemRepository;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
