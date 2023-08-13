@@ -4,16 +4,16 @@ import { live, LiveItem, liveItemList } from '../../api/live';
 import { arrayPadding } from '../util/arrayPadding';
 import { DUMMY } from '../components/auctionSystem/auctionItemList/AuctionItemStatus';
 
-const [order, setOrder] = useState<number>(2); //순서, 2부터 시작함
-const [currPrice, setCurrPrice] = useState<number>(0); //현재 최고 입찰가 (입찰성공시 업데이트)
-const [topbidder, setTopBidder] = useState<string>('기맨'); //현재 최고 입찰자
-const [currId, setCurrId] = useState<number>(0); //현재 진행중인 아이템
-const [itemList, setItemList] = useState<liveItemList | undefined>(undefined); //전체 아이템리스트
-const [disable, setDisable] = useState<boolean>(true); //입찰 대기 시간동안 버튼이 눌리지 않는 상태
-const [currTime, setCurrTime] = useState<number>(10); //남은 시간
-const [liveStatus, setLiveStatus] = useState<string>('');
-
 export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
+  const [order, setOrder] = useState<number>(2); //순서, 2부터 시작함
+  const [currPrice, setCurrPrice] = useState<number>(0); //현재 최고 입찰가 (입찰성공시 업데이트)
+  const [topbidder, setTopBidder] = useState<string>('기맨'); //현재 최고 입찰자
+  const [currId, setCurrId] = useState<number>(0); //현재 진행중인 아이템
+  const [itemList, setItemList] = useState<liveItemList | undefined>(undefined); //전체 아이템리스트
+  const [disable, setDisable] = useState<boolean>(true); //입찰 대기 시간동안 버튼이 눌리지 않는 상태
+  const [currTime, setCurrTime] = useState<number>(10); //남은 시간
+  const [liveStatus, setLiveStatus] = useState<string>('');
+
   useEffect(() => {
     socket.current?.on('init', ({ currentItemId, itemList }) => {
       const adjusted = arrayPadding(itemList, DUMMY, 2);
