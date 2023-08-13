@@ -18,7 +18,7 @@ export function useLiveEnter() {
     try {
       (async () => {
         const isLogined = await store.getState().user.isLogined;
-        if (!isLogined) throw new Error('403');
+        if (!isLogined) return;
         else {
           const uid = (await store.getState().user.id) || 0;
           const data = await enter(Number(auctionId), accessToken);
