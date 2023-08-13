@@ -38,10 +38,10 @@ export function AppRouter() {
         <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
         <Route path="/seller/detail/complete/:auctionId" element={<SellerDetailOffLive />} />
         <Route path="/seller" element={<Seller />}></Route>
-        <Route path="/seller/auction/:auctionId" element={<SellerLive />} />
       </Route>
 
       {/* 네브바가 안들어가는 페이지 및 판매페이지 */}
+      <Route path="/seller/auction/:auctionId" element={<SellerLive />} />
     </Routes>
   );
 }

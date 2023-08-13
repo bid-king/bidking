@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes, memo } from 'react';
 
-export function Spacing({ rem = '1', dir = 'v' }: Props) {
+export const Spacing = memo(function Spacing({ rem = '1', dir = 'v' }: Props) {
   return (
     <div
       css={{
@@ -10,7 +10,7 @@ export function Spacing({ rem = '1', dir = 'v' }: Props) {
       }}
     />
   );
-}
+});
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   rem: '0.25' | '0.5' | '1' | '1.5' | '2' | '3' | '4' | '5';

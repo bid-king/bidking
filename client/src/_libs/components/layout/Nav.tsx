@@ -143,28 +143,27 @@ export function Nav({ theme = 'light' }: Props) {
           {isLogined && (
             <>
               {theme === 'light' && (
-                <Link to={'/seller'}>
-                  <RoundButton label="판매" size="small" color="white" />
-                </Link>
+                <div>
+                  <Link to={'/seller'}>
+                    <RoundButton label="판매" size="small" color="white" />
+                  </Link>
+                  <Spacing rem="0.5" dir="h" />
+                  <Link css={{}} to={`/purchased/${id}`}>
+                    <RoundButton label="내 경매" size="small" color="white" />
+                  </Link>
+                </div>
               )}
               {theme === 'dark' && (
-                <Link to={'/seller/create-auction'}>
-                  <RoundButton label="경매방 생성" size="small" color="white" />
-                </Link>
+                <div>
+                  <Link to={'/seller/create-auction'}>
+                    <RoundButton label="경매방 생성" size="small" color="white" />
+                  </Link>
+                  <Spacing rem="0.5" dir="h" />
+                </div>
               )}
-              <Spacing rem="0.5" dir="h" />
-              {theme === 'dark' && (
-                <Link to={'/'}>
-                  <RoundButton label="구매" size="small" color="white" />
-                </Link>
-              )}
-              <Spacing rem="0.5" dir="h" />
-              <Link css={{}} to={`/purchased/${id}`}>
-                <RoundButton label="내 경매" size="small" color="white" />
-              </Link>
               <Spacing rem="2" dir="h" />
               <div onMouseEnter={handleAlarmMouseEnter} onMouseLeave={handleAlarmMouseLeave}>
-                <Icon type="noti" color="black" rem="1.5" />
+                <Icon type="noti" color={theme} rem="1.5" />
               </div>
               <Spacing rem="1" dir="h" />
               <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>

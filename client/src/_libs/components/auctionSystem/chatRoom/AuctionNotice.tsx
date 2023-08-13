@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import React, { HTMLAttributes, MutableRefObject, useEffect, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import colors from '../../design/colors';
-import { Text } from '../../components/common/Text';
-import { Input } from '../common/Input';
-import { Spacing } from '../common/Spacing';
-import { live, liveItemList } from '../../../api/live';
+import colors from '../../../design/colors';
+import { Text } from '../../common/Text';
+import { Input } from '../../common/Input';
+import { Spacing } from '../../common/Spacing';
+import { live, liveItemList } from '../../../../api/live';
+import { RoundButton } from '../../common/RoundButton';
 
 export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
   const [itemList, setItemList] = useState<liveItemList | undefined>(undefined);
@@ -48,9 +49,28 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
           <form
             onSubmit={e => {
               e.preventDefault();
+              live(socket.current).send.notice(auctionRoomId, notice);
+              setNotice('');
             }}
           >
-            <Input placeholder="공지를 입력하세요." size="small" theme="dark" shape="square" />
+            <Input
+              placeholder="공지를 입력하세요."
+              size="large"
+              theme="dark"
+              shape="square"
+              value={notice}
+              onChange={e => setNotice(e.target.value)}
+            />
+            <RoundButton
+              type="button"
+              size="large"
+              color="confirm"
+              label="공지"
+              onClick={() => {
+                live(socket.current).send.notice(auctionRoomId, notice);
+                setNotice('');
+              }}
+            />
           </form>
         </div>
       )}

@@ -1,13 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import React, { HTMLAttributes, useState } from 'react';
-import colors from '../../design/colors';
-import { Text } from '../../components/common/Text';
-import { Input } from '../common/Input';
-import itemState from '../../constants/itemState';
-import { Spacing } from '../common/Spacing';
-import { bidPriceParse } from '../../util/bidPriceParse';
-import { LiveItem, liveItemList } from '../../../api/live';
-import { Item } from '../../../api/auction';
+import colors from '../../../design/colors';
+import { Text } from '../../../components/common/Text';
+
+import { Spacing } from '../../common/Spacing';
+import { bidPriceParse } from '../../../util/bidPriceParse';
+import { LiveItem, liveItemList } from '../../../../api/live';
+import { Item } from '../../../../api/auction';
 import { AuctionItem } from './AuctionItem';
 
 export function AuctionItemStatus({
@@ -112,8 +111,7 @@ export function AuctionItemStatus({
     >
       <div css={{ width: '100%', padding: '0 1rem 0 1rem', ...THEME_VARIANT[theme] }}>
         <div css={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {itemList?.map((item, idx, arr) => {
-            console.log(arr);
+          {itemList?.map((item, idx) => {
             if (idx >= order - 2 && idx <= order + 2) return <AuctionItem item={item} idx={idx} key={idx} />;
           })}
         </div>

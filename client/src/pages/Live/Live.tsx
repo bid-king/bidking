@@ -1,25 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { ChatRoom } from '../../_libs/components/auctionsystem/chatRoom/ChatRoom';
-import { AuctionSystem } from '../../_libs/components/auctionsystem/AuctionSystem';
-import { AuctionHeader } from '../../_libs/components/auctionsystem/AuctionHeader';
+import { AuctionSystem } from '../../_libs/components/auctionSystem/AuctionSystem';
+import { AuctionHeader } from '../../_libs/components/auctionSystem/auctionHeader/AuctionHeader';
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { OrderStream } from '../../_libs/components/meeting/OrderStream';
 import colors from '../../_libs/design/colors';
 import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
 import { useSocket } from '../../_libs/hooks/useSocket';
-import { AuctionNotice } from '../../_libs/components/auctionsystem/AuctionNotice';
+import { AuctionNotice } from '../../_libs/components/auctionSystem/chatRoom/AuctionNotice';
 
 export function Live() {
-  const userId = 1;
-  const auctionRoomId = 1;
-  const auctionRoomType = 'GENERAL';
-  const nickname = '윤다정';
-  const title = '또 나야?';
-  const liveAuthErr = null;
-
-  // const { accessToken } = useAppSelector(state => state.user);
-  // const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter(accessToken);
+  const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter();
   const { SOCKET, error } = useSocket(auctionRoomId, nickname);
 
   return (

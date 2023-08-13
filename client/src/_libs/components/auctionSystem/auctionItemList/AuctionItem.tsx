@@ -1,13 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React, { HTMLAttributes } from 'react';
-import colors from '../../design/colors';
-import { Text } from '../../components/common/Text';
-import { Input } from '../common/Input';
-import itemState from '../../constants/itemState';
-import { Spacing } from '../common/Spacing';
-import { bidPriceParse } from '../../util/bidPriceParse';
-import { LiveItem, liveItemList } from '../../../api/live';
-import { Item } from '../../../api/auction';
+import colors from '../../../design/colors';
+import { Text } from '../../../components/common/Text';
+import { LiveItem, liveItemList } from '../../../../api/live';
 export function AuctionItem({ item, idx }: Props) {
   return (
     <div

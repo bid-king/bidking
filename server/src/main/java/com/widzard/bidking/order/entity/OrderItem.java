@@ -1,10 +1,8 @@
-package com.widzard.bidking.orderItem.entity;
+package com.widzard.bidking.order.entity;
 
 
 import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.item.entity.Item;
-import com.widzard.bidking.order.entity.Order;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +24,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "order_item")
+@Table(
+    name = "order_item",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "UniqueOrderAndItem",
+            columnNames = {"order_id", "item_id"}
+        )
+    }
+)
 public class OrderItem extends BaseEntity {
 
     @Id
@@ -44,7 +51,7 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    public static OrderItem create(Long price, Item item, Order order){
+    public static OrderItem create(Long price, Item item, Order order) {
         return OrderItem.builder()
             .price(price)
             .item(item)

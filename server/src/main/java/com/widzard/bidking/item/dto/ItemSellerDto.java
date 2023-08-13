@@ -1,6 +1,6 @@
 package com.widzard.bidking.item.dto;
 
-import com.widzard.bidking.orderItem.entity.OrderItem;
+import com.widzard.bidking.order.entity.OrderItem;
 import com.widzard.bidking.order.entity.OrderState;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;

@@ -39,7 +39,6 @@ module.exports = (server, app, sessionMiddleware) => {
         io.to(roomId).emit('roomClosed');
       } else {
         socket.leave(roomId);
-        io.to(roomId).emit('chat', { nickname: 'System', msg: `${socket.nickname} 퇴장` });
       }
     });
 

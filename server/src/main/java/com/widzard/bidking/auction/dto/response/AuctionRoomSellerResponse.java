@@ -2,7 +2,7 @@ package com.widzard.bidking.auction.dto.response;
 
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.item.dto.ItemSellerDto;
-import com.widzard.bidking.orderItem.entity.OrderItem;
+import com.widzard.bidking.order.entity.OrderItem;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

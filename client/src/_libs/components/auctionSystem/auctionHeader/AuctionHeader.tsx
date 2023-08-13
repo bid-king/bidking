@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
-import colors from '../../design/colors';
-import { ConfirmButton } from '../common/ConfirmButton';
-import { Spacing } from '../common/Spacing';
-import { Text } from '../common/Text';
-import { AuctionItemStatus } from './AuctionItemStatus';
+import colors from '../../../design/colors';
+import { ConfirmButton } from '../../common/ConfirmButton';
+import { Spacing } from '../../common/Spacing';
 import { AuctionTitle } from './AuctionTitle';
 
 export function AuctionHeader({ userType, theme, nickname, auctionRoomType, title }: Props) {
@@ -21,7 +19,7 @@ export function AuctionHeader({ userType, theme, nickname, auctionRoomType, titl
       <AuctionTitle theme={theme} nickname={nickname} auctionRoomType={auctionRoomType} title={title} />
       {userType === 'seller' && (
         <div>
-          <Spacing rem="2" />
+          <Spacing rem="1" />
           <ConfirmButton btnType="warn" label="경매 종료" type="button" onClick={() => {}} />
         </div>
       )}
@@ -40,6 +38,6 @@ interface Props {
   userType: 'order' | 'seller';
   theme: 'light' | 'dark';
   nickname: string;
-  auctionRoomType: string;
+  auctionRoomType: 'COMMON' | 'REVERSE';
   title: string;
 }
