@@ -189,6 +189,12 @@ export function SignUpBox() {
                 </div>
                 <Spacing rem="2" />
 
+                {password !== passwordConfirmation && (
+                  <>
+                    <Text type="bold" content="비밀번호가 일치하지 않습니다." />
+                    <Spacing rem="1" />
+                  </>
+                )}
                 {password !== passwordConfirmation && <ConfirmButton btnType="disabled" label="다음" />}
                 {password === passwordConfirmation && <ConfirmButton onClick={handleNextStep} label="다음" />}
               </>
