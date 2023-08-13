@@ -32,21 +32,6 @@ public class ItemDto {
 
     private int itemOrdering;
 
-    private LocalDateTime successTime;
-
-    private Long successPrice;
-
-    private String successMemberNickname;
-
-    private Long successMemberId;
-
-    private String deliveryAddress;
-
-    private String deliveryMsg;
-
-//    private invoiceDto invoice; //TODO invoice 구현 후
-
-
     public static ItemDto create(Item item) {
         return ItemDto.builder()
             .itemId(item.getId())
@@ -57,7 +42,6 @@ public class ItemDto {
             .itemImageUrl(item.getImage().getFilePath())
             .itemDescription(item.getDescription())
             .itemOrdering(item.getOrdering())
-            .successTime(item.getOrderItem().getCreatedAt())
             .build();
     }
 
