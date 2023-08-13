@@ -11,7 +11,9 @@ import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionRoomNotStartedException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
-import com.widzard.bidking.auction.exception.ImageNotSufficientException;
+import com.widzard.bidking.auction.exception.InvalidAuctionRoomRequestException;
+import com.widzard.bidking.auction.exception.UnableToDeleteAuctionNow;
+import com.widzard.bidking.auction.exception.UnableToUpdateAuctionNow;
 import com.widzard.bidking.auction.exception.UnauthorizedAuctionRoomAccessException;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
@@ -133,7 +135,7 @@ public class AuctionServiceImpl implements AuctionService {
 
         // 이미지 수 검증
         if (request.getItemList().size() != itemImgs.length) {
-            throw new ImageNotSufficientException();
+            throw new InvalidAuctionRoomRequestException();
         }
 
         // 경매방 이미지, 경매방 생성
@@ -191,18 +193,18 @@ public class AuctionServiceImpl implements AuctionService {
     ) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
+        //시작시간이 20분이하로 남은경우 수정 불가능
+        LocalDateTime auctionStartTime = auctionRoom.getStartedAt();
+        LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
+        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(twentyMinutesAgo)) {
+            throw new UnableToUpdateAuctionNow();
+        }
         log.info("auctionRoom ItemList={}", auctionRoom.getItemList().toString());
         //auctionRoom 기본자료형 필드 업데이트
         auctionRoom.update(req);
 
         //경매방 소유권 검사
-        Member loginMember = memberRepository.findById(member.getId()).orElseThrow(
-            MemberNotFoundException::new);
-        Member seller = memberRepository.findById(auctionRoom.getSeller().getId())
-            .orElseThrow(MemberNotFoundException::new);
-        if (loginMember != seller) {
-            throw new UnauthorizedAuctionRoomAccessException();
-        }
+        checkOwner(member, auctionRoom);
 
         //경매썸네일 변경 요청 존재
         if (auctionRoomImg != null && !auctionRoomImg.isEmpty()) {
@@ -282,14 +284,15 @@ public class AuctionServiceImpl implements AuctionService {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
 
-        //경매방 소유권 검사
-        Member loginMember = memberRepository.findById(member.getId()).orElseThrow(
-            MemberNotFoundException::new);
-        Member seller = memberRepository.findById(auctionRoom.getSeller().getId())
-            .orElseThrow(MemberNotFoundException::new);
-        if (loginMember != seller) {
-            throw new UnauthorizedAuctionRoomAccessException();
+        //시작시간이 20분이하로 남은경우 삭제 불가능
+        LocalDateTime auctionStartTime = auctionRoom.getStartedAt();
+        LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
+        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(twentyMinutesAgo)) {
+            throw new UnableToDeleteAuctionNow();
         }
+
+        //경매방 소유권 검사
+        checkOwner(member, auctionRoom);
 
         //북마크 삭제
         List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
@@ -402,5 +405,13 @@ public class AuctionServiceImpl implements AuctionService {
 
     }
 
-
+    private void checkOwner(Member member, AuctionRoom auctionRoom) {
+        Member loginMember = memberRepository.findById(member.getId()).orElseThrow(
+            MemberNotFoundException::new);
+        Member seller = memberRepository.findById(auctionRoom.getSeller().getId())
+            .orElseThrow(MemberNotFoundException::new);
+        if (loginMember != seller) {
+            throw new UnauthorizedAuctionRoomAccessException();
+        }
+    }
 }
