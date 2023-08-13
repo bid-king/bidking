@@ -12,10 +12,10 @@ export function useLiveEnter() {
   const [auctionRoomType, setAuctionRoomType] = useState<string>('');
   const [liveAuthErr, setLiveAuthErr] = useState<unknown>(null);
   const { accessToken } = useAppSelector(state => state.user);
+  const auctionId = useParams<string>();
 
   useEffect(() => {
     try {
-      const auctionId = useParams<string>();
       (async () => {
         const isLogined = await store.getState().user.isLogined;
         if (!isLogined) throw new Error('403');
@@ -32,7 +32,7 @@ export function useLiveEnter() {
     } catch (err) {
       setLiveAuthErr(err);
     }
-  });
+  }, [auctionId]);
 
   return { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr };
 }
