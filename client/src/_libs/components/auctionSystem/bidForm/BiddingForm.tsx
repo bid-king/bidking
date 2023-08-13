@@ -7,7 +7,7 @@ import { Input } from '../../common/Input';
 
 import { Spacing } from '../../common/Spacing';
 
-export function BiddingForm({ theme = 'light', askingPrice, onBid, disable }: Props) {
+export function BiddingForm({ theme = 'light', askingPrice, disable, onBid }: Props) {
   const [bidPrice, setBidPrice] = useState<string>('');
 
   return (
@@ -23,7 +23,7 @@ export function BiddingForm({ theme = 'light', askingPrice, onBid, disable }: Pr
         <ConfirmButton
           btnType="progress"
           label={bidPriceParse(askingPrice) + '원 즉시입찰'}
-          onClick={() => onBid(askingPrice)}
+          onClick={() => Bid(setBidPrice, askingPrice, askingPrice, onBid)}
         />
       </div>
       <Spacing rem="0.5" />
