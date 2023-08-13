@@ -28,7 +28,7 @@ module.exports = (server, app, sessionMiddleware) => {
       socket.join(roomId);
       socket['nickname'] = nickname;
 
-      http.get(`/api/v1/auctions/${roomId}/items`).then(itemList => {
+      http.get(`/api/v1/bid/${roomId}/items`).then(itemList => {
         io.to(roomId).emit('init', itemList);
       });
     });
