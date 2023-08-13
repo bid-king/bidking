@@ -34,13 +34,11 @@ export function SignUpBox() {
     requestCerificated,
     userId,
     isIdDuplicated,
-    // handleUserIdBlur,
+    isNicknameDuplicated,
     nickname,
     handleNicknameChange,
-    // handleNicknameBlurOrEnter,
     handleCertificateCode,
     isSuccess,
-    isNicknameDuplicated,
     isPhoneError,
     phoneErrorMessage,
     isPasswordValid,
@@ -54,6 +52,9 @@ export function SignUpBox() {
     passwordConfirmationRef,
     phoneNumberRef,
     addressRef,
+    error,
+    handlePrevStep,
+    phoneNumber,
   } = useSignUp();
 
   return (
@@ -91,6 +92,7 @@ export function SignUpBox() {
                     placeholder=""
                     inputType="text"
                     ref={nicknameRef}
+                    value={nickname}
                   />
                 </div>
                 <Spacing rem="2" />
@@ -107,8 +109,11 @@ export function SignUpBox() {
                   </>
                 )}
 
-                {nickname === '' && <ConfirmButton btnType="disabled" label="다음" />}
-                {nickname !== '' && <ConfirmButton onClick={handleNextStep} label="다음" />}
+                {nickname.length < 2 || nickname.length > 12 || isNicknameDuplicated ? (
+                  <ConfirmButton btnType="disabled" label="다음" />
+                ) : (
+                  <ConfirmButton onClick={handleNextStep} label="다음" />
+                )}
               </>
             )}
             {step === 'id' && (
@@ -124,9 +129,11 @@ export function SignUpBox() {
                     placeholder=""
                     inputType="text"
                     ref={userIdRef}
+                    value={userId}
                   />
                 </div>
                 <Spacing rem="2" />
+
                 {idError && (
                   <>
                     <Text type="bold" content={idError} />
@@ -139,9 +146,11 @@ export function SignUpBox() {
                     <Spacing rem="1" />
                   </>
                 )}
-
-                {userId === '' && <ConfirmButton btnType="disabled" label="다음" />}
-                {userId !== '' && <ConfirmButton onClick={handleNextStep} label="다음" />}
+                {userId.length < 4 || userId.length > 12 || isIdDuplicated ? (
+                  <ConfirmButton btnType="disabled" label="다음" />
+                ) : (
+                  <ConfirmButton onClick={handleNextStep} label="다음" />
+                )}
               </>
             )}
 
@@ -158,6 +167,7 @@ export function SignUpBox() {
                     placeholder=""
                     inputType="password"
                     ref={passwordRef}
+                    value={password}
                   />
                 </div>
                 <Spacing rem="2" />
@@ -220,6 +230,7 @@ export function SignUpBox() {
                         onChange={handlePhoneChange}
                         placeholder=""
                         ref={phoneNumberRef}
+                        value={phoneNumber}
                       />
                     </div>
                     <Spacing rem="3" dir="h" />
@@ -278,7 +289,13 @@ export function SignUpBox() {
                     <Text type="bold" content="주소를 입력해주세요" />
                   </label>
                   <Spacing rem="1" />
-                  <Input id="street-signup-input" onChange={handleStreetChange} placeholder="" />
+                  <Input
+                    id="street-signup-input"
+                    onChange={handleStreetChange}
+                    placeholder=""
+                    ref={addressRef}
+                    value={street}
+                  />
                 </div>
                 <Spacing rem="2" />
 
@@ -287,7 +304,7 @@ export function SignUpBox() {
                     <Text type="bold" content="상세 주소를 입력해주세요" />
                   </label>
                   <Spacing rem="1" />
-                  <Input id="details-signup-input" onChange={handleDetailsChange} placeholder="" />
+                  <Input id="details-signup-input" onChange={handleDetailsChange} placeholder="" value={details} />
                 </div>
                 <Spacing rem="2" />
 
@@ -296,10 +313,22 @@ export function SignUpBox() {
                     <Text type="bold" content="우편번호를 입력해주세요" />
                   </label>
                   <Spacing rem="1" />
-                  <Input id="zip-code-signup-input" onChange={handleZipCodeChange} placeholder="" />
+                  <Input id="zip-code-signup-input" onChange={handleZipCodeChange} placeholder="" value={zipCode} />
                 </div>
                 <Spacing rem="2" />
-
+                {zipCode.length !== 5 && (
+                  <>
+                    <Text type="bold" content="우편번호는 5자리여야 합니다." />
+                    <Spacing rem="1" />
+                  </>
+                )}
+                {error && (
+                  <>
+                    <Text type="bold" content="회원 가입 중 문제가 발생했습니다. 다시 시도해 주세요." />
+                    <Spacing rem="1" />
+                  </>
+                )}
+                <Spacing rem="1" />
                 {(street === '' || details === '' || zipCode === '') && (
                   <>
                     <ConfirmButton btnType="disabled" label="완료" />

@@ -27,6 +27,7 @@ export function useSignUp() {
   const [isCertificationDisabled, setIsCertificationDisabled] = useState(false);
   const [nicknameError, setNicknameError] = useState('');
   const [idError, setIdError] = useState('');
+  const [error, setError] = useState(false);
 
   // 포커싱 로직
   const nicknameRef = useRef<HTMLInputElement | null>(null);
@@ -52,6 +53,7 @@ export function useSignUp() {
     }
   }, [step]);
 
+  // 단계 로직
   const handleNextStep = (e: FormEvent) => {
     e.preventDefault();
     if (step === 'nickname' && nickname !== '' && !isNicknameDuplicated) {
@@ -64,15 +66,30 @@ export function useSignUp() {
       setStep('phone-number');
     } else if (step === 'phone-number' && isRequestCerificated) {
       setStep('address');
-    } else if (step === 'address' && street !== '' && details !== '' && zipCode !== '') {
+    } else if (step === 'address' && street !== '' && details !== '' && zipCode !== '' && zipCode.length === 5) {
       member
         .signup(userId, password, nickname, phoneNumber, { street, details, zipCode })
         .then(res => {
           setSuccess(true);
         })
         .catch(err => {
-          console.log(err);
+          setError(true);
         });
+    }
+  };
+
+  // 뒤로가기 로직
+  const handlePrevStep = () => {
+    if (step === 'id') {
+      setStep('nickname');
+    } else if (step === 'password') {
+      setStep('id');
+    } else if (step === 'password-again') {
+      setStep('password');
+    } else if (step === 'phone-number') {
+      setStep('password-again');
+    } else if (step === 'address') {
+      setStep('phone-number');
     }
   };
 
@@ -89,6 +106,7 @@ export function useSignUp() {
     }
   };
 
+  // 닉네임 중복검사
   const checkNicknameDuplication = async (nickname: string) => {
     if (nickname) {
       member
@@ -162,14 +180,14 @@ export function useSignUp() {
 
     if (nickname === '') {
       setNicknameError('');
-      setIsNicknameDuplicated(false); // 중복 상태도 초기화
+      setIsNicknameDuplicated(false);
       return;
     }
     if (nickname.length < 2 || nickname.length > 12) {
       setNicknameError('닉네임은 2자 이상, 12자 이하로 입력해주세요.');
-      return; // 길이 에러가 있으면 중복 체크 로직은 실행하지 않음
+      return;
     } else {
-      setNicknameError(''); // 에러 메시지 초기화
+      setNicknameError('');
     }
 
     checkNicknameDuplication(e.target.value);
@@ -181,22 +199,18 @@ export function useSignUp() {
 
     if (id === '') {
       setIdError('');
-      setIsNicknameDuplicated(false); // 중복 상태도 초기화
+      setIsNicknameDuplicated(false);
       return;
     }
     if (id.length < 4 || id.length > 12) {
       setIdError('아이디는 4자 이상, 12자 이하로 입력해주세요.');
-      return; // 길이 에러가 있으면 중복 체크 로직은 실행하지 않음
+      return;
     } else {
-      setIdError(''); // 에러 메시지 초기화
+      setIdError('');
     }
 
     checkIdDuplication(e.target.value);
   };
-
-  // const handleUserIdBlur = () => {
-  //   checkIdDuplication(userId);
-  // };
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -267,5 +281,8 @@ export function useSignUp() {
     passwordConfirmationRef,
     phoneNumberRef,
     addressRef,
+    error,
+    handlePrevStep,
+    phoneNumber,
   };
 }
