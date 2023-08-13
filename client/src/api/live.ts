@@ -103,7 +103,7 @@ export function live(ws: Socket | null) {
 
 export interface AuctionEnterResponse {
   nickname: string;
-  auctionRoomType: 'COMMON' | 'REVERSE';
+  auctionRoomType: 'common' | 'reverse';
   title: string;
   auctionRoomId: number;
   currentItemId: number;

@@ -10,7 +10,7 @@ export function useLiveEnter() {
   const [auctionRoomId, setAuctionRoomId] = useState<number>(0);
   const [nickname, setNickname] = useState<string>('');
   const [title, setTitle] = useState<string>('');
-  const [auctionRoomType, setAuctionRoomType] = useState<'COMMON' | 'REVERSE'>('COMMON');
+  const [auctionRoomType, setAuctionRoomType] = useState<'common' | 'reverse'>('common');
   const [liveAuthErr, setLiveAuthErr] = useState<unknown>(null);
   const [seller, setSeller] = useState<boolean>(false);
   const { accessToken } = useAppSelector(state => state.user);

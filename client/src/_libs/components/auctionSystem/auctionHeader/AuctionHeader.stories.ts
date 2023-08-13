@@ -16,7 +16,7 @@ export const Primary: Story = {
     userType: 'order',
     theme: 'dark',
     nickname: '김성용',
-    auctionRoomType: 'REVERSE',
+    auctionRoomType: 'reverse',
     title: '제목',
   },
 };
