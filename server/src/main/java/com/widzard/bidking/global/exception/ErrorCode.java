@@ -37,6 +37,7 @@ public enum ErrorCode {
     FORBIDDEN(HttpStatus.FORBIDDEN, "SC_FORBIDDEN", "해당 자원에 대한 권한이 없습니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHENTICATED", "로그인 인증이 안된 사용자입니다."),
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "EXPIRED_AT", "엑세스 토큰이 만료되었습니다."),
+    LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "LOGIN_FAILURE", "아이디 또는 비밀번호를 잘못 입력했습니다."),
     /*
      * Auction
      */
