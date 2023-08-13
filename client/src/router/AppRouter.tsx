@@ -26,7 +26,7 @@ export function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/mypage/:id" element={<MyPage />} />
-        <Route path="/purchased" element={<Purchased />} />
+        <Route path="/purchased/:memberId" element={<Purchased />} />
         <Route path="/detail/:auctionId" element={<Detail />} />
         <Route path="/auction/:auctionId" element={<Live />} />
       </Route>

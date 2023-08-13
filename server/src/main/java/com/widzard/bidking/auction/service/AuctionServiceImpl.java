@@ -3,6 +3,7 @@ package com.widzard.bidking.auction.service;
 import com.widzard.bidking.alarm.entity.AlarmType;
 import com.widzard.bidking.alarm.entity.Content;
 import com.widzard.bidking.alarm.service.AlarmService;
+import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
@@ -11,6 +12,7 @@ import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
+import com.widzard.bidking.auction.exception.AuctionRoomNotStartedException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.exception.ImageNotSufficientException;
 import com.widzard.bidking.auction.exception.UnauthorizedAuctionRoomAccessException;
@@ -32,8 +34,8 @@ import com.widzard.bidking.item.repository.ItemRepository;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
-import com.widzard.bidking.order.entity.OrderItem;
-import com.widzard.bidking.order.repository.OrderItemRepository;
+import com.widzard.bidking.orderItem.entity.OrderItem;
+import com.widzard.bidking.orderItem.repository.OrderItemRepository;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -61,7 +63,6 @@ public class AuctionServiceImpl implements AuctionService {
     private final BookmarkRepository bookmarkRepository;
     private final OrderItemRepository orderItemRepository;
     private final MemberRepository memberRepository;
-    private final AlarmService alarmService;
 
     @Override
     public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
@@ -171,9 +172,6 @@ public class AuctionServiceImpl implements AuctionService {
             auctionRoom.addItem(item);
         }
 
-        //알림 보내기
-        alarmService.send(seller, Content.AUCTION_REGISTERED, AlarmType.AUCTION);
-
         return savedAuctionRoom;
     }
 
@@ -275,16 +273,6 @@ public class AuctionServiceImpl implements AuctionService {
             imageService.modifyImage(curFileImg, item.getImage().getId());
         }
         auctionRoom.isValid();
-        //알림 전송
-        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
-            auctionRoom);
-        for (Optional<Bookmark> bookmark : bookmarkList
-        ) {
-            if (bookmark.isPresent()) {
-                alarmService.send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK,
-                    AlarmType.AUCTION);
-            }
-        }
         return auctionRoom;
     }
 
@@ -329,15 +317,6 @@ public class AuctionServiceImpl implements AuctionService {
             Item curItem = itemList.get(i);
             imageService.deleteImage(curItem.getImage());
         }
-
-        //북마크 삭제 알림 전송
-        for (Optional<Bookmark> bookmark : bookmarkList
-        ) {
-            if (bookmark.isPresent()) {
-                alarmService.send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK,
-                    AlarmType.AUCTION);
-            }
-        }
     }
 
     @Override
@@ -367,22 +346,45 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Transactional
     @Override
-    public AuctionRoom validateEnterRoom(Member seller, Long auctionId) {
+    public AuctionRoomEnterDto validateEnterRoom(Member member, Long auctionId) {
         // 1. 사용자 및 경매방 검증
-        // 1) 현재 판매자가 생성한 경매가 있는지 검증
+        // 1) 현재 판매자가 생성한 경매가 있는지 검증 (판매자인지 아닌지 여부 결정)
         // 2) 해당 경매가 아직 진행되지 않은 경매인가 (이미 시작했던 / 끝난 경매방인지)
         // 3) 경매방이 시작될 수 있는 시간인가 (경매방 시작시간 20분전부터 해당 시간까지)
-        log.info("seller pk: {}", seller.getId());
-        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(
-            auctionId,
-            seller
-        ).orElseThrow(AuctionRoomNotFoundException::new);
-        log.info("시작할 경매방: {}", auctionRoom);
-        auctionRoom.canLive();
-        // 2. 경매방 라이브로 상태 변경
-        auctionRoom.changeOnLive();
+        boolean isSeller = true;
+
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
+        log.info("memberId: {}", member.getId());
+        log.info("sellerId: {}", auctionRoom.getSeller().getId());
+
+        if (auctionRoom.getSeller().getId() != member.getId()) {
+            isSeller = false;
+            if (!auctionRoom.getAuctionRoomLiveState().equals(AuctionRoomLiveState.ON_LIVE)) {
+                throw new AuctionRoomNotStartedException();
+            }
+        } else {
+            auctionRoom.validateLive();
+            // 2. 경매방 라이브로 상태 변경
+            auctionRoom.changeOnLive();
+            log.info("시작할 경매방 pk: {}", auctionRoom.getId());
+        }
+
+        log.info("해당 방을 생성한 판매자인가: {}", isSeller);
         // 3. 결과 반환
-        return auctionRoom;
+        return new AuctionRoomEnterDto(
+            isSeller,
+            auctionId,
+            member.getNickname(),
+            auctionRoom.getAuctionRoomType(),
+            auctionRoom.getName()
+        );
+    }
+
+    @Override
+    public AuctionRoom getLiveAuctionItemList(Long auctionId) {
+        return auctionRoomRepository.findById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
     }
 
     @Transactional
@@ -399,5 +401,6 @@ public class AuctionServiceImpl implements AuctionService {
 
 
     }
+
 
 }

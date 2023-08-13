@@ -18,7 +18,7 @@ export function IconButton({ type, background = 'transparent', color = 'lightgre
       }}
       onClick={onClick}
     >
-      <Icon type={type} color={color} rem={size === 'small' ? '1.25' : '2'} />
+      <Icon type={type} color={color} rem={size === 'small' ? '0.85' : '1.15'} />
     </button>
   );
 }
@@ -36,10 +36,10 @@ const BACKGROUND_VARIANT = {
 const SIZE_VARIANT = {
   small: {
     height: '1.75rem',
-    width: '3.5rem',
+    width: '3rem',
   },
   large: {
-    height: '2rem',
+    height: '2.25rem',
     width: '4rem',
   },
 };

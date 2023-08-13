@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { HTMLAttributes, useState, ChangeEvent, useEffect } from 'react';
+import React from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
 import { Input } from '../common/Input';
@@ -7,8 +7,6 @@ import { Spacing } from '../common/Spacing';
 import { TextArea } from '../common/TextArea';
 import { useAuctionUpdateCard } from '../../hooks/useAuctionUpdateCard';
 import { Select, SelectOption } from '../common/SelectOption';
-import { useAppSelector } from '../../../store/hooks';
-import AuctionItem from '../../../store/slices/auctionUpdateSlice';
 import { Image } from '../common/Image';
 
 interface Props {

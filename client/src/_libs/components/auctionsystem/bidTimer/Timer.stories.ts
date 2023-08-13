@@ -12,5 +12,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: { theme: 'light' },
+  args: { theme: 'light', time: 10 },
 };

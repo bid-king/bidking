@@ -1,14 +1,15 @@
 const SocketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
-const { startCountdownTimer } = require('../middlewares/timer');
+const { startCountdownTimer } = require('../api/timer');
 const { getRedis } = require('../api/redis');
+const { http } = require('../api/http');
 
 module.exports = (server, app, sessionMiddleware) => {
   const io = SocketIO(server, {
     path: '/socket.io',
     cors: {
-      origin: 'http://localhost:3000',
+      origin: process.env.NODE_APP_CLIENT_ROOT,
       credentials: true,
     },
   });
@@ -27,12 +28,8 @@ module.exports = (server, app, sessionMiddleware) => {
       socket.join(roomId);
       socket['nickname'] = nickname;
 
-      // TODO: roomId에 해당하는 itemList 요청 to Spring
-      // GET /api/v1/auctions/{auctionId}/items
-
-      io.to(roomId).emit('chat', {
-        nickname: 'System',
-        msg: `${nickname} 입장`,
+      http.get(`/api/v1/auctions/${roomId}/items`).then(itemList => {
+        io.to(roomId).emit('init', itemList);
       });
     });
 
@@ -40,10 +37,8 @@ module.exports = (server, app, sessionMiddleware) => {
       if (socket.id === roomOwners[`${roomId}`]) {
         console.log(socket.adapter.rooms.get(roomId)); // room의 참여자 socket.id
         io.to(roomId).emit('roomClosed');
-        // TODO: roomId 방 종료됐다고 알려줌 to Spring
       } else {
         socket.leave(roomId);
-        io.to(roomId).emit('chat', { nickname: 'System', msg: `${socket.nickname} 퇴장` });
       }
     });
 
@@ -61,11 +56,11 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on('start', async ({ roomId }) => {
       const redisCli = app.get('redisCli');
-
       const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
       const price = await getRedis(redisCli, `auction:${roomId}:onLiveItem:currentPrice`);
 
       io.to(`${roomId}`).emit('start', { itemId, price });
+
       startCountdownTimer(app, roomId);
     });
 

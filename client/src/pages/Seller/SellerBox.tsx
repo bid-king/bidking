@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { Text } from '../../_libs/components/common/Text';
 import colors from '../../_libs/design/colors';
-import { AuctionList } from '../../_libs/components/auction/AuctionList';
+import { AuctionList } from '../../_libs/components/main/AuctionList';
 import { useSellerBox } from '../../_libs/hooks/useSellerBox';
+import { DashBoard } from '../../_libs/components/common/DashBoard';
 
 export function SellerBox() {
-  const { auctionListBeforeLive, auctionListAfterLive, isLogined } = useSellerBox();
+  const { auctionListBeforeLive, auctionListAfterLive, isLogined, status } = useSellerBox();
   return (
     <div
       css={{
@@ -17,6 +18,7 @@ export function SellerBox() {
     >
       {isLogined && (
         <div>
+          <Spacing rem="1" />
           <div
             css={{
               display: 'flex',
@@ -25,8 +27,14 @@ export function SellerBox() {
               color: colors.white,
             }}
           >
-            대쉬보드 자리
+            <DashBoard
+              theme="dark"
+              deliveryWaiting={status?.deliveryWaiting}
+              paymentWaiting={status?.paymentWaiting}
+              penalty={status?.penalty}
+            />
           </div>
+          <Spacing rem="1" />
           <div
             css={{
               padding: '1rem',

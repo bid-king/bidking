@@ -16,13 +16,12 @@ export function ConfirmButton({
       css={{
         cursor: 'pointer',
         width: '100%',
-        height: '3rem',
+        height: '2.25rem',
         border: 'none',
         outline: 'none',
-        borderRadius: '1rem',
+        borderRadius: '0.85rem',
         fontWeight: '600',
-        fontSize: '1.15rem',
-        transition: 'filter 0.3s',
+        fontSize: '1rem',
         '&:hover': {
           filter: 'brightness(0.9)',
         },

@@ -1,13 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import React, { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
-import { HTMLAttributes } from 'react';
 import { Socket } from 'socket.io-client';
-import { live, SocketAPI } from '../../../api/live';
-import colors from '../../design/colors';
-import { IconButton } from '../common/IconButton';
-import { Input } from '../common/Input';
-import { RoundButton } from '../common/RoundButton';
-import { Spacing } from '../common/Spacing';
+import { live, SocketAPI } from '../../../../api/live';
+import colors from '../../../design/colors';
+import { IconButton } from '../../common/IconButton';
+import { Input } from '../../common/Input';
+import { Spacing } from '../../common/Spacing';
 import { ChatMessage } from './ChatMessage';
 
 export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order', socket }: Props) {
@@ -31,16 +29,16 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
 
   useEffect(() => {
     return () => {
-      live(socket.current).req.leave(roomId, nickname);
+      live(socket.current).send.leave(roomId, nickname);
     };
   }, []);
   return (
     <div
       css={{
         width: '100%',
-        minHeight: '45vh',
-        borderRadius: '1.5rem',
-        padding: '1.5rem',
+        minHeight: '60vh',
+        borderRadius: '1.85rem',
+        padding: '1rem',
         position: 'relative',
         ...THEME_VARIANT[theme],
         display: 'flex',
@@ -60,7 +58,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
         css={{
           width: 'calc(100% - 2rem)',
           left: '1rem',
-          bottom: '1.5rem',
+          bottom: '1rem',
           position: 'absolute',
           display: 'flex',
           justifyContent: 'center',
@@ -72,7 +70,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
               onSubmit={e => {
                 e.preventDefault();
                 setIsLoading(true);
-                if (isLoading && input.length > 0) live(socket.current).req.chat(roomId, nickname, input);
+                if (isLoading && input.length > 0) live(socket.current).send.chat(roomId, nickname, input);
                 setIsLoading(false);
               }}
             >
@@ -92,7 +90,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   background="confirm"
                   size="small"
                   onClick={e => {
-                    live(socket.current).req.chat(roomId, nickname, input);
+                    live(socket.current).send.chat(roomId, nickname, input);
                     setInput('');
                   }}
                 />

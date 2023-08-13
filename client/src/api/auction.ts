@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ROOT } from '../_libs/util/http';
 
 export default {
-  get: (auctionId: number) => http.get<AuctionRoomResponse>(`/api/v1/auctions/${auctionId}`),
+  get: (auctionId: number, token: string) => https.get<AuctionRoomResponse>(`/api/v1/auctions/${auctionId}`, token),
   //경매 상세 정보
   post: (data: AuctionCreateRequest, token: string) => https.post('/api/v1/auctions', token, data),
   //경매 등록

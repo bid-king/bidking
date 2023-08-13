@@ -32,7 +32,7 @@ export function useSellerDetail() {
 
   useEffect(() => {
     auction
-      .get(auctionId)
+      .get(auctionId, accessToken)
       .then(data => {
         setDetail(data);
       })
