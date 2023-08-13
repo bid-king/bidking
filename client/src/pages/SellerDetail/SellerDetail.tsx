@@ -145,7 +145,7 @@ export function SellerDetail() {
         <Spacing rem="1" />
 
         {detail.auctionRoomLiveState === 'BEFORE_LIVE' && (
-          <ConfirmButton btnType="disabled" label={auctionRoomLiveState.BEFORE_LIVE} />
+          <ConfirmButton btnType="disabled" label={auctionRoomLiveState.beforeLive} />
         )}
 
         {detail.auctionRoomLiveState === 'ON_LIVE' && (
@@ -187,13 +187,13 @@ export function SellerDetail() {
             {!isChecked && <ConfirmButton btnType="disabled" label="판매 주의사항에 동의 해주세요" />}
             {isChecked && (
               <Link to={`/seller/auction/${auctionId}`}>
-                <ConfirmButton btnType="confirm" label={auctionRoomLiveState.ON_LIVE} />
+                <ConfirmButton btnType="confirm" label={auctionRoomLiveState.onLive} />
               </Link>
             )}
           </div>
         )}
         {detail.auctionRoomLiveState === 'OFF_LIVE' && (
-          <ConfirmButton btnType="disabled" label={auctionRoomLiveState.OFF_LIVE} />
+          <ConfirmButton btnType="disabled" label={auctionRoomLiveState.offLive} />
         )}
 
         <Spacing rem="1" />

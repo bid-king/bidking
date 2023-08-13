@@ -1,14 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState } from 'react';
+import { bid } from '../../../../api/live';
+import { useAppSelector } from '../../../../store/hooks';
 import colors from '../../../design/colors';
-import { Bid, bidPriceParse, validateBidPrice } from '../../../util/bidPriceParse';
+import { tryBid, bidPriceParse, validateBidPrice } from '../../../util/bidPriceParse';
 import { ConfirmButton } from '../../common/ConfirmButton';
 import { Input } from '../../common/Input';
 
 import { Spacing } from '../../common/Spacing';
 
-export function BiddingForm({ theme = 'light', askingPrice, disable, onBid }: Props) {
+export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice, askingPrice, disable }: Props) {
   const [bidPrice, setBidPrice] = useState<string>('');
+  const { accessToken } = useAppSelector(state => state.user);
 
   return (
     <div
@@ -23,7 +26,10 @@ export function BiddingForm({ theme = 'light', askingPrice, disable, onBid }: Pr
         <ConfirmButton
           btnType="progress"
           label={bidPriceParse(askingPrice) + '원 즉시입찰'}
-          onClick={() => Bid(setBidPrice, askingPrice, askingPrice, onBid)}
+          onClick={async () => {
+            await tryBid(setBidPrice, currPrice, askingPrice, askingPrice);
+            bid(auctionRoomId, itemId, askingPrice, accessToken);
+          }}
         />
       </div>
       <Spacing rem="0.5" />
@@ -41,7 +47,10 @@ export function BiddingForm({ theme = 'light', askingPrice, disable, onBid }: Pr
           disable={disable}
           btnType="confirm"
           label="입찰"
-          onClick={() => Bid(setBidPrice, bidPrice, askingPrice, onBid)}
+          onClick={async () => {
+            await tryBid(setBidPrice, currPrice, askingPrice, bidPrice);
+            bid(auctionRoomId, itemId, bidPrice, accessToken);
+          }}
         />
       </div>
     </div>
@@ -60,7 +69,9 @@ const THEME_VARIANT = {
 
 interface Props {
   theme: 'dark' | 'light';
+  currPrice: number;
+  auctionRoomId: number;
+  itemId: number;
   askingPrice: string;
-  onBid: (bidPrice: string) => void;
   disable: boolean;
 }

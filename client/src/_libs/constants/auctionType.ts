@@ -1,4 +1,4 @@
 export default {
-  COMMON: '일반 경매',
-  REVERSE: '네덜란드',
+  common: '일반 경매',
+  reverse: '네덜란드',
 };
