@@ -41,9 +41,14 @@ public class Bidding extends BaseEntity {
     private int count;
 
     public void raisePrice(Long price) {
-        if (this.price <= price) {
+        if (this.price >= price) {
             throw new InvalidBidPriceException();
         }
         this.price = price;
+        this.count++;
+    }
+
+    public void increaseCount(Long quantity) {
+        this.count += quantity;
     }
 }

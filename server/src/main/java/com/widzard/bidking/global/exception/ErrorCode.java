@@ -64,6 +64,11 @@ public enum ErrorCode {
     ITEM_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_CATEGORY_NOT_FOUND", "카테고리가 없습니다."),
 
     /*
+     * Bidding
+     */
+    ITEM_ALREADY_START_BIDDING(HttpStatus.BAD_REQUEST, "ALREADY_BIDDING_ITEM",
+        "이미 이전에 경매가 진행된 적이 있는 아이템입니다."),
+    /*
      * Image
      */
     EMPTY_THUMBNAIL_EXCEPTION(HttpStatus.NOT_FOUND, "EMPTY_THUMBNAIL_EXCEPTION", "썸네일이 없습니다."),
@@ -77,10 +82,9 @@ public enum ErrorCode {
     /*
      *  Alarm
      */
-    ALARM_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "ALARM_NOT_FOUND_EXCEPTION",
-        "해당하는 알림이 존재하지 않습니다."),
-    CLIENT_CONNECTION_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "CLIENT_CONNECTION_EXCEPTION",
-        "클라이언트에게 알림을 보낼 수 없습니다.");
+    ALARM_NOT_FOUND_EXCEPTION(HttpStatus.NOT_FOUND, "ALARM_NOT_FOUND_EXCEPTION","해당하는 알림이 존재하지 않습니다."),
+    CLIENT_CONNECTION_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR,"CLIENT_CONNECTION_EXCEPTION","클라이언트에게 알림을 보낼 수 없습니다.")
+    ;
 
     private final HttpStatus status;
     private final String code;

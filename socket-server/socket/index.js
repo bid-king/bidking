@@ -28,7 +28,7 @@ module.exports = (server, app, sessionMiddleware) => {
       socket.join(roomId);
       socket['nickname'] = nickname;
 
-      http.get(`/api/v1/auctions/${roomId}/items`).then(itemList => {
+      http.get(`/api/v1/bid/${roomId}/items`).then(itemList => {
         io.to(roomId).emit('init', itemList);
       });
     });
@@ -57,7 +57,7 @@ module.exports = (server, app, sessionMiddleware) => {
     socket.on('start', async ({ roomId }) => {
       const redisCli = app.get('redisCli');
       const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
-      const price = await getRedis(redisCli, `auction:${roomId}:onLiveItem:currentPrice`);
+      const price = await getRedis(redisCli, `auction:${roomId}:onLiveItem:startPrice`);
 
       io.to(`${roomId}`).emit('start', { itemId, price });
 
