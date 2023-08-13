@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
-import colors from '../../design/colors';
-import { Spacing } from '../common/Spacing';
-import { Text } from '../common/Text';
+import colors from '../../../design/colors';
+import { Spacing } from '../../common/Spacing';
+import { Text } from '../../common/Text';
 export function AuctionTitle({ theme, nickname, title, auctionRoomType }: Props) {
   return (
     <div>
