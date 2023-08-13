@@ -28,7 +28,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
       const time = await getRedis(redisCli, `item:${itemId}:bidding:time`);
 
       // 3. redis에  afterBidResult 저장
-      if (userId === null) {
+      if (userId === undefined) {
         // 유찰
         await redisCli.set(`item:${itemId}:afterBidResult:type`, 'fail');
         io.to(`${roomId}`).emit('failBid', { itemId });
