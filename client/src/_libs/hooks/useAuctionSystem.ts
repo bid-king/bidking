@@ -1,6 +1,6 @@
 import React, { MutableRefObject, useEffect, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { live, LiveItem, liveItemList } from '../../api/live';
+import { LiveItem, liveItemList } from '../../api/live';
 import { arrayPadding } from '../util/arrayPadding';
 import { DUMMY } from '../components/auctionSystem/auctionItemList/AuctionItemStatus';
 
@@ -12,7 +12,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
   const [itemList, setItemList] = useState<liveItemList | undefined>(undefined); //전체 아이템리스트
   const [disable, setDisable] = useState<boolean>(true); //입찰 대기 시간동안 버튼이 눌리지 않는 상태
   const [currTime, setCurrTime] = useState<number>(10); //남은 시간
-  const [liveStatus, setLiveStatus] = useState<string>('');
+  const [liveStatus, setLiveStatus] = useState<'beforeStart' | 'inAuction' | 'pending' | 'end'>('beforeStart');
 
   useEffect(() => {
     socket.current?.on('init', ({ currentItemId, itemList }) => {
@@ -24,6 +24,8 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
     socket.current?.on('start', ({ itemId, price }) => {
       setDisable(false);
       setLiveStatus('inAuction');
+      setCurrId(itemId);
+      setCurrPrice(price);
     }); //아이템 경매 시작 (전체 경매가 시작되는것)
 
     socket.current?.on('next', ({ itemId, price }) => {
