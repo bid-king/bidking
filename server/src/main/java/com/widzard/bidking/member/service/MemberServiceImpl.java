@@ -10,6 +10,7 @@ import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
 import com.widzard.bidking.member.dto.response.AuthInfo;
 import com.widzard.bidking.member.entity.Member;
+import com.widzard.bidking.member.exception.LoginFailureException;
 import com.widzard.bidking.member.exception.MemberDuplicatedException;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
@@ -96,8 +97,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public AuthInfo login(MemberLoginRequest request) {
         Member member = memberRepository.findByUserId(request.getUserId())
-            .orElseThrow(MemberNotFoundException::new);
-        comparePassword(request.getPassword(), member.getPassword());
+            .orElseThrow(LoginFailureException::new);
+        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
+            throw new LoginFailureException();
+        }
         String loginToken = tokenProvider.generateAccessToken(member);
         return new AuthInfo(member.getId(), member.getNickname(), loginToken);
     }
@@ -183,7 +186,9 @@ public class MemberServiceImpl implements MemberService {
         throws IOException {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberNotFoundException());
-        comparePassword(request.getOldPassword(), member.getPassword());
+        if (!passwordEncoder.matches(request.getOldPassword(), member.getPassword())) {
+            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        }
 
         String newPassword = request.getNewPassword();
         if (newPassword.isBlank()) {
@@ -222,12 +227,5 @@ public class MemberServiceImpl implements MemberService {
         HttpServletResponse response
     ) {
         logoutHandler.logout(request, response, authentication);
-    }
-
-
-    private void comparePassword(String rawPassword, String encodedPassword) {
-        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
-            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
-        }
     }
 }

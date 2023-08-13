@@ -29,7 +29,8 @@ public enum ErrorCode {
      * Member
      */
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "존재하지 않는 회원입니다."),
-    AUCTION_START_TIME_ERROR(HttpStatus.BAD_REQUEST, "AUCTION_START_TIME_ERROR", "경매방 시작시간 에러입니다."),
+    AUCTION_START_TIME_ERROR(HttpStatus.BAD_REQUEST, "AUCTION_START_TIME_ERROR",
+        "경매방 시작 시간은 한 시간 뒤부터 지정할 수 있습니다."),
     INVALID_AUCTION_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "INVALID_AUCTION_REQUEST_ERROR",
         "올바르지 않은 입력값입니다."),
     MEMBER_DUPLICATED(HttpStatus.BAD_REQUEST, "AlREADY_JOINED_MEMBER", "이미 존재하는 회원입니다."),
@@ -37,6 +38,7 @@ public enum ErrorCode {
     FORBIDDEN(HttpStatus.FORBIDDEN, "SC_FORBIDDEN", "해당 자원에 대한 권한이 없습니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "UNAUTHENTICATED", "로그인 인증이 안된 사용자입니다."),
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "EXPIRED_AT", "엑세스 토큰이 만료되었습니다."),
+    LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "LOGIN_FAILURE", "아이디 또는 비밀번호를 잘못 입력했습니다."),
     /*
      * Auction
      */
