@@ -4,4 +4,5 @@ public interface BiddingService {
 
     void bidding(Long itemId, Long price);
 
+    int increaseCount(Long itemId, Long quantity);
 }

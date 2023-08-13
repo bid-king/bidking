@@ -1,4 +1,4 @@
-package com.widzard.bidking.auction.service;
+package com.widzard.bidking.auction.service.facade;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,10 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BiddingServiceTest {
+class RedissonLockAuctionFacadeTest {
 
     @Autowired
-    private BiddingService biddingService;
+    private RedissonLockAuctionFacade biddingService;
 
     @Autowired
     private BiddingRepository biddingRepository;
@@ -35,16 +35,7 @@ class BiddingServiceTest {
     }
 
     @Test
-    public void decrease_test() {
-        biddingService.bidding(1L, 1000L);
-
-        Bidding bidding = biddingRepository.findById(1L).orElseThrow();
-
-        assertEquals(1000L, bidding.getPrice());
-    }
-
-    @Test
-    public void 동시에_100명이_주문() throws InterruptedException {
+    public void 동시에_100명이_입찰_후_동시성_수량_확인() throws InterruptedException {
         int threadCount = 100;
         ExecutorService executorService = Executors.newFixedThreadPool(32);
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -52,8 +43,7 @@ class BiddingServiceTest {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    biddingService.bidding(1L, 100000L);
-                    // TODO 수량 up
+                    biddingService.lockTest(1L, 1L);
                 } finally {
                     latch.countDown();
                 }
@@ -64,7 +54,6 @@ class BiddingServiceTest {
 
         Bidding bidding = biddingRepository.findById(1L).orElseThrow();
 
-        // 100 - (100 * 1) = 0
         assertEquals(100, bidding.getCount());
     }
 }

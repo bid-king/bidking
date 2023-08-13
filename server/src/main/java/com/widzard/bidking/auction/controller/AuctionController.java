@@ -4,6 +4,7 @@ import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
+import com.widzard.bidking.auction.dto.request.TryBiddingRequest;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkCountResponse;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
@@ -14,6 +15,7 @@ import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.service.AuctionService;
+import com.widzard.bidking.auction.service.facade.RedissonLockAuctionFacade;
 import com.widzard.bidking.auction.service.facade.StartBiddingFacade;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -40,13 +43,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auctions")
+@RequestMapping("/api/v1")
 public class AuctionController {
 
     private final AuctionService auctionService;
     private final StartBiddingFacade startBiddingFacade;
+    private final RedissonLockAuctionFacade redissonLockAuctionFacade;
 
-    @GetMapping
+    @GetMapping("/auctions")
     public ResponseEntity<List<AuctionResponse>> readAuctionList(
         @RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam(value = "page") int page,
@@ -59,7 +63,7 @@ public class AuctionController {
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
 
-    @GetMapping("/status")
+    @GetMapping("/auctions/status")
     public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListWithLoginStatus(
         @AuthenticationPrincipal Member member,
         @RequestParam(value = "keyword", required = false) String keyword,
@@ -73,7 +77,7 @@ public class AuctionController {
         return new ResponseEntity<>(auctionBookmarkResponseList, HttpStatus.OK);
     }
 
-    @GetMapping("/bookmarks")
+    @GetMapping("/auctions/bookmarks")
     public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListOnlyBookmarked(
         @AuthenticationPrincipal Member member,
         @RequestParam(value = "keyword", required = false) String keyword,
@@ -91,7 +95,7 @@ public class AuctionController {
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
 
-    @GetMapping("/bookmarks/count")
+    @GetMapping("/auctions/bookmarks/count")
     public ResponseEntity<AuctionBookmarkCountResponse> readBookmarkTotalCount(
         @AuthenticationPrincipal Member member
     ) {
@@ -100,7 +104,8 @@ public class AuctionController {
             HttpStatus.OK);
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(path = "/auctions", consumes = {MediaType.APPLICATION_JSON_VALUE,
+        MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<AuctionCreateResponse> createAuction(
         @AuthenticationPrincipal Member member,
         @RequestPart @Valid AuctionCreateRequest auctionCreateRequest,
@@ -112,7 +117,7 @@ public class AuctionController {
         return new ResponseEntity<>(AuctionCreateResponse.from(auctionRoom), HttpStatus.OK);
     }
 
-    @GetMapping("/{auctionId}")
+    @GetMapping("/auctions/{auctionId}")
     public ResponseEntity<AuctionRoomResponse> readAuction(
         @AuthenticationPrincipal Member member,
         @PathVariable Long auctionId
@@ -121,7 +126,7 @@ public class AuctionController {
         return new ResponseEntity<>(AuctionRoomResponse.from(auctionRoom), HttpStatus.OK);
     }
 
-    @PutMapping("/{auctionId}")
+    @PutMapping("/auctions/{auctionId}")
     public ResponseEntity updateAuction(
         @AuthenticationPrincipal Member member,
         @RequestPart @Valid AuctionUpdateRequest auctionUpdateRequest,
@@ -134,7 +139,7 @@ public class AuctionController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/{auctionId}")
+    @DeleteMapping("/auctions/{auctionId}")
     public ResponseEntity deleteAuction(
         @AuthenticationPrincipal Member member,
         @PathVariable Long auctionId
@@ -143,7 +148,7 @@ public class AuctionController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/seller/after-live")
+    @GetMapping("/auctions/seller/after-live")
     public ResponseEntity<List<AuctionResponse>> readAuctionAfterLive(
         @AuthenticationPrincipal Member member) {
         List<AuctionResponse> auctionResponseList = getAuctionResponseList(
@@ -151,7 +156,7 @@ public class AuctionController {
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
 
-    @GetMapping("/seller/before-live")
+    @GetMapping("/auctions/seller/before-live")
     public ResponseEntity<List<AuctionResponse>> readAuctionBeforeLive(
         @AuthenticationPrincipal Member member) {
         List<AuctionResponse> auctionResponseList = getAuctionResponseList(
@@ -159,7 +164,7 @@ public class AuctionController {
         return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
     }
 
-    @GetMapping("/{auctionId}/seller/after-live")
+    @GetMapping("/auctions/{auctionId}/seller/after-live")
     public ResponseEntity<AuctionRoomSellerResponse> readAuctionRoomSeller(
         @AuthenticationPrincipal Member member,
         @PathVariable("auctionId") Long auctionId
@@ -170,25 +175,9 @@ public class AuctionController {
     }
 
     /*
-     * 상품 경매 시작
-     */
-    @PostMapping("/bid/{auctionId}/items/{itemId}/start")
-    public ResponseEntity<String> startBidding(
-        @AuthenticationPrincipal Member member,
-        @PathVariable("auctionId") Long auctionId,
-        @PathVariable("itemId") Long itemId
-    ) {
-        startBiddingFacade.startBidding(member, auctionId, itemId);
-        return new ResponseEntity<>(
-            null,
-            HttpStatus.OK
-        );
-    }
-
-    /*
      * 경매방 입장 (유저 인증 및 셀러 여부 반환)
      */
-    @GetMapping("/{auctionId}/enter")
+    @GetMapping("/bid/{auctionId}/enter")
     public ResponseEntity<AuctionRoomEnterResponse> validateEnteringRoom(
         @AuthenticationPrincipal Member member,
         @PathVariable("auctionId") Long auctionId
@@ -206,7 +195,7 @@ public class AuctionController {
     /*
      * 인증된 유저에게 필요한 경매방, 아이템 리스트 반환
      */
-    @GetMapping("/{auctionId}/items")
+    @GetMapping("/bid/{auctionId}/items")
     public ResponseEntity<AuctionRoomEnterItemsResponse> getLiveAuctionItemList(
         @PathVariable("auctionId") Long auctionId
     ) {
@@ -217,6 +206,45 @@ public class AuctionController {
         );
     }
 
+
+    /*
+     * 상품 경매 시작
+     */
+    @PostMapping("/bid/{auctionId}/items/{itemId}/start")
+    public ResponseEntity<String> startBidding(
+        @AuthenticationPrincipal Member member,
+        @PathVariable("auctionId") Long auctionId,
+        @PathVariable("itemId") Long itemId
+    ) {
+        startBiddingFacade.startBidding(member, auctionId, itemId);
+        return new ResponseEntity<>(
+            "ok",
+            HttpStatus.OK
+        );
+    }
+
+    /*
+     * 경매 입찰 시도
+     */
+    @PostMapping("/bid/{auctionId}/items/{itemId}/try")
+    public ResponseEntity<String> tryBidding(
+        @AuthenticationPrincipal Member member,
+        @PathVariable("itemId") Long itemId,
+        @PathVariable("auctionId") Long auctionId,
+        @RequestBody @Valid TryBiddingRequest request
+    ) {
+        redissonLockAuctionFacade.bidding(
+            auctionId,
+            itemId,
+            member.getId(),
+            member.getNickname(),
+            request.getPrice()
+        );
+        return new ResponseEntity<>(
+            "ok",
+            HttpStatus.OK
+        );
+    }
 
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {
         List<AuctionResponse> auctionResponseList = new ArrayList<>();
