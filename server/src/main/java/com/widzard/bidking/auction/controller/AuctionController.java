@@ -185,19 +185,6 @@ public class AuctionController {
         );
     }
 
-    @PostMapping("/bid/{auctionId}/items/{itemId}/test")
-    public ResponseEntity<String> startBiddingTest(
-        @AuthenticationPrincipal Member member,
-        @PathVariable("auctionId") Long auctionId,
-        @PathVariable("itemId") Long itemId
-    ) {
-        startBiddingFacade.test(member, auctionId, itemId);
-        return new ResponseEntity<>(
-            null,
-            HttpStatus.OK
-        );
-    }
-
     /*
      * 경매방 입장 (유저 인증 및 셀러 여부 반환)
      */

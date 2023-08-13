@@ -42,28 +42,6 @@ public class StartBiddingFacade {
     }
 
 
-    public void test(Member member, Long auctionId, Long itemId) {
-        // redis 저장
-        redisTemplate.opsForValue().set(
-            generateItemKey(auctionId),
-            itemId,
-            Duration.ofDays(1)
-        );
-
-        redisTemplate.opsForValue().set(
-            generateCurrentPriceKey(auctionId),
-            120000L,
-            Duration.ofDays(1)
-        );
-
-        log.info("generate key: {}", generateItemKey(auctionId));
-        // 갱신된 입찰가를 Redis 채널에 발행(Publish)
-        redisTemplate.convertAndSend(
-            "StartAuctionItem",
-            auctionId + ":" + itemId + ":" + 100000L
-        );
-    }
-
     private String generateCurrentPriceKey(Long auctionId) {
         return "auction" + ":" + auctionId + ":" + "onLiveItem:currentPrice";
     }
