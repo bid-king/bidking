@@ -19,31 +19,32 @@ export function useLiveEnter() {
   const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
 
   useEffect(() => {
-    async function api() {
+    async function getRoomInfo() {
       const isLogined = await store.getState().user.isLogined;
       if (!isLogined) return;
       else {
         const uid = (await store.getState().user.id) || 0;
-        const data = await enter(Number(auctionId), accessToken);
-        setUserId(uid);
-        setAuctionRoomId(data.auctionRoomId);
-        setNickname(data.nickname);
-        setSeller(data.seller);
-        setTitle(data.title);
-        setAuctionRoomType(data.auctionRoomType);
+        enter(Number(auctionId), accessToken)
+          .then(data => {
+            setUserId(uid);
+            setAuctionRoomId(data.auctionRoomId);
+            setNickname(data.nickname);
+            setSeller(data.seller);
+            setTitle(data.title);
+            setAuctionRoomType(data.auctionRoomType);
+          })
+          .catch(err => setLiveAuthErr(err));
       }
     }
     async function connectSocket() {
       socket.current = io('http://localhost:8005', {
         withCredentials: true,
       });
-
-      const SOCKET_API = live(socket.current);
-      SOCKET_API.send.connect(auctionRoomId, nickname, seller);
+      live(socket.current).send.connect(auctionRoomId, nickname, seller);
     }
     try {
       (async () => {
-        await api();
+        await getRoomInfo();
         await connectSocket();
       })();
     } catch (err) {
