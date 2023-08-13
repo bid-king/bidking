@@ -7,7 +7,7 @@ import { Input } from '../../common/Input';
 
 import { Spacing } from '../../common/Spacing';
 
-export function BiddingForm({ theme = 'light', askingPrice, onBid }: Props) {
+export function BiddingForm({ theme = 'light', askingPrice, onBid, disable }: Props) {
   const [bidPrice, setBidPrice] = useState<string>('');
 
   return (
@@ -37,7 +37,12 @@ export function BiddingForm({ theme = 'light', askingPrice, onBid }: Props) {
           onKeyDown={e => e.key === 'Enter' && alert('엔터키로는 입찰할 수 없어요')}
         />
         <Spacing rem="1" dir="h" />
-        <ConfirmButton btnType="confirm" label="입찰" onClick={() => Bid(setBidPrice, bidPrice, askingPrice, onBid)} />
+        <ConfirmButton
+          disable={disable}
+          btnType="confirm"
+          label="입찰"
+          onClick={() => Bid(setBidPrice, bidPrice, askingPrice, onBid)}
+        />
       </div>
     </div>
   );
@@ -57,4 +62,5 @@ interface Props {
   theme: 'dark' | 'light';
   askingPrice: string;
   onBid: (bidPrice: string) => void;
+  disable: boolean;
 }

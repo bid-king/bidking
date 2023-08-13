@@ -8,11 +8,13 @@ export function ConfirmButton({
   label = '안녕 나는 확인버튼이야',
   onClick,
   type = 'button',
+  disable = false,
 }: Props) {
   return (
     <button
       onClick={onClick}
       type={type}
+      disabled={disable}
       css={{
         cursor: 'pointer',
         width: '100%',
@@ -61,4 +63,5 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   type?: 'button' | 'submit';
+  disable?: boolean;
 }

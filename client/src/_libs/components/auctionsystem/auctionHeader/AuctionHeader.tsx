@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
-import colors from '../../design/colors';
-import { ConfirmButton } from '../common/ConfirmButton';
-import { Spacing } from '../common/Spacing';
-import { Text } from '../common/Text';
-import { AuctionItemStatus } from './AuctionItemStatus';
+import colors from '../../../design/colors';
+import { ConfirmButton } from '../../common/ConfirmButton';
+import { Spacing } from '../../common/Spacing';
 import { AuctionTitle } from './AuctionTitle';
 
 export function AuctionHeader({ userType, theme, nickname, auctionRoomType, title }: Props) {
