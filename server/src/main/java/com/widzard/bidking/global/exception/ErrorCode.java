@@ -48,6 +48,10 @@ public enum ErrorCode {
         "경매방 접근 권한이 없습니다."),
     AUCTION_ROOM_NOT_STARTED(HttpStatus.BAD_REQUEST, "AUCTION_ROOM_NOT_STARTED",
         "아직 판매자가 시작하지 않은 경매방입니다."),
+    UNABLE_TO_UPDATE_AUCTION_NOW(HttpStatus.BAD_REQUEST, "UNABLE_TO_UPDATE_AUCTION_NOW",
+        "경매 시작 20분전에는 수정할 수 없습니다."),
+    UNABLE_TO_DELETE_AUCTION_NOW(HttpStatus.BAD_REQUEST, "UNABLE_TO_DELETE_AUCTION_NOW",
+        "경매 시작 20분전에는 삭제할 수 없습니다."),
     /*
      * Bid
      */
