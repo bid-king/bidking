@@ -15,7 +15,7 @@ export function SellerLive() {
     useLiveEnter();
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
-      <div css={{ width: '100%', padding: '0 0.25rem 0.5rem 0.5rem' }}>
+      <div css={{ width: '100%', padding: '1rem 0.25rem 0.5rem 0.5rem' }}>
         <div css={{ display: 'flex', position: 'fixed', bottom: '1rem', width: 'calc(100vw - 22.5rem)' }}>
           <div>
             <AuctionHeader
@@ -38,7 +38,7 @@ export function SellerLive() {
           minWidth: '20.5rem',
           display: 'flex',
           flexDirection: 'column',
-          padding: '0 0.5rem 0.5rem 0.25rem',
+          padding: '1rem 0.5rem 0.5rem 0.25rem',
         }}
       >
         <AuctionSystem

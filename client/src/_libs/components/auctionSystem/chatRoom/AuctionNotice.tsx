@@ -52,6 +52,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
               live(socket.current).send.notice(auctionRoomId, notice);
               setNotice('');
             }}
+            css={{ display: 'flex' }}
           >
             <Input
               placeholder="공지를 입력하세요."
@@ -61,6 +62,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
               value={notice}
               onChange={e => setNotice(e.target.value)}
             />
+            <Spacing rem="0.5" dir="h" />
             <RoundButton
               type="button"
               size="large"
