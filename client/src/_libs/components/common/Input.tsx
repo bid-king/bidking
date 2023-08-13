@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { ChangeEvent, KeyboardEvent } from 'react';
+import React, { ChangeEvent, KeyboardEvent, forwardRef } from 'react';
 import colors from '../../design/colors';
 import { HTMLAttributes } from 'react';
 
@@ -16,40 +16,48 @@ interface Props extends HTMLAttributes<HTMLInputElement> {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
-export function Input({
-  id,
-  inputType = 'text',
-  placeholder = 'placeholder를 입력하세요',
-  size = 'large',
-  theme = 'light',
-  shape = 'square',
-  value,
-  onChange,
-  onBlur,
-  onKeyDown,
-}: Props) {
-  return (
-    <input
-      id={id}
-      type={inputType}
-      placeholder={placeholder}
-      value={value}
-      css={{
-        width: '100%',
-        paddingLeft: '1rem',
-        paddingRight: '1rem',
-        fontWeight: 600,
-        outline: 'none',
-        ...THEME_VARIENT[theme],
-        ...SHAPE_VARIENT[shape],
-        ...SIZE_VARIENT[size],
-      }}
-      onChange={onChange}
-      onBlur={onBlur}
-      onKeyDown={onKeyDown}
-    />
-  );
-}
+export const Input = forwardRef<HTMLInputElement, Props>(
+  (
+    {
+      id,
+      inputType = 'text',
+      placeholder = 'placeholder를 입력하세요',
+      size = 'large',
+      theme = 'light',
+      shape = 'square',
+      value,
+      onChange,
+      onBlur,
+      onKeyDown,
+      ...rest
+    },
+    ref
+  ) => {
+    return (
+      <input
+        {...rest}
+        ref={ref}
+        id={id}
+        type={inputType}
+        placeholder={placeholder}
+        value={value}
+        css={{
+          width: '100%',
+          paddingLeft: '1rem',
+          paddingRight: '1rem',
+          fontWeight: 600,
+          outline: 'none',
+          ...THEME_VARIENT[theme],
+          ...SHAPE_VARIENT[shape],
+          ...SIZE_VARIENT[size],
+        }}
+        onChange={onChange}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+      />
+    );
+  }
+);
 
 const THEME_VARIENT = {
   light: {
@@ -84,3 +92,5 @@ const SIZE_VARIENT = {
     fontSize: '0.95rem',
   },
 };
+
+Input.displayName = 'Input';

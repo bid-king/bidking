@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent, KeyboardEvent, FocusEvent } from 'react';
+import { useState, useEffect, useRef, ChangeEvent, FormEvent, KeyboardEvent, FocusEvent } from 'react';
 import member from '../../api/member';
 
 export function useSignUp() {
@@ -27,6 +27,30 @@ export function useSignUp() {
   const [isCertificationDisabled, setIsCertificationDisabled] = useState(false);
   const [nicknameError, setNicknameError] = useState('');
   const [idError, setIdError] = useState('');
+
+  // 포커싱 로직
+  const nicknameRef = useRef<HTMLInputElement | null>(null);
+  const userIdRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+  const passwordConfirmationRef = useRef<HTMLInputElement | null>(null);
+  const phoneNumberRef = useRef<HTMLInputElement | null>(null);
+  const addressRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (step === 'nickname' && nicknameRef.current) {
+      nicknameRef.current.focus();
+    } else if (step === 'id' && userIdRef.current) {
+      userIdRef.current.focus();
+    } else if (step === 'password' && passwordRef.current) {
+      passwordRef.current.focus();
+    } else if (step === 'password-again' && passwordConfirmationRef.current) {
+      passwordConfirmationRef.current.focus();
+    } else if (step === 'phone-number' && phoneNumberRef.current) {
+      phoneNumberRef.current.focus();
+    } else if (step === 'address' && addressRef.current) {
+      addressRef.current.focus();
+    }
+  }, [step]);
 
   const handleNextStep = (e: FormEvent) => {
     e.preventDefault();
@@ -237,5 +261,11 @@ export function useSignUp() {
     isCertificationDisabled,
     nicknameError,
     idError,
+    nicknameRef,
+    userIdRef,
+    passwordRef,
+    passwordConfirmationRef,
+    phoneNumberRef,
+    addressRef,
   };
 }

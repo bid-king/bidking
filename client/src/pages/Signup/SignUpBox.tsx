@@ -48,6 +48,12 @@ export function SignUpBox() {
     isCertificationDisabled,
     nicknameError,
     idError,
+    nicknameRef,
+    userIdRef,
+    passwordRef,
+    passwordConfirmationRef,
+    phoneNumberRef,
+    addressRef,
   } = useSignUp();
 
   return (
@@ -79,7 +85,13 @@ export function SignUpBox() {
                     <Text type="bold" content="닉네임을 입력해주세요" />
                   </label>
                   <Spacing rem="1" />
-                  <Input id="nickname-signup-input" onChange={handleNicknameChange} placeholder="" inputType="text" />
+                  <Input
+                    id="nickname-signup-input"
+                    onChange={handleNicknameChange}
+                    placeholder=""
+                    inputType="text"
+                    ref={nicknameRef}
+                  />
                 </div>
                 <Spacing rem="2" />
                 {nicknameError && (
@@ -106,7 +118,13 @@ export function SignUpBox() {
                     <Text type="bold" content="아이디를 입력해주세요" />
                   </label>
                   <Spacing rem="1" />
-                  <Input id="userId-signup-input" onChange={handleUserIdChange} placeholder="" inputType="text" />
+                  <Input
+                    id="userId-signup-input"
+                    onChange={handleUserIdChange}
+                    placeholder=""
+                    inputType="text"
+                    ref={userIdRef}
+                  />
                 </div>
                 <Spacing rem="2" />
                 {idError && (
@@ -139,6 +157,7 @@ export function SignUpBox() {
                     onChange={handlePasswordChange}
                     placeholder=""
                     inputType="password"
+                    ref={passwordRef}
                   />
                 </div>
                 <Spacing rem="2" />
@@ -165,6 +184,7 @@ export function SignUpBox() {
                     onChange={handlePasswordConfirmationChange}
                     placeholder=""
                     inputType="password"
+                    ref={passwordConfirmationRef}
                   />
                 </div>
                 <Spacing rem="2" />
@@ -189,7 +209,12 @@ export function SignUpBox() {
                         width: '80rem',
                       }}
                     >
-                      <Input id="phone-nubmer-signup-input" onChange={handlePhoneChange} placeholder="" />
+                      <Input
+                        id="phone-nubmer-signup-input"
+                        onChange={handlePhoneChange}
+                        placeholder=""
+                        ref={phoneNumberRef}
+                      />
                     </div>
                     <Spacing rem="3" dir="h" />
                     <Spacing rem="2" />
