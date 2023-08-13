@@ -111,8 +111,7 @@ export function AuctionItemStatus({
     >
       <div css={{ width: '100%', padding: '0 1rem 0 1rem', ...THEME_VARIANT[theme] }}>
         <div css={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {itemList?.map((item, idx, arr) => {
-            console.log(arr);
+          {itemList?.map((item, idx) => {
             if (idx >= order - 2 && idx <= order + 2) return <AuctionItem item={item} idx={idx} key={idx} />;
           })}
         </div>

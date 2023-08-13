@@ -9,16 +9,16 @@ export function useLiveEnter() {
   const [auctionRoomId, setAuctionRoomId] = useState<number>(0);
   const [nickname, setNickname] = useState<string>('');
   const [title, setTitle] = useState<string>('');
-  const [auctionRoomType, setAuctionRoomType] = useState<string>('');
+  const [auctionRoomType, setAuctionRoomType] = useState<'COMMON' | 'REVERSE'>('COMMON');
   const [liveAuthErr, setLiveAuthErr] = useState<unknown>(null);
   const { accessToken } = useAppSelector(state => state.user);
+  const auctionId = useParams<string>();
 
   useEffect(() => {
     try {
-      const auctionId = useParams<string>();
       (async () => {
         const isLogined = await store.getState().user.isLogined;
-        if (!isLogined) throw new Error('403');
+        if (!isLogined) return;
         else {
           const uid = (await store.getState().user.id) || 0;
           const data = await enter(Number(auctionId), accessToken);
@@ -32,7 +32,7 @@ export function useLiveEnter() {
     } catch (err) {
       setLiveAuthErr(err);
     }
-  });
+  }, [auctionId]);
 
   return { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr };
 }

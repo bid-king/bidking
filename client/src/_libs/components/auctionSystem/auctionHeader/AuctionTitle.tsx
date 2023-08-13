@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
+import auctionType from '../../../constants/auctionType';
 import colors from '../../../design/colors';
 import { Spacing } from '../../common/Spacing';
 import { Text } from '../../common/Text';
@@ -15,11 +16,11 @@ export function AuctionTitle({ theme, nickname, title, auctionRoomType }: Props)
           css={{
             padding: '0.2rem 1rem 0.2rem 1rem',
             borderRadius: '1.5rem',
-            backgroundColor: auctionRoomType === 'GENERAL' ? colors.progress : colors.warn,
+            backgroundColor: auctionRoomType === 'COMMON' ? colors.progress : colors.warn,
             color: colors.white,
           }}
         >
-          <Text content={auctionRoomType} type="bold" />
+          <Text content={auctionType[auctionRoomType]} type="bold" />
         </div>
         <Spacing rem="0.5" dir="h" />
         <div
@@ -44,6 +45,6 @@ const THEME_VARIANT = {
 interface Props {
   theme: 'light' | 'dark';
   nickname: string;
-  auctionRoomType: string;
+  auctionRoomType: 'COMMON' | 'REVERSE';
   title: string;
 }

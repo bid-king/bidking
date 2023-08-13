@@ -4,6 +4,7 @@ import colors from '../../design/colors';
 import { Icon } from './Icon';
 import { Text } from './Text';
 import { Spacing } from './Spacing';
+import dashboardState from '../../constants/dashboardState';
 
 interface Props {
   theme: 'light' | 'dark';
@@ -42,13 +43,13 @@ export function DashBoard({
         <Spacing rem="0.5" dir="h" />
         <Text type={textSizeType} content="결제대기" />
         <Spacing rem="0.5" dir="h" />
-        <Text type={textSizeType} content={paymentWaiting.toString()} />
+        <Text type={textSizeType} content={dashboardState.paymentWaiting} />
       </div>
       {isSmall && <Spacing rem="0.5" />}
       <div css={{ display: 'flex', alignItems: 'center' }}>
         <Icon type="gavel" color="ok" rem={iconSize} />
         <Spacing rem="0.5" dir="h" />
-        <Text type={textSizeType} content="송장대기" />
+        <Text type={textSizeType} content={dashboardState.deliveryWaiting} />
         <Spacing rem="0.5" dir="h" />
         <Text type={textSizeType} content={deliveryWaiting.toString()} />
       </div>
@@ -56,7 +57,7 @@ export function DashBoard({
       <div css={{ display: 'flex', alignItems: 'center' }}>
         <Icon type="gavel" color="confirm" rem={iconSize} />
         <Spacing rem="0.5" dir="h" />
-        <Text type={textSizeType} content="낙찰취소" />
+        <Text type={textSizeType} content={dashboardState.penalty} />
         <Spacing rem="0.5" dir="h" />
         <Text type={textSizeType} content={penalty.toString()} />
       </div>

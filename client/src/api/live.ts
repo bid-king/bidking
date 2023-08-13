@@ -89,7 +89,7 @@ export function live(ws: Socket | null) {
 
 export interface AuctionEnterResponse {
   nickname: string;
-  auctionRoomType: string;
+  auctionRoomType: 'COMMON' | 'REVERSE';
   title: string;
   auctionRoomId: number;
   currentItemId: number;
