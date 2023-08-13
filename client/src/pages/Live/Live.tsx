@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
-import { AuctionSystem } from '../../_libs/components/auctionTemp/AuctionSystem';
-import { AuctionHeader } from '../../_libs/components/auctionTemp/auctionHeader/AuctionHeader';
+import { AuctionSystem } from '../../_libs/components/auctionSystem/AuctionSystem';
+import { AuctionHeader } from '../../_libs/components/auctionSystem/auctionHeader/AuctionHeader';
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { OrderStream } from '../../_libs/components/meeting/OrderStream';
 import colors from '../../_libs/design/colors';
 import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
 import { useSocket } from '../../_libs/hooks/useSocket';
-import { AuctionNotice } from '../../_libs/components/auctionTemp/chatRoom/AuctionNotice';
+import { AuctionNotice } from '../../_libs/components/auctionSystem/chatRoom/AuctionNotice';
 
 export function Live() {
   const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr } = useLiveEnter();
