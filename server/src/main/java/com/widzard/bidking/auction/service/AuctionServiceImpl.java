@@ -133,7 +133,7 @@ public class AuctionServiceImpl implements AuctionService {
             throw new EmptyItemListException();
         }
 
-        // 이미지 수 검증
+        // 이미지 수 및 아이템 입력값 검증
         if (request.getItemList().size() != itemImgs.length) {
             throw new InvalidAuctionRoomRequestException();
         }

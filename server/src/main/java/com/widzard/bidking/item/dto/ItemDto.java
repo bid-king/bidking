@@ -57,7 +57,7 @@ public class ItemDto {
             .itemImageUrl(item.getImage().getFilePath())
             .itemDescription(item.getDescription())
             .itemOrdering(item.getOrdering())
-//            .successTime(item.getOrderItem().getCreatedAt()) TODO orderItem 구현 후 지정
+            .successTime(item.getOrderItem().getCreatedAt())
             .build();
     }
 
