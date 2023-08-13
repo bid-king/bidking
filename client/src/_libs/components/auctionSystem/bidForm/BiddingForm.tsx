@@ -24,6 +24,7 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
     >
       <div css={{ display: 'flex', alignItems: 'center' }}>
         <ConfirmButton
+          disable={disable}
           btnType="progress"
           label={bidPriceParse(askingPrice) + '원 즉시입찰'}
           onClick={async () => {
