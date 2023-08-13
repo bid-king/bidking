@@ -44,7 +44,6 @@ public class Item extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_room_id", nullable = false)
-    //TODO 양방향 연관관계 도우미 매핑 메소드 생성
     private AuctionRoom auctionRoom;// (경매방코드)
 
     @Column(nullable = false)
@@ -102,32 +101,10 @@ public class Item extends BaseEntity {
     }
 
     public void update(ItemUpdateRequest updateRequest, ItemCategory itemCategory) {
-
-        //TODO 카테고리 별도 수정 필요
         this.itemCategory = itemCategory;
         this.name = updateRequest.getItemName();
         this.ordering = updateRequest.getOrdering();
         this.startPrice = updateRequest.getStartPrice();
         this.description = updateRequest.getDescription();
-    }
-
-    @Override
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        return sb.append("\ngetId")
-            .append(this.getId())
-            .append("\ngetDescription")
-            .append(this.getDescription())
-            .append("\ngetName")
-            .append(this.getName())
-            .append("\ngetStartPrice")
-            .append(this.getStartPrice())
-            .append("\ngetAuctionRoom")
-            .append(this.getAuctionRoom().getId())
-            .append("\ngetItemCategory")
-            .append(this.getItemCategory().getName())
-            .append("\nthis.getItemState()")
-            .append(this.getItemState())
-            .toString();
     }
 }

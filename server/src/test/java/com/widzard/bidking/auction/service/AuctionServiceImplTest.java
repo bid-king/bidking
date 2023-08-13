@@ -192,7 +192,7 @@ class AuctionServiceImplTest {
                 .id(item.getId())
                 .itemName(item.getName() + "changed")
                 .ordering(item.getOrdering())
-                .itemCategoryId(itemCategory2.getId())//TODO 카테고리 따로
+                .itemCategoryId(itemCategory2.getId())
                 .description(item.getDescription())
                 .startPrice(item.getStartPrice())
                 .build();
@@ -517,8 +517,4 @@ class AuctionServiceImplTest {
         log.info("auctionRoom's size={}", auctionRoomList.size());
 //        Assertions.assertEquals(auctionRoomList.get(0).getId(), find.getId());
     }
-
-    //TODO itemList를 빈 리스트로 update 요청시 아이템 에러 발생
-
-    //TODO 시작시간을 현재시간 1시간 이내로 설정시 시간 에러 발생
 }

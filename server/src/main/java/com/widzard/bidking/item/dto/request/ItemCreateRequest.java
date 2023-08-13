@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// TODO 이미지
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemCreateRequest {
