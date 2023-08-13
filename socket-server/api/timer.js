@@ -30,15 +30,23 @@ module.exports.startCountdownTimer = (app, roomId) => {
       // 3. redis에  afterBidResult 저장
       if (userId === undefined) {
         // 유찰
-        await redisCli.set(`item:${itemId}:afterBidResult:type`, 'fail');
+        await redisCli.hmset(`item:${itemId}:afterBidResult`, 'type', 'fail');
         io.to(`${roomId}`).emit('failBid', { itemId });
       } else {
         // 낙찰
-        await redisCli.set(`item:${itemId}:afterBidResult:type`, 'success');
-        await redisCli.set(`item:${itemId}:afterBidResult:userId`, userId);
-        await redisCli.set(`item:${itemId}:afterBidResult:nickname`, nickname);
-        await redisCli.set(`item:${itemId}:afterBidResult:price`, price);
-        await redisCli.set(`item:${itemId}:afterBidResult:time`, time);
+        await redisCli.hmset(
+          `item:${itemId}:afterBidResult`,
+          'type',
+          'success',
+          'userId',
+          userId,
+          'nickname',
+          nickname,
+          'price',
+          price,
+          'time',
+          time
+        );
         io.to(`${roomId}`).emit('successBid', { itemId, userId, nickname, price, time });
       }
     }
