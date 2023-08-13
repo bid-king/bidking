@@ -44,6 +44,8 @@ export function SignUpBox() {
     isPhoneError,
     phoneErrorMessage,
     isPasswordValid,
+    certifiedErrMessage,
+    isCertificationDisabled,
   } = useSignUp();
 
   return (
@@ -192,7 +194,10 @@ export function SignUpBox() {
                     <Spacing rem="3" dir="h" />
                     <Spacing rem="2" />
 
-                    <ConfirmButton btnType="certification" onClick={requestVerification} label="인증번호 전송" />
+                    {!isCertificationDisabled && (
+                      <ConfirmButton btnType="certification" onClick={requestVerification} label="인증번호 전송" />
+                    )}
+                    {isCertificationDisabled && <ConfirmButton btnType="disabled" label="인증번호 전송" />}
                   </div>
                   {isVerificationVisible && isPhoneValid && (
                     <>
@@ -222,7 +227,12 @@ export function SignUpBox() {
                     <Spacing rem="1" />
                   </>
                 )}
-
+                {certifiedErrMessage && (
+                  <>
+                    <Text type="bold" content={certifiedErrMessage} />
+                    <Spacing rem="1" />
+                  </>
+                )}
                 {isButtonDisabled && <ConfirmButton btnType="disabled" label="다음" />}
 
                 {!isButtonDisabled && <ConfirmButton onClick={handleNextStep} label="다음" />}

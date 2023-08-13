@@ -23,6 +23,8 @@ export function useSignUp() {
   const [certifiedNumber, setCertifiedNumber] = useState('');
   const [isPhoneError, setIsPhoneError] = useState(false);
   const [phoneErrorMessage, setPhoneErrorMessage] = useState('');
+  const [certifiedErrMessage, setCertifiedErrMessage] = useState('');
+  const [isCertificationDisabled, setIsCertificationDisabled] = useState(false);
 
   const handleNextStep = (e: FormEvent) => {
     e.preventDefault();
@@ -76,12 +78,16 @@ export function useSignUp() {
 
   // 인증번호 요청 함수
   const requestVerification = () => {
+    setIsCertificationDisabled(true);
     if (phoneNumber && isPhoneValid) {
       member
         .phoneVerification({ phoneNumber })
         .then(res => {
           setCertifiedNumber(res.certifiedNumber);
           setVerificationVisible(true);
+          setTimeout(() => {
+            setIsCertificationDisabled(false);
+          }, 10000);
         })
         .catch(err => {
           console.log(err);
@@ -96,6 +102,8 @@ export function useSignUp() {
     if (certificateCode) {
       if (certificateCode === certifiedNumber) {
         setRequestCerificated(true);
+      } else {
+        setCertifiedErrMessage('인증번호가 일치하지 않습니다.');
       }
     }
   };
@@ -199,5 +207,7 @@ export function useSignUp() {
     isPhoneError,
     phoneErrorMessage,
     isPasswordValid,
+    certifiedErrMessage,
+    isCertificationDisabled,
   };
 }
