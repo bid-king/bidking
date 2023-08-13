@@ -163,7 +163,7 @@ export function Nav({ theme = 'light' }: Props) {
               )}
               <Spacing rem="2" dir="h" />
               <div onMouseEnter={handleAlarmMouseEnter} onMouseLeave={handleAlarmMouseLeave}>
-                <Icon type="noti" color="black" rem="1.5" />
+                <Icon type="noti" color={theme} rem="1.5" />
               </div>
               <Spacing rem="1" dir="h" />
               <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
