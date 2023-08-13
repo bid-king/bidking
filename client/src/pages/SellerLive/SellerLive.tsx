@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import React from 'react';
 
-import { AuctionNotice } from '../../_libs/components/auctionsystem/chatRoom/AuctionNotice';
-import { AuctionSystem } from '../../_libs/components/auctionsystem/AuctionSystem';
-import { AuctionHeader } from '../../_libs/components/auctionsystem/auctionHeader/AuctionHeader';
+import { AuctionNotice } from '../../_libs/components/auctionTemp/chatRoom/AuctionNotice';
+import { AuctionSystem } from '../../_libs/components/auctionTemp/AuctionSystem';
+import { AuctionHeader } from '../../_libs/components/auctionTemp/auctionHeader/AuctionHeader';
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { SellerStream } from '../../_libs/components/meeting/SellerStream';
 import colors from '../../_libs/design/colors';
