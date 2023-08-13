@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent, KeyboardEvent, FocusEvent } from 'react';
 import member from '../../api/member';
 
 export function useSignUp() {
@@ -25,6 +25,8 @@ export function useSignUp() {
   const [phoneErrorMessage, setPhoneErrorMessage] = useState('');
   const [certifiedErrMessage, setCertifiedErrMessage] = useState('');
   const [isCertificationDisabled, setIsCertificationDisabled] = useState(false);
+  const [nicknameError, setNicknameError] = useState('');
+  const [idError, setIdError] = useState('');
 
   const handleNextStep = (e: FormEvent) => {
     e.preventDefault();
@@ -85,15 +87,15 @@ export function useSignUp() {
         .then(res => {
           setCertifiedNumber(res.certifiedNumber);
           setVerificationVisible(true);
-          setTimeout(() => {
-            setIsCertificationDisabled(false);
-          }, 10000);
         })
         .catch(err => {
           console.log(err);
           setIsPhoneError(true);
           setPhoneErrorMessage(err.response.data.message);
         });
+      setTimeout(() => {
+        setIsCertificationDisabled(false);
+      }, 10000);
     }
   };
 
@@ -131,20 +133,46 @@ export function useSignUp() {
 
   // 인풋값 관리
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value.trim());
-  };
+    const nickname = e.target.value.trim();
+    setNickname(nickname);
 
-  const handleNicknameBlur = () => {
-    checkNicknameDuplication(nickname);
+    if (nickname === '') {
+      setNicknameError('');
+      setIsNicknameDuplicated(false); // 중복 상태도 초기화
+      return;
+    }
+    if (nickname.length < 2 || nickname.length > 12) {
+      setNicknameError('닉네임은 2자 이상, 12자 이하로 입력해주세요.');
+      return; // 길이 에러가 있으면 중복 체크 로직은 실행하지 않음
+    } else {
+      setNicknameError(''); // 에러 메시지 초기화
+    }
+
+    checkNicknameDuplication(e.target.value);
   };
 
   const handleUserIdChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserId(e.target.value.trim());
+    const id = e.target.value.trim();
+    setUserId(id);
+
+    if (id === '') {
+      setIdError('');
+      setIsNicknameDuplicated(false); // 중복 상태도 초기화
+      return;
+    }
+    if (id.length < 4 || id.length > 12) {
+      setIdError('아이디는 4자 이상, 12자 이하로 입력해주세요.');
+      return; // 길이 에러가 있으면 중복 체크 로직은 실행하지 않음
+    } else {
+      setIdError(''); // 에러 메시지 초기화
+    }
+
+    checkIdDuplication(e.target.value);
   };
 
-  const handleUserIdBlur = () => {
-    checkIdDuplication(userId);
-  };
+  // const handleUserIdBlur = () => {
+  //   checkIdDuplication(userId);
+  // };
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -198,10 +226,8 @@ export function useSignUp() {
     userId,
     isIdDuplicated,
     isNicknameDuplicated,
-    handleUserIdBlur,
     nickname,
     handleNicknameChange,
-    handleNicknameBlur,
     handleCertificateCode,
     isSuccess,
     isPhoneError,
@@ -209,5 +235,7 @@ export function useSignUp() {
     isPasswordValid,
     certifiedErrMessage,
     isCertificationDisabled,
+    nicknameError,
+    idError,
   };
 }

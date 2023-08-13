@@ -34,10 +34,10 @@ export function SignUpBox() {
     requestCerificated,
     userId,
     isIdDuplicated,
-    handleUserIdBlur,
+    // handleUserIdBlur,
     nickname,
     handleNicknameChange,
-    handleNicknameBlur,
+    // handleNicknameBlurOrEnter,
     handleCertificateCode,
     isSuccess,
     isNicknameDuplicated,
@@ -46,6 +46,8 @@ export function SignUpBox() {
     isPasswordValid,
     certifiedErrMessage,
     isCertificationDisabled,
+    nicknameError,
+    idError,
   } = useSignUp();
 
   return (
@@ -77,16 +79,15 @@ export function SignUpBox() {
                     <Text type="bold" content="닉네임을 입력해주세요" />
                   </label>
                   <Spacing rem="1" />
-                  <Input
-                    id="nickname-signup-input"
-                    onChange={handleNicknameChange}
-                    onBlur={handleNicknameBlur}
-                    placeholder=""
-                    inputType="text"
-                  />
+                  <Input id="nickname-signup-input" onChange={handleNicknameChange} placeholder="" inputType="text" />
                 </div>
                 <Spacing rem="2" />
-
+                {nicknameError && (
+                  <>
+                    <Text type="bold" content={nicknameError} />
+                    <Spacing rem="1" />
+                  </>
+                )}
                 {isNicknameDuplicated && (
                   <>
                     <Text type="bold" content="닉네임이 중복되었습니다." />
@@ -105,16 +106,15 @@ export function SignUpBox() {
                     <Text type="bold" content="아이디를 입력해주세요" />
                   </label>
                   <Spacing rem="1" />
-                  <Input
-                    id="userId-signup-input"
-                    onChange={handleUserIdChange}
-                    onBlur={handleUserIdBlur}
-                    placeholder=""
-                    inputType="text"
-                  />
+                  <Input id="userId-signup-input" onChange={handleUserIdChange} placeholder="" inputType="text" />
                 </div>
                 <Spacing rem="2" />
-
+                {idError && (
+                  <>
+                    <Text type="bold" content={idError} />
+                    <Spacing rem="1" />
+                  </>
+                )}
                 {isIdDuplicated && (
                   <>
                     <Text type="bold" content="아이디가 중복되었습니다." />
@@ -194,10 +194,11 @@ export function SignUpBox() {
                     <Spacing rem="3" dir="h" />
                     <Spacing rem="2" />
 
-                    {!isCertificationDisabled && (
+                    {!isCertificationDisabled && isPhoneValid && (
                       <ConfirmButton btnType="certification" onClick={requestVerification} label="인증번호 전송" />
                     )}
-                    {isCertificationDisabled && <ConfirmButton btnType="disabled" label="인증번호 전송" />}
+                    {isCertificationDisabled ||
+                      (!isPhoneValid && <ConfirmButton btnType="disabled" label="인증번호 전송" />)}
                   </div>
                   {isVerificationVisible && isPhoneValid && (
                     <>
