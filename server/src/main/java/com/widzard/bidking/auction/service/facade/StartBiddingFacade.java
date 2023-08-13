@@ -29,7 +29,7 @@ public class StartBiddingFacade {
         );
 
         redisTemplate.opsForValue().set(
-            generateCurrentPriceKey(auctionId),
+            generateStartPriceKey(auctionId),
             startPrice,
             Duration.ofDays(1)
         );
@@ -42,8 +42,8 @@ public class StartBiddingFacade {
     }
 
 
-    private String generateCurrentPriceKey(Long auctionId) {
-        return "auction" + ":" + auctionId + ":" + "onLiveItem:currentPrice";
+    private String generateStartPriceKey(Long auctionId) {
+        return "auction" + ":" + auctionId + ":" + "onLiveItem:startPrice";
     }
 
     private String generateItemKey(Long auctionId) {

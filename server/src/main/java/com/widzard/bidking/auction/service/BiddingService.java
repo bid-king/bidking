@@ -2,7 +2,7 @@ package com.widzard.bidking.auction.service;
 
 public interface BiddingService {
 
-    void bidding(Long itemId, Long price);
+    void biddingInDB(Long itemId, Long price);
 
     int increaseCount(Long itemId, Long quantity);
 }
