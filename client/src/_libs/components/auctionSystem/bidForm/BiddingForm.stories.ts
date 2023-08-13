@@ -12,5 +12,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: { theme: 'light', askingPrice: '1211000' },
+  args: { theme: 'light', askingPrice: '1211000', disable: false, onBid: () => {} },
 };
