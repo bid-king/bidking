@@ -18,6 +18,12 @@ export function LinkDebug() {
           <li>
             <Link to="/login/loading">로딩화면</Link>
           </li>
+          <li>
+            <Link to="/seller/openvidu">오픈비두 테스트 판매자</Link>
+          </li>
+          <li>
+            <Link to="/openvidu">오픈비두 테스트 구매자</Link>
+          </li>
         </ul>
       </nav>
     </div>
