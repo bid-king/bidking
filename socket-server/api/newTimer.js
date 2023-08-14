@@ -57,7 +57,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
           userId,
           nickname,
           price,
-          time: new Date().toJSON(),
+          time: new Date().toJSON().split('.')[0],
         };
         io.to(roomId).emit('successBid', {
           itemId: Number(itemId),
