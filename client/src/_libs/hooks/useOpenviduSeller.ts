@@ -83,5 +83,6 @@ export function useOpenviduSeller(userId: number, roomId: number) {
     publisher,
     onChangeCameraStatus,
     onChangeMicStatus,
+    leaveSession,
   };
 }
