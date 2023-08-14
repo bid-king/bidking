@@ -16,7 +16,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 }
 //price는 시험용 변수로, 실적용 시 삭제하고 useBidPrice()를 활성화해야합니다.
 export function BidPrice({ align = 'center', theme = 'light', price }: Props) {
-  const [priceArr, setPriceArr] = useState<string[]>([String(price)]);
+  const [priceArr, setPriceArr] = useState<string[]>([bidPriceParse(String(price))]);
 
   //여기까지를 주석 처리해야합니다.
   return (

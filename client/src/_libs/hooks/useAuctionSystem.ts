@@ -44,6 +44,8 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
     }); //다음 아이템 설명시작
 
     socket.current?.on('updateBid', ({ itemId, userId, nickname, price, time }) => {
+      console.log('업뎃업뎃');
+      console.log(itemId, userId, nickname, price, time);
       setCurrPrice(price);
       setCurrTime(time);
       setTopBidder(nickname);
@@ -83,10 +85,10 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       setLiveStatus('pending');
     }); //유찰
 
-    socket.current?.on('time', second => {
-      setCurrTime(second);
+    socket.current?.on('time', time => {
+      setCurrTime(time);
     }); //시간 업데이트
   }, [socket.current]);
 
-  return { order, currPrice, topbidder, currId, itemList, disable, currTime, liveStatus };
+  return { order, currPrice, topbidder, currId, itemList, disable, currTime, liveStatus, setCurrId, setLiveStatus };
 }

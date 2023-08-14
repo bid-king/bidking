@@ -14,7 +14,8 @@ import { useAuctionSystem } from '../../hooks/useAuctionSystem';
 import { BidCtrl } from './bf/BidCtrl';
 
 export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoomId, socket }: Props) {
-  const { order, currPrice, topbidder, currId, itemList, disable, currTime, liveStatus } = useAuctionSystem(socket);
+  const { order, currPrice, topbidder, currId, itemList, disable, currTime, liveStatus, setCurrId, setLiveStatus } =
+    useAuctionSystem(socket);
 
   return (
     <div>
@@ -44,7 +45,14 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
             disable={disable}
           />
         ) : (
-          <BidCtrl liveStatus={liveStatus} auctionRoomId={auctionRoomId} itemId={currId} />
+          <BidCtrl
+            socket={socket}
+            liveStatus={liveStatus}
+            setLiveStatus={setLiveStatus}
+            setCurrId={setCurrId}
+            auctionRoomId={auctionRoomId}
+            itemId={currId}
+          />
         )}
       </div>
       <Spacing rem="0.5" />
