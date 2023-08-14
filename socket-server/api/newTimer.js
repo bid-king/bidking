@@ -49,7 +49,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
         afterBidResultData = {
           type: 'fail',
         };
-        io.to(`${roomId}`).emit('failBid', { itemId: Number(itemId) });
+        io.to(roomId).emit('failBid', { itemId: Number(itemId) });
       } else if ([itemId, nickname, price, time].every(value => value !== undefined)) {
         // 낙찰
         afterBidResultData = {
@@ -59,7 +59,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
           price,
           time,
         };
-        io.to(`${roomId}`).emit('successBid', {
+        io.to(roomId).emit('successBid', {
           itemId: Number(itemId),
           userId: Number(userId),
           nickname,
