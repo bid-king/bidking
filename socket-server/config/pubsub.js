@@ -5,12 +5,12 @@ module.exports = app => {
   const io = app.get('io');
 
   // docker
-  // const subscriber = redis.createClient({
-  //   url: 'redis://redis:6379',
-  // });
+  const subscriber = redis.createClient({
+    url: 'redis://redis:6379',
+  });
 
   // local
-  const subscriber = redis.createClient();
+  // const subscriber = redis.createClient();
 
   subscriber.subscribe('StartAuctionItem');
   subscriber.subscribe('UpdateAuctionPrice');

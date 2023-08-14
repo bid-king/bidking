@@ -9,6 +9,9 @@ services:
 
   react:
     image: dajeongyun/docker-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     volumes:
       - ./client:/app
     ports:
@@ -17,6 +20,9 @@ services:
 
   springboot:
     image: dajeongyun/docker-springboot-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
     volumes:
       - ./server:/app
     ports:
@@ -26,6 +32,9 @@ services:
 
   nodejs:
     image: dajeongyun/docker-nodejs-server
+    build:
+      context: ./socket-server
+      dockerfile: Dockerfile
     ports:
       - '8005:8005'
     volumes:

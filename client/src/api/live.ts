@@ -6,12 +6,12 @@ export function enter(auctionId: number, token: string) {
 export function getItems(auctionId: number, token: string) {
   return https.get<AuctionEnterResponse>(`/api/v1/bid/${auctionId}/items`, token);
 }
-export function liveStart(auctionId: number) {}
-export function itemStart(auctionId: number, itemId: number, token: string) {
+export function descStart(auctionId: number, itemId: number, token: string) {
   return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/start`, token);
 }
 export function bid(auctionId: number, itemId: number, price: string, token: string) {
-  return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/start`, token, { price });
+  console.log(price, '원에 입찰함....ㅠㅠ');
+  return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/try`, token, { price });
 }
 export function auctionEnd(auctionId: number, token: string) {
   return https.post(`/api/v1/bid/${auctionId}/end`, token);
@@ -21,6 +21,7 @@ export function live(ws: Socket | null) {
     send: {
       connect: (roomId: number, nickname: string, isSeller: boolean) =>
         ws?.emit('enterRoom', { nickname, roomId, isSeller }),
+      bidStart: (roomId: number) => ws?.emit('start', { roomId }),
       chat: (roomId: number, nickname: string, msg: string) => ws?.emit('chat', { nickname, roomId, msg }),
       leave: (roomId: number, nickname: string) => {
         ws?.emit('leaveRoom', { nickname, roomId });
