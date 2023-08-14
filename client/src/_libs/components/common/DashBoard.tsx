@@ -43,7 +43,7 @@ export function DashBoard({
         <Spacing rem="0.5" dir="h" />
         <Text type={textSizeType} content="결제대기" />
         <Spacing rem="0.5" dir="h" />
-        <Text type={textSizeType} content={dashboardState.paymentWaiting} />
+        <Text type={textSizeType} content={paymentWaiting.toString()} />
       </div>
       {isSmall && <Spacing rem="0.5" />}
       <div css={{ display: 'flex', alignItems: 'center' }}>

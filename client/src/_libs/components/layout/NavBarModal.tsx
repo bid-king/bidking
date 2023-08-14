@@ -18,6 +18,7 @@ export function NavBarModal({ theme = 'light' }: Props) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [status, setStatus] = useState<SellerDashBoardResponce | DashBoardResponce | null>(null);
+  const [nickname, setNickname] = useState('');
 
   const handleLogout = () => {
     if (isLogined) {
@@ -62,6 +63,18 @@ export function NavBarModal({ theme = 'light' }: Props) {
     }
   }, [theme]);
 
+  useEffect(() => {
+    if (id && isLogined) {
+      member
+        .get(id, accessToken)
+        .then(res => {
+          setNickname(res.nickname);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [theme]);
   return (
     <div
       css={{
@@ -78,7 +91,7 @@ export function NavBarModal({ theme = 'light' }: Props) {
           alignItems: 'center',
         }}
       >
-        <Text type="h2" content="NickName" />
+        <Text type="h2" content={nickname} />
       </div>
       <Spacing rem="1" />
       <div
@@ -106,6 +119,11 @@ export function NavBarModal({ theme = 'light' }: Props) {
       >
         <Link to={`/mypage/${id}`}>
           <Text type="bold" content="개인정보 수정" />
+        </Link>
+        <Spacing rem="1" />
+
+        <Link to={`/purchased/${id}`}>
+          <Text type="bold" content="구매내역" />
         </Link>
         <Spacing rem="1" />
 
