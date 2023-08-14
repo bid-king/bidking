@@ -51,7 +51,7 @@ export function useNavBar() {
           console.log(err);
         });
     }
-  }, [id, isLogined]);
+  }, [id, isLogined, imgSrc]);
 
   // 검색
   const [keyword, setKeyword] = useState('');

@@ -10,9 +10,6 @@ export function LinkDebug() {
             <Link to="/seller/detail/complete/1">판매자완료물품상세</Link>
           </li>
           <li>
-            <Link to="/purchased/1">구매내역</Link>
-          </li>
-          <li>
             <Link to="/seller/auction/1">판매자 경매진행</Link>
           </li>
           <li>
@@ -20,6 +17,12 @@ export function LinkDebug() {
           </li>
           <li>
             <Link to="/login/loading">로딩화면</Link>
+          </li>
+          <li>
+            <Link to="/seller/openvidu">오픈비두 테스트 판매자</Link>
+          </li>
+          <li>
+            <Link to="/openvidu">오픈비두 테스트 구매자</Link>
           </li>
         </ul>
       </nav>
