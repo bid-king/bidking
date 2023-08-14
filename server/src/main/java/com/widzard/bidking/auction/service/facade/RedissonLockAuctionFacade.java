@@ -96,7 +96,6 @@ public class RedissonLockAuctionFacade {
         return redisTemplate.opsForValue().increment(key, incrementValue);
     }
 
-
     private void saveBidding(Long itemId, Long memberId, String nickname, Long price,
         LocalDateTime time) {
         redisTemplate.opsForValue()
@@ -108,7 +107,6 @@ public class RedissonLockAuctionFacade {
         redisTemplate.opsForValue()
             .set(generateBiddingTimeKey(itemId), time, Duration.ofDays(1));
     }
-
 
     private String generateStartPriceKey(Long auctionId) {
         return "auction" + ":" + auctionId + ":" + "onLiveItem:startPrice";

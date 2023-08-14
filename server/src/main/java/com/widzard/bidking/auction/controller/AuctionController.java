@@ -16,6 +16,7 @@ import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.service.AuctionService;
+import com.widzard.bidking.auction.service.facade.EndAuctionRoomFacade;
 import com.widzard.bidking.auction.service.facade.RedissonLockAuctionFacade;
 import com.widzard.bidking.auction.service.facade.StartBiddingFacade;
 import com.widzard.bidking.member.entity.Member;
@@ -51,6 +52,7 @@ public class AuctionController {
     private final AlarmService alarmService;
     private final StartBiddingFacade startBiddingFacade;
     private final RedissonLockAuctionFacade redissonLockAuctionFacade;
+    private final EndAuctionRoomFacade endAuctionRoomFacade;
 
     @GetMapping("/auctions")
     public ResponseEntity<List<AuctionResponse>> readAuctionList(
@@ -252,6 +254,25 @@ public class AuctionController {
             "ok",
             HttpStatus.OK
         );
+    }
+
+    /*
+     * 경매방 종료 (셀러만 요청 가능/셀러 검증은 이미 이전에 됨)
+     */
+    @PostMapping("/bid/{auctionId}/end")
+    public ResponseEntity<String> endBiddingRoom(
+        @PathVariable("auctionId") Long auctionId
+    ) {
+        endAuctionRoomFacade.end(auctionId);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }
+
+    @PostMapping("/test/{auctionId}")
+    public ResponseEntity<String> test(
+        @PathVariable("auctionId") Long auctionId
+    ) {
+        endAuctionRoomFacade.test(auctionId);
+        return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 
     private List<AuctionResponse> getAuctionResponseList(List<AuctionRoom> auctionRoomList) {

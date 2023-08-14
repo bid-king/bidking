@@ -196,7 +196,8 @@ public class AuctionServiceImpl implements AuctionService {
         //시작시간이 20분이하로 남은경우 수정 불가능
         LocalDateTime auctionStartTime = auctionRoom.getStartedAt();
         LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
-        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(twentyMinutesAgo)) {
+        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(
+            twentyMinutesAgo)) {
             throw new UnableToUpdateAuctionNow();
         }
         log.info("auctionRoom ItemList={}", auctionRoom.getItemList().toString());
@@ -287,7 +288,8 @@ public class AuctionServiceImpl implements AuctionService {
         //시작시간이 20분이하로 남은경우 삭제 불가능
         LocalDateTime auctionStartTime = auctionRoom.getStartedAt();
         LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
-        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(twentyMinutesAgo)) {
+        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(
+            twentyMinutesAgo)) {
             throw new UnableToDeleteAuctionNow();
         }
 
@@ -369,7 +371,7 @@ public class AuctionServiceImpl implements AuctionService {
         } else {
             auctionRoom.validateLive();
             // 2. 경매방 라이브로 상태 변경
-            auctionRoom.changeOnLive();
+            auctionRoom.changeLiveState(AuctionRoomLiveState.ON_LIVE);
             log.info("시작할 경매방 pk: {}", auctionRoom.getId());
         }
 
@@ -388,6 +390,17 @@ public class AuctionServiceImpl implements AuctionService {
     public AuctionRoom getLiveAuctionItemList(Long auctionId) {
         return auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
+    }
+
+    @Override
+    public AuctionRoom endAuctionRoom(Long auctionId) {
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
+
+        // LiveState 변경
+        auctionRoom.quit();
+
+        return auctionRoom;
     }
 
     @Transactional

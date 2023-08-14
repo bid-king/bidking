@@ -54,7 +54,8 @@ public class SecurityConfig {
                 "/api/v1/auctions/bookmarks/count",
                 "/api/v1/refresh",
                 "/api/v1/bid/**",
-                "/api/v1/alarms/**"
+                "/api/v1/alarms/**",
+                "/api/v1/test/**"
             ).permitAll()
             .anyRequest().authenticated()
             .and()

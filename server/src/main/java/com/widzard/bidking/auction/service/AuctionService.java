@@ -47,4 +47,6 @@ public interface AuctionService {
     Long startBidding(Member member, Long auctionId, Long itemId);
 
     AuctionRoom getLiveAuctionItemList(Long auctionId);
+
+    AuctionRoom endAuctionRoom(Long auctionId);
 }

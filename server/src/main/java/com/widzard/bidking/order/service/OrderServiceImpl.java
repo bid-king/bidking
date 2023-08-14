@@ -10,10 +10,10 @@ import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
 import com.widzard.bidking.order.entity.Order;
-import com.widzard.bidking.order.entity.OrderState;
-import com.widzard.bidking.order.repository.OrderRepository;
 import com.widzard.bidking.order.entity.OrderItem;
+import com.widzard.bidking.order.entity.OrderState;
 import com.widzard.bidking.order.repository.OrderItemRepository;
+import com.widzard.bidking.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
 
+    @Transactional
     @Override
     public Order createOrder(Long auctionRoomId, Long ordererId, OrderState orderState, Long itemId,
         Long price) {
