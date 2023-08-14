@@ -18,16 +18,16 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
     socket.current?.on('init', ({ currentItemId, itemList }) => {
       setItemList(itemList);
     }); //API 요청 성공시, 이 데이터가 소켓에서옴
-    socket.current?.on('notice', data => {
-      setNotice(data);
+    socket.current?.on('notice', ({ msg }) => {
+      setNotice(msg);
     }); //판매자 공지 받음
     socket.current?.on('successBid', ({ itemId, userId, nickname, price, time }) => {
-      const cur = itemList?.filter(el => el.itemId === itemId);
-      setNotice(`<SYSTEM> ${cur && cur[0].name} 상품이 ${nickname}님께 ${price}원에 낙찰되었습니다.`);
+      //TODO: 상품 뭔지 알려줘야함
+      setNotice(`<SYSTEM> 상품이 ${nickname}님께 ${price}원에 낙찰되었습니다.`);
     }); //낙찰
     socket.current?.on('failBid', ({ itemId }) => {
-      const cur = itemList?.filter(el => el.itemId === itemId);
-      setNotice(`<SYSTEM> ${cur && cur[0].name}  상품이 유찰되었습니다.`);
+      //TODO: 상품 뭔지 알려줘야함
+      setNotice('<SYSTEM> 상품이 유찰되었습니다.');
     }); //유찰
   }, [socket.current, notice]);
   return (
@@ -59,12 +59,11 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
               size="large"
               theme="dark"
               shape="square"
-              value={notice}
               onChange={e => setNotice(e.target.value)}
             />
             <Spacing rem="0.5" dir="h" />
             <RoundButton
-              type="button"
+              type="submit"
               size="large"
               color="confirm"
               label="공지"
