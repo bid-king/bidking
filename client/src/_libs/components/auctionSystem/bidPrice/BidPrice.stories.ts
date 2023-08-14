@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    price: 12354,
+    priceArr: ['1', '2', ',', '3', '5', '4'],
     align: 'center',
     theme: 'light',
   },
