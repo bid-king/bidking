@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { MutableRefObject, useEffect, useMemo, useState } from 'react';
 import { HTMLAttributes } from 'react';
 import { Socket } from 'socket.io-client';
 import colors from '../../../design/colors';
@@ -12,12 +12,10 @@ import { BidWon } from './BidWon';
 interface Props extends HTMLAttributes<HTMLDivElement> {
   align: 'left' | 'right' | 'center';
   theme: 'dark' | 'light';
-  price: number;
+  priceArr: string[];
 }
 //price는 시험용 변수로, 실적용 시 삭제하고 useBidPrice()를 활성화해야합니다.
-export function BidPrice({ align = 'center', theme = 'light', price }: Props) {
-  const [priceArr, setPriceArr] = useState<string[]>([bidPriceParse(String(price))]);
-
+export function BidPrice({ align = 'center', theme = 'light', priceArr }: Props) {
   //여기까지를 주석 처리해야합니다.
   return (
     <div css={{ width: '100%', height: '2rem', position: 'relative' }}>
