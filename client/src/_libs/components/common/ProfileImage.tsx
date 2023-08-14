@@ -15,6 +15,11 @@ export function ProfileImage({ src = '/image/profile.png', rem = 2 }: Props) {
         width: `${rem}rem`,
         height: `${rem}rem`,
       }}
+      onError={e => {
+        const target = e.target as HTMLImageElement;
+        target.onerror = null;
+        target.src = '/image/profile.png';
+      }}
     />
   );
 }

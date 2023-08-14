@@ -3,18 +3,30 @@ import React, { MutableRefObject, useEffect, useState } from 'react';
 import colors from '../../design/colors';
 import { Spacing } from '../common/Spacing';
 import { AuctionItemStatus, DUMMY } from './auctionItemList/AuctionItemStatus';
-import { BiddingForm } from './bidForm/BiddingForm';
 import { BidPrice } from './bidPrice/BidPrice';
 import { Timer } from './bidTimer/Timer';
 import { Bidder } from './bidder/Bidder';
+import { BiddingForm } from './bf/BiddingForm';
 import { Socket } from 'socket.io-client';
 import { ChatRoom } from './chatRoom/ChatRoom';
 import { askingPriceParse } from '../../util/bidPriceParse';
 import { useAuctionSystem } from '../../hooks/useAuctionSystem';
-import { BidCtrl } from './bidForm/BidCtrl';
+import { BidCtrl } from './bf/BidCtrl';
 
 export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoomId, socket }: Props) {
-  const { order, currPrice, topbidder, currId, itemList, disable, currTime, liveStatus } = useAuctionSystem(socket);
+  const {
+    order,
+    currPrice,
+    priceArr,
+    topbidder,
+    currId,
+    itemList,
+    disable,
+    currTime,
+    liveStatus,
+    setCurrId,
+    setLiveStatus,
+  } = useAuctionSystem(socket);
 
   return (
     <div>
@@ -30,19 +42,28 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
         <Spacing rem="1" />
         <Bidder theme={theme} bidder={topbidder} />
         <Spacing rem="1" />
-        <BidPrice align="center" theme={theme} price={currPrice} />
+        <BidPrice align="center" theme={theme} priceArr={priceArr} />
         <Spacing rem="1.5" />
         <Timer theme={theme} time={currTime} />
         <Spacing rem="1.5" />
         {userType === 'order' ? (
           <BiddingForm
+            auctionRoomId={auctionRoomId}
+            itemId={currId}
             theme={theme}
+            currPrice={currPrice}
             askingPrice={askingPriceParse(currPrice)}
             disable={disable}
-            onBid={() => alert('API')}
           />
         ) : (
-          <BidCtrl liveStatus={liveStatus} />
+          <BidCtrl
+            socket={socket}
+            liveStatus={liveStatus}
+            setLiveStatus={setLiveStatus}
+            setCurrId={setCurrId}
+            auctionRoomId={auctionRoomId}
+            itemId={currId}
+          />
         )}
       </div>
       <Spacing rem="0.5" />
@@ -68,5 +89,5 @@ interface Props {
   nickname: string;
   auctionRoomId: number;
   socket: MutableRefObject<Socket | null>;
-  setNotice?: () => void;
+  setNotice?: () => Promise<unknown>;
 }

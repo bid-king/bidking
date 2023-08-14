@@ -1,18 +1,22 @@
 import React, { MutableRefObject, useEffect, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { live, LiveItem, liveItemList } from '../../api/live';
+import { LiveItem, liveItemList } from '../../api/live';
 import { arrayPadding } from '../util/arrayPadding';
 import { DUMMY } from '../components/auctionSystem/auctionItemList/AuctionItemStatus';
+import { bidPriceParse } from '../util/bidPriceParse';
 
 export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
   const [order, setOrder] = useState<number>(2); //순서, 2부터 시작함
   const [currPrice, setCurrPrice] = useState<number>(0); //현재 최고 입찰가 (입찰성공시 업데이트)
-  const [topbidder, setTopBidder] = useState<string>('기맨'); //현재 최고 입찰자
+  const [priceArr, setPriceArr] = useState<string[]>(['']);
+  const [topbidder, setTopBidder] = useState<string>('-'); //현재 최고 입찰자
   const [currId, setCurrId] = useState<number>(0); //현재 진행중인 아이템
   const [itemList, setItemList] = useState<liveItemList | undefined>(undefined); //전체 아이템리스트
   const [disable, setDisable] = useState<boolean>(true); //입찰 대기 시간동안 버튼이 눌리지 않는 상태
   const [currTime, setCurrTime] = useState<number>(10); //남은 시간
-  const [liveStatus, setLiveStatus] = useState<string>('');
+  const [liveStatus, setLiveStatus] = useState<'beforeStart' | 'inAuction' | 'inDesc' | 'beforeDesc' | 'end'>(
+    'beforeStart'
+  );
 
   useEffect(() => {
     socket.current?.on('init', ({ currentItemId, itemList }) => {
@@ -24,6 +28,9 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
     socket.current?.on('start', ({ itemId, price }) => {
       setDisable(false);
       setLiveStatus('inAuction');
+      setCurrId(itemId);
+      setCurrPrice(price);
+      setPriceArr([bidPriceParse(String(price))]);
     }); //아이템 경매 시작 (전체 경매가 시작되는것)
 
     socket.current?.on('next', ({ itemId, price }) => {
@@ -38,11 +45,14 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       });
       setItemList(result);
       setCurrPrice(price);
+      setPriceArr([bidPriceParse(String(price))]);
       setDisable(true);
     }); //다음 아이템 설명시작
 
     socket.current?.on('updateBid', ({ itemId, userId, nickname, price, time }) => {
+      console.log(itemId, userId, nickname, price, time);
       setCurrPrice(price);
+      setPriceArr([bidPriceParse(String(price))]);
       setCurrTime(time);
       setTopBidder(nickname);
       setDisable(true);
@@ -62,7 +72,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       });
       setItemList(result);
       setOrder(order + 1);
-      setLiveStatus('pending');
+      setLiveStatus('beforeDesc');
     }); //낙찰
 
     socket.current?.on('failBid', ({ itemId }) => {
@@ -78,13 +88,25 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       });
       setItemList(result);
       setOrder(order + 1);
-      setLiveStatus('pending');
+      setLiveStatus('beforeDesc');
     }); //유찰
 
-    socket.current?.on('time', second => {
-      setCurrTime(second);
+    socket.current?.on('time', time => {
+      setCurrTime(time);
     }); //시간 업데이트
   }, [socket.current]);
 
-  return { order, currPrice, topbidder, currId, itemList, disable, currTime, liveStatus };
+  return {
+    order,
+    currPrice,
+    priceArr,
+    topbidder,
+    currId,
+    itemList,
+    disable,
+    currTime,
+    liveStatus,
+    setCurrId,
+    setLiveStatus,
+  };
 }

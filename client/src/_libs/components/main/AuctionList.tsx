@@ -49,6 +49,11 @@ export function AuctionList({
             filter: 'blur(0.25rem)',
           },
         }}
+        onError={e => {
+          const target = e.target as HTMLImageElement;
+          target.onerror = null;
+          target.src = '/image/bid.jpg';
+        }}
         alt={title}
       />
 

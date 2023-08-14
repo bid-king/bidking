@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import React, { MutableRefObject, useEffect, useMemo, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { live, SocketAPI } from '../../../../api/live';
+import { live } from '../../../../api/live';
 import colors from '../../../design/colors';
-import { IconButton } from '../../common/IconButton';
 import { Input } from '../../common/Input';
+import { RoundButton } from '../../common/RoundButton';
 import { Spacing } from '../../common/Spacing';
 import { ChatMessage } from './ChatMessage';
 
@@ -84,10 +84,10 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   onChange={e => setInput(e.target.value)}
                 />
                 <Spacing rem="0.5" dir="h" />
-                <IconButton
-                  type="arrowRight"
-                  color="black"
-                  background="confirm"
+                <RoundButton
+                  label="보내기"
+                  type="button"
+                  color="confirm"
                   size="small"
                   onClick={e => {
                     live(socket.current).send.chat(roomId, nickname, input);

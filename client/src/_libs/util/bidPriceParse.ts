@@ -20,15 +20,15 @@ export function validateBidPrice(price: string, callback: (arg: string) => void)
 }
 
 /**입찰 시도가 올바른지 검증합니다. 초기화할 상태의 setter, 현재 가격, 최소 호가, 입찰 성공 후 다음에 할 동작을 입력받습니다.*/
-export function Bid(init: (arg: string) => void, price: string, asking: string, onBid: (arg: string) => void): void {
+export function tryBid(init: (arg: string) => void, currPrice: number, asking: string, price: string): boolean {
   init('');
   if (price.trim().length === 0) {
     alert('입찰가를 입력해야 해요');
-    return;
+    return false;
   }
-  if (Number(price) <= Number(asking)) {
+  if (Number(price) <= currPrice) {
     alert('입찰가는 현재 가격보다 높아야 해요');
-    return;
+    return false;
   }
-  onBid(price);
+  return true;
 }

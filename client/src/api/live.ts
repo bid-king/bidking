@@ -1,12 +1,27 @@
 import { Socket } from 'socket.io-client';
 import { https } from '../_libs/util/http';
 export function enter(auctionId: number, token: string) {
-  return https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`, token);
+  return https.get<AuctionEnterResponse>(`/api/v1/bid/${auctionId}/enter`, token);
+}
+export function getItems(auctionId: number, token: string) {
+  return https.get<AuctionEnterResponse>(`/api/v1/bid/${auctionId}/items`, token);
+}
+export function descStart(auctionId: number, itemId: number, token: string) {
+  return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/start`, token);
+}
+export function bid(auctionId: number, itemId: number, price: string, token: string) {
+  console.log(price, '원에 입찰함....ㅠㅠ');
+  return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/try`, token, { price });
+}
+export function auctionEnd(auctionId: number, token: string) {
+  return https.post(`/api/v1/bid/${auctionId}/end`, token);
 }
 export function live(ws: Socket | null) {
   return {
     send: {
-      connect: (roomId: number, nickname: string) => ws?.emit('enterRoom', { nickname, roomId }),
+      connect: (roomId: number, nickname: string, isSeller: boolean) =>
+        ws?.emit('enterRoom', { nickname, roomId, isSeller }),
+      bidStart: (roomId: number) => ws?.emit('start', { roomId }),
       chat: (roomId: number, nickname: string, msg: string) => ws?.emit('chat', { nickname, roomId, msg }),
       leave: (roomId: number, nickname: string) => {
         ws?.emit('leaveRoom', { nickname, roomId });
@@ -89,10 +104,11 @@ export function live(ws: Socket | null) {
 
 export interface AuctionEnterResponse {
   nickname: string;
-  auctionRoomType: 'COMMON' | 'REVERSE';
+  auctionRoomType: 'common' | 'reverse';
   title: string;
   auctionRoomId: number;
   currentItemId: number;
+  seller: boolean;
 }
 
 export interface SocketAPI {

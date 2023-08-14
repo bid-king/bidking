@@ -13,7 +13,7 @@ export function RoundButton({ color = 'confirm', label, size = 'large', onClick 
         cursor: 'pointer',
         borderRadius: '2.25rem',
         fontWeight: '600',
-        width: 'auto',
+        whiteSpace: 'nowrap',
         ...COLOR_VARIANTS[color],
         ...SIZE_VARIANT[size],
       }}
