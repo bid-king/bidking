@@ -34,7 +34,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
         if (userId === undefined) {
           // 유찰
           await redisCli.hmset(`item:${itemId}:afterBidResult`, 'type', 'fail');
-          io.to(roomId).emit('failBid', { itemId });
+          io.to(roomId).emit('failBid', { itemId: Number(itemId) });
         } else {
           if (
             (itemId === undefined) |
@@ -59,7 +59,13 @@ module.exports.startCountdownTimer = (app, roomId) => {
               'time',
               time
             );
-            io.to(roomId).emit('successBid', { itemId, userId, nickname, price, time });
+            io.to(roomId).emit('successBid', {
+              itemId: Number(itemId),
+              userId: Number(userId),
+              nickname,
+              price: Number(price),
+              time,
+            });
           }
         }
       }

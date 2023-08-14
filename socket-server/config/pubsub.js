@@ -21,7 +21,7 @@ module.exports = app => {
     if (channel === 'StartAuctionItem') {
       const [roomId, itemId, price] = message.split(':');
       console.log(`AuctionRoom ${roomId}의 Item ${itemId}가 ${price}원부터 시작`);
-      io.to(Number(roomId)).emit('next', { itemId, price });
+      io.to(Number(roomId)).emit('next', { itemId: Number(itemId), price: Number(price) });
     }
 
     if (channel === 'UpdateAuctionPrice') {

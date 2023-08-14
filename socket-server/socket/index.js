@@ -62,7 +62,7 @@ module.exports = (server, app, sessionMiddleware) => {
       if (itemId === undefined || price === undefined) {
         console.error('Redis value not found in start');
       } else {
-        io.to(roomId).emit('start', { itemId, price });
+        io.to(roomId).emit('start', { itemId: Number(itemId), price: Number(price) });
         startCountdownTimer(app, roomId);
       }
     });
