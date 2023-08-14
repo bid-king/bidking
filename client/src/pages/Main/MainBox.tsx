@@ -77,7 +77,7 @@ export function MainBox() {
                   <Link to={`/detail/${auction.id}`}>
                     <AuctionList
                       title={auction.name}
-                      date={auctionDateParse(auction.startedAt)}
+                      date={auction.startedAt}
                       items={auction.itemListDto.map(item => item.name)}
                       img={auction.imageUrl}
                       css={{
@@ -143,7 +143,7 @@ export function MainBox() {
                 <Link to={isLogined ? `/detail/${auction.id}` : '/login'}>
                   <AuctionList
                     title={auction.name}
-                    date={auctionDateParse(auction.startedAt)}
+                    date={auction.startedAt}
                     items={auction.itemListDto.map(item => item.name)}
                     img={auction.imageUrl}
                     css={{
