@@ -28,6 +28,8 @@ export function useMyPageBox() {
   const { isLogined, accessToken } = useAppSelector(state => state.user);
   const [imgSrc, setImgSrc] = useState('/image/profile.png');
   const [errMessage, setErrMessage] = useState('');
+  const [isCertificationDisabled, setIsCertificationDisabled] = useState(false);
+  const [certifiedErrMessage, setCertifiedErrMessage] = useState('');
   const navigate = useNavigate();
   const memberId = useAppSelector(state => state.user.id);
 
@@ -73,7 +75,9 @@ export function useMyPageBox() {
   };
 
   // Functions
+  // 인증번호 요청 함수
   const requestVerification = () => {
+    setIsCertificationDisabled(true);
     if (phoneNumber && isPhoneValid) {
       member
         .phoneVerification({ phoneNumber })
@@ -86,6 +90,9 @@ export function useMyPageBox() {
           setIsPhoneError(true);
           setPhoneErrorMessage(err.response.data.message);
         });
+      setTimeout(() => {
+        setIsCertificationDisabled(false);
+      }, 10000);
     }
   };
 
@@ -93,6 +100,11 @@ export function useMyPageBox() {
     if (certificateCode) {
       if (certificateCode === certifiedNumber) {
         setRequestCerificated(true);
+        setVerificationVisible(false);
+        setCertifiedErrMessage('');
+        setPhoneErrorMessage('');
+      } else {
+        setCertifiedErrMessage('인증번호가 일치하지 않습니다.');
       }
     }
   };
@@ -139,6 +151,7 @@ export function useMyPageBox() {
       setButtonDisabled(true);
     }
   }, [isPhoneValid, street, details, zipCode]);
+
   useEffect(() => {
     if (memberId && isLogined) {
       member
@@ -213,5 +226,7 @@ export function useMyPageBox() {
     imgSrc,
     previewImageURL,
     errMessage,
+    certifiedErrMessage,
+    isCertificationDisabled,
   };
 }

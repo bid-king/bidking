@@ -4,7 +4,7 @@ import { AuctionList } from './AuctionList';
 import bid from '../static/bid.jpg';
 
 const meta = {
-  title: '/AuctionList',
+  title: 'Auction/Main/AuctionList',
   component: AuctionList,
   argTypes: {},
 } satisfies Meta<typeof AuctionList>;

@@ -39,6 +39,8 @@ export function MyPageBox() {
     imgSrc,
     previewImageURL,
     errMessage,
+    certifiedErrMessage,
+    isCertificationDisabled,
   } = useMyPageBox();
 
   return (
@@ -84,8 +86,10 @@ export function MyPageBox() {
           </div>
           <Spacing rem="3" dir="h" />
           <Spacing rem="2" />
-
-          <ConfirmButton btnType="certification" onClick={requestVerification} label="인증번호전송" />
+          {!isCertificationDisabled && isPhoneValid && (
+            <ConfirmButton btnType="certification" onClick={requestVerification} label="인증번호 전송" />
+          )}
+          {isCertificationDisabled || (!isPhoneValid && <ConfirmButton btnType="disabled" label="인증번호 전송" />)}
         </div>
         {phoneNumberErrorMessage && (
           <div>
@@ -112,14 +116,21 @@ export function MyPageBox() {
             </div>
           </div>
         )}
+        <Spacing rem="1" />
+
+        {isPhoneError && (
+          <>
+            <Text type="bold" content={phoneErrorMessage} />
+            <Spacing rem="1" />
+          </>
+        )}
+        {certifiedErrMessage && (
+          <>
+            <Text type="bold" content={certifiedErrMessage} />
+            <Spacing rem="1" />
+          </>
+        )}
       </div>
-      <Spacing rem="2" />
-      {isPhoneError && (
-        <div>
-          <Text type="bold" content={phoneErrorMessage} />
-          <Spacing rem="1" />
-        </div>
-      )}
 
       <div className="address">
         <Label theme="light" value="주소" htmlFor="street-signup-input" />
