@@ -6,7 +6,7 @@ import { AuctionItemStatus, DUMMY } from './auctionItemList/AuctionItemStatus';
 import { BidPrice } from './bidPrice/BidPrice';
 import { Timer } from './bidTimer/Timer';
 import { Bidder } from './bidder/Bidder';
-import { BiddingForm } from './BidForm/BiddingForm';
+import { BiddingForm } from './bf/BiddingForm';
 import { Socket } from 'socket.io-client';
 import { ChatRoom } from './chatRoom/ChatRoom';
 import { askingPriceParse } from '../../util/bidPriceParse';
