@@ -59,9 +59,12 @@ module.exports = (server, app, sessionMiddleware) => {
       const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
       const price = await getRedis(redisCli, `auction:${roomId}:onLiveItem:startPrice`);
 
-      io.to(`${roomId}`).emit('start', { itemId, price });
-
-      startCountdownTimer(app, roomId);
+      if (itemId === undefined || price === undefined) {
+        console.error('Redis value not found');
+      } else {
+        io.to(`${roomId}`).emit('start', { itemId, price });
+        startCountdownTimer(app, roomId);
+      }
     });
 
     socket.on('disconnect', () => {

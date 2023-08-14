@@ -36,21 +36,31 @@ module.exports.startCountdownTimer = (app, roomId) => {
           await redisCli.hmset(`item:${itemId}:afterBidResult`, 'type', 'fail');
           io.to(`${roomId}`).emit('failBid', { itemId });
         } else {
-          // 낙찰
-          await redisCli.hmset(
-            `item:${itemId}:afterBidResult`,
-            'type',
-            'success',
-            'userId',
-            userId,
-            'nickname',
-            nickname,
-            'price',
-            price,
-            'time',
-            time
-          );
-          io.to(`${roomId}`).emit('successBid', { itemId, userId, nickname, price, time });
+          if (
+            (itemId === undefined) |
+            (userId === undefined) |
+            (nickname === undefined) |
+            (price === undefined) |
+            (time === undefined)
+          ) {
+            console.error('Redis value not found');
+          } else {
+            // 낙찰
+            await redisCli.hmset(
+              `item:${itemId}:afterBidResult`,
+              'type',
+              'success',
+              'userId',
+              userId,
+              'nickname',
+              nickname,
+              'price',
+              price,
+              'time',
+              time
+            );
+            io.to(`${roomId}`).emit('successBid', { itemId, userId, nickname, price, time });
+          }
         }
       }
     }
