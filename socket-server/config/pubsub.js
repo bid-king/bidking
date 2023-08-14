@@ -1,5 +1,5 @@
 const redis = require('redis');
-const { startCountdownTimer } = require('../api/timer');
+const { startCountdownTimer } = require('../api/newTimer');
 
 module.exports = app => {
   const io = app.get('io');
