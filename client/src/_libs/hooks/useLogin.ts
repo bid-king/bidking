@@ -3,7 +3,6 @@ import member from '../../api/member';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setUserInformation } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
-import { ROOT } from '../util/http';
 
 export function useLogin() {
   const dispatch = useAppDispatch();
