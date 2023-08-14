@@ -80,6 +80,11 @@ export function ItemCard({ theme = 'light', item }: Props) {
               width: '100%',
               // maxHeight: '20rem',
             }}
+            onError={e => {
+              const target = e.target as HTMLImageElement;
+              target.onerror = null;
+              target.src = '/image/bid.jpg';
+            }}
           />
           <Spacing rem="1" />
         </div>
