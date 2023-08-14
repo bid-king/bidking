@@ -17,6 +17,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
 
       const redisCli = app.get('redisCli');
 
+      // 1. onLiveItem.itemId 가져오고 -1로 덮어쓰기
       const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
 
       if (itemId === '-1') {
@@ -24,6 +25,9 @@ module.exports.startCountdownTimer = (app, roomId) => {
         return;
       }
 
+      await redisCli.set(`auction:${roomId}:onLiveItem:itemId`, -1);
+
+      // 2. bidding 확인. 있으면 낙찰, 없으면 유찰
       const biddingKey = `item:${itemId}:bidding`;
       const keysToRetrieve = [
         `${biddingKey}:userId`,
@@ -36,31 +40,37 @@ module.exports.startCountdownTimer = (app, roomId) => {
         keysToRetrieve.map(key => getRedis(redisCli, key).catch(() => undefined))
       );
 
-      const afterBidResultKey = `item:${itemId}:afterBidResult`;
+      // 3. redis에 afterBidResult 저장
+      const afterBidResultKey = `auction:${roomId}:AfterBidResult`;
+      const afterBidResultData = {};
 
-      // 유찰
       if (userId === undefined) {
-        await redisCli.hmset(afterBidResultKey, 'type', 'fail');
-        io.to(roomId).emit('failBid', { itemId });
-        return;
-      }
-
-      // 낙찰
-      if ([itemId, userId, nickname, price, time].every(value => value !== undefined)) {
-        const afterBidResultData = {
+        // 유찰
+        afterBidResultData = {
+          type: 'fail',
+        };
+        io.to(`${roomId}`).emit('failBid', { itemId: Number(itemId) });
+      } else if ([itemId, nickname, price, time].every(value => value !== undefined)) {
+        // 낙찰
+        afterBidResultData = {
           type: 'success',
           userId,
           nickname,
           price,
           time,
         };
-
-        await redisCli.hmset(afterBidResultKey, ...Object.entries(afterBidResultData).flat());
-        io.to(roomId).emit('successBid', { itemId, ...afterBidResultData });
+        io.to(`${roomId}`).emit('successBid', {
+          itemId: Number(itemId),
+          userId: Number(userId),
+          nickname,
+          price: Number(price),
+          time,
+        });
+      } else {
+        // 잘못된 값이 있는 경우
+        console.error('Redis value not found in timer');
         return;
       }
-
-      console.error('Redis value not found in timer');
     }
   }
 
