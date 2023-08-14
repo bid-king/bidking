@@ -18,8 +18,7 @@ export function MainBox() {
     auctionListBookmarked,
     handleCategoryButtonClick,
     handleBookmark,
-    auctionListBeforeLive,
-    auctionListAfterLive,
+    auctionList,
   } = useMainBox();
 
   return (
@@ -60,6 +59,7 @@ export function MainBox() {
         {isLogined && (
           <div>
             <Text type="h1" content="관심 경매" />
+            <Spacing rem="1" />
             <div
               css={{
                 display: 'flex',
@@ -70,20 +70,45 @@ export function MainBox() {
                 <div
                   css={{
                     marginRight: '1rem',
+                    position: 'relative',
                   }}
                   key={auction.id}
                 >
-                  <Link to={`seller/detail/${auction.id}`}>
+                  <Link to={`/detail/${auction.id}`}>
                     <AuctionList
                       title={auction.name}
-                      date={auctionDateParse(auction.startedAt)}
+                      date={auction.startedAt}
                       items={auction.itemListDto.map(item => item.name)}
                       img={auction.imageUrl}
+                      css={{
+                        position: 'relative',
+                      }}
                     />
                   </Link>
+                  {isLogined && (
+                    <div
+                      css={{
+                        position: 'absolute',
+                        top: '1rem',
+                        right: '1rem',
+                      }}
+                    >
+                      <IconButton
+                        type={auction.bookmarked ? 'starFilled' : 'star'}
+                        color="confirm"
+                        background="light"
+                        size="small"
+                        onClick={event => {
+                          event.stopPropagation();
+                          handleBookmark({ auctionRoomId: auction.id });
+                        }}
+                      />
+                    </div>
+                  )}
                   <Spacing rem="1" />
                 </div>
               ))}
+
               {auctionListBookmarked.length === 0 && (
                 <div
                   css={{
@@ -99,90 +124,60 @@ export function MainBox() {
           </div>
         )}
         <div>
-          <Text type="h1" content="진행 중인 경매" />
+          <Text type="h1" content="경매 목록" />
+          <Spacing rem="1" />
           <div
             css={{
               display: 'flex',
               flexWrap: 'wrap',
             }}
           >
-            {auctionListAfterLive.map((auction, index) => (
+            {auctionList.map((auction, index) => (
               <div
                 css={{
                   marginRight: '1rem',
+                  position: 'relative',
                 }}
                 key={auction.id}
               >
-                {isLogined && (
-                  <IconButton
-                    type={auction.bookmarked ? 'starFilled' : 'star'}
-                    color="confirm"
-                    background="light"
-                    size="small"
-                    onClick={() => handleBookmark({ auctionRoomId: auction.id })}
+                <Link to={isLogined ? `/detail/${auction.id}` : '/login'}>
+                  <AuctionList
+                    title={auction.name}
+                    date={auction.startedAt}
+                    items={auction.itemListDto.map(item => item.name)}
+                    img={auction.imageUrl}
+                    css={{
+                      position: 'relative',
+                    }}
                   />
+                </Link>
+
+                {isLogined && (
+                  <div
+                    css={{
+                      position: 'absolute',
+                      top: '1rem',
+                      right: '1rem',
+                    }}
+                  >
+                    <IconButton
+                      type={auction.bookmarked ? 'starFilled' : 'star'}
+                      color="confirm"
+                      background="light"
+                      size="small"
+                      onClick={event => {
+                        event.stopPropagation();
+                        handleBookmark({ auctionRoomId: auction.id });
+                      }}
+                    />
+                  </div>
                 )}
 
-                <Link to={isLogined ? `/detail/${auction.id}` : '/login'}>
-                  <AuctionList
-                    title={auction.name}
-                    date={auctionDateParse(auction.startedAt)}
-                    items={auction.itemListDto.map(item => item.name)}
-                    img={auction.imageUrl}
-                  />
-                </Link>
                 <Spacing rem="1" />
               </div>
             ))}
-            {auctionListAfterLive.length === 0 && (
-              <div
-                css={{
-                  height: '20rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <Text type="h2" content="진행중인 경매가 존재하지 않습니다" />
-              </div>
-            )}
-          </div>
-        </div>
-        <div>
-          <Text type="h1" content="진행 예정 경매" />
-          <div
-            css={{
-              display: 'flex',
-              flexWrap: 'wrap',
-            }}
-          >
-            {auctionListBeforeLive.map((auction, index) => (
-              <div
-                css={{
-                  marginRight: '1rem',
-                }}
-                key={auction.id}
-              >
-                {isLogined && (
-                  <IconButton
-                    type={auction.bookmarked ? 'starFilled' : 'star'}
-                    color="confirm"
-                    background="light"
-                    size="small"
-                    onClick={() => handleBookmark({ auctionRoomId: auction.id })}
-                  />
-                )}
-                <Link to={isLogined ? `/detail/${auction.id}` : '/login'}>
-                  <AuctionList
-                    title={auction.name}
-                    date={auctionDateParse(auction.startedAt)}
-                    items={auction.itemListDto.map(item => item.name)}
-                    img={auction.imageUrl}
-                  />
-                </Link>
-                <Spacing rem="1" />
-              </div>
-            ))}
-            {auctionListBeforeLive.length === 0 && (
+
+            {auctionList.length === 0 && (
               <div
                 css={{
                   height: '20rem',
