@@ -108,12 +108,6 @@ export function NavBarModal({ theme = 'light' }: Props) {
           <Text type="bold" content="개인정보 수정" />
         </Link>
         <Spacing rem="1" />
-
-        <Link to={`/purchased/${id}`}>
-          <Text type="bold" content="구매내역" />
-        </Link>
-        <Spacing rem="1" />
-
         <div
           css={{
             cursor: 'pointer',
