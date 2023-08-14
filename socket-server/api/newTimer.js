@@ -71,6 +71,8 @@ module.exports.startCountdownTimer = (app, roomId) => {
         console.error('Redis value not found in timer');
         return;
       }
+
+      await redisCli.hset(afterBidResultKey, `${itemId}`, JSON.stringify(afterBidResultData));
     }
   }
 
