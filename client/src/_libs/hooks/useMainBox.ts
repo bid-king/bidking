@@ -140,14 +140,16 @@ export function useMainBox() {
     perPage: 8,
   };
   useEffect(() => {
-    main
-      .getBookmarked(bookmarkList, accessToken)
-      .then(res => {
-        setAuctionListBookmarked(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    if (isLogined) {
+      main
+        .getBookmarked(bookmarkList, accessToken)
+        .then(res => {
+          setAuctionListBookmarked(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }, [buttonCategoryList, refreshTrigger]);
 
   // 진행중, 진행예정 경매 정보
