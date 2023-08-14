@@ -18,6 +18,8 @@ import { Layout } from '../pages/Layout';
 import { SellerLayout } from '../pages/SellerLayout';
 import { OpenviduTestOrder } from '../pages/OpenviduTestOrder';
 import { OpenviduTestSeller } from '../pages/OpenviduTestSeller';
+import { useAppSelector } from '../store/hooks';
+import { ProtectedRoute } from './ProtectedRoute';
 
 export function AppRouter() {
   return (
@@ -27,24 +29,34 @@ export function AppRouter() {
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/mypage/:id" element={<MyPage />} />
-        <Route path="/purchased/:memberId" element={<Purchased />} />
-        <Route path="/detail/:auctionId" element={<Detail />} />
-        <Route path="/auction/:auctionId" element={<Live />} />
-      </Route>
 
+        <Route path="mypage" element={<ProtectedRoute />}>
+          <Route path=":id" element={<MyPage />} />
+        </Route>
+        <Route path="purchased" element={<ProtectedRoute />}>
+          <Route path=":memberId" element={<Purchased />} />
+        </Route>
+        <Route path="detail" element={<ProtectedRoute />}>
+          <Route path=":auctionId" element={<Detail />} />
+        </Route>
+        <Route path="auction" element={<ProtectedRoute />}>
+          <Route path=":auctionId" element={<Live />} />
+        </Route>
+      </Route>
       {/* 판매자 라우터 페이지 */}
       <Route element={<SellerLayout />}>
-        <Route path="/seller/create-auction" element={<SellerCreateAuction />} />
-        <Route path="/seller/update-auction/:auctionId" element={<SellerUpdateAuction />} />
-        <Route path="/seller/detail/:auctionId" element={<SellerDetail />} />
-        <Route path="/seller/detail/complete/:auctionId" element={<SellerDetailOffLive />} />
-        <Route path="/seller" element={<Seller />}></Route>
+        <Route path="seller" element={<ProtectedRoute />}>
+          <Route path="create-auction" element={<SellerCreateAuction />} />
+          <Route path="update-auction/:auctionId" element={<SellerUpdateAuction />} />
+          <Route path="detail/:auctionId" element={<SellerDetail />} />
+          <Route path="detail/complete/:auctionId" element={<SellerDetailOffLive />} />
+          <Route index element={<Seller />} />
+        </Route>
       </Route>
-
       {/* 네브바가 안들어가는 페이지 및 판매페이지 */}
-      <Route path="/seller/auction/:auctionId" element={<SellerLive />} />
-
+      <Route path="seller/auction" element={<ProtectedRoute />}>
+        <Route path=":auctionId" element={<SellerLive />} />
+      </Route>
       <Route path="/seller/openvidu" element={<OpenviduTestSeller />} />
       <Route path="/openvidu" element={<OpenviduTestOrder />} />
     </Routes>
