@@ -16,6 +16,8 @@ import { SellerDetail } from '../pages/SellerDetail/SellerDetail';
 import { SellerDetailOffLive } from '../pages/SellerDetail/SellerDetailOffLive';
 import { Layout } from '../pages/Layout';
 import { SellerLayout } from '../pages/SellerLayout';
+import { OpenviduTestOrder } from '../pages/OpenviduTestOrder';
+import { OpenviduTestSeller } from '../pages/OpenviduTestSeller';
 
 export function AppRouter() {
   return (
@@ -42,6 +44,9 @@ export function AppRouter() {
 
       {/* 네브바가 안들어가는 페이지 및 판매페이지 */}
       <Route path="/seller/auction/:auctionId" element={<SellerLive />} />
+
+      <Route path="/seller/openvidu" element={<OpenviduTestSeller />} />
+      <Route path="/openvidu" element={<OpenviduTestOrder />} />
     </Routes>
   );
 }
