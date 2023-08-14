@@ -3,15 +3,15 @@ import React, { MutableRefObject, useEffect, useState } from 'react';
 import colors from '../../design/colors';
 import { Spacing } from '../common/Spacing';
 import { AuctionItemStatus, DUMMY } from './auctionItemList/AuctionItemStatus';
-import { BiddingForm } from './bidForm/BiddingForm';
 import { BidPrice } from './bidPrice/BidPrice';
 import { Timer } from './bidTimer/Timer';
 import { Bidder } from './bidder/Bidder';
+import { BiddingForm } from './BidForm/BiddingForm';
 import { Socket } from 'socket.io-client';
 import { ChatRoom } from './chatRoom/ChatRoom';
 import { askingPriceParse } from '../../util/bidPriceParse';
 import { useAuctionSystem } from '../../hooks/useAuctionSystem';
-import { BidCtrl } from './bidForm/BidCtrl';
+import { BidCtrl } from './BidForm/BidCtrl';
 
 export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoomId, socket }: Props) {
   const { order, currPrice, topbidder, currId, itemList, disable, currTime, liveStatus } = useAuctionSystem(socket);
