@@ -14,11 +14,10 @@ import order, { DashBoardResponce } from '../../../api/order';
 import seller, { SellerDashBoardResponce } from '../../../api/seller';
 
 export function NavBarModal({ theme = 'light' }: Props) {
-  const { isLogined, accessToken, id } = useAppSelector(state => state.user);
+  const { isLogined, accessToken, id, nickname } = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [status, setStatus] = useState<SellerDashBoardResponce | DashBoardResponce | null>(null);
-  const [nickname, setNickname] = useState('');
 
   const handleLogout = () => {
     if (isLogined) {
@@ -63,18 +62,6 @@ export function NavBarModal({ theme = 'light' }: Props) {
     }
   }, [theme]);
 
-  useEffect(() => {
-    if (id && isLogined) {
-      member
-        .get(id, accessToken)
-        .then(res => {
-          setNickname(res.nickname);
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-  }, [theme]);
   return (
     <div
       css={{
