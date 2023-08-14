@@ -15,6 +15,7 @@ import com.widzard.bidking.auction.exception.InvalidAuctionRoomRequestException;
 import com.widzard.bidking.auction.exception.UnableToDeleteAuctionNow;
 import com.widzard.bidking.auction.exception.UnableToUpdateAuctionNow;
 import com.widzard.bidking.auction.exception.UnauthorizedAuctionRoomAccessException;
+import com.widzard.bidking.auction.exception.UserCannotStartBiddingException;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.bookmark.entity.Bookmark;
@@ -408,7 +409,7 @@ public class AuctionServiceImpl implements AuctionService {
     public Long startBidding(Member member, Long auctionId, Long itemId) {
         // 1. 사용자/경매방 검증 (셀러인지, 셀러가 만든 경매방이 맞는지)
         AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(auctionId, member)
-            .orElseThrow(AuctionRoomNotFoundException::new);
+            .orElseThrow(UserCannotStartBiddingException::new);
         // 2. 경매 진행될 수 있는 아이템인지 검증
         Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
         item.isBiddable();

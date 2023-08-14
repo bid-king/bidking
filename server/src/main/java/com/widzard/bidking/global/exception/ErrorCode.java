@@ -52,6 +52,8 @@ public enum ErrorCode {
         "경매 시작 20분전에는 수정할 수 없습니다."),
     UNABLE_TO_DELETE_AUCTION_NOW(HttpStatus.BAD_REQUEST, "UNABLE_TO_DELETE_AUCTION_NOW",
         "경매 시작 20분전에는 삭제할 수 없습니다."),
+    CANNOT_ALLOWED_TO_START_AUCTION(HttpStatus.FORBIDDEN, "CANNOT_ALLOWED_TO_START_AUCTION",
+        "해당 유저는 경매방을 시작할 수 있는 권한이 없습니다."),
     /*
      * Bid
      */
