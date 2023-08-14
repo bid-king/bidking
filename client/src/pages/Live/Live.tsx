@@ -28,12 +28,12 @@ export function Live() {
           </div>
         </div>
         <div css={{ width: '100%', height: '100%' }}>
-          <OrderStream
+          {/* <OrderStream
             err={error || liveAuthErr || null}
             auctionRoomId={auctionRoomId}
             userId={userId}
             userType="order"
-          />
+          /> */}
           <Spacing rem="0.5" />
           <AuctionNotice auctionRoomId={auctionRoomId} userType="order" socket={SOCKET} />
         </div>
