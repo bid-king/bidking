@@ -11,7 +11,7 @@ import { Socket } from 'socket.io-client';
 import { ChatRoom } from './chatRoom/ChatRoom';
 import { askingPriceParse } from '../../util/bidPriceParse';
 import { useAuctionSystem } from '../../hooks/useAuctionSystem';
-import { BidCtrl } from './BidForm/BidCtrl';
+import { BidCtrl } from './bidForm/BidCtrl';
 
 export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoomId, socket }: Props) {
   const { order, currPrice, topbidder, currId, itemList, disable, currTime, liveStatus } = useAuctionSystem(socket);
