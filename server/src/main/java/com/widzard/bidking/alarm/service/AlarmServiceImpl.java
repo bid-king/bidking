@@ -15,6 +15,7 @@ import com.widzard.bidking.bookmark.entity.Bookmark;
 import com.widzard.bidking.bookmark.repository.BookmarkRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -121,6 +122,19 @@ public class AlarmServiceImpl implements AlarmService {
         Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(AlarmNotFoundException::new);
         alarm.read();
         alarmRepository.save(alarm);
+    }
+
+    @Override
+    public List<AlarmResponse> readAlarmRecords(Member member) {
+        List<Alarm> alarmList = alarmRepository.findTop5ByMemberIdOrderByCreatedAtDesc(member.getId());
+        List<AlarmResponse> alarmResponseList = new ArrayList<>();
+        if(!alarmList.isEmpty()){
+            for (Alarm alarm: alarmList
+            ) {
+                alarmResponseList.add(AlarmResponse.from(alarm));
+            }
+        }
+        return alarmResponseList;
     }
 
     private void send(Member member, Content content, AlarmType alarmType) {
