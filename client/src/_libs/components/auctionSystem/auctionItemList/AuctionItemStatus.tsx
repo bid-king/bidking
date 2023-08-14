@@ -21,35 +21,67 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
     >
       <div css={{ width: '100%', padding: '0 1rem 0 1rem', ...THEME_VARIANT[theme] }}>
         <div css={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {itemList?.map((item, idx) => {
-            if (idx >= order - 2 && idx <= order + 2) return <AuctionItem item={item} idx={idx} key={idx} />;
-          })}
+          {itemList ? (
+            itemList?.map((item, idx) => {
+              if (idx >= order - 2 && idx <= order + 2) return <AuctionItem item={item} idx={idx} key={idx} />;
+            })
+          ) : (
+            <div />
+          )}
         </div>
         <Spacing rem="1" />
         <div>
-          {itemList?.map((item, idx) => {
-            if (item.itemId === currentItemId)
-              return (
-                <div key={idx} css={{ display: 'flex', alignItems: 'center' }}>
-                  <div
-                    css={{
-                      background: `url(${item.itemImg}) no-repeat center center`,
-                      borderRadius: '1rem',
-                      border: '1px solid ' + colors.ok,
-                      filter: `drop-shadow(0 0 0.075rem ${colors.ok})`,
-                      width: '3rem',
-                      height: '3rem',
-                    }}
-                  />
-                  <Spacing rem="1" dir="h" />
-                  <div css={{ display: 'flex', flexDirection: 'column' }}>
-                    <Text type="h3" content={item.name} />
-                    <Spacing rem="0.25" />
-                    <Text content={'경매 시작가 ' + bidPriceParse(String(item.startPrice)) + '원'} />
-                  </div>
+          <div>
+            {itemList ? (
+              itemList?.map((item, idx) => {
+                if (item.itemId === currentItemId)
+                  return (
+                    <div css={{ display: 'flex', alignItems: 'center' }} key={idx}>
+                      <div
+                        css={{
+                          background: `url(${item.itemImg}) no-repeat center center`,
+                          borderRadius: '1rem',
+                          border: '1px solid ' + colors.ok,
+                          filter: `drop-shadow(0 0 0.075rem ${colors.ok})`,
+                          width: '3rem',
+                          height: '3rem',
+                        }}
+                      />
+                      <Spacing rem="1" dir="h" />
+                      <div css={{ display: 'flex', flexDirection: 'column' }}>
+                        <Text type="h3" content={item.name} />
+                        <Spacing rem="0.25" />
+                        <Text content={'경매 시작가 ' + bidPriceParse(String(item.startPrice)) + '원'} />
+                      </div>
+                    </div>
+                  );
+              })
+            ) : (
+              <>
+                <div
+                  css={{
+                    background: 'transparent',
+                    borderRadius: '1rem',
+                    border: '1px solid ' + colors.whitegrey,
+                    width: '100%',
+                    height: '3rem',
+                  }}
+                />
+                <Spacing rem="1" dir="h" />
+                <div
+                  css={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    height: '3.25rem',
+                  }}
+                >
+                  <Text type="h2" content="경매 대기" />
                 </div>
-              );
-          })}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

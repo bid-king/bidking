@@ -8,7 +8,7 @@ export const globalStyle = css`
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     font-family: 'Pretendard';
-    font-size: 77.5%;
+    font-size: 90%;
     color: ${colors.black};
     line-height: 1.2rem;
   }

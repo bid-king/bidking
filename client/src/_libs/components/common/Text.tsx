@@ -7,7 +7,7 @@ interface Props {
   content: string;
 }
 
-export function Text({ type = 'normal', content = '예시 텍스트' }: Props) {
+export function Text({ type = 'normal', content = '' }: Props) {
   if (type === 'h1') return <h1 css={{ ...FONT_TYPE[type] }}>{content}</h1>;
   if (type === 'h2') return <h2 css={{ ...FONT_TYPE[type] }}>{content}</h2>;
   if (type === 'h3') return <h3 css={{ ...FONT_TYPE[type] }}>{content}</h3>;

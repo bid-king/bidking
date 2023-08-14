@@ -7,7 +7,6 @@ import { AuctionHeader } from '../../_libs/components/auctionSystem/auctionHeade
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { SellerStream } from '../../_libs/components/meeting/SellerStream';
 import colors from '../../_libs/design/colors';
-import { useSocket } from '../../_libs/hooks/useSocket';
 import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
 
 export function SellerLive() {
