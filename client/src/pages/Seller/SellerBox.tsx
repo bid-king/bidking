@@ -45,6 +45,7 @@ export function SellerBox() {
           >
             <div>
               <Text type="h1" content="진행 예정 경매" />
+              <Spacing rem="1" />
               <div
                 css={{
                   display: 'flex',
@@ -84,6 +85,7 @@ export function SellerBox() {
             </div>
             <div>
               <Text type="h1" content="완료된 경매" />
+              <Spacing rem="1" />
               <div
                 css={{
                   display: 'flex',

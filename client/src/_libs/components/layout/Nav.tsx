@@ -144,21 +144,24 @@ export function Nav({ theme = 'light' }: Props) {
             <>
               {theme === 'light' && (
                 <div>
-                  <Link to={'/seller'}>
-                    <RoundButton label="판매" size="small" color="white" />
+                  <Link to={`/purchased/${id}`}>
+                    <RoundButton label="구매 내역" size="small" color="white" />
                   </Link>
                   <Spacing rem="0.5" dir="h" />
-                  <Link css={{}} to={`/purchased/${id}`}>
-                    <RoundButton label="내 경매" size="small" color="white" />
+                  <Link to={'/seller'}>
+                    <RoundButton label="판매 모드" size="small" color="white" />
                   </Link>
                 </div>
               )}
               {theme === 'dark' && (
                 <div>
                   <Link to={'/seller/create-auction'}>
-                    <RoundButton label="경매방 생성" size="small" color="white" />
+                    <RoundButton label="경매 생성" size="small" color="white" />
                   </Link>
                   <Spacing rem="0.5" dir="h" />
+                  <Link to={'/'}>
+                    <RoundButton label="구매 모드" size="small" color="white" />
+                  </Link>
                 </div>
               )}
               <Spacing rem="2" dir="h" />

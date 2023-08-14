@@ -1,10 +1,10 @@
 import { Socket } from 'socket.io-client';
 import { https } from '../_libs/util/http';
 export function enter(auctionId: number, token: string) {
-  return https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/enter`, token);
+  return https.get<AuctionEnterResponse>(`/api/v1/bid/${auctionId}/enter`, token);
 }
 export function getItems(auctionId: number, token: string) {
-  return https.get<AuctionEnterResponse>(`/api/v1/auctions/${auctionId}/items`, token);
+  return https.get<AuctionEnterResponse>(`/api/v1/bid/${auctionId}/items`, token);
 }
 export function liveStart(auctionId: number) {}
 export function itemStart(auctionId: number, itemId: number, token: string) {
