@@ -42,7 +42,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
 
       // 3. redis에 afterBidResult 저장
       const afterBidResultKey = `auction:${roomId}:AfterBidResult`;
-      const afterBidResultData = {};
+      let afterBidResultData = {};
 
       if (userId === undefined) {
         // 유찰
@@ -57,7 +57,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
           userId,
           nickname,
           price,
-          time,
+          time: new Date().toJSON(),
         };
         io.to(roomId).emit('successBid', {
           itemId: Number(itemId),
