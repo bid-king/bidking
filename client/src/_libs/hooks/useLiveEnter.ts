@@ -19,37 +19,29 @@ export function useLiveEnter() {
   const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
 
   useEffect(() => {
+    getRoomInfo();
+
     async function getRoomInfo() {
-      const isLogined = await store.getState().user.isLogined;
-      if (!isLogined) return;
-      else {
-        const uid = (await store.getState().user.id) || 0;
-        enter(Number(auctionId), accessToken)
-          .then(data => {
-            setUserId(uid);
-            setAuctionRoomId(data.auctionRoomId);
-            setNickname(data.nickname);
-            setSeller(data.seller);
-            setTitle(data.title);
-            setAuctionRoomType(data.auctionRoomType);
-          })
-          .catch(err => setLiveAuthErr(err));
-      }
+      const uid = (await store.getState().user.id) || 0;
+      enter(Number(auctionId), accessToken)
+        .then(data => {
+          setUserId(uid);
+          setAuctionRoomId(data.auctionRoomId);
+          setNickname(data.nickname);
+          setSeller(data.seller);
+          setTitle(data.title);
+          setAuctionRoomType(data.auctionRoomType);
+          return data;
+        })
+        .then(res => {
+          socket.current = io('http://localhost:8005', {
+            withCredentials: true,
+          });
+          live(socket.current).send.connect(res.auctionRoomId, res.nickname, res.seller);
+        })
+        .catch(err => setLiveAuthErr(err));
     }
-    async function connectSocket() {
-      socket.current = io('http://localhost:8005', {
-        withCredentials: true,
-      });
-      live(socket.current).send.connect(auctionRoomId, nickname, seller);
-    }
-    try {
-      (async () => {
-        await getRoomInfo();
-        await connectSocket();
-      })();
-    } catch (err) {
-      setLiveAuthErr(err);
-    }
+
     return () => {
       live(socket.current).send.leave(auctionRoomId, nickname);
     }; //unmount시 채팅방 나갑니다
