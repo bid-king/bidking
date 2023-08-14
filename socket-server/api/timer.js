@@ -19,27 +19,39 @@ module.exports.startCountdownTimer = (app, roomId) => {
 
       // 1. onLiveItem.itemId 가져오고 -1로 덮어쓰기
       const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
-      await redisCli.set(`auction:${roomId}:onLiveItem:itemId`, -1);
 
-      // 2. bidding 확인. 있으면 낙찰, 없으면 유찰
-      const userId = await getRedis(redisCli, `item:${itemId}:bidding:userId`);
-      const nickname = await getRedis(redisCli, `item:${itemId}:bidding:nickname`);
-      const price = await getRedis(redisCli, `item:${itemId}:bidding:price`);
-      const time = await getRedis(redisCli, `item:${itemId}:bidding:time`);
+      // onLiveItem이 없는 경우 처리
+      if (itemId !== '-1') {
+        await redisCli.set(`auction:${roomId}:onLiveItem:itemId`, -1);
 
-      // 3. redis에  afterBidResult 저장
-      if (userId === undefined) {
-        // 유찰
-        await redisCli.set(`item:${itemId}:afterBidResult:type`, 'fail');
-        io.to(`${roomId}`).emit('failBid', { itemId });
-      } else {
-        // 낙찰
-        await redisCli.set(`item:${itemId}:afterBidResult:type`, 'success');
-        await redisCli.set(`item:${itemId}:afterBidResult:userId`, userId);
-        await redisCli.set(`item:${itemId}:afterBidResult:nickname`, nickname);
-        await redisCli.set(`item:${itemId}:afterBidResult:price`, price);
-        await redisCli.set(`item:${itemId}:afterBidResult:time`, time);
-        io.to(`${roomId}`).emit('successBid', { itemId, userId, nickname, price, time });
+        // 2. bidding 확인. 있으면 낙찰, 없으면 유찰
+        const userId = await getRedis(redisCli, `item:${itemId}:bidding:userId`);
+        const nickname = await getRedis(redisCli, `item:${itemId}:bidding:nickname`);
+        const price = await getRedis(redisCli, `item:${itemId}:bidding:price`);
+        const time = await getRedis(redisCli, `item:${itemId}:bidding:time`);
+
+        // 3. redis에  afterBidResult 저장
+        if (userId === undefined) {
+          // 유찰
+          await redisCli.hmset(`item:${itemId}:afterBidResult`, 'type', 'fail');
+          io.to(`${roomId}`).emit('failBid', { itemId });
+        } else {
+          // 낙찰
+          await redisCli.hmset(
+            `item:${itemId}:afterBidResult`,
+            'type',
+            'success',
+            'userId',
+            userId,
+            'nickname',
+            nickname,
+            'price',
+            price,
+            'time',
+            time
+          );
+          io.to(`${roomId}`).emit('successBid', { itemId, userId, nickname, price, time });
+        }
       }
     }
   }
