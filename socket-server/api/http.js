@@ -7,8 +7,32 @@ const axios = Axios.create({
 });
 
 module.exports.http = {
-  get: url => axios.get(url).then(res => res.data),
-  post: (url, body) => axios.post(url, body).then(res => res.data),
-  put: (url, body) => axios.put(url, body).then(res => res.data),
-  delete: url => axios.delete(url).then(res => res.data),
+  get: url =>
+    axios
+      .get(url)
+      .then(res => res.data)
+      .catch(err => {
+        console.error(err.response.data);
+      }),
+  post: (url, body) =>
+    axios
+      .post(url, body)
+      .then(res => res.data)
+      .catch(err => {
+        console.error(err.response.data);
+      }),
+  put: (url, body) =>
+    axios
+      .put(url, body)
+      .then(res => res.data)
+      .catch(err => {
+        console.error(err.response.data);
+      }),
+  delete: url =>
+    axios
+      .delete(url)
+      .then(res => res.data)
+      .catch(err => {
+        console.error(err.response.data);
+      }),
 };
