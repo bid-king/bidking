@@ -9,7 +9,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
   let seconds = 10;
 
   async function updateTimer() {
-    io.to(`${roomId}`).emit('time', seconds);
+    io.to(roomId).emit('time', seconds);
     seconds--;
 
     if (seconds < 0) {
@@ -41,7 +41,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
       // 유찰
       if (userId === undefined) {
         await redisCli.hmset(afterBidResultKey, 'type', 'fail');
-        io.to(`${roomId}`).emit('failBid', { itemId });
+        io.to(roomId).emit('failBid', { itemId });
         return;
       }
 
@@ -56,11 +56,11 @@ module.exports.startCountdownTimer = (app, roomId) => {
         };
 
         await redisCli.hmset(afterBidResultKey, ...Object.entries(afterBidResultData).flat());
-        io.to(`${roomId}`).emit('successBid', { itemId, ...afterBidResultData });
+        io.to(roomId).emit('successBid', { itemId, ...afterBidResultData });
         return;
       }
 
-      console.error('Redis value not found');
+      console.error('Redis value not found in timer');
     }
   }
 
