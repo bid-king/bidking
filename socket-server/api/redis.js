@@ -4,5 +4,5 @@ module.exports.getRedis = (client, query) => {
       if (err) reject(err);
       else resolve(res?.replace(/"/g, ''));
     });
-  });
+  }).catch(err => console.log(err));
 };
