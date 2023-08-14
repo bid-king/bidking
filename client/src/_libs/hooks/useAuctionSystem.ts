@@ -13,7 +13,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
   const [currId, setCurrId] = useState<number>(0); //현재 진행중인 아이템
   const [itemList, setItemList] = useState<liveItemList | undefined>(undefined); //전체 아이템리스트
   const [disable, setDisable] = useState<boolean>(true); //입찰 대기 시간동안 버튼이 눌리지 않는 상태
-  const [currTime, setCurrTime] = useState<number>(10); //남은 시간
+  const [currTime, setCurrTime] = useState<number>(11); //남은 시간
   const [liveStatus, setLiveStatus] = useState<'beforeStart' | 'inAuction' | 'inDesc' | 'beforeDesc' | 'end'>(
     'beforeStart'
   );
@@ -56,18 +56,13 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       setCurrTime(time);
       setTopBidder(nickname);
       setDisable(true);
-      setTimeout(() => setDisable(false), 250); //잠깐대기
+      setTimeout(() => setDisable(false), 500); //잠깐대기
     }); //입찰
 
     socket.current?.on('successBid', ({ itemId, userId, nickname, price, time }) => {
       setDisable(true); //버튼 다시 누를 수 없도록 처리함 (다음 아이템설명)
       const result = itemList?.map<LiveItem>(item => {
-        if (item.itemId === itemId) {
-          return {
-            ...item,
-            status: 'complete',
-          };
-        }
+        if (item.itemId === itemId) item.status = 'complete';
         return item;
       });
       setItemList(result);
@@ -78,12 +73,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
     socket.current?.on('failBid', ({ itemId }) => {
       setDisable(true); //버튼 다시 누를수 없도록 처리함 (다음 아이템설명)
       const result = itemList?.map<LiveItem>(item => {
-        if (item.itemId === itemId) {
-          return {
-            ...item,
-            status: 'fail',
-          };
-        }
+        if (item.itemId === itemId) item.status = 'fail';
         return item;
       });
       setItemList(result);

@@ -44,7 +44,7 @@ function Video({ streamManager }: { streamManager: StreamManager }) {
     }
   }, [streamManager]);
 
-  return <video ref={videoRef} autoPlay={true} />;
+  return <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />;
 }
 
 interface Props {
