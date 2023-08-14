@@ -4,6 +4,11 @@ import com.widzard.bidking.auction.dto.redis.ItemAfterBidResult;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.auction.service.AuctionService;
+import com.widzard.bidking.item.entity.Item;
+import com.widzard.bidking.order.entity.Order;
+import com.widzard.bidking.order.entity.OrderState;
+import com.widzard.bidking.order.service.OrderService;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,16 +21,19 @@ public class EndAuctionRoomFacade {
 
     private final AuctionService auctionService;
     private final HashOperations<String, String, Object> hashOperations;
+    private final OrderService orderService;
     private final AuctionRoomRepository testRepository;
 
     public EndAuctionRoomFacade(
         AuctionService auctionService,
         AuctionRoomRepository testRepository,
-        RedisTemplate<String, Object> redisTemplate
+        RedisTemplate<String, Object> redisTemplate,
+        OrderService orderService
     ) {
         this.hashOperations = redisTemplate.opsForHash();
         this.auctionService = auctionService;
         this.testRepository = testRepository;
+        this.orderService = orderService;
     }
 
     // 데이터 저장
@@ -49,8 +57,40 @@ public class EndAuctionRoomFacade {
     public void end(Long auctionId) {
         // 경매 검증 및 라이브 상태 변경
         AuctionRoom auctionRoom = auctionService.endAuctionRoom(auctionId);
-        AuctionRoom build = AuctionRoom.builder().id(2L).build();
 
+        log.info("##########끝난 auctionRoom: {}", auctionRoom);
+        List<Item> itemList = auctionRoom.getItemList();
+
+        for (Item item : itemList) {
+            Long itemId = item.getId();
+            log.info("##########끝난 itemId: {}", itemId);
+            ItemAfterBidResult bidResult = getItemAfterBidResult(auctionId, itemId);
+            OrderState orderState = null;
+            if (bidResult.getType().equals("success")) {
+                orderState = OrderState.COMPLETED;
+                log.info("##########끝난 itemId orderState: {}:{}", itemId, orderState);
+                Order order = orderService.createOrder(
+                    auctionId,
+                    Long.parseLong(bidResult.getUserId()),
+                    orderState, itemId,
+                    Long.parseLong(bidResult.getPrice())
+                );
+                System.out.println("낙찰 order = " + order);
+            } else {
+                orderState = OrderState.ORDER_FAILED;
+                log.info("##########끝난 itemId orderState: {}:{}", itemId, orderState);
+                Order order = orderService.createOrder(
+                    auctionId,
+                    null,
+                    orderState,
+                    itemId,
+                    null
+                );
+                System.out.println("유찰 order = " + order);
+            }
+
+
+        }
         // afterBidResult redis 보고 db 저장
 
         // order 생성
@@ -102,8 +142,7 @@ public class EndAuctionRoomFacade {
                 .build()
         );
 
-        Long itemId = 1L;
-        ItemAfterBidResult bidResult = getItemAfterBidResult(auctionId, itemId);
+        ItemAfterBidResult bidResult = getItemAfterBidResult(auctionId, 5L);
         System.out.println("bidResult = " + bidResult);
 
 
