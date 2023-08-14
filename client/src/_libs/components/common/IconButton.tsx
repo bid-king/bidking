@@ -15,6 +15,9 @@ export function IconButton({ type, background = 'transparent', color = 'lightgre
         lineHeight: '0',
         ...BACKGROUND_VARIANT[background],
         ...SIZE_VARIANT[size],
+        '&:hover': {
+          filter: 'brightness(0.9)',
+        },
       }}
       onClick={onClick}
     >

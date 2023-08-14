@@ -4,6 +4,7 @@ import { HTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
+import { auctionDateParse } from '../../util/auctionDateParse';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   title?: string;
@@ -67,7 +68,7 @@ export function AuctionList({
         }}
       >
         <Text type="h2" content={title} />
-        <Text type="h3" content={date} />
+        <Text type="h3" content={auctionDateParse(date)} />
         {items.map((item, index) => (
           <Text key={index} content={index < 3 ? item : ''} />
         ))}
