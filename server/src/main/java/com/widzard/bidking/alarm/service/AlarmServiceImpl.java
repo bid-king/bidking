@@ -43,7 +43,7 @@ public class AlarmServiceImpl implements AlarmService {
     @Async
     public CompletableFuture subscribe(Long memberId, String lastEventId) {
         // 고유 식별자 부여
-        String id = memberId + "_" + System.currentTimeMillis();
+        String id = String.valueOf(memberId);
 
         SseEmitter emitter = emitterRepository.save(id, new SseEmitter(DEFAULT_TIMEOUT));
 
@@ -55,13 +55,13 @@ public class AlarmServiceImpl implements AlarmService {
         sendToClient(emitter, id, "EventStream Created. [userId=" + memberId + "]");
 
         // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
-        if (!lastEventId.isEmpty()) {
-            Map<String, Object> events = emitterRepository.findAllEventCacheStartWithId(
-                String.valueOf(memberId));
-            events.entrySet().stream()
-                .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
-                .forEach(entry -> sendToClient(emitter, entry.getKey(), entry.getValue()));
-        }
+//        if (!lastEventId.isEmpty()) {
+//            Map<String, Object> events = emitterRepository.findAllEventCacheStartWithId(
+//                id);
+//            events.entrySet().stream()
+//                .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
+//                .forEach(entry -> sendToClient(emitter, id, entry.getValue()));
+//        }
         log.info("연결 요청 끝");
         return CompletableFuture.completedFuture(emitter);
     }
@@ -132,7 +132,7 @@ public class AlarmServiceImpl implements AlarmService {
         sseEmitterMap.forEach(
             (key, emitter) -> {
                 // 데이터 캐시 저장(유실된 데이터 처리하기 위함)
-                emitterRepository.saveEventCache(key, alarm);
+//                emitterRepository.saveEventCache(key, alarm);
                 sendToClient(emitter, key, AlarmResponse.from(alarm));
             }
         );
