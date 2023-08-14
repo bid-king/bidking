@@ -19,6 +19,7 @@ import com.widzard.bidking.auction.service.AuctionService;
 import com.widzard.bidking.auction.service.facade.EndAuctionRoomFacade;
 import com.widzard.bidking.auction.service.facade.RedissonLockAuctionFacade;
 import com.widzard.bidking.auction.service.facade.StartBiddingFacade;
+import com.widzard.bidking.item.service.ItemService;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuctionController {
 
     private final AuctionService auctionService;
+    private final ItemService itemService;
     private final AlarmService alarmService;
     private final StartBiddingFacade startBiddingFacade;
     private final RedissonLockAuctionFacade redissonLockAuctionFacade;
@@ -243,6 +245,7 @@ public class AuctionController {
         @PathVariable("auctionId") Long auctionId,
         @RequestBody @Valid TryBiddingRequest request
     ) {
+        itemService.isInAuction(itemId);
         redissonLockAuctionFacade.bidding(
             auctionId,
             itemId,
