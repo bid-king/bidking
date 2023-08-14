@@ -8,6 +8,7 @@ import com.widzard.bidking.item.entity.Item;
 import com.widzard.bidking.order.entity.Order;
 import com.widzard.bidking.order.entity.OrderState;
 import com.widzard.bidking.order.service.OrderService;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
@@ -36,7 +37,6 @@ public class EndAuctionRoomFacade {
         this.orderService = orderService;
     }
 
-    // 데이터 저장
     public void saveItemAfterBidResult(Long auctionId, Long itemId, ItemAfterBidResult result) {
         hashOperations.put(
             "auction:" + auctionId + ":AfterBidResult",
@@ -45,7 +45,6 @@ public class EndAuctionRoomFacade {
         );
     }
 
-    // 데이터 가져오기
     public ItemAfterBidResult getItemAfterBidResult(Long auctionId, Long itemId) {
         return (ItemAfterBidResult) hashOperations.get(
             "auction:" + auctionId + ":AfterBidResult",
@@ -59,43 +58,44 @@ public class EndAuctionRoomFacade {
         AuctionRoom auctionRoom = auctionService.endAuctionRoom(auctionId);
 
         log.info("##########끝난 auctionRoom: {}", auctionRoom);
+        // 해당 경매방에서 판매하는 아이템 리스트 조회
         List<Item> itemList = auctionRoom.getItemList();
 
+        // 아이템 리스트 순회하며 낙찰/유찰 주문 생성
         for (Item item : itemList) {
             Long itemId = item.getId();
-            log.info("##########끝난 itemId: {}", itemId);
+            log.info("##########끝난 auctionRoom{}의 itemId: {}", auctionId, itemId);
             ItemAfterBidResult bidResult = getItemAfterBidResult(auctionId, itemId);
-            OrderState orderState = null;
-            if (bidResult.getType().equals("success")) {
+            OrderState orderState;
+
+            if (bidResult == null || bidResult.getType().equals("fail")) {
+                orderState = OrderState.ORDER_FAILED;
+                log.info("##########끝난 itemId orderState: {}:{}", itemId, orderState);
+
+                // 유찰 주문 생성
+                Order order = orderService.failOrder(
+                    auctionId,
+                    itemId
+                );
+                log.info("유찰 order = {}", order);
+            } else {
                 orderState = OrderState.COMPLETED;
                 log.info("##########끝난 itemId orderState: {}:{}", itemId, orderState);
+
+                // 낙찰 주문 생성
                 Order order = orderService.createOrder(
                     auctionId,
                     Long.parseLong(bidResult.getUserId()),
                     orderState, itemId,
                     Long.parseLong(bidResult.getPrice())
                 );
-                System.out.println("낙찰 order = " + order);
-            } else {
-                orderState = OrderState.ORDER_FAILED;
-                log.info("##########끝난 itemId orderState: {}:{}", itemId, orderState);
-                Order order = orderService.createOrder(
-                    auctionId,
-                    null,
-                    orderState,
-                    itemId,
-                    null
-                );
-                System.out.println("유찰 order = " + order);
+                log.info("낙찰 order = {}", order);
             }
 
-
         }
-        // afterBidResult redis 보고 db 저장
-
-        // order 생성
     }
 
+    // TODO node, client 개발테스트 완료 후 삭제 예정
     public void test(Long auctionId) {
 
         saveItemAfterBidResult(
@@ -106,7 +106,7 @@ public class EndAuctionRoomFacade {
                 .userId(1L)
                 .nickname("천사")
                 .price(10000L)
-                .time("2023-08-14T11:17:18.3536262")
+                .time(LocalDateTime.parse("2023-08-14T11:17:18"))
                 .build()
         );
 
@@ -118,7 +118,7 @@ public class EndAuctionRoomFacade {
                 .userId(1L)
                 .nickname("천사")
                 .price(10000L)
-                .time("2023-08-16T11:17:18.3536262")
+                .time(LocalDateTime.parse("2023-08-16T11:17:18"))
                 .build()
         );
 
@@ -138,7 +138,7 @@ public class EndAuctionRoomFacade {
                 .userId(2L)
                 .nickname("천사2")
                 .price(12000L)
-                .time("2023-08-18T11:17:18.3536262")
+                .time(LocalDateTime.parse("2023-08-18T11:17:18"))
                 .build()
         );
 

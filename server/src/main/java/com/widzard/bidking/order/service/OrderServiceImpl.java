@@ -48,4 +48,31 @@ public class OrderServiceImpl implements OrderService {
         orderItemRepository.save(orderItem);
         return order;
     }
+
+    /*
+     * 상품 유찰 == 주문 실패 처리 TODO 전체 주문시스템 의존성/엔티티 리팩토링 필요
+     */
+    @Transactional
+    @Override
+    public Order failOrder(Long auctionRoomId, Long itemId) {
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomId).orElseThrow(
+            AuctionRoomNotFoundException::new);
+        Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
+
+        Order order = Order.create(
+            auctionRoom,
+            null,
+            OrderState.ORDER_FAILED
+        );
+        orderRepository.save(order);
+
+        orderItemRepository.save(
+            OrderItem.builder()
+                .price(0L)
+                .item(item)
+                .order(order)
+                .build()
+        );
+        return order;
+    }
 }

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.redis.core.RedisHash;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @RedisHash(value = "itemAfterBidResult", timeToLive = 86400) //만료기간 1일
@@ -24,8 +23,7 @@ public class ItemAfterBidResult {
 
     private String price;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime time;
+    private String time;
 
     @Builder
     public ItemAfterBidResult(String type, Long userId, String nickname, Long price,
@@ -34,6 +32,6 @@ public class ItemAfterBidResult {
         this.userId = String.valueOf(userId);
         this.nickname = nickname;
         this.price = String.valueOf(price);
-        this.time = time;
+        this.time = String.valueOf(time);
     }
 }

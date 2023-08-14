@@ -49,7 +49,7 @@ public class Order extends BaseEntity {
     private Long id; // (주문코드)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderer_id", nullable = false)
+    @JoinColumn(name = "orderer_id")
     private Member orderer;
 
     @OneToOne(fetch = FetchType.LAZY)
