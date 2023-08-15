@@ -167,10 +167,6 @@ public class AuctionRoom extends BaseEntity {
         }
     }
 
-    public void changeOnLive() {
-        this.auctionRoomLiveState = AuctionRoomLiveState.ON_LIVE;
-    }
-
     public void validateLive() {
         LocalDateTime now = LocalDateTime.now();
         if (now.isBefore(this.startedAt.minusMinutes(20L)) || now.isAfter(this.startedAt)) {
@@ -188,6 +184,16 @@ public class AuctionRoom extends BaseEntity {
     public void TradeStart() {
         if (this.auctionRoomTradeState == AuctionRoomTradeState.BEFORE_PROGRESS) {
             this.auctionRoomTradeState = AuctionRoomTradeState.IN_PROGRESS;
+        }
+    }
+
+    public void quit() {
+        LocalDateTime now = LocalDateTime.now();
+        if (this.startedAt.isAfter(now)) {
+            changeLiveState(AuctionRoomLiveState.BEFORE_LIVE);
+        }
+        if (this.startedAt.isBefore(now)) {
+            changeLiveState(AuctionRoomLiveState.OFF_LIVE);
         }
     }
 }

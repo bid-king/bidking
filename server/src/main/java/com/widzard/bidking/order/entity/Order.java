@@ -23,11 +23,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 @Getter
 @Entity
+@ToString
 @Builder
 @DynamicInsert
 @AllArgsConstructor
@@ -47,7 +49,7 @@ public class Order extends BaseEntity {
     private Long id; // (주문코드)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderer_id", nullable = false)
+    @JoinColumn(name = "orderer_id")
     private Member orderer;
 
     @OneToOne(fetch = FetchType.LAZY)

@@ -45,34 +45,39 @@ public class RedissonLockAuctionFacade {
 
             // 경매가 갱신 (redis)
             // 1) 경매가 갱신 검증
+
             Long startPrice = null;
             Long currentPrice = null;
 
-            Object value = redisTemplate.opsForValue()
+            Object startPriceValue = redisTemplate.opsForValue()
                 .get(generateStartPriceKey(auctionId));
+            startPrice = getLongValue(startPrice, startPriceValue);
 
-            Object value2 = redisTemplate.opsForValue()
-                .get(generateBiddingPriceKey(itemId));
+            if (Boolean.FALSE.equals(redisTemplate.hasKey(generateBiddingPriceKey(itemId)))) {
+                currentPrice = startPrice;
+                if (currentPrice > price) {
+                    throw new InvalidBidPriceException();
+                }
+            } else {
+                Object currentPriceValue = redisTemplate.opsForValue()
+                    .get(generateBiddingPriceKey(itemId));
+                currentPrice = getLongValue(currentPrice, currentPriceValue);
 
-            startPrice = getLongValue(startPrice, value);
-            currentPrice = getLongValue(currentPrice, value2);
-
+                if (currentPrice >= price) {
+                    throw new InvalidBidPriceException();
+                }
+            }
             Long biddingCount = increaseBiddingCount(generateBiddingCountKey(itemId), 0, 1);
+
             log.info("***********biddingCount: {}", biddingCount);
             log.info("***********startPrice: {}", startPrice);
             log.info("***********currentPrice: {}", currentPrice);
             log.info("***********inputPrice: {}", price);
 
-            if ((biddingCount == 1) && (startPrice > price)) {
-                throw new InvalidBidPriceException();
-            }
-            if (biddingCount > 1 && currentPrice >= price) {
-                throw new InvalidBidPriceException();
-            }
-
             // 2) 레디스 Bidding 저장 - 자료구조 변경 리팩토링 필요
             LocalDateTime time = LocalDateTime.now();
-            saveBidding(itemId, memberId, nickname, price, time);
+
+            saveBidding(itemId, memberId, nickname, price, String.valueOf(time));
 
             // 3) pub-sub으로 전달
             redisTemplate.convertAndSend(
@@ -96,9 +101,8 @@ public class RedissonLockAuctionFacade {
         return redisTemplate.opsForValue().increment(key, incrementValue);
     }
 
-
     private void saveBidding(Long itemId, Long memberId, String nickname, Long price,
-        LocalDateTime time) {
+        String time) {
         redisTemplate.opsForValue()
             .set(generateBiddingUserIdKey(itemId), memberId, Duration.ofDays(1));
         redisTemplate.opsForValue()
@@ -108,7 +112,6 @@ public class RedissonLockAuctionFacade {
         redisTemplate.opsForValue()
             .set(generateBiddingTimeKey(itemId), time, Duration.ofDays(1));
     }
-
 
     private String generateStartPriceKey(Long auctionId) {
         return "auction" + ":" + auctionId + ":" + "onLiveItem:startPrice";
