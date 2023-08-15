@@ -11,25 +11,14 @@ import { ConfirmButton } from '../../common/ConfirmButton';
 export function BidCtrl({ socket, liveStatus, auctionRoomId, itemId, setCurrId, setLiveStatus }: Props) {
   const { accessToken } = useAppSelector(state => state.user);
 
-  if (liveStatus === 'beforeStart')
-    return (
-      <ConfirmButton
-        label={'경매 개시'}
-        color="ok"
-        onClick={() => {
-          descStart(auctionRoomId, itemId, accessToken).then(() => {
-            setLiveStatus('inDesc');
-          });
-        }}
-      />
-    );
   if (liveStatus === 'beforeDesc') {
     return (
       <ConfirmButton
         label={'다음 아이템 소개 시작하기'}
         onClick={() => {
-          socket.current?.emit('start', { roomId: auctionRoomId });
-          setLiveStatus('inDesc');
+          descStart(auctionRoomId, itemId, accessToken).then(() => {
+            setLiveStatus('inDesc');
+          });
         }}
       />
     );
@@ -54,6 +43,6 @@ interface Props extends HTMLAttributes<HTMLButtonElement> {
   auctionRoomId: number;
   itemId: number;
   socket: MutableRefObject<Socket | null>;
-  setLiveStatus: Dispatch<SetStateAction<'beforeStart' | 'inAuction' | 'beforeDesc' | 'inDesc' | 'end'>>;
+  setLiveStatus: Dispatch<SetStateAction<'inAuction' | 'beforeDesc' | 'inDesc' | 'end'>>;
   setCurrId: Dispatch<SetStateAction<number>>;
 }

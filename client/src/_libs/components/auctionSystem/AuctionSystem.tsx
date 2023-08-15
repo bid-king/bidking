@@ -6,12 +6,12 @@ import { AuctionItemStatus, DUMMY } from './auctionItemList/AuctionItemStatus';
 import { BidPrice } from './bidPrice/BidPrice';
 import { Timer } from './bidTimer/Timer';
 import { Bidder } from './bidder/Bidder';
-import { BiddingForm } from './bf/BiddingForm';
+import { BiddingForm } from './bidForm/BiddingForm';
 import { Socket } from 'socket.io-client';
 import { ChatRoom } from './chatRoom/ChatRoom';
 import { askingPriceParse } from '../../util/bidPriceParse';
 import { useAuctionSystem } from '../../hooks/useAuctionSystem';
-import { BidCtrl } from './bf/BidCtrl';
+import { BidCtrl } from './bidForm/BidCtrl';
 
 export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoomId, socket }: Props) {
   const {
