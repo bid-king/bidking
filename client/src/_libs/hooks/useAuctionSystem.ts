@@ -14,9 +14,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
   const [itemList, setItemList] = useState<liveItemList | undefined>(undefined); //전체 아이템리스트
   const [disable, setDisable] = useState<boolean>(true); //입찰 대기 시간동안 버튼이 눌리지 않는 상태
   const [currTime, setCurrTime] = useState<number>(0); //남은 시간
-  const [liveStatus, setLiveStatus] = useState<'beforeStart' | 'inAuction' | 'inDesc' | 'beforeDesc' | 'end'>(
-    'beforeStart'
-  );
+  const [liveStatus, setLiveStatus] = useState<'inAuction' | 'inDesc' | 'beforeDesc' | 'end'>('beforeDesc');
 
   useEffect(() => {
     socket.current?.on('init', ({ currentItemId, itemList }: Init) => {
@@ -24,14 +22,6 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       setItemList(adjusted);
       setCurrId(currentItemId);
     }); //API 요청 성공시, 이 데이터가 소켓에서옴
-
-    socket.current?.on('start', ({ itemId, price }: NextItem) => {
-      setDisable(false);
-      setLiveStatus('inAuction');
-      setCurrId(itemId);
-      setCurrPrice(price);
-      setPriceArr([bidPriceParse(String(price))]);
-    }); //아이템 경매 시작 (전체 경매가 시작되는것)
 
     socket.current?.on('next', ({ itemId, price }: NextItem) => {
       const result = itemList?.map<LiveItem>(item => {
@@ -48,6 +38,14 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       setPriceArr([bidPriceParse(String(price))]);
       setDisable(true);
     }); //다음 아이템 설명시작
+
+    socket.current?.on('start', ({ itemId, price }: NextItem) => {
+      setDisable(false);
+      setLiveStatus('inAuction');
+      setCurrId(itemId);
+      setCurrPrice(price);
+      setPriceArr([bidPriceParse(String(price))]);
+    }); //아이템 경매 시작 (전체 경매가 시작되는것)
 
     socket.current?.on('updateBid', ({ itemId, userId, nickname, price, time }: Result) => {
       setCurrPrice(price);
