@@ -338,9 +338,11 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId) {
+        Member seller = memberRepository.findById(member.getId())
+            .orElseThrow(MemberNotFoundException::new);
         AuctionRoom auctionRoom = auctionRoomRepository.findOffLiveById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
-        if (!auctionRoom.getSeller().equals(member)) {
+        if (!auctionRoom.getSeller().equals(seller)) {
             throw new UnauthorizedAuctionRoomAccessException();
         }
         List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByAuctionRoom(
