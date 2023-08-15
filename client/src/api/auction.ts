@@ -17,7 +17,8 @@ export default {
     https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/before-live', token),
   getSellerAuctionListAfterLive: (token: string) =>
     https.get<SellerAuctionRoomListResponse[]>('/api/v1/auctions/seller/after-live', token),
-  getSeller: (auctionId: number) => http.get<SellerAuctionDetail>(`/api/v1/auctions/${auctionId}/seller/after-live`),
+  getSeller: (auctionId: number, token: string) =>
+    https.get<SellerAuctionDetail>(`/api/v1/auctions/${auctionId}/seller/after-live`, token),
 };
 
 export interface AuctionRoomResponse {

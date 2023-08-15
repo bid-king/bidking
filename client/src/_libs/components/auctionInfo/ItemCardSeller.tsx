@@ -67,6 +67,8 @@ export function ItemCardSeller({ theme = 'dark', item }: Props) {
           </div>
         )}
       </div>
+      <Spacing rem="1" />
+
       <div>
         <Text type="bold" content={item.successTime ? detailDateParse(item.successTime) + ' 낙찰' : ''} />
       </div>
