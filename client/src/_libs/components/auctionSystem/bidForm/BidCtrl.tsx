@@ -2,7 +2,7 @@
 import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from 'react';
 import { HTMLAttributes } from 'react';
 import { Socket } from 'socket.io-client';
-import { descStart, live } from '../../../../api/live';
+import { auctionEnd, descStart, live } from '../../../../api/live';
 import { useAppSelector } from '../../../../store/hooks';
 import colors from '../../../design/colors';
 
@@ -35,7 +35,14 @@ export function BidCtrl({ socket, liveStatus, auctionRoomId, itemId, setCurrId, 
       />
     );
   if (liveStatus === 'inAuction') return <ConfirmButton disable={true} label={'경매 진행 중...'} />;
-  else return <ConfirmButton disable={true} label={'모든 경매가 종료되었어요.'} />;
+  else
+    return (
+      <ConfirmButton
+        color={'warn'}
+        label={'경매 종료하고 나가기'}
+        onClick={() => auctionEnd(auctionRoomId, accessToken)}
+      />
+    );
 }
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {

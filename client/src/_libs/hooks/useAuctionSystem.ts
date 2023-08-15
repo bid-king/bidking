@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
 import { LiveItem, liveItemList } from '../../api/live';
 import { arrayPadding } from '../util/arrayPadding';
@@ -15,6 +15,12 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
   const [disable, setDisable] = useState<boolean>(true); //입찰 대기 시간동안 버튼이 눌리지 않는 상태
   const [currTime, setCurrTime] = useState<number>(0); //남은 시간
   const [liveStatus, setLiveStatus] = useState<'inAuction' | 'inDesc' | 'beforeDesc' | 'end'>('beforeDesc');
+  const orderRef = useRef<number>(order);
+  const itemListRef = useRef<liveItemList | undefined>(itemList);
+  useEffect(() => {
+    orderRef.current = order;
+    itemListRef.current = itemList;
+  }, [order, itemList]);
 
   useEffect(() => {
     socket.current?.on('init', ({ currentItemId, itemList }: Init) => {
@@ -24,16 +30,13 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
     }); //API 요청 성공시, 이 데이터가 소켓에서옴
 
     socket.current?.on('next', ({ itemId, price }: NextItem) => {
-      const result = itemList?.map<LiveItem>(item => {
-        if (item.itemId === itemId) {
-          return {
-            ...item,
-            status: 'in',
-          };
-        }
-        return item;
+      setItemList(currentList => {
+        const result = currentList?.map<LiveItem>(item => {
+          if (item.itemId === itemId) item.status = 'in';
+          return item;
+        });
+        return result;
       });
-      setItemList(result);
       setCurrPrice(price);
       setPriceArr([bidPriceParse(String(price))]);
       setDisable(true);
@@ -56,27 +59,35 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
     }); //입찰
 
     socket.current?.on('successBid', ({ itemId, userId, nickname, price, time }: Result) => {
-      setDisable(true); //버튼 다시 누를 수 없도록 처리함 (다음 아이템설명)
-      const result = itemList?.map<LiveItem>(item => {
-        if (item.itemId === itemId) item.status = 'complete';
-        return item;
+      setDisable(true);
+      setItemList(currentList => {
+        const result = currentList?.map<LiveItem>(item => {
+          if (item.itemId === itemId) item.status = 'complete';
+          return item;
+        });
+        return result;
       });
-      console.log(result);
-      setItemList(result);
-      setOrder(order + 1);
-      setCurrId(itemId), setLiveStatus('beforeDesc');
+      setCurrId(itemListRef.current ? itemListRef.current[orderRef.current + 1].itemId : 0);
+      setOrder(orderRef.current && orderRef.current + 1);
+      setLiveStatus(
+        orderRef.current === (itemListRef.current?.length && itemListRef.current.length - 4) ? 'end' : 'beforeDesc'
+      ); //지금 순서가 마지막 순서였으면 끝내고, 아니면 계속 진행
     }); //낙찰
 
     socket.current?.on('failBid', ({ itemId }: { itemId: number }) => {
-      setDisable(true); //버튼 다시 누를수 없도록 처리함 (다음 아이템설명)
-      const result = itemList?.map<LiveItem>(item => {
-        if (item.itemId === itemId) item.status = 'fail';
-        return item;
+      setDisable(true);
+      setItemList(currentList => {
+        const result = currentList?.map<LiveItem>(item => {
+          if (item.itemId === itemId) item.status = 'fail';
+          return item;
+        });
+        return result;
       });
-      console.log(result);
-      setItemList(result);
-      setCurrId(itemId), setOrder(order + 1);
-      setLiveStatus('beforeDesc');
+      setCurrId(itemListRef.current ? itemListRef.current[orderRef.current + 1].itemId : 0);
+      setOrder(orderRef.current && orderRef.current + 1);
+      setLiveStatus(
+        orderRef.current === (itemListRef.current?.length && itemListRef.current.length - 4) ? 'end' : 'beforeDesc'
+      ); //지금 순서가 마지막 순서였으면 끝내고, 아니면 계속 진행
     }); //유찰
 
     socket.current?.on('time', (time: number) => {
