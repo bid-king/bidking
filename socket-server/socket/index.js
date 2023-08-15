@@ -28,6 +28,8 @@ module.exports = (server, app, sessionMiddleware) => {
       socket.join(roomId);
       socket['nickname'] = nickname;
 
+      io.to(roomId).emit('count', { count: socket.adapter.rooms.get(roomId)?.size });
+
       http.get(`/api/v1/bid/${roomId}/items`).then(itemList => {
         io.to(roomId).emit('init', itemList);
       });
@@ -35,7 +37,6 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on('leaveRoom', ({ roomId }) => {
       if (socket.id === roomOwners[`${roomId}`]) {
-        console.log(socket.adapter.rooms.get(roomId)); // room의 참여자 socket.id
         io.to(roomId).emit('roomClosed');
       } else {
         socket.leave(roomId);
