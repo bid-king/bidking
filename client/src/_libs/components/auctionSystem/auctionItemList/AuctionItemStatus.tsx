@@ -40,7 +40,7 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                     <div css={{ display: 'flex', alignItems: 'center' }} key={idx}>
                       <div
                         css={{
-                          background: `url(${item.imageUrl}) no-repeat center center`,
+                          background: `url("${item.imageUrl}") no-repeat center center`,
                           borderRadius: '1rem',
                           border: '1px solid ' + colors.ok,
                           filter: `drop-shadow(0 0 0.075rem ${colors.ok})`,
