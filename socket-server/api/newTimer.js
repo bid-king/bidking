@@ -72,6 +72,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
         return;
       }
 
+      console.log(`Bid Result for Item ${itemId} : ${JSON.stringify(afterBidResultData)}`);
       await redisCli.hset(afterBidResultKey, `${itemId}`, JSON.stringify(afterBidResultData));
     }
   }
