@@ -115,8 +115,8 @@ public class AuctionController {
     public ResponseEntity<AuctionCreateResponse> createAuction(
         @AuthenticationPrincipal Member member,
         @RequestPart @Valid AuctionCreateRequest auctionCreateRequest,
-        @RequestPart(name = "auctionRoomImg") MultipartFile auctionRoomImg,
-        @RequestPart(name = "itemImgs") MultipartFile[] itemImgs
+        @RequestPart(name = "auctionRoomImg", required = false) MultipartFile auctionRoomImg,
+        @RequestPart(name = "itemImgs", required = false) MultipartFile[] itemImgs
     ) throws IOException {
         AuctionRoom auctionRoom = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImgs);

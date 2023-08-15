@@ -1,10 +1,12 @@
 package com.widzard.bidking.alarm.controller;
 
+import com.widzard.bidking.alarm.dto.request.ReadRequest;
 import com.widzard.bidking.alarm.dto.response.AlarmResponse;
 import com.widzard.bidking.alarm.service.AlarmService;
 import com.widzard.bidking.member.entity.Member;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -46,9 +48,9 @@ public class AlarmController {
     @PostMapping("/{memberId}")
     public ResponseEntity<Void> readAlarm(
         @AuthenticationPrincipal Member member,
-        @RequestBody Long alarmId
+        @RequestBody @Valid ReadRequest readRequest
     ) {
-        alarmService.changeState(alarmId);
+        alarmService.changeState(readRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
