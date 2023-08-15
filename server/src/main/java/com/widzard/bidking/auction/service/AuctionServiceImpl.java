@@ -383,6 +383,7 @@ public class AuctionServiceImpl implements AuctionService {
         return new AuctionRoomEnterDto(
             isSeller,
             auctionId,
+            auctionRoom.getSeller().getNickname(),
             member.getNickname(),
             auctionRoom.getAuctionRoomType(),
             auctionRoom.getName()

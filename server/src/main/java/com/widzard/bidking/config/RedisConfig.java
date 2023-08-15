@@ -1,5 +1,6 @@
 package com.widzard.bidking.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -28,13 +29,13 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<?, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+    public RedisTemplate<?, Object> redisTemplate(ObjectMapper objectMapper) {
         RedisTemplate<?, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
+        template.setConnectionFactory(redisConnectionFactory());
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
+        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(objectMapper));
         template.afterPropertiesSet();
         return template;
     }

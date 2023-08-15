@@ -1,5 +1,6 @@
 package com.widzard.bidking.auction.service.facade;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.widzard.bidking.auction.dto.redis.ItemAfterBidResult;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
@@ -23,18 +24,21 @@ public class EndAuctionRoomFacade {
     private final AuctionService auctionService;
     private final HashOperations<String, String, Object> hashOperations;
     private final OrderService orderService;
+    private final ObjectMapper objectMapper;
     private final AuctionRoomRepository testRepository;
 
     public EndAuctionRoomFacade(
         AuctionService auctionService,
         AuctionRoomRepository testRepository,
         RedisTemplate<String, Object> redisTemplate,
-        OrderService orderService
+        OrderService orderService,
+        ObjectMapper objectMapper
     ) {
         this.hashOperations = redisTemplate.opsForHash();
         this.auctionService = auctionService;
         this.testRepository = testRepository;
         this.orderService = orderService;
+        this.objectMapper = objectMapper;
     }
 
     public void saveItemAfterBidResult(Long auctionId, Long itemId, ItemAfterBidResult result) {
@@ -46,10 +50,12 @@ public class EndAuctionRoomFacade {
     }
 
     public ItemAfterBidResult getItemAfterBidResult(Long auctionId, Long itemId) {
-        return (ItemAfterBidResult) hashOperations.get(
+        Object result = hashOperations.get(
             "auction:" + auctionId + ":AfterBidResult",
             String.valueOf(itemId)
         );
+        return objectMapper.convertValue(result, ItemAfterBidResult.class);
+
     }
 
     @Transactional
