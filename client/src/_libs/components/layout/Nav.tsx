@@ -41,12 +41,10 @@ export function Nav({ theme = 'light' }: Props) {
     content: string;
     alarmType: string;
   };
-  const [alarm, setAlarm] = useState<AlarmEvent[]>([]);
 
   useEffect(() => {
     if (isLogined) {
       const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
-      console.log(eventSource);
       eventSource.onmessage = function (event) {
         console.log(event);
       };
@@ -138,7 +136,11 @@ export function Nav({ theme = 'light' }: Props) {
           {isLogined && (
             <>
               {theme === 'light' && (
-                <div>
+                <div
+                  css={{
+                    display: 'flex',
+                  }}
+                >
                   <Link to={`/purchased/${id}`}>
                     <RoundButton label="구매 내역" size="small" color="white" />
                   </Link>
@@ -149,7 +151,11 @@ export function Nav({ theme = 'light' }: Props) {
                 </div>
               )}
               {theme === 'dark' && (
-                <div>
+                <div
+                  css={{
+                    display: 'flex',
+                  }}
+                >
                   <Link to={'/seller/create-auction'}>
                     <RoundButton label="경매 등록" size="small" color="white" />
                   </Link>
