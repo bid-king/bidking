@@ -36,7 +36,8 @@ export function useLiveConnection() {
           return data;
         })
         .then(res => {
-          socket.current = io('http://localhost:8005', {
+          const ROOT = process.env.REACT_APP_WS_ROOT as string;
+          socket.current = io(ROOT, {
             withCredentials: true,
           });
           live(socket.current).send.connect(res.auctionRoomId, res.nickname, res.seller);
