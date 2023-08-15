@@ -12,5 +12,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
-  args: { theme: 'light', currPrice: 12345, askingPrice: '1211000', disable: false, auctionRoomId: 3, itemId: 2 },
+  args: { theme: 'light', currPrice: 12345, askingPrice: 1211000, disable: false, auctionRoomId: 3, itemId: 2 },
 };
