@@ -18,17 +18,6 @@ export function useSellerDetailOffLive() {
     setChecked(!isChecked);
   };
 
-  const handleDelete = () => {
-    auction
-      .delete(auctionId, accessToken)
-      .then(() => {
-        navigate('/seller');
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
     auction
       .getSeller(auctionId, accessToken)
@@ -45,7 +34,6 @@ export function useSellerDetailOffLive() {
     error,
     isLogined,
     handleCheck,
-    handleDelete,
     isChecked,
   };
 }

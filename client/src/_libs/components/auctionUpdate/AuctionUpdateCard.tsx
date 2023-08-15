@@ -66,7 +66,7 @@ export function AuctionUpdateCard({ ordering }: Props) {
       <div>
         <Select value={itemCategory} onChange={handleCategoryChange}>
           {categoryList.map(category => (
-            <SelectOption value={category.id} key={category.id}>
+            <SelectOption value={category.name} key={category.id}>
               {category.name}
             </SelectOption>
           ))}
