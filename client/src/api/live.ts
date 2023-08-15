@@ -9,8 +9,7 @@ export function getItems(auctionId: number, token: string) {
 export function descStart(auctionId: number, itemId: number, token: string) {
   return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/start`, token);
 }
-export function bid(auctionId: number, itemId: number, price: string, token: string) {
-  console.log(price, '원에 입찰함....ㅠㅠ');
+export function bid(auctionId: number, itemId: number, price: number, token: string) {
   return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/try`, token, { price });
 }
 export function auctionEnd(auctionId: number, token: string) {
@@ -23,8 +22,8 @@ export function live(ws: Socket | null) {
         ws?.emit('enterRoom', { nickname, roomId, isSeller }),
       bidStart: (roomId: number) => ws?.emit('start', { roomId }),
       chat: (roomId: number, nickname: string, msg: string) => ws?.emit('chat', { nickname, roomId, msg }),
-      leave: (roomId: number, nickname: string) => {
-        ws?.emit('leaveRoom', { nickname, roomId });
+      leave: (roomId: number) => {
+        ws?.emit('leaveRoom', { roomId });
         ws?.disconnect();
       },
       notice: (roomId: number, msg: string) => ws?.emit('notice', { roomId, msg }),
@@ -104,7 +103,8 @@ export function live(ws: Socket | null) {
 
 export interface AuctionEnterResponse {
   nickname: string;
-  auctionRoomType: 'common' | 'reverse';
+  sellerNickname: string;
+  auctionRoomType: 'COMMON' | 'REVERSE';
   title: string;
   auctionRoomId: number;
   currentItemId: number;

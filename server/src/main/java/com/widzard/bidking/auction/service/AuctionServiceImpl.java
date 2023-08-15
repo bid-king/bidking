@@ -8,6 +8,7 @@ import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
+import com.widzard.bidking.auction.exception.AuctionRoomImageNotFound;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionRoomNotStartedException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
@@ -123,8 +124,7 @@ public class AuctionServiceImpl implements AuctionService {
         throws IOException {
 
         //시작시간 예외 검증
-        LocalDateTime now = LocalDateTime.now();
-        if (request.getStartedAt().isBefore(now.plusHours(1))) {
+        if (request.getStartedAt().isBefore(LocalDateTime.now())) {
             throw new AuctionStartTimeInvalidException();
         }
 
@@ -137,6 +137,11 @@ public class AuctionServiceImpl implements AuctionService {
         // 이미지 수 및 아이템 입력값 검증
         if (request.getItemList().size() != itemImgs.length) {
             throw new InvalidAuctionRoomRequestException();
+        }
+
+        //썸네일 검사
+        if(auctionRoomImg == null){
+            throw new AuctionRoomImageNotFound();
         }
 
         // 경매방 이미지, 경매방 생성
@@ -383,6 +388,7 @@ public class AuctionServiceImpl implements AuctionService {
         return new AuctionRoomEnterDto(
             isSeller,
             auctionId,
+            auctionRoom.getSeller().getNickname(),
             member.getNickname(),
             auctionRoom.getAuctionRoomType(),
             auctionRoom.getName()

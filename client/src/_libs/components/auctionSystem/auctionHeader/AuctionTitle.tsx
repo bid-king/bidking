@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect, useState } from 'react';
-import auctionType from '../../../constants/auctionType';
 import colors from '../../../design/colors';
 import { Spacing } from '../../common/Spacing';
 import { Text } from '../../common/Text';
-export function AuctionTitle({ theme, nickname, title, auctionRoomType }: Props) {
+export function AuctionTitle({ theme, sellerNickname, title, auctionRoomType }: Props) {
   return (
     <div>
       <div css={{ padding: '0 0.5rem 0 0.5rem' }}>
@@ -16,11 +15,11 @@ export function AuctionTitle({ theme, nickname, title, auctionRoomType }: Props)
           css={{
             padding: '0.2rem 1rem 0.2rem 1rem',
             borderRadius: '1.5rem',
-            backgroundColor: auctionRoomType === 'common' ? colors.progress : colors.warn,
+            backgroundColor: auctionRoomType === 'COMMON' ? colors.progress : colors.warn,
             color: colors.white,
           }}
         >
-          <Text content={auctionType[auctionRoomType]} type="bold" />
+          <Text content={AUCTION_TYPE[auctionRoomType]} type="bold" />
         </div>
         <Spacing rem="0.5" dir="h" />
         <div
@@ -31,7 +30,7 @@ export function AuctionTitle({ theme, nickname, title, auctionRoomType }: Props)
           }}
         >
           <Text content={'판매자 '} />
-          <Text content={nickname} type="bold" />
+          <Text content={sellerNickname} type="bold" />
         </div>
       </div>
     </div>
@@ -42,9 +41,13 @@ const THEME_VARIANT = {
   dark: { color: colors.white, backgroundColor: 'transparent', border: `1px solid ${colors.white}` },
 };
 
+const AUCTION_TYPE = {
+  COMMON: '일반 경매',
+  REVERSE: '네덜란드',
+};
 interface Props {
   theme: 'light' | 'dark';
-  nickname: string;
-  auctionRoomType: 'common' | 'reverse';
+  sellerNickname: string;
+  auctionRoomType: 'COMMON' | 'REVERSE';
   title: string;
 }

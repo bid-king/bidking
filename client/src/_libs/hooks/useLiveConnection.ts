@@ -5,12 +5,13 @@ import { enter, live } from '../../api/live';
 import { useAppSelector } from '../../store/hooks';
 import { store } from '../../store/store';
 
-export function useLiveEnter() {
+export function useLiveConnection() {
   const [userId, setUserId] = useState<number>(0);
   const [auctionRoomId, setAuctionRoomId] = useState<number>(0);
   const [nickname, setNickname] = useState<string>('');
+  const [sellerNickname, setSellerNickname] = useState<string>('');
   const [title, setTitle] = useState<string>('');
-  const [auctionRoomType, setAuctionRoomType] = useState<'common' | 'reverse'>('common');
+  const [auctionRoomType, setAuctionRoomType] = useState<'COMMON' | 'REVERSE'>('COMMON');
   const [liveAuthErr, setLiveAuthErr] = useState<unknown>(null);
   const [seller, setSeller] = useState<boolean>(false);
   const { accessToken } = useAppSelector(state => state.user);
@@ -28,6 +29,7 @@ export function useLiveEnter() {
           setUserId(uid);
           setAuctionRoomId(data.auctionRoomId);
           setNickname(data.nickname);
+          setSellerNickname(data.sellerNickname);
           setSeller(data.seller);
           setTitle(data.title);
           setAuctionRoomType(data.auctionRoomType);
@@ -43,7 +45,7 @@ export function useLiveEnter() {
     }
 
     return () => {
-      live(socket.current).send.leave(auctionRoomId, nickname);
+      live(socket.current).send.leave(auctionRoomId);
     }; //unmount시 채팅방 나갑니다
   }, [auctionId]);
 
@@ -52,6 +54,7 @@ export function useLiveEnter() {
     auctionRoomId,
     auctionRoomType,
     nickname,
+    sellerNickname,
     title,
     liveAuthErr,
     seller,

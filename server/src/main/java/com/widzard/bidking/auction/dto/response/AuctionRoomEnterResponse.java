@@ -13,6 +13,7 @@ public class AuctionRoomEnterResponse {
 
     private boolean isSeller;
     private Long auctionRoomId;
+    private String sellerNickname;
     private String nickname; // 방 들어온 사람 id
     private AuctionRoomType auctionRoomType;
     private String title;
@@ -21,6 +22,7 @@ public class AuctionRoomEnterResponse {
         return new AuctionRoomEnterResponse(
             dto.isSeller(),
             dto.getAuctionRoomId(),
+            dto.getSellerNickname(),
             dto.getNickname(),
             dto.getAuctionRoomType(),
             dto.getTitle()

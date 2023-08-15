@@ -7,11 +7,11 @@ import { AuctionHeader } from '../../_libs/components/auctionSystem/auctionHeade
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { SellerStream } from '../../_libs/components/meeting/SellerStream';
 import colors from '../../_libs/design/colors';
-import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
+import { useLiveConnection } from '../../_libs/hooks/useLiveConnection';
 
 export function SellerLive() {
-  const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr, seller, SOCKET, error } =
-    useLiveEnter();
+  const { SOCKET, userId, auctionRoomId, auctionRoomType, nickname, sellerNickname, title, liveAuthErr, error } =
+    useLiveConnection();
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
       <div css={{ width: '100%', padding: '1rem 0.25rem 0.5rem 0.5rem' }}>
@@ -20,13 +20,13 @@ export function SellerLive() {
             <AuctionHeader
               userType="seller"
               theme="dark"
-              nickname={nickname}
+              sellerNickname={sellerNickname}
               auctionRoomType={auctionRoomType}
               title={title}
             />
           </div>
         </div>
-        <div css={{ width: '100%', height: '100%' }}>
+        <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
           <SellerStream auctionRoomId={auctionRoomId} userId={userId} userType={'seller'} />
           <Spacing rem="0.5" />
           <AuctionNotice auctionRoomId={auctionRoomId} userType="seller" socket={SOCKET} />

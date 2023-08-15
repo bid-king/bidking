@@ -8,6 +8,8 @@ const helmet = require('helmet');
 const hpp = require('hpp');
 const ejs = require('ejs');
 const redisSub = require('./config/pubsub');
+const https = require("https");
+const fs = require("fs");
 
 dotenv.config();
 const redis = require('./config/redis');
@@ -65,7 +67,20 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-const server = app.listen(app.get('port'), () => {
+// SSL 인증서와 개인 키 파일의 경로
+const privateKeyPath = './ssl/privkey.pem';
+const certificatePath = './ssl/fullchain.pem';
+
+// SSL 옵션 설정
+const sslOptions = {
+  key: fs.readFileSync(privateKeyPath),
+  cert: fs.readFileSync(certificatePath)
+};
+
+// Express 애플리케이션을 HTTPS로 실행
+const server = https.createServer(sslOptions, app);
+
+server.listen(app.get('port'), () => {
   console.log(app.get('port'), '번 포트에서 대기 중');
 });
 

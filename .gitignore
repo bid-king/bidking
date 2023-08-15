@@ -415,3 +415,7 @@ out/
 .vsid/
 
 env.properties
+
+### ssl
+/server/src/main/resources/ssl
+/socket-server/ssl

@@ -5,7 +5,7 @@ import { ConfirmButton } from '../../common/ConfirmButton';
 import { Spacing } from '../../common/Spacing';
 import { AuctionTitle } from './AuctionTitle';
 
-export function AuctionHeader({ userType, theme, nickname, auctionRoomType, title }: Props) {
+export function AuctionHeader({ userType, theme, sellerNickname, auctionRoomType, title }: Props) {
   return (
     <div
       css={{
@@ -16,7 +16,7 @@ export function AuctionHeader({ userType, theme, nickname, auctionRoomType, titl
         ...THEME_VARIANT[theme],
       }}
     >
-      <AuctionTitle theme={theme} nickname={nickname} auctionRoomType={auctionRoomType} title={title} />
+      <AuctionTitle theme={theme} sellerNickname={sellerNickname} auctionRoomType={auctionRoomType} title={title} />
     </div>
   );
 }
@@ -31,7 +31,7 @@ const THEME_VARIANT = {
 interface Props {
   userType: 'order' | 'seller';
   theme: 'light' | 'dark';
-  nickname: string;
-  auctionRoomType: 'common' | 'reverse';
+  sellerNickname: string;
+  auctionRoomType: 'COMMON' | 'REVERSE';
   title: string;
 }

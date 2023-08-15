@@ -12,6 +12,7 @@ public class AuctionRoomEnterDto {
 
     private boolean isSeller;
     private Long auctionRoomId;
+    private String sellerNickname;
     private String nickname;
     private AuctionRoomType auctionRoomType;
     private String title;
