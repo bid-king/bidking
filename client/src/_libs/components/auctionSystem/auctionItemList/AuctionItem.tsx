@@ -9,7 +9,7 @@ export function AuctionItem({ item, idx }: Props) {
       key={idx}
       css={{
         backgroundImage: `url('${item.imageUrl}')`,
-        backgroundSize: 'contain',
+        backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
         borderRadius: '0.75rem',
@@ -22,24 +22,13 @@ export function AuctionItem({ item, idx }: Props) {
         ...ITEM_STATUS_CSS[item.status],
       }}
     >
-      {/* <img src={} css={{ zIndex: '99', width: '100%', maxHeight: '100%' }} /> */}
-      <div
-        css={{
-          position: 'absolute',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: colors.white,
-        }}
-      >
-        <Text type="bold" content={ITEM_STATUS_TEXT[item.status]} />
-      </div>
+      <Text type="bold" content={ITEM_STATUS_TEXT[item.status]} />
     </div>
   );
 }
 
 const ITEM_STATUS_CSS = {
-  dummy: { border: '1px solid transparent' },
+  dummy: { backgroundColor: colors.grey, border: '1px solid transparent' },
   before: { color: 'grayscale(1)', border: '1px solid ' + colors.grey },
   in: {
     color: 'transparent',

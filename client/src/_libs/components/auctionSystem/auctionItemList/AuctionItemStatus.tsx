@@ -40,10 +40,13 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                     <div css={{ display: 'flex', alignItems: 'center' }} key={idx}>
                       <div
                         css={{
-                          background: `url("${item.imageUrl}") no-repeat center center`,
+                          backgroundImage: `url("${item.imageUrl}")`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center center',
+                          backgroundRepeat: 'no-repeat',
                           borderRadius: '1rem',
-                          border: '1px solid ' + colors.ok,
-                          filter: `drop-shadow(0 0 0.075rem ${colors.ok})`,
+                          border: '1px solid ' + colors.confirm,
+                          filter: `drop-shadow(0 0 0.025rem ${colors.confirm})`,
                           width: '3rem',
                           height: '3rem',
                         }}
@@ -66,6 +69,8 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                     border: '1px solid transparent',
                     width: '100%',
                     height: '3rem',
+                    display: 'flex',
+                    justifyContent: 'center',
                   }}
                 >
                   <Text type="h2" content="경매 종료" />
@@ -91,6 +96,8 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                     border: '1px solid transparent',
                     width: '100%',
                     height: '3rem',
+                    display: 'flex',
+                    justifyContent: 'center',
                   }}
                 >
                   <Text type="h2" content="경매 대기" />

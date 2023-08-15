@@ -72,6 +72,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       setLiveStatus(
         orderRef.current === (itemListRef.current?.length && itemListRef.current.length - 4) ? 'end' : 'beforeDesc'
       ); //지금 순서가 마지막 순서였으면 끝내고, 아니면 계속 진행
+      setTopBidder('-');
     }); //낙찰
 
     socket.current?.on('failBid', ({ itemId }: { itemId: number }) => {
@@ -88,6 +89,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       setLiveStatus(
         orderRef.current === (itemListRef.current?.length && itemListRef.current.length - 4) ? 'end' : 'beforeDesc'
       ); //지금 순서가 마지막 순서였으면 끝내고, 아니면 계속 진행
+      setTopBidder('-');
     }); //유찰
 
     socket.current?.on('time', (time: number) => {
