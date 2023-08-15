@@ -1,0 +1,6 @@
+FROM node:18-alpine
+WORKDIR /app
+RUN apk update && apk add --no-cache yarn
+COPY ./ ./
+RUN yarn
+CMD ["yarn","start"]
