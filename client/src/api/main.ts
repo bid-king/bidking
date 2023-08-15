@@ -66,7 +66,7 @@ export interface AuctionRoomListResponse {
   name: string;
   imageUrl: string;
   startedAt: string;
-  auctionRoomLiveState: string;
+  auctionRoomLiveState: 'ON_LIVE' | 'BEFORE_LIVE';
   itemListDto: ItemListDto[];
   bookmarked: boolean;
 }

@@ -124,7 +124,7 @@ export function useMainBox() {
     categoryList: buttonCategoryList,
     keyword: '',
     page: 1,
-    perPage: 8,
+    perPage: 100,
   };
 
   useEffect(() => {

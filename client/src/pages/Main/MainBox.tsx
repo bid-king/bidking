@@ -83,14 +83,15 @@ export function MainBox() {
                       css={{
                         position: 'relative',
                       }}
+                      auctionRoomLiveState={auction.auctionRoomLiveState}
                     />
                   </Link>
                   {isLogined && (
                     <div
                       css={{
                         position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
+                        top: '0.6rem',
+                        right: '0.6rem',
                       }}
                     >
                       <IconButton
@@ -149,6 +150,7 @@ export function MainBox() {
                     css={{
                       position: 'relative',
                     }}
+                    auctionRoomLiveState={auction.auctionRoomLiveState}
                   />
                 </Link>
 
@@ -156,8 +158,8 @@ export function MainBox() {
                   <div
                     css={{
                       position: 'absolute',
-                      top: '1rem',
-                      right: '1rem',
+                      top: '0.6rem',
+                      right: '0.6rem',
                     }}
                   >
                     <IconButton
