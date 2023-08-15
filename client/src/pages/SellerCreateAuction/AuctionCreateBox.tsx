@@ -92,7 +92,7 @@ export function AuctionCreateBox() {
               display: 'flex',
             }}
           >
-            <Text type="p" content="일반 경매" />
+            <Text type="p" content="일반경매" />
             <Spacing rem="1" dir="h" />
             <RadioButton
               name="auctionRoomType"
@@ -101,6 +101,7 @@ export function AuctionCreateBox() {
               onChange={handleAuctionRoomType}
             />
           </div>
+          <Spacing rem="0.25" />
           <div
             css={{
               display: 'flex',

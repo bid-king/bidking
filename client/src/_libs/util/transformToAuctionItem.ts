@@ -21,6 +21,7 @@ export interface AuctionItem {
   ordering: number;
   itemId: number;
   isChanged: boolean;
+  itemImageUrl: string;
 }
 
 export function transformToAuctionItem(originalItem: OriginalItem): AuctionItem {
@@ -32,5 +33,6 @@ export function transformToAuctionItem(originalItem: OriginalItem): AuctionItem 
     ordering: originalItem.itemOrdering,
     itemId: originalItem.itemId,
     isChanged: false,
+    itemImageUrl: originalItem.itemImageUrl,
   };
 }
