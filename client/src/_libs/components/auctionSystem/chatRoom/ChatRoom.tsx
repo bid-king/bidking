@@ -29,7 +29,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
 
   useEffect(() => {
     return () => {
-      live(socket.current).send.leave(roomId, nickname);
+      live(socket.current).send.leave(roomId);
     };
   }, []);
   return (
