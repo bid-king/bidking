@@ -51,12 +51,6 @@ import org.hibernate.annotations.DynamicInsert;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
     name = "auction_room",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "UniqueMemberAndStartedAt",
-            columnNames = {"member_id", "started_at"}
-        )
-    },
     indexes = {
         @Index(name = "idx__auction_live_state__auction_room_trade_state__member_id",
             columnList = "auction_live_state,auction_room_trade_state,member_id")
