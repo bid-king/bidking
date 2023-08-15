@@ -29,11 +29,7 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           disable={disable}
           btnType="progress"
           label={bidPriceParse(String(askingPrice)) + '원 즉시입찰'}
-          onClick={async () => {
-            if (tryBid(setBidPrice, currPrice, askingPrice, askingPrice, setAlert))
-              bid(auctionRoomId, itemId, askingPrice, accessToken);
-            else return;
-          }}
+          onClick={() => bid(auctionRoomId, itemId, askingPrice, accessToken)}
         />
       </div>
       <div
@@ -53,8 +49,12 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           inputType="text"
           placeholder={'입찰가'}
           value={bidPrice}
-          onChange={e => validateBidPrice(e.target.value, setBidPrice, setAlert)}
-          onKeyDown={e => e.key === 'Enter' && setAlert('엔터키로는 입찰할 수 없어요')}
+          onChange={e => validateBidPrice(bidPrice, askingPrice) === 'OK' && setBidPrice(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter') setAlert('엔터키로는 입찰할 수 없어요');
+            if (validateBidPrice(bidPrice, askingPrice) === 'OK') setAlert('');
+            else setAlert(validateBidPrice(bidPrice, askingPrice));
+          }}
         />
         <Spacing rem="1" dir="h" />
         <ConfirmButton
