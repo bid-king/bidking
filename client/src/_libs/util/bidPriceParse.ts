@@ -10,12 +10,15 @@ export function askingPriceParse(price: number): string {
 }
 
 /**숫자만 입력했는지 검증합니다. */
-export function validateBidPrice(price: string, callback: (arg: string) => void): void {
+export function validateBidPrice(price: string, onValid: (arg: string) => void, onErr: (arg: string) => void): void {
   const check = /^\d+$/;
-  if (check.test(price) || price === '') return callback(price);
+  if (check.test(price) || price === '') return onValid(price);
   else {
-    alert('숫자만 입력할 수 있어요');
+    onErr('숫자만 입력할 수 있어요');
     return;
+  }
+  if (price.length > 12) {
+    onErr('숫자만 입력할 수 있어요');
   }
 }
 

@@ -4,6 +4,7 @@ import { LiveItem, liveItemList } from '../../api/live';
 import { arrayPadding } from '../util/arrayPadding';
 import { DUMMY } from '../components/auctionSystem/auctionItemList/AuctionItemStatus';
 import { bidPriceParse } from '../util/bidPriceParse';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
   const [order, setOrder] = useState<number>(2); //순서, 2부터 시작함
@@ -18,6 +19,8 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
   const [liveStatus, setLiveStatus] = useState<'inAuction' | 'inDesc' | 'beforeDesc' | 'end'>('beforeDesc');
   const orderRef = useRef<number>(order);
   const itemListRef = useRef<liveItemList | undefined>(itemList);
+
+  const navigate = useNavigate();
   useEffect(() => {
     orderRef.current = order;
     itemListRef.current = itemList;
@@ -100,6 +103,11 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
     socket.current?.on('time', (time: number) => {
       setCurrTime(time);
     }); //시간 업데이트
+
+    socket.current?.on('roomClosed', roomId => {
+      socket.current?.emit('roomClosed', roomId);
+      navigate('/');
+    });
   }, [socket.current]);
 
   return {

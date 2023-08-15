@@ -10,7 +10,7 @@ import colors from '../../_libs/design/colors';
 import { useLiveConnection } from '../../_libs/hooks/useLiveConnection';
 
 export function SellerLive() {
-  const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr, seller, SOCKET, error } =
+  const { SOCKET, userId, auctionRoomId, auctionRoomType, nickname, sellerNickname, title, liveAuthErr, error } =
     useLiveConnection();
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
@@ -20,13 +20,13 @@ export function SellerLive() {
             <AuctionHeader
               userType="seller"
               theme="dark"
-              nickname={nickname}
+              sellerNickname={sellerNickname}
               auctionRoomType={auctionRoomType}
               title={title}
             />
           </div>
         </div>
-        <div css={{ width: '100%', height: '100%' }}>
+        <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
           <SellerStream auctionRoomId={auctionRoomId} userId={userId} userType={'seller'} />
           <Spacing rem="0.5" />
           <AuctionNotice auctionRoomId={auctionRoomId} userType="seller" socket={SOCKET} />

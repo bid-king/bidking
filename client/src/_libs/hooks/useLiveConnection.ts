@@ -9,8 +9,9 @@ export function useLiveConnection() {
   const [userId, setUserId] = useState<number>(0);
   const [auctionRoomId, setAuctionRoomId] = useState<number>(0);
   const [nickname, setNickname] = useState<string>('');
+  const [sellerNickname, setSellerNickname] = useState<string>('');
   const [title, setTitle] = useState<string>('');
-  const [auctionRoomType, setAuctionRoomType] = useState<'common' | 'reverse'>('common');
+  const [auctionRoomType, setAuctionRoomType] = useState<'COMMON' | 'REVERSE'>('COMMON');
   const [liveAuthErr, setLiveAuthErr] = useState<unknown>(null);
   const [seller, setSeller] = useState<boolean>(false);
   const { accessToken } = useAppSelector(state => state.user);
@@ -21,10 +22,6 @@ export function useLiveConnection() {
   useEffect(() => {
     getRoomInfo();
 
-    socket.current?.on('roomClosed', () => {
-      socket.current?.emit('roomClosed', { roomId: auctionRoomId });
-    });
-
     async function getRoomInfo() {
       const uid = (await store.getState().user.id) || 0;
       enter(Number(auctionId), accessToken)
@@ -32,6 +29,7 @@ export function useLiveConnection() {
           setUserId(uid);
           setAuctionRoomId(data.auctionRoomId);
           setNickname(data.nickname);
+          setSellerNickname(data.sellerNickname);
           setSeller(data.seller);
           setTitle(data.title);
           setAuctionRoomType(data.auctionRoomType);
@@ -56,6 +54,7 @@ export function useLiveConnection() {
     auctionRoomId,
     auctionRoomType,
     nickname,
+    sellerNickname,
     title,
     liveAuthErr,
     seller,

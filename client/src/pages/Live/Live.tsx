@@ -10,7 +10,7 @@ import { useSocket } from '../../_libs/hooks/useSocket';
 import { AuctionNotice } from '../../_libs/components/auctionSystem/chatRoom/AuctionNotice';
 
 export function Live() {
-  const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr, seller, SOCKET, error } =
+  const { SOCKET, userId, auctionRoomId, auctionRoomType, nickname, sellerNickname, title, liveAuthErr, error } =
     useLiveConnection();
 
   return (
@@ -20,14 +20,14 @@ export function Live() {
           <div css={{ width: 'auto', maxWidth: '33vw' }}>
             <AuctionHeader
               theme="light"
-              nickname={nickname}
+              sellerNickname={sellerNickname}
               auctionRoomType={auctionRoomType}
               title={title}
               userType="order"
             />
           </div>
         </div>
-        <div css={{ width: '100%', height: '100%' }}>
+        <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
           <OrderStream auctionRoomId={auctionRoomId} userId={userId} userType="order" />
           <Spacing rem="0.5" />
           <AuctionNotice auctionRoomId={auctionRoomId} userType="order" socket={SOCKET} />
