@@ -26,7 +26,7 @@ export function Timer({ theme = 'light', time }: Props) {
         <div
           css={{
             width: '100%', //시간에 따른 동적 바인딩
-            transform: `scaleX(${time > 0 ? (time - 1) / 10 : 0})`,
+            transform: `scaleX(${time / 10})`,
             transformOrigin: 'left',
             height: '0.35rem',
             borderRadius: '1rem',

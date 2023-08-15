@@ -5,13 +5,13 @@ import { AuctionHeader } from '../../_libs/components/auctionSystem/auctionHeade
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { OrderStream } from '../../_libs/components/meeting/OrderStream';
 import colors from '../../_libs/design/colors';
-import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
+import { useLiveConnection } from '../../_libs/hooks/useLiveConnection';
 import { useSocket } from '../../_libs/hooks/useSocket';
 import { AuctionNotice } from '../../_libs/components/auctionSystem/chatRoom/AuctionNotice';
 
 export function Live() {
   const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr, seller, SOCKET, error } =
-    useLiveEnter();
+    useLiveConnection();
 
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>

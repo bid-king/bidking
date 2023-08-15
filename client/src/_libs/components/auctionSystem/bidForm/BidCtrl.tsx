@@ -40,7 +40,10 @@ export function BidCtrl({ socket, liveStatus, auctionRoomId, itemId, setCurrId, 
       <ConfirmButton
         color={'warn'}
         label={'경매 종료하고 나가기'}
-        onClick={() => auctionEnd(auctionRoomId, accessToken)}
+        onClick={async () => {
+          await auctionEnd(auctionRoomId, accessToken);
+          live(socket.current).send.leave(auctionRoomId);
+        }}
       />
     );
 }
