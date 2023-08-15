@@ -296,9 +296,14 @@ export function AuctionUpdateBox() {
           </div>
         </div>
       )}
-      {!detail && (
+      {!isLogined && (
         <div>
           <Text type="h1" content="로그인이 필요한서비스입니다." />
+        </div>
+      )}
+      {!detail && (
+        <div>
+          <Text type="h1" content="경매물품이 존재하지 않습니다." />
         </div>
       )}
     </div>
