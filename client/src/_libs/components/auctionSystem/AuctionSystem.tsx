@@ -17,6 +17,7 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
   const {
     order,
     currPrice,
+    askingPrice,
     priceArr,
     topbidder,
     currId,
@@ -52,7 +53,7 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
             itemId={currId}
             theme={theme}
             currPrice={currPrice}
-            askingPrice={askingPriceParse(currPrice)}
+            askingPrice={askingPrice}
             disable={disable}
           />
         ) : (

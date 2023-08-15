@@ -8,9 +8,11 @@ import { ConfirmButton } from '../../common/ConfirmButton';
 import { Input } from '../../common/Input';
 
 import { Spacing } from '../../common/Spacing';
+import { Text } from '../../common/Text';
 
 export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice, askingPrice, disable }: Props) {
   const [bidPrice, setBidPrice] = useState<string>('');
+  const [alert, setAlert] = useState<string>('');
   const { accessToken } = useAppSelector(state => state.user);
 
   return (
@@ -26,14 +28,24 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
         <ConfirmButton
           disable={disable}
           btnType="progress"
-          label={bidPriceParse(askingPrice) + '원 즉시입찰'}
+          label={bidPriceParse(String(askingPrice)) + '원 즉시입찰'}
           onClick={async () => {
-            await tryBid(setBidPrice, currPrice, askingPrice, askingPrice);
+            await tryBid(setBidPrice, currPrice, askingPrice, askingPrice, setAlert);
             bid(auctionRoomId, itemId, askingPrice, accessToken);
           }}
         />
       </div>
-      <Spacing rem="0.5" />
+      <div
+        css={{
+          ...THEME_VARIANT[theme],
+          height: '0.75rem',
+          borderRadius: '1rem',
+          padding: '0 0.5rem 0 0.5rem',
+          fontSize: '0.66rem',
+        }}
+      >
+        <Text content={alert} />
+      </div>
       <div css={{ display: 'flex' }}>
         <Input
           theme={theme}
@@ -41,7 +53,7 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           placeholder={'입찰가'}
           value={bidPrice}
           onChange={e => validateBidPrice(e.target.value, setBidPrice)}
-          onKeyDown={e => e.key === 'Enter' && alert('엔터키로는 입찰할 수 없어요')}
+          onKeyDown={e => e.key === 'Enter' && setAlert('엔터키로는 입찰할 수 없어요')}
         />
         <Spacing rem="1" dir="h" />
         <ConfirmButton
@@ -49,8 +61,8 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           btnType="confirm"
           label="입찰"
           onClick={async () => {
-            await tryBid(setBidPrice, currPrice, askingPrice, bidPrice);
-            bid(auctionRoomId, itemId, bidPrice, accessToken);
+            await tryBid(setBidPrice, currPrice, askingPrice, Number(bidPrice), setAlert);
+            bid(auctionRoomId, itemId, Number(bidPrice), accessToken);
           }}
         />
       </div>
@@ -71,8 +83,8 @@ const THEME_VARIANT = {
 interface Props {
   theme: 'dark' | 'light';
   currPrice: number;
+  askingPrice: number;
   auctionRoomId: number;
   itemId: number;
-  askingPrice: string;
   disable: boolean;
 }
