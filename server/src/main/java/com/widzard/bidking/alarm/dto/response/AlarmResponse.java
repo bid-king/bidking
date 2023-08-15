@@ -26,12 +26,15 @@ public class AlarmResponse {
 
     private AlarmType alarmType;
 
+    private Boolean isRead;
+
     public static AlarmResponse from(Alarm alarm) {
         return AlarmResponse.builder()
             .id(alarm.getId())
             .content(alarm.getContent().getContent())
             .createdTime(alarm.getCreatedAt())
             .alarmType(alarm.getAlarmType())
+            .isRead(alarm.getIsRead())
             .build();
     }
 }
