@@ -77,7 +77,7 @@ export function AuctionCreateCard({ ordering }: Props) {
           <Text type="bold" content="물품 대표사진을 등록하세요" />
           <Spacing rem="1" />
           <div>
-            <Image src={previewImageURL ? previewImageURL : '#'} alt="" />
+            <Image src={previewImageURL ? previewImageURL : '#'} alt="auctionCardImg" />
             <input type="file" accept="image/*" onChange={handleItemImg} />
           </div>
         </div>

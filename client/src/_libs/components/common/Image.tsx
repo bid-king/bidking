@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 
-export function Image({ src = '/public/image/logo/logo_light.png', alt = 'bidking' }: Props) {
+export function Image({ src = '/public/image/logo/logo_light.png', alt = 'bidking', onError }: Props) {
   return (
     <img
       css={{
@@ -10,6 +10,7 @@ export function Image({ src = '/public/image/logo/logo_light.png', alt = 'bidkin
       }}
       src={src}
       alt={alt}
+      onError={onError}
     />
   );
 }
@@ -17,4 +18,5 @@ export function Image({ src = '/public/image/logo/logo_light.png', alt = 'bidkin
 interface Props {
   src: string;
   alt: string;
+  onError?: React.EventHandler<React.SyntheticEvent<HTMLImageElement, Event>>;
 }

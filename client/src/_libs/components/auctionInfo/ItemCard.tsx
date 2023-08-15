@@ -7,7 +7,6 @@ import { Spacing } from '../common/Spacing';
 import { detailDateParse } from '../../util/detailDateParse';
 
 export function ItemCard({ theme = 'light', item }: Props) {
-  console.log(item);
   const [detailDisplay, setDetailDisplay] = useState<boolean>(false);
   return (
     <div
@@ -85,7 +84,7 @@ export function ItemCard({ theme = 'light', item }: Props) {
             onError={e => {
               const target = e.target as HTMLImageElement;
               target.onerror = null;
-              target.src = '/image/bid.jpg';
+              target.src = theme === 'light' ? '/image/nonImageLight.png' : '/image/nonImageDark.png';
             }}
           />
           <Spacing rem="1" />

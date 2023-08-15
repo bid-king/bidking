@@ -8,6 +8,7 @@ export interface AuctionItem {
   ordering: number;
   itemId: number | undefined;
   isChanged: boolean;
+  itemImageUrl: string;
 }
 
 export interface AuctionCreateItem {
