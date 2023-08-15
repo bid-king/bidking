@@ -4,13 +4,9 @@ const { startCountdownTimer } = require('../api/newTimer');
 module.exports = app => {
   const io = app.get('io');
 
-  // docker
   const subscriber = redis.createClient({
-    url: 'redis://redis:6379',
+    url: process.env.REDIS_URL,
   });
-
-  // local
-  // const subscriber = redis.createClient();
 
   subscriber.subscribe('StartAuctionItem');
   subscriber.subscribe('UpdateAuctionPrice');
