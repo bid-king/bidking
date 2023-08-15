@@ -38,7 +38,7 @@ export interface ItemList {
   itemName: string;
   category: string;
   startPrice: number;
-  itemState: 'PRE_AUCTION';
+  itemState: 'BEFORE_LIVE' | 'ON_LIVE' | 'OFF_LIVE';
   itemImageUrl: string;
   itemDescription: string;
   itemOrdering: number;
