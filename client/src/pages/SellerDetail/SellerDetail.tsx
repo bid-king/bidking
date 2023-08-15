@@ -97,17 +97,19 @@ export function SellerDetail() {
           }}
         >
           <Text type="h1" content="경매 정보" />
-          <div
-            css={{
-              display: 'flex',
-            }}
-          >
-            <Link to={`/seller/update-auction/${auctionId}`}>
-              <RoundButton label="수정" size="small" color="white" />
-            </Link>
-            <Spacing rem="0.5" dir="h" />
-            <RoundButton onClick={handleDelete} label="삭제" size="small" color="delete" />
-          </div>
+          {!isWithinTwentyMinutes && (
+            <div
+              css={{
+                display: 'flex',
+              }}
+            >
+              <Link to={`/seller/update-auction/${auctionId}`}>
+                <RoundButton label="수정" size="small" color="white" />
+              </Link>
+              <Spacing rem="0.5" dir="h" />
+              <RoundButton onClick={handleDelete} label="삭제" size="small" color="delete" />
+            </div>
+          )}
         </div>
         <Spacing rem="1" />
         <div>
