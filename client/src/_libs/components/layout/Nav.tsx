@@ -151,7 +151,7 @@ export function Nav({ theme = 'light' }: Props) {
               {theme === 'dark' && (
                 <div>
                   <Link to={'/seller/create-auction'}>
-                    <RoundButton label="경매 생성" size="small" color="white" />
+                    <RoundButton label="경매 등록" size="small" color="white" />
                   </Link>
                   <Spacing rem="0.5" dir="h" />
                   <Link to={'/'}>

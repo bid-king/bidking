@@ -21,7 +21,7 @@ export function AuctionList({
   date = '오늘 18:00',
   items = ['물품1', '물품2', '물품3', '물품4', '물품5', '물품6'],
   auctionRoomTradeState = 'NONE',
-  auctionRoomLiveState = 'ON_LIVE',
+  auctionRoomLiveState = 'BEFORE_LIVE',
   img = '/image/bid.jpg',
 }: Props) {
   return (
@@ -53,7 +53,7 @@ export function AuctionList({
         onError={e => {
           const target = e.target as HTMLImageElement;
           target.onerror = null;
-          target.src = '/image/bid.jpg';
+          target.src = '/image/nonImageLight.png';
         }}
         alt={title}
       />

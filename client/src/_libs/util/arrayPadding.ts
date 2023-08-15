@@ -6,5 +6,6 @@ export function arrayPadding(arr: liveItemList, pad: LiveItem, padding: number) 
     list.push(pad);
     list.unshift(pad);
   }
+  list.push(pad);
   return list;
 }

@@ -119,11 +119,9 @@ export function useAuctionUpdateBox() {
           },
         })
         .then(res => {
-          console.log(res);
           navigate(`/seller/detail/${auctionId}`);
         })
         .catch(err => {
-          console.log(data);
           console.log(err);
           SetErrMessage(err.response.data.message);
           // navigate('/login/loading'); // 404페이지로 넘어가야함

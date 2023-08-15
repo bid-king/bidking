@@ -67,6 +67,8 @@ export function ItemCardSeller({ theme = 'dark', item }: Props) {
           </div>
         )}
       </div>
+      <Spacing rem="1" />
+
       <div>
         <Text type="bold" content={item.successTime ? detailDateParse(item.successTime) + ' 낙찰' : ''} />
       </div>
@@ -121,7 +123,7 @@ export function ItemCardSeller({ theme = 'dark', item }: Props) {
             onError={e => {
               const target = e.target as HTMLImageElement;
               target.onerror = null;
-              target.src = '/image/bid.jpg';
+              target.src = '/image/nonImageDark.png';
             }}
           />
           <Spacing rem="1" />

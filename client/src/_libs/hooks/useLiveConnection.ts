@@ -5,7 +5,7 @@ import { enter, live } from '../../api/live';
 import { useAppSelector } from '../../store/hooks';
 import { store } from '../../store/store';
 
-export function useLiveEnter() {
+export function useLiveConnection() {
   const [userId, setUserId] = useState<number>(0);
   const [auctionRoomId, setAuctionRoomId] = useState<number>(0);
   const [nickname, setNickname] = useState<string>('');
@@ -20,6 +20,10 @@ export function useLiveEnter() {
 
   useEffect(() => {
     getRoomInfo();
+
+    socket.current?.on('roomClosed', () => {
+      socket.current?.emit('roomClosed', { roomId: auctionRoomId });
+    });
 
     async function getRoomInfo() {
       const uid = (await store.getState().user.id) || 0;
@@ -43,7 +47,7 @@ export function useLiveEnter() {
     }
 
     return () => {
-      live(socket.current).send.leave(auctionRoomId, nickname);
+      live(socket.current).send.leave(auctionRoomId);
     }; //unmount시 채팅방 나갑니다
   }, [auctionId]);
 

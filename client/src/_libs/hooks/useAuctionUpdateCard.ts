@@ -8,22 +8,25 @@ import auction from '../../api/auction';
 export function useAuctionUpdateCard(ordering: number) {
   interface Item {
     name?: string;
-    category?: string;
-    startPrice?: string;
+    itemCategory?: string;
     description?: string;
-    itemId?: number;
+    startPrice?: string;
+    ordering?: number;
+    itemId?: number | undefined;
     isChanged?: boolean;
+    itemImageUrl?: string;
   }
   const auctionUpdateState = useAppSelector(state => state.auctionUpdate.items);
   const item: Item = auctionUpdateState.find(item => item.ordering === ordering) || {};
   const [name, setName] = useState(item?.name || '');
-  const [itemCategory, setItemCategory] = useState(item.category || '1');
+  const [itemCategory, setItemCategory] = useState(item.itemCategory || '1');
   const [startPrice, setStartPrice] = useState(item.startPrice || '');
   const [description, setDescription] = useState(item.description || '');
   const [itemId, setItemId] = useState(item.itemId);
   const [itemOrdering, setItemOrdering] = useState(ordering);
   const [isImageChanged, setIsImageChanged] = useState(item.isChanged || false);
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
+  const [itemImageUrl, setItemImageUrl] = useState(item.itemImageUrl || '');
 
   const dispatch = useAppDispatch();
 
@@ -81,6 +84,7 @@ export function useAuctionUpdateCard(ordering: number) {
         ordering: itemOrdering,
         itemId: itemId,
         isChanged: isImageChanged,
+        itemImageUrl: '',
       })
     );
   }, [name, startPrice, description, itemCategory, isImageChanged]);
@@ -122,5 +126,6 @@ export function useAuctionUpdateCard(ordering: number) {
     handleStartPriceChange,
     handleDescriptionChange,
     previewImageURL,
+    itemImageUrl,
   };
 }

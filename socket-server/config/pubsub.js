@@ -17,7 +17,7 @@ module.exports = app => {
     if (channel === 'StartAuctionItem') {
       const [roomId, itemId, price] = message.split(':');
       console.log(`AuctionRoom ${roomId}의 Item ${itemId}가 ${price}원부터 시작`);
-      io.to(Number(roomId)).emit('next', { itemId: Number(itemId), price: Number(price) });
+      io.to(Number(roomId)).emit('next', { itemId: Number(itemId), price: Number(price), askingPrice: Number(price) });
     }
 
     if (channel === 'UpdateAuctionPrice') {
@@ -33,6 +33,7 @@ module.exports = app => {
         nickname,
         price: Number(price),
         time: time.join(':'),
+        askingPrice: Math.floor(Number(price) * 1.1),
       });
 
       startCountdownTimer(app, Number(roomId));

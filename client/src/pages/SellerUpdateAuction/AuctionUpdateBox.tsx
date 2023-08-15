@@ -163,7 +163,15 @@ export function AuctionUpdateBox() {
               <Text type="bold" content="경매 정보를 알려줄 수 있는 썸네일을 등록하세요" />
               <Spacing rem="1" />
               <div>
-                <Image src={previewImageURL ? previewImageURL : auctionRoomUrl} alt="auctionRoomUrl" />
+                <Image
+                  src={previewImageURL ? previewImageURL : auctionRoomUrl}
+                  alt="auctionRoomUrl"
+                  onError={e => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = '/image/nonImageDark.png';
+                  }}
+                />
                 <input type="file" accept="image/*" onChange={handleImageChange} />
               </div>
             </div>
@@ -281,16 +289,21 @@ export function AuctionUpdateBox() {
             })}
             {errMessage && <Text content={errMessage} />}
             {itemPermissionChecked && deliveryRulesChecked ? (
-              <ConfirmButton btnType="confirm" label="경매등록" onClick={updateAuction} />
+              <ConfirmButton btnType="confirm" label="경매수정" onClick={updateAuction} />
             ) : (
-              <ConfirmButton btnType="disabled" label="경매등록" />
+              <ConfirmButton btnType="disabled" label="경매수정" />
             )}
           </div>
         </div>
       )}
-      {!detail && (
+      {!isLogined && (
         <div>
           <Text type="h1" content="로그인이 필요한서비스입니다." />
+        </div>
+      )}
+      {!detail && (
+        <div>
+          <Text type="h1" content="경매물품이 존재하지 않습니다." />
         </div>
       )}
     </div>

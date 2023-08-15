@@ -31,6 +31,7 @@ export function AuctionUpdateCard({ ordering }: Props) {
     handleStartPriceChange,
     handleDescriptionChange,
     previewImageURL,
+    itemImageUrl,
   } = useAuctionUpdateCard(ordering);
 
   return (
@@ -65,7 +66,7 @@ export function AuctionUpdateCard({ ordering }: Props) {
       <div>
         <Select value={itemCategory} onChange={handleCategoryChange}>
           {categoryList.map(category => (
-            <SelectOption value={category.id} key={category.id}>
+            <SelectOption value={category.name} key={category.id}>
               {category.name}
             </SelectOption>
           ))}
@@ -81,8 +82,15 @@ export function AuctionUpdateCard({ ordering }: Props) {
           <Text type="bold" content="물품 대표사진을 등록하세요" />
           <Spacing rem="1" />
           <div>
-            <Image src={previewImageURL ? previewImageURL : '#'} alt="" />
-
+            <Image
+              src={previewImageURL ? previewImageURL : itemImageUrl}
+              alt="auctionUpdateCard"
+              onError={e => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = '/image/nonImageDark.png';
+              }}
+            />
             <input type="file" accept="image/*" onChange={handleItemImg} />
           </div>
         </div>

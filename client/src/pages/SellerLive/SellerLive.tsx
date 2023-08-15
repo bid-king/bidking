@@ -7,11 +7,11 @@ import { AuctionHeader } from '../../_libs/components/auctionSystem/auctionHeade
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { SellerStream } from '../../_libs/components/meeting/SellerStream';
 import colors from '../../_libs/design/colors';
-import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
+import { useLiveConnection } from '../../_libs/hooks/useLiveConnection';
 
 export function SellerLive() {
   const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr, seller, SOCKET, error } =
-    useLiveEnter();
+    useLiveConnection();
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
       <div css={{ width: '100%', padding: '1rem 0.25rem 0.5rem 0.5rem' }}>
