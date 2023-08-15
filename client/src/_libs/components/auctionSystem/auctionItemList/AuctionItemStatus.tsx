@@ -32,7 +32,7 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
         <Spacing rem="1" />
         <div>
           <div>
-            {itemList ? (
+            {itemList && order < itemList.length - 4 + 1 ? (
               itemList?.map((item, idx) => {
                 if (item.itemId === currentItemId)
                   return (

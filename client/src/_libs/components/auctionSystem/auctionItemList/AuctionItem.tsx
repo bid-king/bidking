@@ -8,7 +8,9 @@ export function AuctionItem({ item, idx }: Props) {
     <div
       key={idx}
       css={{
-        background: `url(${item.itemImg}) no-repeat center center ${ITEM_STATUS_BG[item.status]}`,
+        background: `${ITEM_STATUS_BG[item.status]} url("${item.itemImg}") no-repeat center center `,
+        backgroundSize: 'cover',
+        backgroundPsition: 'center',
         borderRadius: '0.75rem',
         border: '1px solid ' + colors.lightgrey,
         width: '2.5rem',
