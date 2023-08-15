@@ -32,14 +32,15 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
         <Spacing rem="1" />
         <div>
           <div>
-            {itemList && order < itemList.length - 4 + 1 ? (
+            {itemList &&
+              order < itemList.length - 4 + 1 &&
               itemList?.map((item, idx) => {
                 if (item.itemId === currentItemId)
                   return (
                     <div css={{ display: 'flex', alignItems: 'center' }} key={idx}>
                       <div
                         css={{
-                          background: `url(${item.itemImg}) no-repeat center center`,
+                          background: `url(${item.imageUrl}) no-repeat center center`,
                           borderRadius: '1rem',
                           border: '1px solid ' + colors.ok,
                           filter: `drop-shadow(0 0 0.075rem ${colors.ok})`,
@@ -55,18 +56,20 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                       </div>
                     </div>
                   );
-              })
-            ) : (
+              })}
+            {itemList && order >= itemList.length - 4 + 1 && (
               <>
                 <div
                   css={{
                     background: 'transparent',
                     borderRadius: '1rem',
-                    border: '1px solid ' + colors.whitegrey,
+                    border: '1px solid transparent',
                     width: '100%',
                     height: '3rem',
                   }}
-                />
+                >
+                  <Text type="h2" content="경매 종료" />
+                </div>
                 <Spacing rem="1" dir="h" />
                 <div
                   css={{
@@ -76,9 +79,32 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                     textAlign: 'center',
                     height: '3.25rem',
                   }}
+                />
+              </>
+            )}
+            {!itemList && (
+              <>
+                <div
+                  css={{
+                    background: 'transparent',
+                    borderRadius: '1rem',
+                    border: '1px solid transparent',
+                    width: '100%',
+                    height: '3rem',
+                  }}
                 >
                   <Text type="h2" content="경매 대기" />
                 </div>
+                <Spacing rem="1" dir="h" />
+                <div
+                  css={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    height: '3.25rem',
+                  }}
+                />
               </>
             )}
           </div>
@@ -97,7 +123,7 @@ const THEME_VARIANT = {
 };
 
 export const DUMMY: LiveItem = {
-  itemImg: '',
+  imageUrl: '',
   name: '',
   status: 'dummy',
   desc: '',

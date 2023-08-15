@@ -129,7 +129,7 @@ export interface SocketAPI {
   };
 }
 export interface LiveItem {
-  itemImg: string;
+  imageUrl: string;
   itemId: number;
   name: string;
   status: 'before' | 'in' | 'fail' | 'complete' | 'dummy';
