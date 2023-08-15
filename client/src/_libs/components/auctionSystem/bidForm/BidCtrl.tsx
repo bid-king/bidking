@@ -14,7 +14,7 @@ export function BidCtrl({ socket, liveStatus, auctionRoomId, itemId, setCurrId, 
   if (liveStatus === 'beforeDesc') {
     return (
       <ConfirmButton
-        label={'다음 아이템 소개 시작하기'}
+        label={'다음 상품 소개 시작하기'}
         onClick={() => {
           descStart(auctionRoomId, itemId, accessToken).then(() => {
             setLiveStatus('inDesc');
@@ -26,7 +26,7 @@ export function BidCtrl({ socket, liveStatus, auctionRoomId, itemId, setCurrId, 
   if (liveStatus === 'inDesc')
     return (
       <ConfirmButton
-        label={'아이템 경매 시작하기'}
+        label={'상품 경매 시작하기'}
         color="progress"
         onClick={() => {
           live(socket.current).send.bidStart(auctionRoomId);
