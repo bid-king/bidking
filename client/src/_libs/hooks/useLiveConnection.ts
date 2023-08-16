@@ -35,8 +35,11 @@ export function useLiveConnection() {
 
   const [streams, setStreams] = useState<StreamData[] | null>(null);
   //구현부
-  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useSellerOV(userId, auctionRoomId);
-  const { streamList } = useOrderOV(userId, auctionRoomId);
+  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useSellerOV(
+    userId,
+    auctionRoomId,
+    seller
+  );
   //Hook
   useEffect(() => {
     getRoomInfo();
@@ -78,10 +81,8 @@ export function useLiveConnection() {
       cameraToggle = onChangeCameraStatus;
       micToggle = onChangeMicStatus;
       leaveOpenvidu = leaveSession;
-    } else {
-      setStreams(streamList);
     }
-  }, [seller, publisher, streamList]);
+  }, [seller, publisher]);
 
   return {
     userId,
@@ -98,6 +99,5 @@ export function useLiveConnection() {
     cameraToggle,
     micToggle,
     leaveOpenvidu,
-    streams,
   };
 }

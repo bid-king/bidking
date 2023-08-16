@@ -4,9 +4,10 @@ import { StreamManager } from 'openvidu-browser';
 
 import { Text } from '../common/Text';
 import colors from '../../design/colors';
-import { StreamData } from '../../hooks/useOvConnect';
+import { StreamData, useOrderOV } from '../../hooks/useOvConnect';
 
-export function OrderStream({ auctionRoomId, userId, userType = 'order', streamList }: Props) {
+export function OrderStream({ auctionRoomId, userId, userType = 'order' }: Props) {
+  const { streamList } = useOrderOV(userId, auctionRoomId);
   const sellerStreamManager = streamList?.find(stream => stream.userId !== userId)?.streamManager;
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -44,21 +45,8 @@ export function OrderStream({ auctionRoomId, userId, userType = 'order', streamL
   );
 }
 
-// function Video({ streamManager }: { streamManager: StreamManager }) {
-//   const videoRef = useRef<HTMLVideoElement>(null);
-
-//   useEffect(() => {
-//     if (videoRef.current && streamManager) {
-//       streamManager.addVideoElement(videoRef.current);
-//     }
-//   }, [streamManager]);
-
-//   return <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />;
-// }
-
 interface Props {
   auctionRoomId: number;
   userId: number;
   userType: 'order';
-  streamList: StreamData[] | null;
 }
