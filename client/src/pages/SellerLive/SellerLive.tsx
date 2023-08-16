@@ -21,10 +21,6 @@ export function SellerLive() {
     seller,
     liveAuthErr,
     error,
-    pub,
-    cameraToggle,
-    micToggle,
-    leaveOpenvidu,
   } = useLiveConnection();
 
   return (
@@ -42,16 +38,7 @@ export function SellerLive() {
           </div>
         </div>
         <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          {seller && (
-            <SellerStream
-              auctionRoomId={auctionRoomId}
-              userId={userId}
-              userType={'seller'}
-              publisher={pub}
-              onChangeCameraStatus={cameraToggle}
-              onChangeMicStatus={micToggle}
-            />
-          )}
+          {seller && <SellerStream auctionRoomId={auctionRoomId} userId={userId} />}
           <Spacing rem="0.5" />
           <AuctionNotice auctionRoomId={auctionRoomId} userType="seller" socket={SOCKET} />
         </div>

@@ -68,7 +68,7 @@ export function useOrderOV(userId: number, auctionRoomId: number) {
   };
 }
 
-export function useSellerOV(userId: number, auctionRoomId: number, seller: boolean) {
+export function useSellerOV(userId: number, auctionRoomId: number) {
   const [publisher, setPublisher] = useState<Publisher | null>();
   const [session, setSession] = useState<Session | null>();
 
@@ -81,10 +81,9 @@ export function useSellerOV(userId: number, auctionRoomId: number, seller: boole
   }, [session]);
 
   useEffect(() => {
-    if (userId && auctionRoomId && seller) {
+    if (userId && auctionRoomId) {
       const openVidu = new OpenVidu();
       const session = openVidu.initSession();
-      console.log('오픈비두 연결 요청');
       session.on('exception', exception => {
         console.warn(exception);
       });
@@ -121,7 +120,7 @@ export function useSellerOV(userId: number, auctionRoomId: number, seller: boole
 
       return leaveSession;
     }
-  }, [auctionRoomId, userId, seller]);
+  }, [auctionRoomId, userId]);
 
   useEffect(() => {
     window.addEventListener('beforeunload', () => leaveSession());

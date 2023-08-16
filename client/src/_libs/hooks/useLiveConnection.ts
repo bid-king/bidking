@@ -23,23 +23,7 @@ export function useLiveConnection() {
   //socket
   const socket = useRef<Socket | null>(null);
   const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
-  //openvidu
-  const [pub, setPub] = useState<Publisher | null | undefined>(null);
-  let cameraToggle: (arg: boolean) => void;
-  let micToggle: (arg: boolean) => void;
-  let leaveOpenvidu: () => void;
 
-  cameraToggle = function (arg) {};
-  micToggle = function (arg) {};
-  leaveOpenvidu = function () {};
-
-  const [streams, setStreams] = useState<StreamData[] | null>(null);
-  //구현부
-  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useSellerOV(
-    userId,
-    auctionRoomId,
-    seller
-  );
   //Hook
   useEffect(() => {
     getRoomInfo();
@@ -75,15 +59,6 @@ export function useLiveConnection() {
     }; //unmount시 소켓 끊어줭
   }, [auctionId]);
 
-  useEffect(() => {
-    if (seller) {
-      setPub(publisher);
-      cameraToggle = onChangeCameraStatus;
-      micToggle = onChangeMicStatus;
-      leaveOpenvidu = leaveSession;
-    }
-  }, [seller, publisher]);
-
   return {
     userId,
     auctionRoomId,
@@ -95,9 +70,5 @@ export function useLiveConnection() {
     seller,
     SOCKET: socket,
     error: socketConnectionErr,
-    pub,
-    cameraToggle,
-    micToggle,
-    leaveOpenvidu,
   };
 }
