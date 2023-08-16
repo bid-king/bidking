@@ -24,15 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-    name = "order_item",
-    uniqueConstraints = {
-        @UniqueConstraint(
-            name = "UniqueOrderAndItem",
-            columnNames = {"order_id", "item_id"}
-        )
-    }
-)
+@Table(name = "order_item")
 public class OrderItem extends BaseEntity {
 
     @Id
@@ -44,11 +36,11 @@ public class OrderItem extends BaseEntity {
     private Long price;// (주문가격(낙찰가격))
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id", nullable = false)
+    @JoinColumn(name = "item_id", nullable = false, unique = true)
     private Item item;// (상품코드, Item)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id", nullable = false, unique = true)
     private Order order;
 
     public static OrderItem create(Long price, Item item, Order order) {

@@ -6,7 +6,6 @@ import com.widzard.bidking.global.entity.BaseEntity;
 import com.widzard.bidking.image.entity.Image;
 import com.widzard.bidking.item.dto.request.ItemUpdateRequest;
 import com.widzard.bidking.item.exception.AlreadyBiddingException;
-import com.widzard.bidking.order.entity.OrderItem;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,9 +64,6 @@ public class Item extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_category_id", nullable = false)
     private ItemCategory itemCategory;// (카테고리)
-
-    @OneToOne(mappedBy = "item")
-    private OrderItem orderItem;
 
     @Column(nullable = false)
     private int ordering;// (순서)
