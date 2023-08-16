@@ -140,7 +140,7 @@ public class AuctionServiceImpl implements AuctionService {
         }
 
         //썸네일 검사
-        if(auctionRoomImg == null){
+        if (auctionRoomImg == null || auctionRoomImg.isEmpty()) {
             throw new AuctionRoomImageNotFound();
         }
 

@@ -153,7 +153,7 @@ public class AlarmServiceImpl implements AlarmService {
                 .data(data));
         } catch (IOException exception) {
             emitterRepository.deleteAllStartWithId(id);
-            throw new ClientConnectionException();
+            log.info("알림 전송 실패");
         }
     }
 }
