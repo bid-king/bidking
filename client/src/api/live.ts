@@ -18,8 +18,8 @@ export function auctionEnd(auctionId: number, token: string) {
 export function live(ws: Socket | null) {
   return {
     send: {
-      connect: (roomId: number, nickname: string, isSeller: boolean) =>
-        ws?.emit('enterRoom', { nickname, roomId, isSeller }),
+      connect: (roomId: number, nickname: string, seller: boolean) =>
+        ws?.emit('enterRoom', { nickname, roomId, seller }),
       bidStart: (roomId: number) => ws?.emit('start', { roomId }),
       chat: (roomId: number, nickname: string, msg: string) => ws?.emit('chat', { nickname, roomId, msg }),
       leave: (roomId: number) => {
