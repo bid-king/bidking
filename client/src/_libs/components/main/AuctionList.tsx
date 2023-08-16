@@ -22,7 +22,7 @@ export function AuctionList({
   items = ['물품1', '물품2', '물품3', '물품4', '물품5', '물품6'],
   auctionRoomTradeState = 'NONE',
   auctionRoomLiveState = 'BEFORE_LIVE',
-  img = '/image/bid.jpg',
+  img,
 }: Props) {
   return (
     <div
@@ -41,10 +41,10 @@ export function AuctionList({
         src={img}
         css={{
           position: 'absolute',
-          width: 'inherit',
-          height: 'auto',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
           borderRadius: '1.5rem',
-          minWidth: '32rem',
           transition: 'filter 0.15s',
           '&:hover': {
             filter: 'blur(0.25rem)',
@@ -53,7 +53,7 @@ export function AuctionList({
         onError={e => {
           const target = e.target as HTMLImageElement;
           target.onerror = null;
-          target.src = '/image/nonImageLight.png';
+          target.src = '/image/auctionListCardNoneImage.png';
         }}
         alt={title}
       />
