@@ -37,10 +37,9 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on('leaveRoom', ({ roomId }) => {
       if (socket.id === roomOwners[`${roomId}`]) {
-        io.to(roomId).emit('roomClosed');
-      } else {
-        socket.leave(roomId);
+        io.to(roomId).emit('roomClosed', { roomId });
       }
+      socket.leave(roomId);
     });
 
     socket.on('roomClosed', ({ roomId }) => {
