@@ -8,7 +8,7 @@ import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import colors from '../../_libs/design/colors';
 import { useSignUp } from '../../_libs/hooks/useSignUp';
 import { Image } from '../../_libs/components/common/Image';
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 
 export function SignUpBox() {
   const {
@@ -57,14 +57,24 @@ export function SignUpBox() {
     phoneNumber,
   } = useSignUp();
 
+  const rotateAnimation = keyframes`
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+`;
+
   const rotatingStyle = css`
-    transform: rotate(90deg);
-    transition: transform 0.5s ease;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    animation: ${rotateAnimation} 5s infinite linear;
   `;
 
   return (
     <>
-      {isSuccess && (
+      {!isSuccess && (
         <form
           onSubmit={handleNextStep}
           css={{
@@ -375,7 +385,7 @@ export function SignUpBox() {
           </div>
         </form>
       )}
-      {!isSuccess && (
+      {isSuccess && (
         <div
           css={{
             width: '50rem',

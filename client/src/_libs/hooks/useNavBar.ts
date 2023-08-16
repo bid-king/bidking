@@ -102,25 +102,27 @@ export function useNavBar() {
   // 이벤트 소스 알람
   const eventSourceRef = useRef<EventSource | null>(null);
   useEffect(() => {
-    eventSourceRef.current = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
+    if (isLogined) {
+      eventSourceRef.current = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
 
-    eventSourceRef.current.onmessage = function (event) {
-      console.log(event.data);
-    };
+      eventSourceRef.current.onmessage = function (event) {
+        console.log(event.data);
+      };
 
-    eventSourceRef.current.onerror = function (error) {
-      console.error('EventSource failed:', error);
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-      }
-    };
+      eventSourceRef.current.onerror = function (error) {
+        console.error('EventSource failed:', error);
+        if (eventSourceRef.current) {
+          eventSourceRef.current.close();
+        }
+      };
 
-    // 컴포넌트가 언마운트될 때 EventSource 해제
-    return () => {
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-      }
-    };
+      // 컴포넌트가 언마운트될 때 EventSource 해제
+      return () => {
+        if (eventSourceRef.current) {
+          eventSourceRef.current.close();
+        }
+      };
+    }
   }, []);
 
   return {

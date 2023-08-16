@@ -76,7 +76,7 @@ export function useSignUp() {
           setSuccess(true);
           setTimeout(() => {
             navigate('/login');
-          }, 2000); //
+          }, 3000);
         })
         .catch(err => {
           setError(true);
