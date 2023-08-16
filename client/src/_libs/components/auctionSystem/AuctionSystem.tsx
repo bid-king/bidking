@@ -27,7 +27,7 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
     liveStatus,
     setCurrId,
     setLiveStatus,
-  } = useAuctionSystem(socket);
+  } = useAuctionSystem(socket, userType);
   if (auctionRoomId)
     return (
       <div>
