@@ -150,12 +150,9 @@ export function SellerDetail() {
           <div>
             <Spacing rem="1" />
             <Text type="h3" content={`${detailDateParse(detail.startedAt)} 시작`} />
+            <Spacing rem="1" />
           </div>
         )}
-
-        <Spacing rem="1" />
-        <Text type="h1" content="경매 물품" />
-        <Spacing rem="1" />
 
         {!hasAuctionStarted && !isWithinTwentyMinutes && (
           <ConfirmButton btnType="disabled" label={auctionRoomLiveState.beforeLive} />
@@ -206,7 +203,8 @@ export function SellerDetail() {
           </div>
         )}
         {hasAuctionStarted && <ConfirmButton btnType="disabled" label={auctionRoomLiveState.offLive} />}
-
+        <Spacing rem="1" />
+        <Text type="h1" content="경매 물품" />
         <Spacing rem="1" />
         <div
           css={{

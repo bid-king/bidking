@@ -86,8 +86,7 @@ export function AuctionList({
         }}
       >
         {auctionRoomTradeState === 'ALL_COMPLETED' && '모든 절차가 끝났어요.'}
-        {auctionRoomTradeState === 'IN_PROGRESS' && '하나 이상의 물건이 배송중이에요.'}
-        {auctionRoomTradeState === 'BEFORE_PROGRESS' && '낙찰자가 아직 결제하지 않았어요.'}
+        {auctionRoomTradeState === 'IN_PROGRESS' && '아직 판매가 진행중이에요'}
 
         {auctionRoomLiveState === 'ON_LIVE' && 'LIVE'}
       </div>
@@ -108,11 +107,7 @@ const TRADE_STATE = {
     backgroundColor: colors.progress,
     color: `${colors.white}`,
   },
-  BEFORE_PROGRESS: {
-    height: '3rem',
-    backgroundColor: colors.confirm,
-    color: `${colors.black}`,
-  },
+  BEFORE_PROGRESS: {},
 };
 
 const LIVE_STATE = {

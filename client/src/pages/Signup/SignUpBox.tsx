@@ -7,6 +7,7 @@ import { Input } from '../../_libs/components/common/Input';
 import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import colors from '../../_libs/design/colors';
 import { useSignUp } from '../../_libs/hooks/useSignUp';
+import { Image } from '../../_libs/components/common/Image';
 
 export function SignUpBox() {
   const {
@@ -292,7 +293,7 @@ export function SignUpBox() {
                   <Input
                     id="street-signup-input"
                     onChange={handleStreetChange}
-                    placeholder=""
+                    placeholder="서울특별시 종로구 종로3가"
                     ref={addressRef}
                     value={street}
                   />
@@ -304,7 +305,12 @@ export function SignUpBox() {
                     <Text type="bold" content="상세 주소를 입력해주세요" />
                   </label>
                   <Spacing rem="1" />
-                  <Input id="details-signup-input" onChange={handleDetailsChange} placeholder="" value={details} />
+                  <Input
+                    id="details-signup-input"
+                    onChange={handleDetailsChange}
+                    placeholder="123-45 홍길동빌딩 7층"
+                    value={details}
+                  />
                 </div>
                 <Spacing rem="2" />
 
@@ -313,7 +319,12 @@ export function SignUpBox() {
                     <Text type="bold" content="우편번호를 입력해주세요" />
                   </label>
                   <Spacing rem="1" />
-                  <Input id="zip-code-signup-input" onChange={handleZipCodeChange} placeholder="" value={zipCode} />
+                  <Input
+                    id="zip-code-signup-input"
+                    onChange={handleZipCodeChange}
+                    placeholder="12345"
+                    value={zipCode}
+                  />
                 </div>
                 <Spacing rem="2" />
                 {zipCode.length !== 5 && (
@@ -369,7 +380,9 @@ export function SignUpBox() {
           }}
         >
           <Link to={'/login'}>
-            <Text type="h2" content="이제 로그인해서 입찰왕의 모든 서비스를 이용하실 수 있어요." />
+            <Image src="/image/logo/logo_light.png" alt="" />
+            <Spacing rem="1" />
+            <Text type="h2" content="가입을 축하합니다! 잠시후 로그인 화면으로 이동합니다" />
           </Link>
         </div>
       )}

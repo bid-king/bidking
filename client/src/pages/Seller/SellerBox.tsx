@@ -105,6 +105,7 @@ export function SellerBox() {
                         date={auction.startedAt}
                         items={auction.itemListDto.map(item => item.name)}
                         img={auction.imageUrl}
+                        auctionRoomTradeState={auction.auctionRoomTradeState}
                       />
                     </Link>
                     <Spacing rem="1" />

@@ -174,5 +174,6 @@ export interface SellerAuctionRoomListResponse {
   imageUrl: string;
   startedAt: string;
   auctionRoomLiveState: string;
+  auctionRoomTradeState: 'IN_PROGRESS' | 'BEFORE_PROGRESS' | 'ALL_COMPLETED';
   itemListDto: ItemListDto[];
 }

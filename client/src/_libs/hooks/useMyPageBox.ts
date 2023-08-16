@@ -57,11 +57,11 @@ export function useMyPageBox() {
   };
 
   const handleStreetChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setStreet(e.target.value.trim());
+    setStreet(e.target.value);
   };
 
   const handleDetailsChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setDetails(e.target.value.trim());
+    setDetails(e.target.value);
   };
 
   const handleZipCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
