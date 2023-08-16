@@ -38,7 +38,7 @@ export function SellerLive() {
           </div>
         </div>
         <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          {seller && <SellerStream auctionRoomId={auctionRoomId} userId={userId} />}
+          <div>{seller && <SellerStream auctionRoomId={auctionRoomId} userId={userId} />}</div>
           <Spacing rem="0.5" />
           <AuctionNotice auctionRoomId={auctionRoomId} userType="seller" socket={SOCKET} />
         </div>

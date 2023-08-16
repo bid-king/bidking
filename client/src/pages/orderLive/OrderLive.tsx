@@ -55,7 +55,7 @@ export function OrderLive() {
             </div>
           </div>
           <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {auctionRoomId && <OrderStream auctionRoomId={auctionRoomId} userId={userId} userType="order" />}
+            <div>{auctionRoomId && <OrderStream auctionRoomId={auctionRoomId} userId={userId} userType="order" />}</div>
             <Spacing rem="0.5" />
             <AuctionNotice auctionRoomId={auctionRoomId} userType="order" socket={SOCKET} />
           </div>
