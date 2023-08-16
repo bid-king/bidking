@@ -414,7 +414,9 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public AfterAuctionDto getAfterAuctionInfo(Long auctionId) {
+    public AfterAuctionDto getAfterAuctionInfo(AuctionRoom auctionRoom) {
+
+
                 /*
          {
          {낙찰자 id, 상품 이름} list
@@ -422,9 +424,12 @@ public class AuctionServiceImpl implements AuctionService {
          }
          */
 
-        return new AfterAuctionDto(
-
-        );
+//        return new AfterAuctionDto(
+//            auctionRoom.getSeller().getId(),
+//            auctionRoom.getId(),
+//            auctionRoom.getName()
+//        );
+        return null;
     }
 
     @Transactional

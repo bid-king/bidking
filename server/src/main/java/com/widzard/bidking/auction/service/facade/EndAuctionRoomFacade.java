@@ -1,6 +1,8 @@
 package com.widzard.bidking.auction.service.facade;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.widzard.bidking.auction.dto.AfterAuctionDto;
+import com.widzard.bidking.auction.dto.OrdererDto;
 import com.widzard.bidking.auction.dto.redis.ItemAfterBidResult;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
@@ -10,6 +12,7 @@ import com.widzard.bidking.order.entity.Order;
 import com.widzard.bidking.order.entity.OrderState;
 import com.widzard.bidking.order.service.OrderService;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
@@ -59,7 +62,7 @@ public class EndAuctionRoomFacade {
     }
 
     @Transactional
-    public void end(Long auctionId) {
+    public AfterAuctionDto end(Long auctionId) {
         // 경매 검증 및 라이브 상태 변경
         AuctionRoom auctionRoom = auctionService.endAuctionRoom(auctionId);
 
@@ -68,6 +71,12 @@ public class EndAuctionRoomFacade {
         List<Item> itemList = auctionRoom.getItemList();
 
         // 아이템 리스트 순회하며 낙찰/유찰 주문 생성
+
+        // 알림 서비스 dto
+        int failCnt = 0;
+        int successCnt = 0;
+        List<OrdererDto> ordererDtoList = new ArrayList<>();
+
         for (Item item : itemList) {
             item.afterAuction();
             Long itemId = item.getId();
@@ -85,6 +94,7 @@ public class EndAuctionRoomFacade {
                     itemId
                 );
                 log.info("유찰 order = {}", order);
+                failCnt++;
             } else {
                 orderState = OrderState.PAYMENT_WAITING;
                 log.info("##########끝난 itemId orderState: {}:{}", itemId, orderState);
@@ -93,13 +103,29 @@ public class EndAuctionRoomFacade {
                 Order order = orderService.createOrder(
                     auctionId,
                     Long.parseLong(bidResult.getUserId()),
-                    orderState, itemId,
+                    orderState,
+                    itemId,
                     Long.parseLong(bidResult.getPrice())
                 );
                 log.info("낙찰 order = {}", order);
-            }
 
+                successCnt++;
+                ordererDtoList.add(
+                    new OrdererDto(
+                        Long.parseLong(bidResult.getUserId()),
+                        bidResult.getPrice()
+                    )
+                );
+            }
         }
+        return AfterAuctionDto.builder()
+            .sellerId(auctionRoom.getSeller().getId())
+            .auctionRoomId(auctionId)
+            .auctionRoomTitle(auctionRoom.getName())
+            .orderSuccessCnt(successCnt)
+            .orderFailCnt(failCnt)
+            .ordererDtoList(ordererDtoList)
+            .build();
     }
 
     // TODO node, client 개발테스트 완료 후 삭제 예정
