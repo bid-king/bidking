@@ -93,17 +93,21 @@ export function AlarmBox({ theme = 'light' }: Props) {
                 <Spacing rem="1" dir="h" />
                 <div
                   css={{
-                    color: ALARM_VARIANT[alarm.alarmType].color,
+                    display: 'flex',
+                    opacity: alarm.isRead ? '0.4' : '1',
                   }}
                 >
-                  <Text
-                    type="bold"
-                    content={`[${ALARM_VARIANT[alarm.alarmType].text}]`}
-                    css={{ textDecoration: alarm.isRead ? 'line-through' : 'none' }}
-                  />
+                  <div
+                    css={{
+                      color: ALARM_VARIANT[alarm.alarmType].color,
+                    }}
+                  >
+                    <Text type="bold" content={`[${ALARM_VARIANT[alarm.alarmType].text}]`} />
+                  </div>
+                  <Spacing rem="0.25" dir="h" />
+
+                  <Text type="bold" content={alarm.content} />
                 </div>
-                <Spacing rem="0.25" dir="h" />
-                <Text type="bold" content={alarm.content} />
                 <Spacing rem="1" dir="h" />
                 <Checkbox
                   theme={theme}
