@@ -1,6 +1,7 @@
 package com.widzard.bidking.auction.service;
 
 
+import com.widzard.bidking.auction.dto.AfterAuctionDto;
 import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
@@ -49,4 +50,6 @@ public interface AuctionService {
     AuctionRoom getLiveAuctionItemList(Long auctionId);
 
     AuctionRoom endAuctionRoom(Long auctionId);
+
+    AfterAuctionDto getAfterAuctionInfo(Long auctionId);
 }

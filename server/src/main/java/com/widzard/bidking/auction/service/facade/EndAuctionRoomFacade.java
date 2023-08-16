@@ -69,6 +69,7 @@ public class EndAuctionRoomFacade {
 
         // 아이템 리스트 순회하며 낙찰/유찰 주문 생성
         for (Item item : itemList) {
+            item.afterAuction();
             Long itemId = item.getId();
             log.info("##########끝난 auctionRoom{}의 itemId: {}", auctionId, itemId);
             ItemAfterBidResult bidResult = getItemAfterBidResult(auctionId, itemId);

@@ -1,5 +1,6 @@
 package com.widzard.bidking.auction.service;
 
+import com.widzard.bidking.auction.dto.AfterAuctionDto;
 import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
@@ -410,6 +411,20 @@ public class AuctionServiceImpl implements AuctionService {
         auctionRoom.quit();
 
         return auctionRoom;
+    }
+
+    @Override
+    public AfterAuctionDto getAfterAuctionInfo(Long auctionId) {
+                /*
+         {
+         {낙찰자 id, 상품 이름} list
+          셀러 id, 경매방 제목, 낙찰 갯수, 유찰 갯수,
+         }
+         */
+
+        return new AfterAuctionDto(
+
+        );
     }
 
     @Transactional
