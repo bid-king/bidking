@@ -6,17 +6,22 @@ import colors from '../../../design/colors';
 import { Input } from '../../common/Input';
 import { RoundButton } from '../../common/RoundButton';
 import { Spacing } from '../../common/Spacing';
+import { Text } from '../../common/Text';
 import { ChatMessage } from './ChatMessage';
 
 export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order', socket }: Props) {
   const [chats, setChats] = useState<Chatting[]>([]);
   const [input, setInput] = useState<string>('');
+  const [count, setCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     socket.current?.on('chat', data => {
       setChats([...chats, data]);
+    });
+    socket.current?.on('count', ({ count }) => {
+      setCount(count);
     });
   }, [socket.current, chats]);
 
@@ -45,6 +50,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
         flexDirection: 'column',
       }}
     >
+      <Text content={'접속인원 ' + count + ' 명'} />
       <div css={{ overflowY: 'auto', height: '35vh' }}>
         <div css={{ paddingBottom: '1rem' }}>
           {chats.map((chat, idx) => (
