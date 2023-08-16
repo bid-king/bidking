@@ -20,8 +20,8 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
     socket.current?.on('chat', data => {
       setChats([...chats, data]);
     });
-    socket.current?.on('count', ({ count }) => {
-      setCount(count);
+    socket.current?.on('newUser', ({ newUser }) => {
+      setChats([...chats, { nickname: newUser, msg: '님이 입장했어요.' }]);
     });
   }, [socket.current, chats]);
 
@@ -50,7 +50,6 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
         flexDirection: 'column',
       }}
     >
-      <Text content={'접속인원 ' + count + ' 명'} />
       <div css={{ overflowY: 'auto', height: '35vh' }}>
         <div css={{ paddingBottom: '1rem' }}>
           {chats.map((chat, idx) => (
