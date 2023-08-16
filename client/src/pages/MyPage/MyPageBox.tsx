@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from '../../_libs/components/common/Input';
 import { Label } from '../../_libs/components/common/Label';
 import { Text } from '../../_libs/components/common/Text';
@@ -8,6 +8,7 @@ import { Spacing } from '../../_libs/components/common/Spacing';
 import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import colors from '../../_libs/design/colors';
 import { useMyPageBox } from '../../_libs/hooks/useMyPageBox';
+import { InputFile } from '../../_libs/components/common/InputFile';
 
 export function MyPageBox() {
   const {
@@ -41,6 +42,8 @@ export function MyPageBox() {
     errMessage,
     certifiedErrMessage,
     isCertificationDisabled,
+    isChangeNewPassword,
+    changePassword,
   } = useMyPageBox();
 
   return (
@@ -56,7 +59,7 @@ export function MyPageBox() {
     >
       <div>
         <ProfileImage src={previewImageURL ? previewImageURL : imgSrc} rem={4} />
-        <input type="file" onChange={handleImageChange} />
+        <InputFile label="파일 선택" accept="image/*" color="white" onChange={handleImageChange} />
       </div>
       <div>
         <Text type="h1" content={nickname} />
@@ -98,6 +101,8 @@ export function MyPageBox() {
         )}
         {isVerificationVisible && isPhoneValid && (
           <div>
+            <Spacing rem="1" />
+            <Text type="bold" content="문자로 전송된 본인인증 번호를 입력해 주세요" />
             <Spacing rem="1" />
             <div
               css={{
@@ -153,31 +158,50 @@ export function MyPageBox() {
       </div>
       <Spacing rem="2" />
 
-      <div className="old-password">
-        <Label theme="light" value="기존 비밀번호" htmlFor="old-password-input" />
-        <Spacing rem="1" />
-        <Input
-          id="old-password-input"
-          value={oldPassword}
-          onChange={handleOldPasswordChange}
-          placeholder=""
-          inputType="password"
-        />
+      <Label theme="light" value="기존 비밀번호" htmlFor="old-password-input" />
+      <Spacing rem="1" />
+      <div
+        className="old-password"
+        css={{
+          display: 'flex',
+        }}
+      >
+        <div
+          css={{
+            width: '180rem',
+          }}
+        >
+          <Input
+            id="old-password-input"
+            value={oldPassword}
+            onChange={handleOldPasswordChange}
+            placeholder=""
+            inputType="password"
+          />
+        </div>
+        <Spacing rem="3" dir="h" />
+
+        <ConfirmButton onClick={changePassword} btnType="confirm" label="비밀번호 수정" />
       </div>
       <Spacing rem="2" />
 
-      <div className="new-password">
-        <Label theme="light" value="새 비밀번호" htmlFor="new-password-input" />
-        <Spacing rem="1" />
-        <Input
-          id="new-password-input"
-          value={newPassword}
-          onChange={handleNewPasswordChange}
-          placeholder=""
-          inputType="password"
-        />
-      </div>
-      <Spacing rem="2" />
+      {isChangeNewPassword && (
+        <div>
+          <div className="new-password">
+            <Label theme="light" value="새 비밀번호" htmlFor="new-password-input" />
+            <Spacing rem="1" />
+
+            <Input
+              id="new-password-input"
+              value={newPassword}
+              onChange={handleNewPasswordChange}
+              placeholder=""
+              inputType="password"
+            />
+          </div>
+          <Spacing rem="2" />
+        </div>
+      )}
       {errMessage && <Text type="bold" content={errMessage} />}
 
       {isButtonDisabled && <ConfirmButton btnType="disabled" label="완료" />}

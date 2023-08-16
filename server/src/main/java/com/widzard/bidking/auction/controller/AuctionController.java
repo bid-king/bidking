@@ -118,8 +118,10 @@ public class AuctionController {
         @RequestPart(name = "auctionRoomImg", required = false) MultipartFile auctionRoomImg,
         @RequestPart(name = "itemImgs", required = false) MultipartFile[] itemImgs
     ) throws IOException {
+        log.info("****** auction Create Time******: {}", auctionCreateRequest.getStartedAt());
         AuctionRoom auctionRoom = auctionService.createAuctionRoom(member, auctionCreateRequest,
             auctionRoomImg, itemImgs);
+        log.info("****** After auction Create Time******: {}", auctionRoom.getStartedAt());
 
         alarmService.sendAuctionCreateToSeller(member);
         return new ResponseEntity<>(AuctionCreateResponse.from(auctionRoom), HttpStatus.OK);
@@ -127,7 +129,6 @@ public class AuctionController {
 
     @GetMapping("/auctions/{auctionId}")
     public ResponseEntity<AuctionRoomResponse> readAuction(
-        @AuthenticationPrincipal Member member,
         @PathVariable Long auctionId
     ) {
         AuctionRoom auctionRoom = auctionService.readAuctionRoom(auctionId);

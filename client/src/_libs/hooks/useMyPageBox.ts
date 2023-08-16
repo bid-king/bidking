@@ -30,6 +30,8 @@ export function useMyPageBox() {
   const [errMessage, setErrMessage] = useState('');
   const [isCertificationDisabled, setIsCertificationDisabled] = useState(false);
   const [certifiedErrMessage, setCertifiedErrMessage] = useState('');
+  const [isChangeNewPassword, setIsChangeNewPassword] = useState(false);
+
   const navigate = useNavigate();
   const memberId = useAppSelector(state => state.user.id);
 
@@ -72,6 +74,10 @@ export function useMyPageBox() {
       const url = URL.createObjectURL(e.target.files[0]);
       setPreviewImageURL(url);
     }
+  };
+
+  const changePassword = () => {
+    setIsChangeNewPassword(!isChangeNewPassword);
   };
 
   // Functions
@@ -228,5 +234,7 @@ export function useMyPageBox() {
     errMessage,
     certifiedErrMessage,
     isCertificationDisabled,
+    isChangeNewPassword,
+    changePassword,
   };
 }
