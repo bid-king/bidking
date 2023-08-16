@@ -9,16 +9,13 @@ import colors from '../../_libs/design/colors';
 
 export function OrderExit() {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setTimeout(() => navigate(''), 2000);
-    return;
-  }, []);
+  setTimeout(() => navigate(''), 2000);
 
   return (
     <div
       css={{
-        backgroundColor: colors.backgroundDark,
+        backgroundColor: colors.backgroundLight,
+        color: colors.black,
         width: '100%',
         height: '100%',
         display: 'flex',

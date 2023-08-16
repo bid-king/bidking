@@ -71,14 +71,19 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
       >
         {userType === 'order' && (
           <div css={{ width: '100%' }}>
-            <form>
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                live(socket.current).send.chat(roomId, nickname, input);
+                setInput('');
+              }}
+            >
               <div css={{ display: 'flex', width: '100%', alignItems: 'center' }}>
                 <Input
                   id="chat"
                   placeholder=""
                   shape="round"
                   size="small"
-                  value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => {
                     e.key === 'enter' && input.length > 0 && live(socket.current).send.chat(roomId, nickname, input);
