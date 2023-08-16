@@ -10,24 +10,29 @@ export function askingPriceParse(price: number): string {
 }
 
 /**숫자만 입력했는지 검증합니다. */
-export function validateBidPrice(price: string, callback: (arg: string) => void): void {
+export function validateBidPrice(price: string, askingPrice: number): string {
   const check = /^\d+$/;
-  if (check.test(price) || price === '') return callback(price);
-  else {
-    alert('숫자만 입력할 수 있어요');
-    return;
-  }
+  if (!check.test(price.trim()) || price === '') return '숫자만 입력할 수 있어요.';
+  if (price.length > 12) return '너무 큰 입찰가는 입력할 수 없어요.';
+  if (Number(price) <= askingPrice) return '최소 입찰가보다 큰 가격으로만 입찰할 수 있어요.';
+  return 'OK';
 }
 
 /**입찰 시도가 올바른지 검증합니다. 초기화할 상태의 setter, 현재 가격, 최소 호가, 입찰 성공 후 다음에 할 동작을 입력받습니다.*/
-export function tryBid(init: (arg: string) => void, currPrice: number, asking: string, price: string): boolean {
+export function tryBid(
+  init: (arg: string) => void,
+  currPrice: number,
+  asking: number,
+  price: number,
+  setAlert: (arg: string) => void
+): boolean {
   init('');
-  if (price.trim().length === 0) {
-    alert('입찰가를 입력해야 해요');
+  if (price === 0) {
+    setAlert('입찰가를 입력해야 해요');
     return false;
   }
   if (Number(price) <= currPrice) {
-    alert('입찰가는 현재 가격보다 높아야 해요');
+    setAlert('입찰가는 현재 가격보다 높아야 해요');
     return false;
   }
   return true;

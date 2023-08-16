@@ -8,6 +8,7 @@ import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
+import com.widzard.bidking.auction.exception.AuctionRoomImageNotFound;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.exception.AuctionRoomNotStartedException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
@@ -15,6 +16,7 @@ import com.widzard.bidking.auction.exception.InvalidAuctionRoomRequestException;
 import com.widzard.bidking.auction.exception.UnableToDeleteAuctionNow;
 import com.widzard.bidking.auction.exception.UnableToUpdateAuctionNow;
 import com.widzard.bidking.auction.exception.UnauthorizedAuctionRoomAccessException;
+import com.widzard.bidking.auction.exception.UserCannotStartBiddingException;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.bookmark.entity.Bookmark;
@@ -122,8 +124,7 @@ public class AuctionServiceImpl implements AuctionService {
         throws IOException {
 
         //시작시간 예외 검증
-        LocalDateTime now = LocalDateTime.now();
-        if (request.getStartedAt().isBefore(now.plusHours(1))) {
+        if (request.getStartedAt().isBefore(LocalDateTime.now())) {
             throw new AuctionStartTimeInvalidException();
         }
 
@@ -136,6 +137,11 @@ public class AuctionServiceImpl implements AuctionService {
         // 이미지 수 및 아이템 입력값 검증
         if (request.getItemList().size() != itemImgs.length) {
             throw new InvalidAuctionRoomRequestException();
+        }
+
+        //썸네일 검사
+        if(auctionRoomImg == null){
+            throw new AuctionRoomImageNotFound();
         }
 
         // 경매방 이미지, 경매방 생성
@@ -196,7 +202,8 @@ public class AuctionServiceImpl implements AuctionService {
         //시작시간이 20분이하로 남은경우 수정 불가능
         LocalDateTime auctionStartTime = auctionRoom.getStartedAt();
         LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
-        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(twentyMinutesAgo)) {
+        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(
+            twentyMinutesAgo)) {
             throw new UnableToUpdateAuctionNow();
         }
         log.info("auctionRoom ItemList={}", auctionRoom.getItemList().toString());
@@ -287,7 +294,8 @@ public class AuctionServiceImpl implements AuctionService {
         //시작시간이 20분이하로 남은경우 삭제 불가능
         LocalDateTime auctionStartTime = auctionRoom.getStartedAt();
         LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
-        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(twentyMinutesAgo)) {
+        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(
+            twentyMinutesAgo)) {
             throw new UnableToDeleteAuctionNow();
         }
 
@@ -335,9 +343,11 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId) {
+        Member seller = memberRepository.findById(member.getId())
+            .orElseThrow(MemberNotFoundException::new);
         AuctionRoom auctionRoom = auctionRoomRepository.findOffLiveById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
-        if (!auctionRoom.getSeller().equals(member)) {
+        if (!auctionRoom.getSeller().equals(seller)) {
             throw new UnauthorizedAuctionRoomAccessException();
         }
         List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByAuctionRoom(
@@ -369,7 +379,7 @@ public class AuctionServiceImpl implements AuctionService {
         } else {
             auctionRoom.validateLive();
             // 2. 경매방 라이브로 상태 변경
-            auctionRoom.changeOnLive();
+            auctionRoom.changeLiveState(AuctionRoomLiveState.ON_LIVE);
             log.info("시작할 경매방 pk: {}", auctionRoom.getId());
         }
 
@@ -378,6 +388,7 @@ public class AuctionServiceImpl implements AuctionService {
         return new AuctionRoomEnterDto(
             isSeller,
             auctionId,
+            auctionRoom.getSeller().getNickname(),
             member.getNickname(),
             auctionRoom.getAuctionRoomType(),
             auctionRoom.getName()
@@ -390,12 +401,23 @@ public class AuctionServiceImpl implements AuctionService {
             .orElseThrow(AuctionRoomNotFoundException::new);
     }
 
+    @Override
+    public AuctionRoom endAuctionRoom(Long auctionId) {
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
+            .orElseThrow(AuctionRoomNotFoundException::new);
+
+        // LiveState 변경
+        auctionRoom.quit();
+
+        return auctionRoom;
+    }
+
     @Transactional
     @Override
     public Long startBidding(Member member, Long auctionId, Long itemId) {
         // 1. 사용자/경매방 검증 (셀러인지, 셀러가 만든 경매방이 맞는지)
         AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(auctionId, member)
-            .orElseThrow(AuctionRoomNotFoundException::new);
+            .orElseThrow(UserCannotStartBiddingException::new);
         // 2. 경매 진행될 수 있는 아이템인지 검증
         Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
         item.isBiddable();

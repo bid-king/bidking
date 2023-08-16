@@ -8,9 +8,11 @@ export function AuctionItem({ item, idx }: Props) {
     <div
       key={idx}
       css={{
-        background: `url(${item.itemImg}) no-repeat center center ${ITEM_STATUS_BG[item.status]}`,
+        backgroundImage: `url('${item.imageUrl}')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
         borderRadius: '0.75rem',
-        border: '1px solid ' + colors.lightgrey,
         width: '2.5rem',
         height: '2.5rem',
         display: 'flex',
@@ -24,19 +26,17 @@ export function AuctionItem({ item, idx }: Props) {
     </div>
   );
 }
-const ITEM_STATUS_BG = {
-  dummy: 'transparent',
-  before: 'transparent',
-  in: 'transparent',
-  fail: colors.backgroundDark3,
-  complete: colors.backgroundDark3,
-};
+
 const ITEM_STATUS_CSS = {
-  dummy: { color: 'transparent', border: '1px solid ' + colors.grey },
-  before: { color: colors.lightgrey },
-  in: { color: 'transparent', border: '1px solid ' + colors.ok, filter: `drop-shadow(0 0 0.15rem ${colors.ok})` },
-  fail: { color: colors.lightgrey },
-  complete: { color: colors.white },
+  dummy: { backgroundColor: colors.grey, border: '1px solid transparent' },
+  before: { color: 'grayscale(1)', border: '1px solid ' + colors.grey },
+  in: {
+    color: 'transparent',
+    border: '1px solid ' + colors.confirm,
+    filter: `drop-shadow(0 0 0.75rem ${colors.confirm})`,
+  },
+  fail: { filter: 'grayscale(1)', border: '1px solid ' + colors.grey },
+  complete: { filter: 'grayscale(1)', border: '1px solid ' + colors.ok },
 };
 const ITEM_STATUS_TEXT = {
   dummy: '',

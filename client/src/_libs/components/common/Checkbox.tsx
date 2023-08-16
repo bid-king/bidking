@@ -3,13 +3,14 @@ import React, { InputHTMLAttributes, ChangeEvent } from 'react';
 import colors from '../../design/colors';
 import { HTMLAttributes } from 'react';
 
-export function Checkbox({ theme, id, value, onChange }: Props) {
+export function Checkbox({ theme, id, value, onChange, checked }: Props) {
   return (
     <input
       id={id}
       type="checkbox"
       value={value}
       onChange={onChange}
+      checked={checked}
       css={{
         appearance: 'none',
         cursor: 'pointer',
@@ -38,4 +39,5 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   value: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  checked?: boolean;
 }

@@ -8,8 +8,6 @@ import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import colors from '../../_libs/design/colors';
 import { useSignUp } from '../../_libs/hooks/useSignUp';
 
-// interface Props extends HTMLAttributes<HTMLDivElement> {}
-
 export function SignUpBox() {
   const {
     step,

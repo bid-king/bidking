@@ -17,7 +17,7 @@ export function useSocket(roomId: number, nickname: string, seller: boolean) {
     SOCKET_API.send.connect(roomId, nickname, seller);
 
     return () => {
-      SOCKET_API.send.leave(roomId, nickname);
+      SOCKET_API.send.leave(roomId);
     }; //unmount시 채팅방 나갑니다
   }, [roomId, nickname]);
 

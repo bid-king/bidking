@@ -1,15 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React from 'react';
 import { HTMLAttributes } from 'react';
-import { Socket } from 'socket.io-client';
 import colors from '../../../design/colors';
 import { Spacing } from '../../common/Spacing';
 import { Text } from '../../common/Text';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  theme: 'dark' | 'light';
-  time: number;
-}
 export function Timer({ theme = 'light', time }: Props) {
   return (
     <div
@@ -20,7 +15,7 @@ export function Timer({ theme = 'light', time }: Props) {
       }}
     >
       <Text type="bold" content={`남은 시간 ${time + '초'}`} />
-      <Spacing rem="0.25" />
+      <Spacing rem="0.5" />
       <div
         css={{
           height: '0.35rem',
@@ -30,17 +25,20 @@ export function Timer({ theme = 'light', time }: Props) {
       >
         <div
           css={{
-            width: `${10 * time}%`, //시간에 따른 동적 바인딩
+            width: '100%', //시간에 따른 동적 바인딩
+            transform: `scaleX(${time / 10})`,
+            transformOrigin: 'left',
             height: '0.35rem',
             borderRadius: '1rem',
-            backgroundColor: `${time >= 5 ? colors.ok : time < 3 ? colors.confirm : colors.warn}`, //시간에 따른 동적 바인딩
-            transition: 'width 1s',
+            backgroundColor: `${time >= 5 ? colors.ok : time > 2 ? colors.confirm : colors.warn}`, //5초 이상은 초록, 2-4초는 노랑, 0-2초는 빨강
+            transition: 'transform 1s linear',
           }}
         />
       </div>
     </div>
   );
 }
+
 const THEME_VARIANT = {
   light: {
     color: colors.black,
@@ -50,3 +48,8 @@ const THEME_VARIANT = {
     backgroundColor: colors.backgroundDark2,
   },
 };
+
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  theme: 'dark' | 'light';
+  time: number;
+}

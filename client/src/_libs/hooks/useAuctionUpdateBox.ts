@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import axios from 'axios';
-import auction, { AuctionRoomResponse } from '../../api/auction';
+import auction, { AuctionRoomResponse, CategoryListResponse, Category } from '../../api/auction';
 import {
   setAuctionTitle,
   setStartedAt,
@@ -35,6 +35,7 @@ export function useAuctionUpdateBox() {
   const [detail, setDetail] = useState<AuctionRoomResponse | undefined>(undefined);
   const [auctionRoomUrl, setAuctionRoomUrl] = useState('');
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
 
   // 4. Handlers
   const handleAuctionTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -81,20 +82,25 @@ export function useAuctionUpdateBox() {
       itemPermissionChecked,
       deliveryRulesChecked,
       itemList: items.map(item => {
-        if ('itemId' in item) {
+        if (!categoryList) return item;
+        const foundCategory = categoryList.find((category: Category) => category.name === item.itemCategory);
+        const categoryId = foundCategory ? foundCategory.id : null;
+
+        if ('itemId' in item && categoryList) {
           // AuctionItem 타입
+
           return {
             ...item,
             id: item.itemId,
             itemName: item.name,
-            itemCategoryId: item.itemCategory,
+            itemCategoryId: categoryId,
           };
         } else {
           // AuctionCreateItem 타입
           return {
             ...item,
             itemName: item.name,
-            itemCategoryId: item.itemCategory,
+            itemCategoryId: categoryId,
           };
         }
       }),
@@ -119,11 +125,9 @@ export function useAuctionUpdateBox() {
           },
         })
         .then(res => {
-          console.log(res);
           navigate(`/seller/detail/${auctionId}`);
         })
         .catch(err => {
-          console.log(data);
           console.log(err);
           SetErrMessage(err.response.data.message);
           // navigate('/login/loading'); // 404페이지로 넘어가야함
@@ -153,6 +157,14 @@ export function useAuctionUpdateBox() {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    auction
+      .getCategoryList()
+      .then(res => {
+        setCategoryList(res.categoryList);
+      })
+      .catch(err => {});
+  }, [items]);
   return {
     auctionId,
     auctionTitle,

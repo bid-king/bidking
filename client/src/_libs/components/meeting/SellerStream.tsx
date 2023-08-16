@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import colors from '../../design/colors';
 import { useOpenviduSeller } from '../../hooks/useOpenviduSeller';
 import { useStream } from '../../hooks/useStream';
+import { RoundButton } from '../common/RoundButton';
 import { Text } from '../common/Text';
 
 export function SellerStream({ auctionRoomId, userId, userType = 'seller' }: Props) {
@@ -30,7 +31,12 @@ export function SellerStream({ auctionRoomId, userId, userType = 'seller' }: Pro
   return (
     <div css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem', border: '1px solid transparent' }}>
       {publisher ? (
-        <video ref={videoRef} autoPlay={true} />
+        <div>
+          <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
+          <RoundButton onClick={handleMicToggle} label={'마이크 켜기'} />
+          <RoundButton onClick={handleCameraToggle} label={'카메라 켜기'} />
+          <RoundButton onClick={leaveSession} label={'세션 나가기'} color="delete" />
+        </div>
       ) : (
         <div
           css={{
@@ -49,9 +55,6 @@ export function SellerStream({ auctionRoomId, userId, userType = 'seller' }: Pro
           </div>
         </div>
       )}
-      <button onClick={handleMicToggle}>Toggle Microphone</button>
-      <button onClick={handleCameraToggle}>Toggle Camera</button>
-      <button onClick={leaveSession}>세션나가기</button>
     </div>
   );
 }

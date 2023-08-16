@@ -21,35 +21,100 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
     >
       <div css={{ width: '100%', padding: '0 1rem 0 1rem', ...THEME_VARIANT[theme] }}>
         <div css={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {itemList?.map((item, idx) => {
-            if (idx >= order - 2 && idx <= order + 2) return <AuctionItem item={item} idx={idx} key={idx} />;
-          })}
+          {itemList ? (
+            itemList?.map((item, idx) => {
+              if (idx >= order - 2 && idx <= order + 2) return <AuctionItem item={item} idx={idx} key={idx} />;
+            })
+          ) : (
+            <div />
+          )}
         </div>
         <Spacing rem="1" />
         <div>
-          {itemList?.map((item, idx) => {
-            if (item.itemId === currentItemId)
-              return (
-                <div key={idx} css={{ display: 'flex', alignItems: 'center' }}>
-                  <div
-                    css={{
-                      background: `url(${item.itemImg}) no-repeat center center`,
-                      borderRadius: '1rem',
-                      border: '1px solid ' + colors.ok,
-                      filter: `drop-shadow(0 0 0.075rem ${colors.ok})`,
-                      width: '3rem',
-                      height: '3rem',
-                    }}
-                  />
-                  <Spacing rem="1" dir="h" />
-                  <div css={{ display: 'flex', flexDirection: 'column' }}>
-                    <Text type="h3" content={item.name} />
-                    <Spacing rem="0.25" />
-                    <Text content={'경매 시작가 ' + bidPriceParse(String(item.startPrice)) + '원'} />
-                  </div>
+          <div>
+            {itemList &&
+              order < itemList.length - 4 + 1 &&
+              itemList?.map((item, idx) => {
+                if (item.itemId === currentItemId)
+                  return (
+                    <div css={{ display: 'flex', alignItems: 'center' }} key={idx}>
+                      <div
+                        css={{
+                          backgroundImage: `url("${item.imageUrl}")`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center center',
+                          backgroundRepeat: 'no-repeat',
+                          borderRadius: '1rem',
+                          border: '1px solid ' + colors.confirm,
+                          filter: `drop-shadow(0 0 0.025rem ${colors.confirm})`,
+                          width: '3rem',
+                          height: '3rem',
+                        }}
+                      />
+                      <Spacing rem="1" dir="h" />
+                      <div css={{ display: 'flex', flexDirection: 'column' }}>
+                        <Text type="h3" content={item.name} />
+                        <Spacing rem="0.25" />
+                        <Text content={'경매 시작가 ' + bidPriceParse(String(item.startPrice)) + '원'} />
+                      </div>
+                    </div>
+                  );
+              })}
+            {itemList && order >= itemList.length - 4 + 1 && (
+              <>
+                <div
+                  css={{
+                    background: 'transparent',
+                    borderRadius: '1rem',
+                    border: '1px solid transparent',
+                    width: '100%',
+                    height: '3rem',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text type="h2" content="경매 종료" />
                 </div>
-              );
-          })}
+                <Spacing rem="1" dir="h" />
+                <div
+                  css={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    height: '3.25rem',
+                  }}
+                />
+              </>
+            )}
+            {!itemList && (
+              <>
+                <div
+                  css={{
+                    background: 'transparent',
+                    borderRadius: '1rem',
+                    border: '1px solid transparent',
+                    width: '100%',
+                    height: '3rem',
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text type="h2" content="경매 대기" />
+                </div>
+                <Spacing rem="1" dir="h" />
+                <div
+                  css={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    height: '3.25rem',
+                  }}
+                />
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -65,7 +130,7 @@ const THEME_VARIANT = {
 };
 
 export const DUMMY: LiveItem = {
-  itemImg: '',
+  imageUrl: '',
   name: '',
   status: 'dummy',
   desc: '',

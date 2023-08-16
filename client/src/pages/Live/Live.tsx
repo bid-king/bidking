@@ -5,13 +5,13 @@ import { AuctionHeader } from '../../_libs/components/auctionSystem/auctionHeade
 import { Spacing } from '../../_libs/components/common/Spacing';
 import { OrderStream } from '../../_libs/components/meeting/OrderStream';
 import colors from '../../_libs/design/colors';
-import { useLiveEnter } from '../../_libs/hooks/useLiveEnter';
+import { useLiveConnection } from '../../_libs/hooks/useLiveConnection';
 import { useSocket } from '../../_libs/hooks/useSocket';
 import { AuctionNotice } from '../../_libs/components/auctionSystem/chatRoom/AuctionNotice';
 
 export function Live() {
-  const { userId, auctionRoomId, auctionRoomType, nickname, title, liveAuthErr, seller, SOCKET, error } =
-    useLiveEnter();
+  const { SOCKET, userId, auctionRoomId, auctionRoomType, nickname, sellerNickname, title, liveAuthErr, error } =
+    useLiveConnection();
 
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>
@@ -20,20 +20,15 @@ export function Live() {
           <div css={{ width: 'auto', maxWidth: '33vw' }}>
             <AuctionHeader
               theme="light"
-              nickname={nickname}
+              sellerNickname={sellerNickname}
               auctionRoomType={auctionRoomType}
               title={title}
               userType="order"
             />
           </div>
         </div>
-        <div css={{ width: '100%', height: '100%' }}>
-          {/* <OrderStream
-            err={error || liveAuthErr || null}
-            auctionRoomId={auctionRoomId}
-            userId={userId}
-            userType="order"
-          /> */}
+        <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <OrderStream auctionRoomId={auctionRoomId} userId={userId} userType="order" />
           <Spacing rem="0.5" />
           <AuctionNotice auctionRoomId={auctionRoomId} userType="order" socket={SOCKET} />
         </div>

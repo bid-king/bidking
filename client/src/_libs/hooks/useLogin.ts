@@ -1,9 +1,8 @@
-import { useState, useEffect, ChangeEvent, FormEvent, MouseEvent } from 'react';
+import { useState, useEffect, ChangeEvent, FormEvent, MouseEvent, useRef } from 'react';
 import member from '../../api/member';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setUserInformation } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router-dom';
-import { ROOT } from '../util/http';
 
 export function useLogin() {
   const dispatch = useAppDispatch();
@@ -12,6 +11,13 @@ export function useLogin() {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isErrorOccured, setErrorOccured] = useState(false);
+  const idRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (idRef.current) {
+      idRef.current.focus();
+    }
+  }, []);
 
   const navigate = useNavigate();
 
@@ -48,5 +54,14 @@ export function useLogin() {
         });
     }
   }
-  return { userId, password, handleUserIdChange, handlePasswordChange, handleSubmit, errorMessage, isErrorOccured };
+  return {
+    userId,
+    password,
+    handleUserIdChange,
+    handlePasswordChange,
+    handleSubmit,
+    errorMessage,
+    isErrorOccured,
+    idRef,
+  };
 }

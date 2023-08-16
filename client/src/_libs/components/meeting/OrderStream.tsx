@@ -8,11 +8,18 @@ import colors from '../../design/colors';
 export function OrderStream({ auctionRoomId, userId, userType = 'order' }: Props) {
   const { streamList } = useOpenviduBuyer(userId, auctionRoomId);
   const sellerStreamManager = streamList.find(stream => stream.userId !== userId)?.streamManager;
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current && sellerStreamManager) {
+      sellerStreamManager.addVideoElement(videoRef.current);
+    }
+  }, [sellerStreamManager]);
 
   return (
     <div css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem', border: '1px solid transparent' }}>
       {sellerStreamManager ? (
-        <Video streamManager={sellerStreamManager} />
+        <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
       ) : (
         <div
           css={{
@@ -35,17 +42,17 @@ export function OrderStream({ auctionRoomId, userId, userType = 'order' }: Props
   );
 }
 
-function Video({ streamManager }: { streamManager: StreamManager }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
+// function Video({ streamManager }: { streamManager: StreamManager }) {
+//   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    if (videoRef.current && streamManager) {
-      streamManager.addVideoElement(videoRef.current);
-    }
-  }, [streamManager]);
+//   useEffect(() => {
+//     if (videoRef.current && streamManager) {
+//       streamManager.addVideoElement(videoRef.current);
+//     }
+//   }, [streamManager]);
 
-  return <video ref={videoRef} autoPlay={true} />;
-}
+//   return <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />;
+// }
 
 interface Props {
   auctionRoomId: number;

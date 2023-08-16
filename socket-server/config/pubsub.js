@@ -1,16 +1,12 @@
 const redis = require('redis');
-const { startCountdownTimer } = require('../api/timer');
+const { startCountdownTimer } = require('../api/newTimer');
 
 module.exports = app => {
   const io = app.get('io');
 
-  // docker
-  // const subscriber = redis.createClient({
-  //   url: 'redis://redis:6379',
-  // });
-
-  // local
-  const subscriber = redis.createClient();
+  const subscriber = redis.createClient({
+    url: process.env.REDIS_URL,
+  });
 
   subscriber.subscribe('StartAuctionItem');
   subscriber.subscribe('UpdateAuctionPrice');
@@ -21,7 +17,7 @@ module.exports = app => {
     if (channel === 'StartAuctionItem') {
       const [roomId, itemId, price] = message.split(':');
       console.log(`AuctionRoom ${roomId}의 Item ${itemId}가 ${price}원부터 시작`);
-      io.to(`${roomId}`).emit('next', { itemId, price });
+      io.to(Number(roomId)).emit('next', { itemId: Number(itemId), price: Number(price), askingPrice: Number(price) });
     }
 
     if (channel === 'UpdateAuctionPrice') {
@@ -31,9 +27,16 @@ module.exports = app => {
           ':'
         )}`
       );
-      io.to(`${roomId}`).emit('updateBid', { itemId, userId, nickname, price, time: time.join(':') });
+      io.to(Number(roomId)).emit('updateBid', {
+        itemId: Number(itemId),
+        userId: Number(userId),
+        nickname,
+        price: Number(price),
+        time: time.join(':'),
+        askingPrice: Math.floor(Number(price) * 1.1),
+      });
 
-      startCountdownTimer(app, roomId);
+      startCountdownTimer(app, Number(roomId));
     }
   });
 };

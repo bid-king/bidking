@@ -7,7 +7,7 @@ export default {
     params.append('keyword', data.keyword);
     params.append('page', data.page.toString());
     params.append('perPage', data.perPage.toString());
-    return http.get<AuctionRoomListResponse[]>(`/api/v1/auctions/status?${params.toString()}`);
+    return http.get<AuctionRoomListResponse[]>(`/api/v1/auctions?${params.toString()}`);
   },
   //메인 경매 리스트 조회
   getLogined: (data: AuctionRoomListRequest, token: string) => {
@@ -66,7 +66,7 @@ export interface AuctionRoomListResponse {
   name: string;
   imageUrl: string;
   startedAt: string;
-  auctionRoomLiveState: string;
+  auctionRoomLiveState: 'ON_LIVE' | 'BEFORE_LIVE';
   itemListDto: ItemListDto[];
   bookmarked: boolean;
 }

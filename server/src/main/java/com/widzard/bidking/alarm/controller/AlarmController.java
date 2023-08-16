@@ -1,13 +1,19 @@
 package com.widzard.bidking.alarm.controller;
 
+import com.widzard.bidking.alarm.dto.request.ReadRequest;
+import com.widzard.bidking.alarm.dto.response.AlarmResponse;
 import com.widzard.bidking.alarm.service.AlarmService;
+import com.widzard.bidking.member.entity.Member;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,10 +47,17 @@ public class AlarmController {
 
     @PostMapping("/{memberId}")
     public ResponseEntity<Void> readAlarm(
-        @PathVariable("memberId") Long memberId,
-        @RequestBody Long alarmId
+        @AuthenticationPrincipal Member member,
+        @RequestBody @Valid ReadRequest readRequest
     ) {
-        alarmService.changeState(alarmId);
+        alarmService.changeState(readRequest);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/records")
+    public ResponseEntity<List<AlarmResponse>> readAlarmRecords(
+        @AuthenticationPrincipal Member member
+    ) {
+        return new ResponseEntity<>(alarmService.readAlarmRecords(member), HttpStatus.OK);
     }
 }

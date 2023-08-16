@@ -14,7 +14,7 @@ import { RoundButton } from '../../_libs/components/common/RoundButton';
 import { useSellerDetailOffLive } from '../../_libs/hooks/useSellerDetailOffLive';
 
 export function SellerDetailOffLive() {
-  const { auctionId, detail, error, isLogined, handleCheck, handleDelete, isChecked } = useSellerDetailOffLive();
+  const { auctionId, detail, error, isLogined, handleCheck, isChecked } = useSellerDetailOffLive();
   if (!detail) {
     return (
       <div
@@ -86,13 +86,6 @@ export function SellerDetailOffLive() {
           }}
         >
           <Text type="h1" content="경매 완료" />
-          <div
-            css={{
-              display: 'flex',
-            }}
-          >
-            <RoundButton onClick={handleDelete} label="삭제" size="small" color="delete" />
-          </div>
         </div>
         <Spacing rem="1" />
         <div>

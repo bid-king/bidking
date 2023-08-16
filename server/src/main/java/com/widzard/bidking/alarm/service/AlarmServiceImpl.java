@@ -1,5 +1,6 @@
 package com.widzard.bidking.alarm.service;
 
+import com.widzard.bidking.alarm.dto.request.ReadRequest;
 import com.widzard.bidking.alarm.dto.response.AlarmResponse;
 import com.widzard.bidking.alarm.entity.Alarm;
 import com.widzard.bidking.alarm.entity.AlarmType;
@@ -15,6 +16,7 @@ import com.widzard.bidking.bookmark.entity.Bookmark;
 import com.widzard.bidking.bookmark.repository.BookmarkRepository;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -117,10 +119,25 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
-    public void changeState(Long alarmId) {
-        Alarm alarm = alarmRepository.findById(alarmId).orElseThrow(AlarmNotFoundException::new);
+    public void changeState(ReadRequest readRequest) {
+        Alarm alarm = alarmRepository.findById(readRequest.getAlarmId())
+            .orElseThrow(AlarmNotFoundException::new);
         alarm.read();
         alarmRepository.save(alarm);
+    }
+
+    @Override
+    public List<AlarmResponse> readAlarmRecords(Member member) {
+        List<Alarm> alarmList = alarmRepository.findTop5ByMemberIdOrderByCreatedAtDesc(
+            member.getId());
+        List<AlarmResponse> alarmResponseList = new ArrayList<>();
+        if (!alarmList.isEmpty()) {
+            for (Alarm alarm : alarmList
+            ) {
+                alarmResponseList.add(AlarmResponse.from(alarm));
+            }
+        }
+        return alarmResponseList;
     }
 
     private void send(Member member, Content content, AlarmType alarmType) {

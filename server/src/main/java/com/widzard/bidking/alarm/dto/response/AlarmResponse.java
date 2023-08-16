@@ -3,6 +3,7 @@ package com.widzard.bidking.alarm.dto.response;
 import com.widzard.bidking.alarm.entity.Alarm;
 import com.widzard.bidking.alarm.entity.AlarmType;
 import com.widzard.bidking.alarm.entity.Content;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,13 +22,19 @@ public class AlarmResponse {
 
     private String content;
 
+    private LocalDateTime createdTime;
+
     private AlarmType alarmType;
+
+    private Boolean isRead;
 
     public static AlarmResponse from(Alarm alarm) {
         return AlarmResponse.builder()
             .id(alarm.getId())
             .content(alarm.getContent().getContent())
+            .createdTime(alarm.getCreatedAt())
             .alarmType(alarm.getAlarmType())
+            .isRead(alarm.getIsRead())
             .build();
     }
 }

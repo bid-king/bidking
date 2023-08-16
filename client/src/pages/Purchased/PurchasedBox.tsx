@@ -10,7 +10,7 @@ import { Spacing } from '../../_libs/components/common/Spacing';
 import colors from '../../_libs/design/colors';
 
 export function PurchasedBox() {
-  const [orderItemList, setOrderItemList] = useState<OrderItemResponse[] | null>(null);
+  const [orderItemList, setOrderItemList] = useState<OrderItemResponse[]>([]);
   const { accessToken, isLogined } = useAppSelector(state => state.user);
 
   // 낙찰물품 GET
@@ -27,25 +27,6 @@ export function PurchasedBox() {
     }
   }, []);
 
-  if (!orderItemList) {
-    return (
-      <div
-        css={{
-          display: 'flex',
-          flexDirection: 'column',
-          textAlign: 'center',
-          minHeight: '100vh',
-          backgroundColor: colors.backgroundLight,
-          justifyContent: 'center',
-        }}
-      >
-        <div>
-          <Text type="h2" content="경매 물품이 존재하지 않아요" />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div>
       <Spacing rem="1.5" />
@@ -59,6 +40,11 @@ export function PurchasedBox() {
           </div>
         );
       })}
+      {orderItemList.length === 0 && (
+        <div>
+          <Text type="h2" content="경매 물품이 존재하지 않아요" />
+        </div>
+      )}
     </div>
   );
 }

@@ -9,7 +9,7 @@ module.exports.startCountdownTimer = (app, roomId) => {
   let seconds = 10;
 
   async function updateTimer() {
-    io.to(`${roomId}`).emit('time', seconds);
+    io.to(roomId).emit('time', seconds);
     seconds--;
 
     if (seconds < 0) {
@@ -34,23 +34,39 @@ module.exports.startCountdownTimer = (app, roomId) => {
         if (userId === undefined) {
           // 유찰
           await redisCli.hmset(`item:${itemId}:afterBidResult`, 'type', 'fail');
-          io.to(`${roomId}`).emit('failBid', { itemId });
+          io.to(roomId).emit('failBid', { itemId: Number(itemId) });
         } else {
-          // 낙찰
-          await redisCli.hmset(
-            `item:${itemId}:afterBidResult`,
-            'type',
-            'success',
-            'userId',
-            userId,
-            'nickname',
-            nickname,
-            'price',
-            price,
-            'time',
-            time
-          );
-          io.to(`${roomId}`).emit('successBid', { itemId, userId, nickname, price, time });
+          if (
+            (itemId === undefined) |
+            (userId === undefined) |
+            (nickname === undefined) |
+            (price === undefined) |
+            (time === undefined)
+          ) {
+            console.error('Redis value not found in after bid result');
+          } else {
+            // 낙찰
+            await redisCli.hmset(
+              `item:${itemId}:afterBidResult`,
+              'type',
+              'success',
+              'userId',
+              userId,
+              'nickname',
+              nickname,
+              'price',
+              price,
+              'time',
+              time
+            );
+            io.to(roomId).emit('successBid', {
+              itemId: Number(itemId),
+              userId: Number(userId),
+              nickname,
+              price: Number(price),
+              time,
+            });
+          }
         }
       }
     }

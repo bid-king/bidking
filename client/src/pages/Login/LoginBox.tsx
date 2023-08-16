@@ -12,8 +12,16 @@ import { useLogin } from '../../_libs/hooks/useLogin';
 // interface Props extends HTMLAttributes<HTMLDivElement> {}
 
 export function LoginBox() {
-  const { userId, password, handleUserIdChange, handlePasswordChange, handleSubmit, errorMessage, isErrorOccured } =
-    useLogin();
+  const {
+    userId,
+    password,
+    handleUserIdChange,
+    handlePasswordChange,
+    handleSubmit,
+    errorMessage,
+    isErrorOccured,
+    idRef,
+  } = useLogin();
 
   return (
     <form
@@ -39,7 +47,14 @@ export function LoginBox() {
             <Text type="bold" content="아이디" />
           </label>
           <Spacing rem="1" />
-          <Input id="userId-input" placeholder="" inputType="userId" value={userId} onChange={handleUserIdChange} />
+          <Input
+            id="userId-input"
+            placeholder=""
+            inputType="userId"
+            value={userId}
+            onChange={handleUserIdChange}
+            ref={idRef}
+          />
         </div>
         <Spacing rem="2" />
         <div className="password">

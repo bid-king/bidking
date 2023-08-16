@@ -4,13 +4,14 @@ import { HTMLAttributes } from 'react';
 import { Link } from 'react-router-dom';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
+import { auctionDateParse } from '../../util/auctionDateParse';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   title?: string;
   date?: string;
   items?: string[];
   auctionRoomTradeState?: 'ALL_COMPLETED' | 'IN_PROGRESS' | 'BEFORE_PROGRESS' | 'NONE';
-  auctionRoomLiveState?: 'ON_LIVE' | 'BEFORE_LIVE' | 'OFF_LIVE';
+  auctionRoomLiveState?: 'ON_LIVE' | 'BEFORE_LIVE';
   // link: '',
   img?: string;
 }
@@ -20,7 +21,7 @@ export function AuctionList({
   date = '오늘 18:00',
   items = ['물품1', '물품2', '물품3', '물품4', '물품5', '물품6'],
   auctionRoomTradeState = 'NONE',
-  auctionRoomLiveState = 'ON_LIVE',
+  auctionRoomLiveState = 'BEFORE_LIVE',
   img = '/image/bid.jpg',
 }: Props) {
   return (
@@ -52,7 +53,7 @@ export function AuctionList({
         onError={e => {
           const target = e.target as HTMLImageElement;
           target.onerror = null;
-          target.src = '/image/bid.jpg';
+          target.src = '/image/nonImageLight.png';
         }}
         alt={title}
       />
@@ -67,26 +68,28 @@ export function AuctionList({
         }}
       >
         <Text type="h2" content={title} />
-        <Text type="h3" content={date} />
-        {items.map((item, index) => (
-          <Text key={index} content={index < 3 ? item : ''} />
-        ))}
+        <Text type="h3" content={auctionDateParse(date)} />
+        <Text content={items.slice(0, 3).join(', ')} />
       </div>
       <div
         css={{
           position: 'absolute',
           textAlign: 'center',
           width: '100%',
-          borderRadius: '1.5rem',
+          borderRadius: '1rem',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
+          opacity: '0.9',
           ...TRADE_STATE[auctionRoomTradeState],
+          ...LIVE_STATE[auctionRoomLiveState],
         }}
       >
         {auctionRoomTradeState === 'ALL_COMPLETED' && '모든 절차가 끝났어요.'}
         {auctionRoomTradeState === 'IN_PROGRESS' && '하나 이상의 물건이 배송중이에요.'}
         {auctionRoomTradeState === 'BEFORE_PROGRESS' && '낙찰자가 아직 결제하지 않았어요.'}
+
+        {auctionRoomLiveState === 'ON_LIVE' && 'LIVE'}
       </div>
     </div>
   );
@@ -109,5 +112,14 @@ const TRADE_STATE = {
     height: '3rem',
     backgroundColor: colors.confirm,
     color: `${colors.black}`,
+  },
+};
+
+const LIVE_STATE = {
+  BEFORE_LIVE: {},
+  ON_LIVE: {
+    height: '3rem',
+    backgroundColor: colors.warn,
+    color: `${colors.white}`,
   },
 };

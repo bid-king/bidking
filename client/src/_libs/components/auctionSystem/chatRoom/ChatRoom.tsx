@@ -29,7 +29,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
 
   useEffect(() => {
     return () => {
-      live(socket.current).send.leave(roomId, nickname);
+      live(socket.current).send.leave(roomId);
     };
   }, []);
   return (
@@ -86,7 +86,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                 <Spacing rem="0.5" dir="h" />
                 <RoundButton
                   label="보내기"
-                  type="button"
+                  type="submit"
                   color="confirm"
                   size="small"
                   onClick={e => {

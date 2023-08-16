@@ -6,12 +6,11 @@ export function enter(auctionId: number, token: string) {
 export function getItems(auctionId: number, token: string) {
   return https.get<AuctionEnterResponse>(`/api/v1/bid/${auctionId}/items`, token);
 }
-export function liveStart(auctionId: number) {}
-export function itemStart(auctionId: number, itemId: number, token: string) {
+export function descStart(auctionId: number, itemId: number, token: string) {
   return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/start`, token);
 }
-export function bid(auctionId: number, itemId: number, price: string, token: string) {
-  return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/start`, token, { price });
+export function bid(auctionId: number, itemId: number, price: number, token: string) {
+  return https.post(`/api/v1/bid/${auctionId}/items/${itemId}/try`, token, { price });
 }
 export function auctionEnd(auctionId: number, token: string) {
   return https.post(`/api/v1/bid/${auctionId}/end`, token);
@@ -21,9 +20,10 @@ export function live(ws: Socket | null) {
     send: {
       connect: (roomId: number, nickname: string, isSeller: boolean) =>
         ws?.emit('enterRoom', { nickname, roomId, isSeller }),
+      bidStart: (roomId: number) => ws?.emit('start', { roomId }),
       chat: (roomId: number, nickname: string, msg: string) => ws?.emit('chat', { nickname, roomId, msg }),
-      leave: (roomId: number, nickname: string) => {
-        ws?.emit('leaveRoom', { nickname, roomId });
+      leave: (roomId: number) => {
+        ws?.emit('leaveRoom', { roomId });
         ws?.disconnect();
       },
       notice: (roomId: number, msg: string) => ws?.emit('notice', { roomId, msg }),
@@ -103,7 +103,8 @@ export function live(ws: Socket | null) {
 
 export interface AuctionEnterResponse {
   nickname: string;
-  auctionRoomType: 'common' | 'reverse';
+  sellerNickname: string;
+  auctionRoomType: 'COMMON' | 'REVERSE';
   title: string;
   auctionRoomId: number;
   currentItemId: number;
@@ -128,7 +129,7 @@ export interface SocketAPI {
   };
 }
 export interface LiveItem {
-  itemImg: string;
+  imageUrl: string;
   itemId: number;
   name: string;
   status: 'before' | 'in' | 'fail' | 'complete' | 'dummy';

@@ -14,7 +14,18 @@ import { RoundButton } from '../../_libs/components/common/RoundButton';
 import { useSellerDetail } from '../../_libs/hooks/useSellerDetail';
 
 export function SellerDetail() {
-  const { auctionId, detail, error, isLogined, handleCheck, handleDelete, isChecked } = useSellerDetail();
+  const {
+    auctionId,
+    detail,
+    error,
+    isLogined,
+    handleCheck,
+    handleDelete,
+    isChecked,
+    isWithinTwentyMinutes,
+    hasAuctionStarted,
+  } = useSellerDetail();
+
   if (!detail) {
     return (
       <div
@@ -86,17 +97,19 @@ export function SellerDetail() {
           }}
         >
           <Text type="h1" content="경매 정보" />
-          <div
-            css={{
-              display: 'flex',
-            }}
-          >
-            <Link to={`/seller/update-auction/${auctionId}`}>
-              <RoundButton label="수정" size="small" color="white" />
-            </Link>
-            <Spacing rem="0.5" dir="h" />
-            <RoundButton onClick={handleDelete} label="삭제" size="small" color="delete" />
-          </div>
+          {!isWithinTwentyMinutes && (
+            <div
+              css={{
+                display: 'flex',
+              }}
+            >
+              <Link to={`/seller/update-auction/${auctionId}`}>
+                <RoundButton label="수정" size="small" color="white" />
+              </Link>
+              <Spacing rem="0.5" dir="h" />
+              <RoundButton onClick={handleDelete} label="삭제" size="small" color="delete" />
+            </div>
+          )}
         </div>
         <Spacing rem="1" />
         <div>
@@ -144,11 +157,11 @@ export function SellerDetail() {
         <Text type="h1" content="경매 물품" />
         <Spacing rem="1" />
 
-        {detail.auctionRoomLiveState === 'BEFORE_LIVE' && (
+        {!hasAuctionStarted && !isWithinTwentyMinutes && (
           <ConfirmButton btnType="disabled" label={auctionRoomLiveState.beforeLive} />
         )}
 
-        {detail.auctionRoomLiveState === 'ON_LIVE' && (
+        {isWithinTwentyMinutes && (
           <div>
             <div
               className="auctionEnterPermission"
@@ -192,9 +205,7 @@ export function SellerDetail() {
             )}
           </div>
         )}
-        {detail.auctionRoomLiveState === 'OFF_LIVE' && (
-          <ConfirmButton btnType="disabled" label={auctionRoomLiveState.offLive} />
-        )}
+        {hasAuctionStarted && <ConfirmButton btnType="disabled" label={auctionRoomLiveState.offLive} />}
 
         <Spacing rem="1" />
         <div

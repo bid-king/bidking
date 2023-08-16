@@ -1,7 +1,7 @@
 const SocketIO = require('socket.io');
 const cookieParser = require('cookie-parser');
 const cookie = require('cookie-signature');
-const { startCountdownTimer } = require('../api/timer');
+const { startCountdownTimer } = require('../api/newTimer');
 const { getRedis } = require('../api/redis');
 const { http } = require('../api/http');
 
@@ -28,6 +28,8 @@ module.exports = (server, app, sessionMiddleware) => {
       socket.join(roomId);
       socket['nickname'] = nickname;
 
+      io.to(roomId).emit('count', { count: socket.adapter.rooms.get(roomId)?.size });
+
       http.get(`/api/v1/bid/${roomId}/items`).then(itemList => {
         io.to(roomId).emit('init', itemList);
       });
@@ -35,7 +37,6 @@ module.exports = (server, app, sessionMiddleware) => {
 
     socket.on('leaveRoom', ({ roomId }) => {
       if (socket.id === roomOwners[`${roomId}`]) {
-        console.log(socket.adapter.rooms.get(roomId)); // room의 참여자 socket.id
         io.to(roomId).emit('roomClosed');
       } else {
         socket.leave(roomId);
@@ -59,9 +60,12 @@ module.exports = (server, app, sessionMiddleware) => {
       const itemId = await getRedis(redisCli, `auction:${roomId}:onLiveItem:itemId`);
       const price = await getRedis(redisCli, `auction:${roomId}:onLiveItem:startPrice`);
 
-      io.to(`${roomId}`).emit('start', { itemId, price });
-
-      startCountdownTimer(app, roomId);
+      if (itemId === undefined || price === undefined) {
+        console.error('Redis value not found in start');
+      } else {
+        io.to(roomId).emit('start', { itemId: Number(itemId), price: Number(price), askingPrice: Number(price) });
+        startCountdownTimer(app, roomId);
+      }
     });
 
     socket.on('disconnect', () => {

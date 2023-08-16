@@ -1,12 +1,8 @@
 const redis = require('redis');
 
 module.exports = app => {
-  // docker
-  // const client = redis.createClient({
-  //   url: 'redis://redis:6379',
-  // });
-
-  // local
-  const client = redis.createClient();
+  const client = redis.createClient({
+    url: process.env.REDIS_URL,
+  });
   app.set('redisCli', client);
 };

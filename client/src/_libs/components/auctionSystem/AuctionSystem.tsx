@@ -6,15 +6,28 @@ import { AuctionItemStatus, DUMMY } from './auctionItemList/AuctionItemStatus';
 import { BidPrice } from './bidPrice/BidPrice';
 import { Timer } from './bidTimer/Timer';
 import { Bidder } from './bidder/Bidder';
-import { BiddingForm } from './bf/BiddingForm';
+import { BiddingForm } from './bidForm/BiddingForm';
 import { Socket } from 'socket.io-client';
 import { ChatRoom } from './chatRoom/ChatRoom';
 import { askingPriceParse } from '../../util/bidPriceParse';
 import { useAuctionSystem } from '../../hooks/useAuctionSystem';
-import { BidCtrl } from './bf/BidCtrl';
+import { BidCtrl } from './bidForm/BidCtrl';
 
 export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoomId, socket }: Props) {
-  const { order, currPrice, topbidder, currId, itemList, disable, currTime, liveStatus } = useAuctionSystem(socket);
+  const {
+    order,
+    currPrice,
+    askingPrice,
+    priceArr,
+    topbidder,
+    currId,
+    itemList,
+    disable,
+    currTime,
+    liveStatus,
+    setCurrId,
+    setLiveStatus,
+  } = useAuctionSystem(socket);
 
   return (
     <div>
@@ -30,7 +43,7 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
         <Spacing rem="1" />
         <Bidder theme={theme} bidder={topbidder} />
         <Spacing rem="1" />
-        <BidPrice align="center" theme={theme} price={currPrice} />
+        <BidPrice align="center" theme={theme} priceArr={priceArr} />
         <Spacing rem="1.5" />
         <Timer theme={theme} time={currTime} />
         <Spacing rem="1.5" />
@@ -40,11 +53,18 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
             itemId={currId}
             theme={theme}
             currPrice={currPrice}
-            askingPrice={askingPriceParse(currPrice)}
+            askingPrice={askingPrice}
             disable={disable}
           />
         ) : (
-          <BidCtrl liveStatus={liveStatus} auctionRoomId={auctionRoomId} itemId={currId} />
+          <BidCtrl
+            socket={socket}
+            liveStatus={liveStatus}
+            setLiveStatus={setLiveStatus}
+            setCurrId={setCurrId}
+            auctionRoomId={auctionRoomId}
+            itemId={currId}
+          />
         )}
       </div>
       <Spacing rem="0.5" />

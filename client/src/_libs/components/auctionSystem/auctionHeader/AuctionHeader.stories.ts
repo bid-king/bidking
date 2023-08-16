@@ -15,8 +15,8 @@ export const Primary: Story = {
   args: {
     userType: 'order',
     theme: 'dark',
-    nickname: '김성용',
-    auctionRoomType: 'reverse',
+    sellerNickname: '김성용',
+    auctionRoomType: 'REVERSE',
     title: '제목',
   },
 };

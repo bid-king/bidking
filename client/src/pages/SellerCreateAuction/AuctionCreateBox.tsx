@@ -43,7 +43,7 @@ export function AuctionCreateBox() {
         color: colors.white,
       }}
     >
-      <Text type="h2" content="경매 등록"></Text>
+      <Text type="h2" content="경매 등록" />
       <Spacing rem="2" />
       <div
         css={{
@@ -82,7 +82,7 @@ export function AuctionCreateBox() {
             >
               <QuestionModal
                 content1="일반경매(English Auction): 이는 우리가 흔히 생각하는, 가장 전통적인 경매 방식입니다. 경매가 시작될 때 최소 입찰가격이 설정되며, 이후 참여자들은 그 가격보다 높은 가격으로 입찰합니다. 가장 높은 가격을 제시한 참여자가 물건을 얻게 됩니다."
-                content2="네덜란드 경매(Dutch Auction): 이 경매 방식은 일반적인 경매와는 반대로, 가장 높은 가격에서 시작하여 점차 가격을 낮추는 방식입니다. 참가자들은 가격이 내려갈수록 입찰을 기다리다가, 자신이 원하는 가격에 도달했을 때 입찰을 합니다. 처음으로 입찰한 사람이 물건을 얻게 됩니다. 이 방식은 일반적으로 꽃이나 농산물 등 시간이 지날수록 가치가 떨어지는 상품을 판매할 때 사용됩니다."
+                content2="네덜란드 경매(Dutch Auction): 이 경매 방식은 일반적인 경매와는 반대로, 가장 높은 가격에서 시작하여 점차 가격을 낮추는 방식입니다. 참가자들은 가격이 내려갈수록 입찰을 기다리다가, 자신이 원하는 가격에 도달했을 때 입찰을 합니다. 처음으로 입찰한 사람이 물건을 얻게 됩니다."
               />
             </div>
           </div>
@@ -101,6 +101,7 @@ export function AuctionCreateBox() {
               onChange={handleAuctionRoomType}
             />
           </div>
+          <Spacing rem="0.25" />
           <div
             css={{
               display: 'flex',
@@ -152,8 +153,8 @@ export function AuctionCreateBox() {
               }}
             >
               <QuestionModal
-                content1="일반경매(English Auction): 이는 우리가 흔히 생각하는, 가장 전통적인 경매 방식입니다. 경매가 시작될 때 최소 입찰가격이 설정되며, 이후 참여자들은 그 가격보다 높은 가격으로 입찰합니다. 가장 높은 가격을 제시한 참여자가 물건을 얻게 됩니다."
-                content2="네덜란드 경매(Dutch Auction): 이 경매 방식은 일반적인 경매와는 반대로, 가장 높은 가격에서 시작하여 점차 가격을 낮추는 방식입니다. 참가자들은 가격이 내려갈수록 입찰을 기다리다가, 자신이 원하는 가격에 도달했을 때 입찰을 합니다. 처음으로 입찰한 사람이 물건을 얻게 됩니다. 이 방식은 일반적으로 꽃이나 농산물 등 시간이 지날수록 가치가 떨어지는 상품을 판매할 때 사용됩니다."
+                content1="실물이 아닌 용역, 부동산, 법적으로 소지 및 거래가 금지된 물품들은 '경매 금지 품목'입니다."
+                content2="경매 금지 품목을 거래하는 것에 따른 법적 책임은 판매자 본인에게 있습니다."
               />
             </div>
             <Spacing rem="1" dir="h" />
@@ -178,7 +179,10 @@ export function AuctionCreateBox() {
               alignItems: 'center',
             }}
           >
-            <Text type="p" content="상품이 낙찰되면 +n일까지 상품을 발송하고, 송장번호를 낙찰자에게 제공하겠습니다." />
+            <Text
+              type="p"
+              content="상품이 낙찰되면 판매자가 결제한 날로부터 일 주일 안에 상품을 발송하고, 배송 정보를 제공하겠습니다."
+            />
             <Spacing rem="1" dir="h" />
             <div
               css={{

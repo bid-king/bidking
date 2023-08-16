@@ -146,6 +146,9 @@ export function useSignUp() {
     if (certificateCode) {
       if (certificateCode === certifiedNumber) {
         setRequestCerificated(true);
+        setVerificationVisible(false);
+        setCertifiedErrMessage('');
+        setPhoneErrorMessage('');
       } else {
         setCertifiedErrMessage('인증번호가 일치하지 않습니다.');
       }
@@ -166,12 +169,12 @@ export function useSignUp() {
 
   // 휴대폰 본인인증 버튼 활성화 체크
   useEffect(() => {
-    if (isRequestCerificated && isVerificationVisible && isPhoneValid) {
+    if (isRequestCerificated && isPhoneValid) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
     }
-  }, [isRequestCerificated, isVerificationVisible, isPhoneValid]);
+  }, [isRequestCerificated, isPhoneValid]);
 
   // 인풋값 관리
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {

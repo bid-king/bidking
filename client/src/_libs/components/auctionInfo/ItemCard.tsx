@@ -30,39 +30,40 @@ export function ItemCard({ theme = 'light', item }: Props) {
         <Text type="bold" content={'순번 ' + item.itemOrdering} />
       </div>
       <Spacing rem="1" />
-      <Text type="bold" content={item.category} />
+      <div
+        css={{
+          display: 'flex',
+        }}
+      >
+        <Text type="bold" content={'카테고리'} />
+        <Spacing rem="0.5" dir="h" />
+        <Text type="bold" content={item.category} />
+      </div>
       <Spacing rem="1" />
       <div className="cardBody-ItemName">
         <Text type="h3" content={item.itemName} />
       </div>
       <Spacing rem="1" />
-      {item.successMemberNickname && (
-        <div>
+      <div>
+        <div
+          className="cardBody-orderInfo"
+          css={{
+            display: 'flex',
+            flexDirection: 'row',
+          }}
+        >
           <div
-            className="cardBody-orderInfo"
             css={{
+              width: '50%',
               display: 'flex',
-              flexDirection: 'row',
             }}
           >
-            <div
-              css={{
-                width: '50%',
-              }}
-            >
-              <Text content={'낙찰자 '} />
-              <Text type="bold" content={String(item.successMemberNickname)} />
-            </div>
-            <div>
-              <Text content={'낙찰가 '} />
-              <Text type="bold" content={String(item.successPrice)} />
-            </div>
-          </div>
-          <div>
-            <Text type="bold" content={detailDateParse(item.successTime) + ' 낙찰'} />
+            <Text type="bold" content={'경매 시작가 '} />
+            <Spacing rem="0.5" dir="h" />
+            <Text type="bold" content={String(item.startPrice)} />
           </div>
         </div>
-      )}
+      </div>
 
       <Spacing rem="1" />
       {/*이 아래는 접으면 접히는 부분*/}
@@ -79,6 +80,11 @@ export function ItemCard({ theme = 'light', item }: Props) {
               borderRadius: '1rem',
               width: '100%',
               // maxHeight: '20rem',
+            }}
+            onError={e => {
+              const target = e.target as HTMLImageElement;
+              target.onerror = null;
+              target.src = theme === 'light' ? '/image/nonImageLight.png' : '/image/nonImageDark.png';
             }}
           />
           <Spacing rem="1" />
@@ -119,9 +125,9 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     itemImageUrl: string;
     itemDescription: string;
     itemOrdering: number;
-    itemState: 'PRE_AUCTION';
+    itemState: 'BEFORE_LIVE' | 'ON_LIVE' | 'OFF_LIVE';
     successTime: string;
-    successPrice: number;
+    startPrice: number;
     successMemberNickname: string;
     deliveryAddress: string;
     deliveryMsg: string;

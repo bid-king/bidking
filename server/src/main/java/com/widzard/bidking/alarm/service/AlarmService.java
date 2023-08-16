@@ -1,7 +1,10 @@
 package com.widzard.bidking.alarm.service;
 
+import com.widzard.bidking.alarm.dto.request.ReadRequest;
+import com.widzard.bidking.alarm.dto.response.AlarmResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.member.entity.Member;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface AlarmService {
@@ -18,5 +21,7 @@ public interface AlarmService {
 
     void sendAuctionUpComingToBookmarkMember(AuctionRoom auctionRoom);
 
-    void changeState(Long alarmId);
+    void changeState(ReadRequest readRequest);
+
+    List<AlarmResponse> readAlarmRecords(Member member);
 }
