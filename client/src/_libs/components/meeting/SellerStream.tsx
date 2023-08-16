@@ -22,7 +22,7 @@ export function SellerStream({
     if (publisher && videoRef?.current) {
       publisher.addVideoElement(videoRef.current);
     }
-  }, [publisher]);
+  }, [publisher, videoRef.current]);
 
   const handleMicToggle = () => {
     if (publisher) {
