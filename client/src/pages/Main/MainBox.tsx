@@ -187,7 +187,7 @@ export function MainBox() {
                   alignItems: 'center',
                 }}
               >
-                <Text type="h2" content="진행중인 경매가 존재하지 않습니다" />
+                <Text type="h2" content="경매가 존재하지 않습니다" />
               </div>
             )}
           </div>

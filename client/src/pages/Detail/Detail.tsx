@@ -120,10 +120,6 @@ export function Detail() {
           </div>
         )}
 
-        <Spacing rem="1" />
-        <Text type="h1" content="경매 물품" />
-        <Spacing rem="1" />
-
         {detail.auctionRoomLiveState === 'BEFORE_LIVE' && (
           <ConfirmButton btnType="disabled" label={auctionRoomLiveState.beforeLive} />
         )}
@@ -184,6 +180,9 @@ export function Detail() {
           }}
         >
           {error && <Text content={error.message} />}
+
+          <Text type="h1" content="경매 물품" />
+          <Spacing rem="1" />
           {detail.itemList.map((item, idx) => (
             <div key={idx}>
               <ItemCard item={item} />
