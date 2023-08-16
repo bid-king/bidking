@@ -39,6 +39,7 @@ export function useLiveConnection() {
           const ROOT = process.env.REACT_APP_WS_ROOT as string;
           socket.current = io(ROOT, {
             withCredentials: true,
+            transports: ['websocket'],
           });
           live(socket.current).send.connect(res.auctionRoomId, res.nickname, res.seller);
         })
