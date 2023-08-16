@@ -89,7 +89,7 @@ interface Props {
   userType: 'order' | 'seller';
   theme: 'dark' | 'light';
   nickname: string;
-  auctionRoomId: number | null;
+  auctionRoomId: number;
   socket: MutableRefObject<Socket | null>;
   setNotice?: () => Promise<unknown>;
 }

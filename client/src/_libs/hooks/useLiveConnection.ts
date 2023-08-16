@@ -80,7 +80,7 @@ export function useLiveConnection() {
     return () => {
       live(socket.current).send.leave(Number(auctionId));
     }; //unmount시 소켓 끊어줭
-  }, [auctionId, seller]);
+  }, [auctionId]);
 
   return {
     userId,

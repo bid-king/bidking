@@ -90,7 +90,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
 }
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  auctionRoomId: number | null;
+  auctionRoomId: number;
   socket: MutableRefObject<Socket | null>;
   userType: 'order' | 'seller';
 }

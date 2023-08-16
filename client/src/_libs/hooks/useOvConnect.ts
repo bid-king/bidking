@@ -4,10 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export type StreamData = {
   streamManager: StreamManager;
-  userId: number | null;
+  userId: number;
 };
 
-export function useOrderOV(userId: number | null, auctionRoomId: number | null) {
+export function useOrderOV(userId: number, auctionRoomId: number) {
   const [subscribers, setSubscribers] = useState<StreamData[]>([]);
   const [session, setSession] = useState<Session | null>();
 
@@ -70,7 +70,7 @@ export function useOrderOV(userId: number | null, auctionRoomId: number | null) 
   };
 }
 
-export function useSellerOV(userId: number | null, auctionRoomId: number | null) {
+export function useSellerOV(userId: number, auctionRoomId: number) {
   const [publisher, setPublisher] = useState<Publisher | null>();
   const [session, setSession] = useState<Session | null>();
 
