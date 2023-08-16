@@ -24,7 +24,7 @@ export function useLiveConnection() {
   const socket = useRef<Socket | null>(null);
   const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
   //openvidu
-  const [pub, setPub] = useState<Publisher | null>();
+  const [pub, setPub] = useState<Publisher | null | undefined>(null);
   let cameraToggle: (arg: boolean) => void;
   let micToggle: (arg: boolean) => void;
   let leaveOpenvidu: () => void;
@@ -64,16 +64,6 @@ export function useLiveConnection() {
           live(socket.current).send.connect(data.auctionRoomId, data.nickname, data.seller);
           return data; //이전에 받은 API 데이터 그대로 toss
         })
-        .then(data => {
-          if (seller) {
-            setPub(publisher);
-            cameraToggle = onChangeCameraStatus;
-            micToggle = onChangeMicStatus;
-            leaveOpenvidu = leaveSession;
-          } else {
-            setStreams(streamList);
-          }
-        })
         .catch(err => setLiveAuthErr(err));
     }
 
@@ -81,6 +71,17 @@ export function useLiveConnection() {
       live(socket.current).send.leave(Number(auctionId));
     }; //unmount시 소켓 끊어줭
   }, [auctionId]);
+
+  useEffect(() => {
+    if (seller) {
+      setPub(publisher);
+      cameraToggle = onChangeCameraStatus;
+      micToggle = onChangeMicStatus;
+      leaveOpenvidu = leaveSession;
+    } else {
+      setStreams(streamList);
+    }
+  }, [seller, publisher, streamList]);
 
   return {
     userId,
