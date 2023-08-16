@@ -7,7 +7,7 @@ import colors from '../../design/colors';
 import { StreamData } from '../../hooks/useOvConnect';
 
 export function OrderStream({ auctionRoomId, userId, userType = 'order', streamList }: Props) {
-  const sellerStreamManager = streamList.find(stream => stream.userId !== userId)?.streamManager;
+  const sellerStreamManager = streamList?.find(stream => stream.userId !== userId)?.streamManager;
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export function OrderStream({ auctionRoomId, userId, userType = 'order', streamL
 
   return (
     <div css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem', border: '1px solid transparent' }}>
-      {sellerStreamManager ? (
+      {userType === 'order' ? (
         <div>
           <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
         </div>
@@ -36,7 +36,7 @@ export function OrderStream({ auctionRoomId, userId, userType = 'order', streamL
           }}
         >
           <div>
-            <Text content={'인증된 사용자가 아닙니다.'} type="h2" />
+            <Text content={'잘못된 접근입니다.'} type="h2" />
           </div>
         </div>
       )}
@@ -60,5 +60,5 @@ interface Props {
   auctionRoomId: number;
   userId: number;
   userType: 'order';
-  streamList: StreamData[];
+  streamList: StreamData[] | null;
 }

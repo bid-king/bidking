@@ -56,7 +56,7 @@ export function OrderLive() {
             </div>
           </div>
           <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {auctionRoomId && userId && streams && (
+            {auctionRoomId && (
               <OrderStream auctionRoomId={auctionRoomId} userId={userId} userType="order" streamList={streams} />
             )}
             <Spacing rem="0.5" />

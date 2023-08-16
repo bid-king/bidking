@@ -66,7 +66,7 @@ export function SellerStream({
           }}
         >
           <div css={{ color: colors.white }}>
-            <Text content={'인증된 사용자가 아닙니다.'} type="h2" />
+            <Text content={'화면을 송출할 수 없습니다'} type="h2" />
           </div>
         </div>
       )}
@@ -78,7 +78,7 @@ interface Props {
   auctionRoomId: number;
   userId: number;
   userType: 'seller';
-  publisher: Publisher;
+  publisher: Publisher | null | undefined;
   onChangeCameraStatus: (arg: boolean) => void;
   onChangeMicStatus: (arg: boolean) => void;
 }

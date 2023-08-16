@@ -18,6 +18,7 @@ export function SellerLive() {
     nickname,
     sellerNickname,
     title,
+    seller,
     liveAuthErr,
     error,
     pub,
@@ -41,7 +42,7 @@ export function SellerLive() {
           </div>
         </div>
         <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          {pub && (
+          {seller && (
             <SellerStream
               auctionRoomId={auctionRoomId}
               userId={userId}
