@@ -97,7 +97,7 @@ export function SellerDetail() {
           }}
         >
           <Text type="h1" content="경매 정보" />
-          {!isWithinTwentyMinutes && (
+          {!hasAuctionStarted && !isWithinTwentyMinutes && (
             <div
               css={{
                 display: 'flex',
