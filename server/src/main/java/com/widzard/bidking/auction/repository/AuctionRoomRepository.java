@@ -29,9 +29,4 @@ public interface AuctionRoomRepository extends JpaRepository<AuctionRoom, Long> 
         @Param("auctionId") Long auctionId,
         @Param("member") Member member
     );
-
-    @Query("select a from AuctionRoom a where a.startedAt <= :startedAt")
-    List<Optional<AuctionRoom>> findUpcomingAuctionRoomList(
-        @Param("startedAt")LocalDateTime startedAt
-    );
 }

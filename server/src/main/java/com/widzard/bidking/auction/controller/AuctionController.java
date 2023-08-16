@@ -268,7 +268,8 @@ public class AuctionController {
     public ResponseEntity<String> endBiddingRoom(
         @PathVariable("auctionId") Long auctionId
     ) {
-        AfterAuctionDto alarmDto = endAuctionRoomFacade.end(auctionId); // TODO 알람 처리
+        AfterAuctionDto alarmDto = endAuctionRoomFacade.end(auctionId);
+        alarmService.sendAuctionCloseToSellerAndOrderer(alarmDto);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 

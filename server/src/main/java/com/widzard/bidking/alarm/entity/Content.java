@@ -28,8 +28,9 @@ public enum Content {
      */
     AUCTION_REGISTERED("경매가 등록되었습니다.", AlarmType.AUCTION.toString(),
         MediaType.NOTIFICATION.toString()),
-    AUCTION_UPCOMING("경매가 시작될 예정입니다.", AlarmType.DELIVERY.toString(),
+    AUCTION_UPCOMING("경매가 시작될 예정입니다.", AlarmType.AUCTION.toString(),
         MediaType.NOTIFICATION.toString()),
+    AUCTION_CLOSE("경매가 종료되었습니다.", AlarmType.AUCTION.toString(), MediaType.NOTIFICATION.toString()),
     AUCTION_UPCOMING_BOOKMARK("관심 경매가 곧 시작됩니다.", AlarmType.AUCTION.toString(),
         MediaType.NOTIFICATION.toString()),
     AUCTION_UPDATED_BOOKMARK("관심 경매가 수정되었습니다.", AlarmType.AUCTION.toString(),

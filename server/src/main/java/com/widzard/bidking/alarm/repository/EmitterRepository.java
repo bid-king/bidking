@@ -27,9 +27,16 @@ public class EmitterRepository {
 
     // id로 시작하는 모든 SseEmitter 객체들을 가져오는 메서드
     public Map<String, SseEmitter> findAllStartById(String startId) {
-        return emitters.entrySet().stream()
-            .filter(entry -> entry.getKey().startsWith(startId))
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<String, SseEmitter> result = new ConcurrentHashMap<>();
+        for (Map.Entry<String, SseEmitter> entry : emitters.entrySet()) {
+            String id = entry.getKey();
+            SseEmitter emitter = entry.getValue();
+            if (id.startsWith(startId)) {
+                result.put(id, emitter);
+            }
+        }
+        return result;
+
     }
 
     public void deleteAllStartWithId(String id) {
