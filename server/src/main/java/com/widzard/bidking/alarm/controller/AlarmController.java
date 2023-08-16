@@ -34,11 +34,9 @@ public class AlarmController {
     public ResponseEntity<CompletableFuture> subscribe(
         @PathVariable("memberId") Long memberId,
         @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
-
+        // X-Accel-Buffering 헤더 추가
         HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Accel-Buffering", "no");  // X-Accel-Buffering 헤더 추가
-
-        log.info("연결 요청 옴, Last-Event-id={}, memberId={}", lastEventId, memberId);
+        headers.set("X-Accel-Buffering", "no");
         return ResponseEntity.ok()
             .headers(headers)
             .contentType(MediaType.TEXT_EVENT_STREAM)
