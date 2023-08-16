@@ -6,7 +6,7 @@ import com.widzard.bidking.global.exception.ErrorCode;
 public class AuctionRoomImageNotFound extends CustomBaseException {
 
     public AuctionRoomImageNotFound() {
-        super(ErrorCode.ALREADY_STARTED_AUCTIONROOM);
+        super(ErrorCode.AUCTION_ROOM_IMAGE_NOT_FOUND);
     }
 
     public AuctionRoomImageNotFound(ErrorCode errorCode) {

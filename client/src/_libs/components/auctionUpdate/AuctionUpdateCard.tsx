@@ -8,6 +8,7 @@ import { TextArea } from '../common/TextArea';
 import { useAuctionUpdateCard } from '../../hooks/useAuctionUpdateCard';
 import { Select, SelectOption } from '../common/SelectOption';
 import { Image } from '../common/Image';
+import { InputFile } from '../common/InputFile';
 
 interface Props {
   ordering: number;
@@ -91,7 +92,7 @@ export function AuctionUpdateCard({ ordering }: Props) {
                 target.src = '/image/nonImageDark.png';
               }}
             />
-            <input type="file" accept="image/*" onChange={handleItemImg} />
+            <InputFile label="파일 선택" accept="image/*" color="white" onChange={handleItemImg} />
           </div>
         </div>
         <Spacing rem="1" />
