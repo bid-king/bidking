@@ -140,21 +140,31 @@ export function MyPageBox() {
       <div className="address">
         <Label theme="light" value="주소" htmlFor="street-signup-input" />
         <Spacing rem="1" />
-        <Input id="street-signup-input" value={street} onChange={handleStreetChange} placeholder="" />
+        <Input
+          id="street-signup-input"
+          value={street}
+          onChange={handleStreetChange}
+          placeholder="서울특별시 종로구 종로3가"
+        />
       </div>
       <Spacing rem="2" />
 
       <div className="address-details">
         <Label theme="light" value="상세 주소" htmlFor="details-signup-input" />
         <Spacing rem="1" />
-        <Input id="details-signup-input" value={details} onChange={handleDetailsChange} placeholder="" />
+        <Input
+          id="details-signup-input"
+          value={details}
+          onChange={handleDetailsChange}
+          placeholder="123-45 홍길동빌딩 7층"
+        />
       </div>
       <Spacing rem="2" />
 
       <div className="zip-code">
         <Label theme="light" value="우편번호" htmlFor="zip-code-signup-input" />
         <Spacing rem="1" />
-        <Input id="zip-code-signup-input" value={zipCode} onChange={handleZipCodeChange} placeholder="" />
+        <Input id="zip-code-signup-input" value={zipCode} onChange={handleZipCodeChange} placeholder="12345" />
       </div>
       <Spacing rem="2" />
 

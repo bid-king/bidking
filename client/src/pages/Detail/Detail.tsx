@@ -121,7 +121,7 @@ export function Detail() {
         )}
 
         {detail.auctionRoomLiveState === 'BEFORE_LIVE' && (
-          <ConfirmButton btnType="disabled" label={auctionRoomLiveState.beforeLive} />
+          <ConfirmButton btnType="disabled" label="판매자가 아직 방송을 시작하지 않았어요" />
         )}
 
         {detail.auctionRoomLiveState === 'ON_LIVE' && (
