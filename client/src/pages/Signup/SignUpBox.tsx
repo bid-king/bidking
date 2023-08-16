@@ -8,6 +8,7 @@ import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import colors from '../../_libs/design/colors';
 import { useSignUp } from '../../_libs/hooks/useSignUp';
 import { Image } from '../../_libs/components/common/Image';
+import { css, keyframes } from '@emotion/react';
 
 export function SignUpBox() {
   const {
@@ -55,6 +56,21 @@ export function SignUpBox() {
     handlePrevStep,
     phoneNumber,
   } = useSignUp();
+
+  const rotateAnimation = keyframes`
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+`;
+
+  const rotatingStyle = css`
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    animation: ${rotateAnimation} 5s infinite linear;
+  `;
 
   return (
     <>
@@ -380,9 +396,11 @@ export function SignUpBox() {
           }}
         >
           <Link to={'/login'}>
-            <Image src="/image/logo/logo_light.png" alt="" />
+            <div css={rotatingStyle}>
+              <Image src="/image/logo/crown.png" alt="" />
+            </div>
             <Spacing rem="1" />
-            <Text type="h2" content="가입을 축하합니다! 잠시후 로그인 화면으로 이동합니다" />
+            <Text type="h1" content="가입을 축하합니다! 잠시후 로그인 화면으로 이동합니다" />
           </Link>
         </div>
       )}
