@@ -41,7 +41,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
           <form
             onSubmit={e => {
               e.preventDefault();
-              live(socket.current).send.notice(auctionRoomId, noticeInput);
+              auctionRoomId && live(socket.current).send.notice(auctionRoomId, noticeInput);
               setNoticeInput('');
             }}
             css={{ display: 'flex' }}
@@ -60,7 +60,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
               color="confirm"
               label="공지"
               onClick={() => {
-                live(socket.current).send.notice(auctionRoomId, noticeInput);
+                auctionRoomId && live(socket.current).send.notice(auctionRoomId, noticeInput);
                 setNoticeInput('');
               }}
             />
@@ -90,7 +90,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
 }
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-  auctionRoomId: number;
+  auctionRoomId: number | null;
   socket: MutableRefObject<Socket | null>;
   userType: 'order' | 'seller';
 }

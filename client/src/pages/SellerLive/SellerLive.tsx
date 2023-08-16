@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { useState } from 'react';
 
 import { AuctionNotice } from '../../_libs/components/auctionSystem/chatRoom/AuctionNotice';
 import { AuctionSystem } from '../../_libs/components/auctionSystem/AuctionSystem';
@@ -10,8 +10,22 @@ import colors from '../../_libs/design/colors';
 import { useLiveConnection } from '../../_libs/hooks/useLiveConnection';
 
 export function SellerLive() {
-  const { SOCKET, userId, auctionRoomId, auctionRoomType, nickname, sellerNickname, title, liveAuthErr, error } =
-    useLiveConnection();
+  const {
+    SOCKET,
+    userId,
+    auctionRoomId,
+    auctionRoomType,
+    nickname,
+    sellerNickname,
+    title,
+    liveAuthErr,
+    error,
+    publisher,
+    cameraToggle,
+    micToggle,
+    leaveOpenvidu,
+  } = useLiveConnection();
+
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
       <div css={{ width: '100%', padding: '1rem 0.25rem 0.5rem 0.5rem' }}>
@@ -27,7 +41,17 @@ export function SellerLive() {
           </div>
         </div>
         <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          <SellerStream auctionRoomId={auctionRoomId} userId={userId} userType={'seller'} />
+          {auctionRoomId && userId && publisher && (
+            <SellerStream
+              auctionRoomId={auctionRoomId}
+              userId={userId}
+              userType={'seller'}
+              publisher={publisher}
+              onChangeCameraStatus={cameraToggle}
+              onChangeMicStatus={micToggle}
+              leaveOpenvidu={leaveOpenvidu}
+            />
+          )}
           <Spacing rem="0.5" />
           <AuctionNotice auctionRoomId={auctionRoomId} userType="seller" socket={SOCKET} />
         </div>

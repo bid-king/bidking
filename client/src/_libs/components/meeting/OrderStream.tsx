@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import React, { useRef, useEffect } from 'react';
 import { StreamManager } from 'openvidu-browser';
-import { useOpenviduBuyer } from '../../hooks/useOpenviduBuyer';
+
 import { Text } from '../common/Text';
 import colors from '../../design/colors';
+import { StreamData } from '../../hooks/useOvConnect';
 
-export function OrderStream({ auctionRoomId, userId, userType = 'order' }: Props) {
-  const { streamList } = useOpenviduBuyer(userId, auctionRoomId);
+export function OrderStream({ auctionRoomId, userId, userType = 'order', streamList }: Props) {
   const sellerStreamManager = streamList.find(stream => stream.userId !== userId)?.streamManager;
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -19,7 +19,9 @@ export function OrderStream({ auctionRoomId, userId, userType = 'order' }: Props
   return (
     <div css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem', border: '1px solid transparent' }}>
       {sellerStreamManager ? (
-        <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
+        <div>
+          <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
+        </div>
       ) : (
         <div
           css={{
@@ -58,4 +60,5 @@ interface Props {
   auctionRoomId: number;
   userId: number;
   userType: 'order';
+  streamList: StreamData[];
 }
