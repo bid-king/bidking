@@ -130,7 +130,7 @@ public class AuctionServiceImpl implements AuctionService {
 
         // 아이템 검증
         List<ItemCreateRequest> itemCreateRequestList = request.getItemList();
-        if (itemCreateRequestList == null || itemCreateRequestList.isEmpty()) {
+        if (itemCreateRequestList == null || itemCreateRequestList.isEmpty() || itemImgs == null) {
             throw new EmptyItemListException();
         }
 
@@ -139,8 +139,8 @@ public class AuctionServiceImpl implements AuctionService {
             throw new InvalidAuctionRoomRequestException();
         }
 
-        //썸네일 검사
-        if(auctionRoomImg == null){
+        //경매방 대표 이미지  검사
+        if (auctionRoomImg == null || auctionRoomImg.isEmpty()) {
             throw new AuctionRoomImageNotFound();
         }
 

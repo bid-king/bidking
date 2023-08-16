@@ -65,7 +65,7 @@ public enum ErrorCode {
     /*
      * Item
      */
-    Empty_Item_List(HttpStatus.NOT_FOUND, "EMPTY_ITEM_LIST", "아이템이 없습니다."),
+    Empty_Item_List(HttpStatus.NOT_FOUND, "EMPTY_ITEM_LIST", "아이템 정보를 확인해주세요."),
     ITEM_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_CATEGORY_NOT_FOUND", "카테고리가 없습니다."),
     ITEM_BID_NOT_STARTED(HttpStatus.BAD_REQUEST, "ITEM_BID_IS_REQUIRED_TO_START",
         "아직 경매가 시작되지 않은 아이템이므로 입찰시도가 불가능합니다."),
