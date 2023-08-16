@@ -211,7 +211,7 @@ export function SignUpBox() {
             {step === 'phone-number' && (
               <>
                 <div className="phone-nubmer">
-                  <Text type="bold" content="본인인증을 진행할게요" />
+                  <Text type="bold" content="휴대폰 번호를 입력해주세요" />
                   <Spacing rem="1" />
                   <div
                     css={{
@@ -226,7 +226,7 @@ export function SignUpBox() {
                       <Input
                         id="phone-nubmer-signup-input"
                         onChange={handlePhoneChange}
-                        placeholder=""
+                        placeholder="01012345678"
                         ref={phoneNumberRef}
                         value={phoneNumber}
                       />
@@ -242,6 +242,8 @@ export function SignUpBox() {
                   </div>
                   {isVerificationVisible && isPhoneValid && (
                     <>
+                      <Spacing rem="1" />
+                      <Text type="bold" content="문자로 전송된 본인인증 번호를 입력해 주세요" />
                       <Spacing rem="1" />
                       <div
                         css={{

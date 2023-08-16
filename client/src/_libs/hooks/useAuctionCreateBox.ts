@@ -48,6 +48,12 @@ export function useAuctionCreateBox() {
   const addItem = () => {
     setItemList(prevItem => [prevItem.length, ...prevItem]);
   };
+  const removeItem = () => {
+    setItemList(prevItem => {
+      if (prevItem.length <= 1) return prevItem; // 최소 길이(예: 1개)를 유지하기 위함
+      return prevItem.slice(1);
+    });
+  };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -133,5 +139,6 @@ export function useAuctionCreateBox() {
     getOrderedItemImgs,
     errMessage,
     previewImageURL,
+    removeItem,
   };
 }
