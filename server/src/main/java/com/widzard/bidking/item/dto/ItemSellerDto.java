@@ -1,5 +1,6 @@
 package com.widzard.bidking.item.dto;
 
+import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.order.entity.OrderItem;
 import com.widzard.bidking.order.entity.OrderState;
 import java.time.LocalDateTime;
@@ -47,7 +48,7 @@ public class ItemSellerDto {
 
 
     public static ItemSellerDto create(OrderItem orderItem) {
-        return ItemSellerDto.builder()
+        ItemSellerDto result = ItemSellerDto.builder()
             .itemId(orderItem.getId())
             .itemName(orderItem.getItem().getName())
             .category(orderItem.getItem().getItemCategory().getName())
@@ -56,10 +57,19 @@ public class ItemSellerDto {
             .itemDescription(orderItem.getItem().getDescription())
             .itemOrdering(orderItem.getItem().getOrdering())
             .orderState(orderItem.getOrder().getOrderState())
-            .successTime(orderItem.getCreatedAt())
-            .successMemberId(orderItem.getOrder().getOrderer().getId())
-            .successMemberNickname(orderItem.getOrder().getOrderer().getNickname())
+            .successTime(orderItem.getCreatedAt()) // 주문 생성 시간 (낙찰/유찰 무관)
             .build();
+
+        if (orderItem.getOrder().getOrderer() != null) {
+            result.success(orderItem.getOrder().getOrderer());
+        }
+        return result;
+
+    }
+
+    private void success(Member orderer) {
+        this.successMemberId = orderer.getId();
+        this.successMemberNickname = orderer.getNickname();
     }
 
 }
