@@ -82,6 +82,14 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   size="small"
                   value={input}
                   onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'enter') {
+                      setIsLoading(true);
+                      if (isLoading && input.length > 0) live(socket.current).send.chat(roomId, nickname, input);
+                      setIsLoading(false);
+                      setInput('');
+                    }
+                  }}
                 />
                 <Spacing rem="0.5" dir="h" />
                 <RoundButton
@@ -90,8 +98,10 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   color="confirm"
                   size="small"
                   onClick={e => {
-                    live(socket.current).send.chat(roomId, nickname, input);
-                    setInput('');
+                    if (input.length > 0) {
+                      live(socket.current).send.chat(roomId, nickname, input);
+                      setInput('');
+                    }
                   }}
                 />
               </div>
