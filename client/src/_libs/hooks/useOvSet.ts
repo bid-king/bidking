@@ -1,5 +1,5 @@
 import { OpenVidu, Publisher, Subscriber, StreamManager, Session } from 'openvidu-browser';
-import { getToken } from '../../api/openviduApi';
+import { getToken } from '../../api/openvidu';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type StreamData = {
@@ -7,7 +7,7 @@ type StreamData = {
   userId: number;
 };
 
-export function useOpenvidu(userId: number, meetingRoomId: number, userType: 'buyer' | 'seller') {
+export function useOvSet(userId: number, meetingRoomId: number, userType: 'buyer' | 'seller') {
   const [subscribers, setSubscribers] = useState<StreamData[]>([]);
   const [publisher, setPublisher] = useState<Publisher | null>();
   const [session, setSession] = useState<Session | null>();

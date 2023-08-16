@@ -18,19 +18,19 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
     }); //API 요청 성공시, 이 데이터가 소켓에서옴
 
     socket.current?.on('notice', ({ msg }) => {
-      setNotice([msg, ...notice].slice(4));
+      setNotice([msg, ...notice]);
     }); //판매자 공지 받음
     socket.current?.on('successBid', ({ itemId, userId, nickname, price, time }) => {
       //TODO: 상품 뭔지 알려줘야함
       const result = itemList?.find(item => item.itemId === itemId);
       const msg = `<SYSTEM> ${result?.name} 상품이 ${nickname}님께 ${price}원에 낙찰되었습니다.`;
-      setNotice([msg, ...notice].slice(4));
+      setNotice([msg, ...notice]);
     }); //낙찰
     socket.current?.on('failBid', ({ itemId }) => {
       //TODO: 상품 뭔지 알려줘야함
       const result = itemList?.find(item => item.itemId === itemId);
       const msg = `<SYSTEM> ${result?.name} 상품이 유찰되었습니다.`;
-      setNotice([msg, ...notice].slice(4));
+      setNotice([msg, ...notice]);
     }); //유찰
   }, [socket.current, notice]);
   return (
@@ -41,7 +41,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
           <form
             onSubmit={e => {
               e.preventDefault();
-              live(socket.current).send.notice(auctionRoomId, noticeInput);
+              auctionRoomId && live(socket.current).send.notice(auctionRoomId, noticeInput);
               setNoticeInput('');
             }}
             css={{ display: 'flex' }}
@@ -60,7 +60,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
               color="confirm"
               label="공지"
               onClick={() => {
-                live(socket.current).send.notice(auctionRoomId, noticeInput);
+                auctionRoomId && live(socket.current).send.notice(auctionRoomId, noticeInput);
                 setNoticeInput('');
               }}
             />
@@ -79,10 +79,10 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
       >
         <Spacing rem="0.5" />
         {notice.map((item, idx) => (
-          <>
-            <Text key="idx" content={item} type="bold" />
+          <div key={idx}>
+            <Text content={item} type="bold" />
             <Spacing rem="0.25" />
-          </>
+          </div>
         ))}
       </div>
     </>

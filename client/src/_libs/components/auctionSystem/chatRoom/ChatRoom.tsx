@@ -6,17 +6,22 @@ import colors from '../../../design/colors';
 import { Input } from '../../common/Input';
 import { RoundButton } from '../../common/RoundButton';
 import { Spacing } from '../../common/Spacing';
+import { Text } from '../../common/Text';
 import { ChatMessage } from './ChatMessage';
 
 export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order', socket }: Props) {
   const [chats, setChats] = useState<Chatting[]>([]);
   const [input, setInput] = useState<string>('');
+  const [count, setCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     socket.current?.on('chat', data => {
       setChats([...chats, data]);
+    });
+    socket.current?.on('newUser', ({ newUser }) => {
+      setChats([...chats, { nickname: newUser, msg: '님이 입장했어요.' }]);
     });
   }, [socket.current, chats]);
 
@@ -29,7 +34,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
 
   useEffect(() => {
     return () => {
-      live(socket.current).send.leave(roomId);
+      // live(socket.current).send.leave(roomId);
     };
   }, []);
   return (
@@ -82,6 +87,14 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   size="small"
                   value={input}
                   onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'enter') {
+                      setIsLoading(true);
+                      if (isLoading && input.length > 0) live(socket.current).send.chat(roomId, nickname, input);
+                      setIsLoading(false);
+                      setInput('');
+                    }
+                  }}
                 />
                 <Spacing rem="0.5" dir="h" />
                 <RoundButton
@@ -90,8 +103,10 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   color="confirm"
                   size="small"
                   onClick={e => {
-                    live(socket.current).send.chat(roomId, nickname, input);
-                    setInput('');
+                    if (input.length > 0) {
+                      live(socket.current).send.chat(roomId, nickname, input);
+                      setInput('');
+                    }
                   }}
                 />
               </div>

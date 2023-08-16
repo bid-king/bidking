@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import React, { useRef, useEffect } from 'react';
 import { StreamManager } from 'openvidu-browser';
-import { useOpenviduBuyer } from '../../hooks/useOpenviduBuyer';
+import { useOrderStream } from '../../hooks/useOrderStream';
 import { Text } from '../common/Text';
 import colors from '../../design/colors';
 
-export function OrderStream({ auctionRoomId, userId, userType = 'order' }: Props) {
-  const { streamList } = useOpenviduBuyer(userId, auctionRoomId);
+export function OrderStream({ auctionRoomId, userId, userType }: Props) {
+  const { streamList } = useOrderStream(userId, auctionRoomId);
   const sellerStreamManager = streamList.find(stream => stream.userId !== userId)?.streamManager;
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -34,7 +34,7 @@ export function OrderStream({ auctionRoomId, userId, userType = 'order' }: Props
           }}
         >
           <div>
-            <Text content={'인증된 사용자가 아닙니다.'} type="h2" />
+            <Text content={'잘못된 접근입니다.'} type="h2" />
           </div>
         </div>
       )}
@@ -42,20 +42,8 @@ export function OrderStream({ auctionRoomId, userId, userType = 'order' }: Props
   );
 }
 
-// function Video({ streamManager }: { streamManager: StreamManager }) {
-//   const videoRef = useRef<HTMLVideoElement>(null);
-
-//   useEffect(() => {
-//     if (videoRef.current && streamManager) {
-//       streamManager.addVideoElement(videoRef.current);
-//     }
-//   }, [streamManager]);
-
-//   return <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />;
-// }
-
 interface Props {
   auctionRoomId: number;
   userId: number;
-  userType: 'order';
+  userType: 'order' | 'seller';
 }

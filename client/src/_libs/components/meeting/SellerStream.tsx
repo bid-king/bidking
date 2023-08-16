@@ -1,20 +1,23 @@
 /** @jsxImportSource @emotion/react */
+import { Publisher } from 'openvidu-browser';
 import React, { useEffect } from 'react';
 import colors from '../../design/colors';
-import { useOpenviduSeller } from '../../hooks/useOpenviduSeller';
+import { useSellerStream } from '../../hooks/useSellerStream';
 import { useStream } from '../../hooks/useStream';
 import { RoundButton } from '../common/RoundButton';
 import { Text } from '../common/Text';
 
-export function SellerStream({ auctionRoomId, userId, userType = 'seller' }: Props) {
-  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useOpenviduSeller(userId, auctionRoomId);
+export function SellerStream({ auctionRoomId, userId }: Props) {
+  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useSellerStream(userId, auctionRoomId);
   const { speaking, micStatus, videoStatus, videoRef } = useStream(publisher || undefined);
 
   useEffect(() => {
+    console.log(videoRef.current);
+    console.log(publisher);
     if (publisher && videoRef?.current) {
       publisher.addVideoElement(videoRef.current);
     }
-  }, [publisher]);
+  }, [publisher, videoRef.current]);
 
   const handleMicToggle = () => {
     if (publisher) {
@@ -33,9 +36,16 @@ export function SellerStream({ auctionRoomId, userId, userType = 'seller' }: Pro
       {publisher ? (
         <div>
           <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
-          <RoundButton onClick={handleMicToggle} label={'마이크 켜기'} />
-          <RoundButton onClick={handleCameraToggle} label={'카메라 켜기'} />
-          <RoundButton onClick={leaveSession} label={'세션 나가기'} color="delete" />
+          <RoundButton
+            onClick={handleMicToggle}
+            color={publisher.stream.audioActive ? 'white' : 'confirm'}
+            label={publisher.stream.audioActive ? '마이크 끄기' : '마이크 켜기'}
+          />
+          <RoundButton
+            onClick={handleCameraToggle}
+            color={publisher.stream.videoActive ? 'white' : 'confirm'}
+            label={publisher.stream.videoActive ? '카메라 끄기' : '카메라 켜기'}
+          />
         </div>
       ) : (
         <div
@@ -51,7 +61,7 @@ export function SellerStream({ auctionRoomId, userId, userType = 'seller' }: Pro
           }}
         >
           <div css={{ color: colors.white }}>
-            <Text content={'인증된 사용자가 아닙니다.'} type="h2" />
+            <Text content={'화면을 송출할 수 없습니다'} type="h2" />
           </div>
         </div>
       )}
@@ -62,5 +72,4 @@ export function SellerStream({ auctionRoomId, userId, userType = 'seller' }: Pro
 interface Props {
   auctionRoomId: number;
   userId: number;
-  userType: 'seller';
 }

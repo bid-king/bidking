@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { Dispatch, MutableRefObject, SetStateAction, useEffect, useState } from 'react';
 import { HTMLAttributes } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
 import { auctionEnd, descStart, live } from '../../../../api/live';
 import { useAppSelector } from '../../../../store/hooks';
@@ -10,7 +11,7 @@ import { ConfirmButton } from '../../common/ConfirmButton';
 
 export function BidCtrl({ socket, liveStatus, auctionRoomId, itemId, setCurrId, setLiveStatus }: Props) {
   const { accessToken } = useAppSelector(state => state.user);
-
+  const navigate = useNavigate();
   if (liveStatus === 'beforeDesc') {
     return (
       <ConfirmButton
@@ -43,6 +44,7 @@ export function BidCtrl({ socket, liveStatus, auctionRoomId, itemId, setCurrId, 
         onClick={async () => {
           await auctionEnd(auctionRoomId, accessToken);
           live(socket.current).send.leave(auctionRoomId);
+          navigate('/seller');
         }}
       />
     );

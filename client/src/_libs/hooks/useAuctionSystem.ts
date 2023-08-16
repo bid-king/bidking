@@ -6,7 +6,7 @@ import { DUMMY } from '../components/auctionSystem/auctionItemList/AuctionItemSt
 import { bidPriceParse } from '../util/bidPriceParse';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
+export function useAuctionSystem(socket: MutableRefObject<Socket | null>, userType: 'order' | 'seller') {
   const [order, setOrder] = useState<number>(2); //순서, 2부터 시작함
   const [currPrice, setCurrPrice] = useState<number>(0); //현재 최고 입찰가 (입찰성공시 업데이트)
   const [askingPrice, setAskingPrice] = useState<number>(0); //호가
@@ -104,9 +104,9 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>) {
       setCurrTime(time);
     }); //시간 업데이트
 
-    socket.current?.on('roomClosed', roomId => {
-      socket.current?.emit('roomClosed', roomId);
-      navigate('/');
+    socket.current?.on('roomClosed', (roomId: number) => {
+      socket.current?.emit('roomClosed', { roomId });
+      userType === 'seller' ? navigate('/seller') : navigate('/');
     });
   }, [socket.current]);
 
