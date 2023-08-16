@@ -10,11 +10,11 @@ export function askingPriceParse(price: number): string {
 }
 
 /**숫자만 입력했는지 검증합니다. */
-export function validateBidPrice(price: string, askingPrice: number): string {
+export function validateBidPrice(price: string): boolean {
   const check = /^\d+$/;
-  if (!check.test(price.trim())) return '숫자만 입력할 수 있어요.';
-  if (price.length > 12) return '너무 큰 입찰가는 입력할 수 없어요.';
-  return 'OK';
+  if (!check.test(price.trim())) return false;
+  if (price.length > 12) return false;
+  return true;
 }
 
 /**입찰 시도가 올바른지 검증합니다. 초기화할 상태의 setter, 현재 가격, 최소 호가, 입찰 성공 후 다음에 할 동작을 입력받습니다.*/

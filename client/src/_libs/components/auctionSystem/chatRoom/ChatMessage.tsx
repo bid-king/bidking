@@ -13,9 +13,10 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export function ChatMessage({ type = 'normal', nickname, msg }: Props) {
   return (
-    <div css={{ ...COLOR_VARIANT[type], paddingBottom: '0.125rem' }}>
+    <div css={{ ...COLOR_VARIANT[type], lineHeight: '1.5' }}>
       <Text type="bold" content={nickname} />
-      <Text content={' ' + msg} />
+      <span css={{ marginRight: '1rem' }} />
+      <Text content={msg} />
     </div>
   );
 }

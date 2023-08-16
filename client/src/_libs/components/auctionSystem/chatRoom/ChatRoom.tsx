@@ -50,7 +50,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
         flexDirection: 'column',
       }}
     >
-      <div css={{ overflowY: 'auto', height: '35vh' }}>
+      <div css={{ overflowY: 'auto', height: '55vh' }}>
         <div css={{ paddingBottom: '1rem' }}>
           {chats.map((chat, idx) => (
             <ChatMessage key={idx} nickname={chat.nickname} msg={chat.msg} />
@@ -71,14 +71,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
       >
         {userType === 'order' && (
           <div css={{ width: '100%' }}>
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                setIsLoading(true);
-                if (isLoading && input.length > 0) live(socket.current).send.chat(roomId, nickname, input);
-                setIsLoading(false);
-              }}
-            >
+            <form>
               <div css={{ display: 'flex', width: '100%', alignItems: 'center' }}>
                 <Input
                   id="chat"
@@ -88,18 +81,14 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => {
-                    if (e.key === 'enter') {
-                      setIsLoading(true);
-                      if (isLoading && input.length > 0) live(socket.current).send.chat(roomId, nickname, input);
-                      setIsLoading(false);
-                      setInput('');
-                    }
+                    e.key === 'enter' && input.length > 0 && live(socket.current).send.chat(roomId, nickname, input);
+                    setInput('');
                   }}
                 />
                 <Spacing rem="0.5" dir="h" />
                 <RoundButton
                   label="보내기"
-                  type="submit"
+                  type="button"
                   color="confirm"
                   size="small"
                   onClick={e => {
