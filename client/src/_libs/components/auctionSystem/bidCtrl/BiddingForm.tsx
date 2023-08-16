@@ -37,7 +37,7 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           ...THEME_VARIANT[theme],
           height: '0.75rem',
           borderRadius: '1rem',
-          padding: '0 0.5rem 0 0.5rem',
+          padding: '0 0.75rem 0 0.75rem',
           fontSize: '0.66rem',
         }}
       >
