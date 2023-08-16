@@ -85,7 +85,7 @@ public class EndAuctionRoomFacade {
                 );
                 log.info("유찰 order = {}", order);
             } else {
-                orderState = OrderState.COMPLETED;
+                orderState = OrderState.PAYMENT_WAITING;
                 log.info("##########끝난 itemId orderState: {}:{}", itemId, orderState);
 
                 // 낙찰 주문 생성
