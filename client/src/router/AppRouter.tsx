@@ -18,6 +18,8 @@ import { Layout } from '../pages/Layout';
 import { SellerLayout } from '../pages/SellerLayout';
 import { useAppSelector } from '../store/hooks';
 import { ProtectedRoute } from './ProtectedRoute';
+import { SellerExit } from '../pages/SellerLive/SellerExit';
+import { OrderExit } from '../pages/orderLive/OrderExit';
 
 export function AppRouter() {
   return (
@@ -40,6 +42,7 @@ export function AppRouter() {
         <Route path="auction" element={<ProtectedRoute />}>
           <Route path=":auctionId" element={<OrderLive />} />
         </Route>
+        <Route path="exit" element={<OrderExit />} />
       </Route>
       {/* 판매자 라우터 페이지 */}
       <Route element={<SellerLayout />}>
@@ -48,6 +51,7 @@ export function AppRouter() {
           <Route path="update-auction/:auctionId" element={<SellerUpdateAuction />} />
           <Route path="detail/:auctionId" element={<SellerDetail />} />
           <Route path="detail/complete/:auctionId" element={<SellerDetailOffLive />} />
+          <Route path="seller/exit" element={<SellerExit />} />
           <Route index element={<Seller />} />
         </Route>
       </Route>
