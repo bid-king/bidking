@@ -104,8 +104,8 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>, userTy
       setCurrTime(time);
     }); //시간 업데이트
 
-    socket.current?.on('roomClosed', roomId => {
-      socket.current?.emit('roomClosed', roomId);
+    socket.current?.on('roomClosed', (roomId: number) => {
+      socket.current?.emit('roomClosed', { roomId });
       userType === 'seller' ? navigate('/seller') : navigate('/');
     });
   }, [socket.current]);
