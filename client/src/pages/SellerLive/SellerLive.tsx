@@ -20,7 +20,7 @@ export function SellerLive() {
     title,
     liveAuthErr,
     error,
-    publisher,
+    pub,
     cameraToggle,
     micToggle,
     leaveOpenvidu,
@@ -41,12 +41,12 @@ export function SellerLive() {
           </div>
         </div>
         <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          {auctionRoomId && userId && publisher && (
+          {auctionRoomId && userId && pub && (
             <SellerStream
               auctionRoomId={auctionRoomId}
               userId={userId}
               userType={'seller'}
-              publisher={publisher}
+              publisher={pub}
               onChangeCameraStatus={cameraToggle}
               onChangeMicStatus={micToggle}
               leaveOpenvidu={leaveOpenvidu}

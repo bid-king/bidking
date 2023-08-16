@@ -9,7 +9,7 @@ import { StreamData, useSellerOV, useOrderOV } from './useOvConnect';
 
 export function useLiveConnection() {
   //API CALL DATA
-  const [auctionRoomId, setAuctionRoomId] = useState<number | null>(null);
+  const [auctionRoomId, setAuctionRoomId] = useState<number>(0);
   const [nickname, setNickname] = useState<string>('');
   const [sellerNickname, setSellerNickname] = useState<string>('');
   const [title, setTitle] = useState<string>('');
@@ -19,7 +19,7 @@ export function useLiveConnection() {
   //login User Data
   const { accessToken } = useAppSelector(state => state.user);
   const { auctionId } = useParams<string>();
-  const [userId, setUserId] = useState<number | null>(null);
+  const [userId, setUserId] = useState<number>(0);
   //socket
   const socket = useRef<Socket | null>(null);
   const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
@@ -42,7 +42,7 @@ export function useLiveConnection() {
     getRoomInfo();
 
     async function getRoomInfo() {
-      const uid = (await store.getState().user.id) || null;
+      const uid = (await store.getState().user.id) || 0;
       enter(Number(auctionId), accessToken)
         .then(data => {
           setUserId(uid);
@@ -93,10 +93,10 @@ export function useLiveConnection() {
     seller,
     SOCKET: socket,
     error: socketConnectionErr,
-    publisher,
+    pub,
     cameraToggle,
     micToggle,
     leaveOpenvidu,
-    streamList,
+    streams,
   };
 }

@@ -21,7 +21,7 @@ export function OrderLive() {
     seller,
     SOCKET,
     error,
-    streamList,
+    streams,
   } = useLiveConnection();
 
   if (seller)
@@ -56,8 +56,8 @@ export function OrderLive() {
             </div>
           </div>
           <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            {auctionRoomId && userId && streamList && (
-              <OrderStream auctionRoomId={auctionRoomId} userId={userId} userType="order" streamList={streamList} />
+            {auctionRoomId && userId && streams && (
+              <OrderStream auctionRoomId={auctionRoomId} userId={userId} userType="order" streamList={streams} />
             )}
             <Spacing rem="0.5" />
             <AuctionNotice auctionRoomId={auctionRoomId} userType="order" socket={SOCKET} />
