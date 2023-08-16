@@ -181,10 +181,7 @@ public class AuctionRoom extends BaseEntity {
     }
 
     public void quit() {
-        LocalDateTime now = LocalDateTime.now();
-        if (this.startedAt.isBefore(now)) {
-            changeLiveState(AuctionRoomLiveState.OFF_LIVE);
-        }
+        changeLiveState(AuctionRoomLiveState.OFF_LIVE);
     }
 }
 

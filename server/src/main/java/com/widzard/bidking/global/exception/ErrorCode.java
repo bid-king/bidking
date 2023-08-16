@@ -30,7 +30,7 @@ public enum ErrorCode {
      */
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "존재하지 않는 회원입니다."),
     AUCTION_START_TIME_ERROR(HttpStatus.BAD_REQUEST, "AUCTION_START_TIME_ERROR",
-        "경매방 시작 시간을 올바르게 입력하세요."),
+        "경매방 시작 시간은 현재 시간 이후로 설정 가능합니다."),
     INVALID_AUCTION_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "INVALID_AUCTION_REQUEST_ERROR",
         "올바르지 않은 입력값입니다."),
     MEMBER_DUPLICATED(HttpStatus.BAD_REQUEST, "AlREADY_JOINED_MEMBER", "이미 존재하는 회원입니다."),
@@ -65,7 +65,7 @@ public enum ErrorCode {
     /*
      * Item
      */
-    Empty_Item_List(HttpStatus.NOT_FOUND, "EMPTY_ITEM_LIST", "아이템 정보를 확인해주세요."),
+    Empty_Item_List(HttpStatus.NOT_FOUND, "EMPTY_ITEM_LIST", "아이템 정보를 모두 입력해주세요."),
     ITEM_CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "ITEM_CATEGORY_NOT_FOUND", "카테고리가 없습니다."),
     ITEM_BID_NOT_STARTED(HttpStatus.BAD_REQUEST, "ITEM_BID_IS_REQUIRED_TO_START",
         "아직 경매가 시작되지 않은 아이템이므로 입찰시도가 불가능합니다."),
