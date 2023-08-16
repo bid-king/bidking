@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, ChangeEvent, FormEvent, KeyboardEvent, FocusEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import member from '../../api/member';
 
 export function useSignUp() {
@@ -37,6 +38,8 @@ export function useSignUp() {
   const phoneNumberRef = useRef<HTMLInputElement | null>(null);
   const addressRef = useRef<HTMLInputElement | null>(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (step === 'nickname' && nicknameRef.current) {
       nicknameRef.current.focus();
@@ -71,6 +74,9 @@ export function useSignUp() {
         .signup(userId, password, nickname, phoneNumber, { street, details, zipCode })
         .then(res => {
           setSuccess(true);
+          setTimeout(() => {
+            navigate('/login');
+          }, 2000); //
         })
         .catch(err => {
           setError(true);
