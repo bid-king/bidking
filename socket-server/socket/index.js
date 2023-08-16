@@ -1,11 +1,9 @@
 const SocketIO = require('socket.io');
-const cookieParser = require('cookie-parser');
-const cookie = require('cookie-signature');
 const { startCountdownTimer } = require('../api/newTimer');
 const { getRedis } = require('../api/redis');
 const { http } = require('../api/http');
 
-module.exports = (server, app, sessionMiddleware) => {
+module.exports = (server, app) => {
   const io = SocketIO(server, {
     path: '/socket.io',
     cors: {

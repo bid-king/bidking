@@ -34,12 +34,11 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation group: 'net.nurigo', name: 'javaSDK', version: '2.2'
     annotationProcessor 'org.projectlombok:lombok'
+
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
-    implementation 'io.openvidu:openvidu-java-client:2.28.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -53,7 +52,6 @@ dependencies {
     // slf4j API
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
-
 }
 
 tasks.named('test') {
