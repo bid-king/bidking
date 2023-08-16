@@ -29,7 +29,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -183,9 +182,6 @@ public class AuctionRoom extends BaseEntity {
 
     public void quit() {
         LocalDateTime now = LocalDateTime.now();
-        if (this.startedAt.isAfter(now)) {
-            changeLiveState(AuctionRoomLiveState.BEFORE_LIVE);
-        }
         if (this.startedAt.isBefore(now)) {
             changeLiveState(AuctionRoomLiveState.OFF_LIVE);
         }
