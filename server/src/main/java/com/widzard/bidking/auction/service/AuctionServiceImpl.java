@@ -139,7 +139,7 @@ public class AuctionServiceImpl implements AuctionService {
             throw new InvalidAuctionRoomRequestException();
         }
 
-        //썸네일 검사
+        //경매방 대표 이미지  검사
         if (auctionRoomImg == null || auctionRoomImg.isEmpty()) {
             throw new AuctionRoomImageNotFound();
         }

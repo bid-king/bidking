@@ -154,6 +154,7 @@ public class AlarmServiceImpl implements AlarmService {
         } catch (IOException exception) {
             emitterRepository.deleteAllStartWithId(id);
             log.info("알림 전송 실패");
+            exception.printStackTrace();
         }
     }
 }
