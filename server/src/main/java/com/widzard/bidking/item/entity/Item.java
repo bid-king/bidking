@@ -136,7 +136,10 @@ public class Item extends BaseEntity {
 
     public void changeOnBid() {
         this.itemState = ItemState.IN_AUCTION;
+    }
 
+    public void afterAuction() {
+        this.itemState = ItemState.AFTER_AUCTION;
     }
 
     public boolean isBidStarted() {

@@ -9,6 +9,7 @@ public enum Content {
     /*
         주문 및 배송
      */
+
     ITEM_SUCCESS("상품이 낙찰되었습니다.", AlarmType.ORDER.toString(), MediaType.NOTIFICATION.toString()),
     ORDER_DUE_CLOSE("오늘 결제가 마감됩니다.", AlarmType.ORDER.toString(), MediaType.NOTIFICATION.toString()),
     ORDER_CANCELED("주문이 취소되었습니다.", AlarmType.ORDER.toString(), MediaType.NOTIFICATION.toString()),
