@@ -13,11 +13,12 @@ export function SellerStream({
   publisher,
   onChangeCameraStatus,
   onChangeMicStatus,
-  leaveOpenvidu,
 }: Props) {
   const { speaking, micStatus, videoStatus, videoRef } = useStream(publisher || undefined);
 
   useEffect(() => {
+    console.log(videoRef.current);
+    console.log(publisher);
     if (publisher && videoRef?.current) {
       publisher.addVideoElement(videoRef.current);
     }
@@ -80,5 +81,4 @@ interface Props {
   publisher: Publisher;
   onChangeCameraStatus: (arg: boolean) => void;
   onChangeMicStatus: (arg: boolean) => void;
-  leaveOpenvidu: () => void;
 }

@@ -41,7 +41,7 @@ export function SellerLive() {
           </div>
         </div>
         <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          {auctionRoomId && userId && pub && (
+          {pub && (
             <SellerStream
               auctionRoomId={auctionRoomId}
               userId={userId}
@@ -49,7 +49,6 @@ export function SellerLive() {
               publisher={pub}
               onChangeCameraStatus={cameraToggle}
               onChangeMicStatus={micToggle}
-              leaveOpenvidu={leaveOpenvidu}
             />
           )}
           <Spacing rem="0.5" />
