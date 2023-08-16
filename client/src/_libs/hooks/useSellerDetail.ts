@@ -21,6 +21,8 @@ export function useSellerDetail() {
       const auctionStartTime = new Date(detail.startedAt);
       const currentTime = new Date();
       const timeDifference = auctionStartTime.getTime() - currentTime.getTime();
+      console.log('시간차', timeDifference);
+      console.log(auctionStartTime.getTime, currentTime.getTime);
       const twentyMinutes = 20 * 60 * 1000;
       setIsWithinTwentyMinutes(timeDifference <= twentyMinutes && timeDifference >= 0);
       setHasAuctionStarted(timeDifference < 0);
