@@ -13,6 +13,7 @@ import { NavBarModal } from './NavBarModal';
 import { AlarmBox } from './AlarmBox';
 import { ROOT } from '../../util/http';
 import { useAlarm } from '../../hooks/useAlarm';
+import { Image } from '../common/Image';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -45,19 +46,6 @@ export function Nav({ theme = 'light' }: Props) {
     eventSourceRef,
   } = useNavBar();
 
-  // useEffect(() => {
-  //   if (isLogined) {
-  //     const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
-  //     eventSource.onmessage = function (event) {
-  //       console.log(event);
-  //     };
-
-  //     return () => {
-  //       eventSource.close();
-  //     };
-  //   }
-  // }, []);
-
   return (
     <div>
       <nav
@@ -77,13 +65,33 @@ export function Nav({ theme = 'light' }: Props) {
           }}
         >
           {theme === 'light' && (
-            <div className="logo">
-              <Link to={'/'}>입찰왕</Link>
+            <div
+              className="logo"
+              css={{
+                width: '5rem',
+                height: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Link to={'/'}>
+                <Image src="/image/logo/logo_light.png" alt="dark-logo" />
+              </Link>
             </div>
           )}
           {theme === 'dark' && (
-            <div className="logo">
-              <Link to={'/seller'}>입찰왕</Link>
+            <div
+              className="logo"
+              css={{
+                width: '5rem',
+                height: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Link to={'/seller'}>
+                <Image src="/image/logo/logo_dark.png" alt="dark-logo" />
+              </Link>
             </div>
           )}
 

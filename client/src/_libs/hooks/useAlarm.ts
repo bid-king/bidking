@@ -3,7 +3,7 @@ import { useAppSelector } from '../../store/hooks';
 import alarm, { AlarmResponse } from '../../api/alarm';
 import { ReadRequest } from '../../api/alarm';
 import { useQuery } from 'react-query';
-import { useNavBar } from './useNavBar';
+import { useLocation } from 'react-router-dom';
 
 export function useAlarm() {
   const { id, accessToken, isLogined } = useAppSelector(state => state.user);
@@ -57,6 +57,7 @@ export function useAlarm() {
   //   }
   // };
 
+  const location = useLocation();
   const getAlarms = () => {
     return alarm.get(accessToken);
   };
