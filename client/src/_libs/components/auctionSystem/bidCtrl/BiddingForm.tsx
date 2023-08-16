@@ -48,11 +48,13 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           theme={theme}
           inputType="text"
           placeholder={'입찰가'}
-          onChange={e => validateBidPrice(bidPrice, askingPrice) === 'OK' && setBidPrice(e.target.value)}
+          onChange={e =>
+            validateBidPrice(bidPrice) || bidPrice === ''
+              ? setBidPrice(e.target.value)
+              : setAlert('1조 미만의 숫자만 입력 가능해요')
+          }
           onKeyDown={e => {
             if (e.key === 'Enter') setAlert('엔터키로는 입찰할 수 없어요');
-            if (validateBidPrice(bidPrice, askingPrice) === 'OK') setAlert('');
-            else setAlert(validateBidPrice(bidPrice, askingPrice));
           }}
         />
         <Spacing rem="1" dir="h" />
@@ -61,8 +63,7 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           btnType="confirm"
           label="입찰"
           onClick={() => {
-            if (tryBid(setBidPrice, currPrice, askingPrice, Number(bidPrice), setAlert))
-              bid(auctionRoomId, itemId, Number(bidPrice), accessToken);
+            if (currPrice < Number(bidPrice)) bid(auctionRoomId, itemId, Number(bidPrice), accessToken);
             else return;
           }}
         />
