@@ -10,47 +10,7 @@ import { Spacing } from '../common/Spacing';
 import alarm, { AlarmResponse, ReadRequest } from '../../../api/alarm';
 import { auctionDateParse } from '../../util/auctionDateParse';
 
-export function AlarmBox({ theme = 'light' }: Props) {
-  const { id, accessToken, isLogined } = useAppSelector(state => state.user);
-  const [error, setError] = useState('');
-  const [alarmList, setAlarmList] = useState<AlarmResponse[]>([]);
-  useEffect(() => {
-    if (isLogined) {
-      alarm
-        .get(accessToken)
-        .then(res => {
-          setAlarmList(res);
-        })
-        .catch(err => {
-          setError(err);
-        });
-    }
-  }, []);
-
-  const alarmCheck = (alarmId: number) => {
-    if (id && isLogined) {
-      setAlarmList(prevAlarms => {
-        return prevAlarms.map(alarm => {
-          if (alarm.id === alarmId) {
-            return {
-              ...alarm,
-              isRead: true,
-            };
-          }
-          return alarm;
-        });
-      });
-
-      const data: ReadRequest = {
-        alarmId,
-      };
-      alarm
-        .post(id, data, accessToken)
-        .then(res => {})
-        .catch(err => {});
-    }
-  };
-
+export function AlarmBox({ theme = 'light', alarmList, alarmCheck, eventSourceRef }: Props) {
   return (
     <div
       css={{
@@ -141,6 +101,11 @@ export function AlarmBox({ theme = 'light' }: Props) {
 
 interface Props {
   theme: 'light' | 'dark';
+  alarmList: AlarmResponse[];
+  alarmCheck: (alarmId: number) => void;
+  eventSourceRef: {
+    current: EventSource | null;
+  };
 }
 
 const THEME_VARIANT = {

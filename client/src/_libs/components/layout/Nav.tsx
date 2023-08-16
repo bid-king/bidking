@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { HTMLAttributes, useEffect, useState } from 'react';
+import React, { HTMLAttributes, useEffect, useRef, useState } from 'react';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
 import { Spacing } from '../common/Spacing';
@@ -12,6 +12,7 @@ import { useNavBar } from '../../hooks/useNavBar';
 import { NavBarModal } from './NavBarModal';
 import { AlarmBox } from './AlarmBox';
 import { ROOT } from '../../util/http';
+import { useAlarm } from '../../hooks/useAlarm';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -20,6 +21,12 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 export function Nav({ theme = 'light' }: Props) {
   const breakpoints = [576, 768, 992, 1200];
   const mq = breakpoints.map(bp => `@media (min-width: ${bp}px)`);
+  const { error, alarmList, alarmCheck } = useAlarm();
+  const [unreadAlarmsCount, setUnreadAlarmsCount] = useState(0);
+
+  useEffect(() => {
+    setUnreadAlarmsCount(alarmList.filter(alarm => !alarm.isRead).length);
+  }, [alarmList]);
 
   const {
     showModal,
@@ -35,25 +42,21 @@ export function Nav({ theme = 'light' }: Props) {
     searchKeyword,
     id,
     searchClickKeyword,
+    eventSourceRef,
   } = useNavBar();
 
-  type AlarmEvent = {
-    content: string;
-    alarmType: string;
-  };
+  // useEffect(() => {
+  //   if (isLogined) {
+  //     const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
+  //     eventSource.onmessage = function (event) {
+  //       console.log(event);
+  //     };
 
-  useEffect(() => {
-    if (isLogined) {
-      const eventSource = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
-      eventSource.onmessage = function (event) {
-        console.log(event);
-      };
-
-      return () => {
-        eventSource.close();
-      };
-    }
-  }, []);
+  //     return () => {
+  //       eventSource.close();
+  //     };
+  //   }
+  // }, []);
 
   return (
     <div>
@@ -168,6 +171,21 @@ export function Nav({ theme = 'light' }: Props) {
               <Spacing rem="2" dir="h" />
               <div onMouseEnter={handleAlarmMouseEnter} onMouseLeave={handleAlarmMouseLeave}>
                 <Icon type="noti" color={theme} rem="1.5" />
+                {unreadAlarmsCount !== 0 && (
+                  <div
+                    css={{
+                      width: '0.7rem',
+                      height: '0.7rem',
+                      borderRadius: '0.5rem',
+                      backgroundColor: colors.warn,
+                      position: 'absolute',
+                      top: 6.6,
+                      right: 77.5,
+                      transform: 'translate(50%, -50%)',
+                      opacity: '0.7',
+                    }}
+                  ></div>
+                )}
               </div>
               <Spacing rem="1" dir="h" />
               <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -201,7 +219,7 @@ export function Nav({ theme = 'light' }: Props) {
           onMouseEnter={handleAlarmMouseEnter}
           onMouseLeave={handleAlarmMouseLeave}
         >
-          <AlarmBox theme={theme} />
+          <AlarmBox theme={theme} alarmList={alarmList} alarmCheck={alarmCheck} eventSourceRef={eventSourceRef} />
         </div>
       )}
     </div>

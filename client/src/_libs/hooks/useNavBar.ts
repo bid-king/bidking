@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, ChangeEvent, FormEvent, MouseEvent 
 import { useAppSelector } from '../../store/hooks';
 import member from '../../api/member';
 import { useNavigate } from 'react-router-dom';
+import { ROOT } from '../util/http';
 
 export function useNavBar() {
   const { isLogined, accessToken, id } = useAppSelector(state => state.user);
@@ -73,6 +74,29 @@ export function useNavBar() {
     }
   };
 
+  const eventSourceRef = useRef<EventSource | null>(null);
+  useEffect(() => {
+    eventSourceRef.current = new EventSource(`${ROOT}/api/v1/alarms/subscribe/${id}`);
+
+    eventSourceRef.current.onmessage = function (event) {
+      console.log(event.data);
+    };
+
+    eventSourceRef.current.onerror = function (error) {
+      console.error('EventSource failed:', error);
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+    };
+
+    // 컴포넌트가 언마운트될 때 EventSource 해제
+    return () => {
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+    };
+  }, []);
+
   return {
     showModal,
     isLogined,
@@ -88,5 +112,6 @@ export function useNavBar() {
     searchKeyword,
     id,
     searchClickKeyword,
+    eventSourceRef,
   };
 }
