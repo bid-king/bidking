@@ -26,7 +26,7 @@ module.exports = (server, app) => {
       socket.join(roomId);
       socket['nickname'] = nickname;
 
-      io.to(roomId).emit('count', { count: socket.adapter.rooms.get(roomId)?.size });
+      io.to(roomId).emit('newUser', { newUser: nickname });
 
       http.get(`/api/v1/bid/${roomId}/items`).then(itemList => {
         io.to(roomId).emit('init', itemList);

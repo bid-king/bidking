@@ -268,21 +268,7 @@ public class AuctionController {
     public ResponseEntity<String> endBiddingRoom(
         @PathVariable("auctionId") Long auctionId
     ) {
-        endAuctionRoomFacade.end(auctionId);
-
-        AfterAuctionDto result = auctionService.getAfterAuctionInfo(auctionId);
-        // 1. 경매방 생성시 판매자 알림
-        // 2. 경매 끝나고, 낙찰된 상품에 대해 구매자 낙찰 완료 및 결제 대기 알림. List<Long> 낙찰자ID + 상품 이름
-        // [상품 이름] 낙찰이 완료 되었습니다. 구매 내역에서 낙찰 목록을 확인하고 7일 이내로 결제해주세요.
-        // 3. 경매 끝나고, [제목] 경매방이 종료되었습니다. 최종 낙찰 3개 유찰 2개입니다. 완료된 경매 내역에서 확인할 수 있습니다.
-        //
-
-        /*
-         {
-         {낙찰자 id, 상품 이름} list
-          셀러 id, 경매방 제목, 낙찰 갯수, 유찰 갯수,
-         }
-         */
+        AfterAuctionDto alarmDto = endAuctionRoomFacade.end(auctionId); // TODO 알람 처리
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 

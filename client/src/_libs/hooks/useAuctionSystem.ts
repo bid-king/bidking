@@ -63,7 +63,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>, userTy
       setTopBidder(nickname);
       setAskingPrice(askingPrice);
       setDisable(true);
-      setTimeout(() => setDisable(false), 500); //잠깐대기
+      setTimeout(() => setDisable(false), 250); //잠깐대기
     }); //입찰
 
     socket.current?.on('successBid', ({ itemId, userId, nickname, price, time, askingPrice }: Result) => {
@@ -106,7 +106,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>, userTy
 
     socket.current?.on('roomClosed', (roomId: number) => {
       socket.current?.emit('roomClosed', { roomId });
-      userType === 'seller' ? navigate('/seller') : navigate('/');
+      userType === 'seller' ? navigate('/seller/exit') : navigate('/exit');
     });
   }, [socket.current]);
 

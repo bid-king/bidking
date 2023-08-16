@@ -51,5 +51,5 @@ public interface AuctionService {
 
     AuctionRoom endAuctionRoom(Long auctionId);
 
-    AfterAuctionDto getAfterAuctionInfo(Long auctionId);
+    AfterAuctionDto getAfterAuctionInfo(AuctionRoom auctionRoom);
 }
