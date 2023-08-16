@@ -24,7 +24,7 @@ export function live(ws: Socket | null) {
       chat: (roomId: number, nickname: string, msg: string) => ws?.emit('chat', { nickname, roomId, msg }),
       leave: (roomId: number) => {
         ws?.emit('leaveRoom', { roomId });
-        ws?.disconnect();
+        // ws?.disconnect();
       },
       notice: (roomId: number, msg: string) => ws?.emit('notice', { roomId, msg }),
     },
@@ -111,23 +111,6 @@ export interface AuctionEnterResponse {
   seller: boolean;
 }
 
-export interface SocketAPI {
-  req: {
-    connect: (roomId: number, nickname: string) => Socket;
-    chat: (roomId: number, nickname: string, msg: string) => void;
-    leave: (roomId: number, nickname: string) => void;
-    notice: (roomId: number, msg: string) => void;
-  };
-  res: {
-    chat: () => { nickname: string; msg: string };
-    notice: () => string;
-    updateBid: () => { nickname: string; price: string };
-    successBid: () => { nickname: string; itemName: string; price: string };
-    failBid: () => string;
-    next: () => string;
-    start: () => string;
-  };
-}
 export interface LiveItem {
   imageUrl: string;
   itemId: number;

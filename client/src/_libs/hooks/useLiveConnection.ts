@@ -24,7 +24,7 @@ export function useLiveConnection() {
   const socket = useRef<Socket | null>(null);
   const [socketConnectionErr, setSocketConnectionErr] = useState<unknown>(null);
   //openvidu
-  const [publisher, setPublisher] = useState<Publisher | null>();
+  const [pub, setPub] = useState<Publisher | null>();
   let cameraToggle: (arg: boolean) => void;
   let micToggle: (arg: boolean) => void;
   let leaveOpenvidu: () => void;
@@ -33,8 +33,11 @@ export function useLiveConnection() {
   micToggle = function (arg) {};
   leaveOpenvidu = function () {};
 
-  const [streamList, setStreamList] = useState<StreamData[] | null>(null);
+  const [streams, setStreams] = useState<StreamData[] | null>(null);
   //구현부
+  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useSellerOV(userId, auctionRoomId);
+  const { streamList } = useOrderOV(userId, auctionRoomId);
+  //Hook
   useEffect(() => {
     getRoomInfo();
 
@@ -63,18 +66,12 @@ export function useLiveConnection() {
         })
         .then(data => {
           if (seller) {
-            //판매자와 구매자에 따라 각각의 useOpenvidu Hook 실행
-            const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useSellerOV(
-              uid,
-              data.auctionRoomId
-            );
-            setPublisher(publisher);
+            setPub(publisher);
             cameraToggle = onChangeCameraStatus;
             micToggle = onChangeMicStatus;
             leaveOpenvidu = leaveSession;
           } else {
-            const { streamList } = useOrderOV(uid, data.auctionRoomId);
-            setStreamList(streamList);
+            setStreams(streamList);
           }
         })
         .catch(err => setLiveAuthErr(err));
@@ -82,8 +79,8 @@ export function useLiveConnection() {
 
     return () => {
       live(socket.current).send.leave(Number(auctionId));
-    }; //unmount시 채팅방 나갑니다
-  }, [auctionId]);
+    }; //unmount시 소켓 끊어줭
+  }, [auctionId, seller]);
 
   return {
     userId,

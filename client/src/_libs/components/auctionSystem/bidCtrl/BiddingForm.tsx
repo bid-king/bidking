@@ -48,7 +48,6 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           theme={theme}
           inputType="text"
           placeholder={'입찰가'}
-          value={bidPrice}
           onChange={e => validateBidPrice(bidPrice, askingPrice) === 'OK' && setBidPrice(e.target.value)}
           onKeyDown={e => {
             if (e.key === 'Enter') setAlert('엔터키로는 입찰할 수 없어요');
