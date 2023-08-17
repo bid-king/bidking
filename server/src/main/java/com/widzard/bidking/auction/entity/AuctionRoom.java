@@ -155,7 +155,7 @@ public class AuctionRoom extends BaseEntity {
         }
         //시작시간
         LocalDateTime now = LocalDateTime.now();
-        if (this.startedAt.isBefore(now.plusHours(1))) {
+        if (this.startedAt.isBefore(now)) {
             throw new AuctionStartTimeInvalidException();
         }
         //썸네일유무

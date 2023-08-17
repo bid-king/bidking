@@ -198,13 +198,7 @@ public class AuctionServiceImpl implements AuctionService {
     ) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
-
-        // 시작시간 예외 검증 (현재보다 이후로만 수정 가능)
-        if (auctionRoom.getStartedAt().isBefore(LocalDateTime.now())) {
-            throw new AuctionStartTimeInvalidException();
-        }
-
-        log.info("auctionRoom ItemList={}", auctionRoom.getItemList().toString());
+        auctionRoom.isValid();
         //auctionRoom 기본자료형 필드 업데이트
         auctionRoom.update(req);
 
@@ -240,10 +234,8 @@ public class AuctionServiceImpl implements AuctionService {
         int imageCnt = 0;
         for (int i = 0; i < itemUpdateRequestList.size(); i++) {
             int curOrdering = i + 1;
-
             ItemUpdateRequest updateRequest = itemUpdateRequestList.get(i);
             updateRequest.setOrdering(curOrdering);
-            log.info("isChanged={}", updateRequest.toString());
             Long itemId = updateRequest.getId();
             //2-1 아이템 신규 등록(신규 등록인 아이템은 아이디가 null)
             if (itemId == null) {
@@ -273,10 +265,8 @@ public class AuctionServiceImpl implements AuctionService {
             }
             //썸네일 변경
             MultipartFile curFileImg = itemImgs[imageCnt++];
-            log.info("file={}", curFileImg.toString());
             imageService.modifyImage(curFileImg, item.getImage().getId());
         }
-        auctionRoom.isValid();
         return auctionRoom;
     }
 
