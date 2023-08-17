@@ -113,6 +113,7 @@ public class AuctionRoom extends BaseEntity {
             .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
             .startedAt(startedAt)
             .image(auctionRoomImg)
+            .currentLiveItemOrder(1)
             .itemList(new ArrayList<>())
             .build();
     }
