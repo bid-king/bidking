@@ -31,7 +31,11 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
   const { Alert, alertTrigger } = useAlert('msg', 'error');
   if (auctionRoomId)
     return (
-      <div>
+      <div
+        css={{
+          height: 'calc(100vh - 4rem)',
+        }}
+      >
         <div
           css={{
             width: '100%',

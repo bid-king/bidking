@@ -6,7 +6,7 @@ export function BidComma() {
     <div
       css={{
         // border: '1px solid black',
-        width: '0.6rem',
+        width: '0.7rem',
         height: '2rem',
         textAlign: 'center',
         fontWeight: '600',

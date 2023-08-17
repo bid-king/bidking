@@ -27,11 +27,11 @@ export function BidPrice({ align = 'center', theme = 'light', priceArr }: Props)
           width: `${
             2 +
             //원
-            0.9 * priceArr.reduce((acc, cur) => (cur === '1' ? acc + '1' : acc), '').length +
+            0.95 * priceArr.reduce((acc, cur) => (cur === '1' ? acc + '1' : acc), '').length +
             //1
-            1.2 * priceArr.reduce((acc, cur) => (cur !== '1' && cur !== ',' ? acc + '1' : acc), '').length +
+            1.25 * priceArr.reduce((acc, cur) => (cur !== '1' && cur !== ',' ? acc + '1' : acc), '').length +
             //1외의 모든 수
-            0.6 * priceArr.reduce((acc, cur) => (cur === ',' ? acc + '1' : acc), '').length
+            0.7 * priceArr.reduce((acc, cur) => (cur === ',' ? acc + '1' : acc), '').length
             //comma
           }rem`,
           transition: 'width 0.2s ease-out',

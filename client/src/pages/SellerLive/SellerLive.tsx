@@ -25,7 +25,7 @@ export function SellerLive() {
 
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
-      <div css={{ width: '100%', padding: '0 0.25rem 0.5rem 0.5rem' }}>
+      <div css={{ width: '100%', padding: '1rem 0.25rem 0.5rem 0.5rem' }}>
         <div css={{ display: 'flex', width: '100%' }}>
           <AuctionHeader
             theme="dark"

@@ -31,26 +31,21 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
       chatRef.current?.scrollIntoView();
     }
   }, [chats]);
-
-  useEffect(() => {
-    return () => {
-      // live(socket.current).send.leave(roomId);
-    };
-  }, []);
   return (
     <div
       css={{
         width: '100%',
-        height: 'calc(60vh - 3rem)',
+        height: 'calc(50vh - 2rem)',
         borderRadius: '1.85rem',
         padding: '1rem',
         position: 'relative',
         ...THEME_VARIANT[theme],
         display: 'flex',
         flexDirection: 'column',
+        border: '1px solid black',
       }}
     >
-      <div css={{ overflowY: 'auto', height: 'calc(55vh - 3rem)' }}>
+      <div css={{ overflowY: 'auto', height: 'calc(50vh - 7rem)', backgroundColor: 'black' }}>
         <div css={{ paddingBottom: '1rem' }}>
           {chats.map((chat, idx) => (
             <ChatMessage key={idx} nickname={chat.nickname} msg={chat.msg} />
