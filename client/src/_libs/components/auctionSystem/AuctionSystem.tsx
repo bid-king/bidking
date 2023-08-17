@@ -28,7 +28,7 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
     setCurrId,
     setLiveStatus,
   } = useAuctionSystem(socket, userType);
-  const { alert, alertTrigger } = useAlert('msg', 'error');
+  const { Alert, alertTrigger } = useAlert('msg', 'error');
   if (auctionRoomId)
     return (
       <div>

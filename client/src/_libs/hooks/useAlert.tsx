@@ -3,7 +3,7 @@ import React, { useState, useEffect, HTMLAttributes } from 'react';
 import { Text } from '../components/common/Text';
 import colors from '../design/colors';
 
-export function useAlert(message: string, type: 'success' | 'error', duration = 2000) {
+export function useAlert(message: string, type: 'success' | 'error', duration = 1500) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -12,9 +12,9 @@ export function useAlert(message: string, type: 'success' | 'error', duration = 
     }, duration);
 
     return () => clearTimeout(timer);
-  }, [duration]);
+  }, [show]);
 
-  return { alert: <Alert message={message} type={type} show={show} />, alertTrigger: () => setShow(true) };
+  return { Alert: <Alert message={message} type={type} show={show} />, alertTrigger: () => setShow(true) };
 }
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -30,7 +30,7 @@ function Alert({ message, type, show }: Props) {
 
     show: show
       ? {
-          transform: 'translateY(3rem)',
+          transform: 'translateY(2rem)',
           opacity: '1',
         }
       : {
@@ -51,7 +51,7 @@ function Alert({ message, type, show }: Props) {
         opacity: 0,
         borderRadius: '100%',
         padding: '1rem 2rem 1rem 2rem',
-        transition: 'transform 0.5s ease-out',
+        transition: 'transform 0.25s',
         ...STYLES[type],
         ...STYLES['show'],
       }}

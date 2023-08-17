@@ -21,12 +21,13 @@ export function Timer({ theme = 'light', time }: Props) {
           height: '0.35rem',
           backgroundColor: theme === 'light' ? colors.backgroundLight3 : colors.backgroundDark3,
           borderRadius: '1rem',
+          overflow: 'hidden',
         }}
       >
         <div
           css={{
             width: '100%', //시간에 따른 동적 바인딩
-            transform: `scaleX(${100 - time * 11})`,
+            transform: `scaleX(${(11 * time - 10) / 100 > 0 ? (11 * time - 10) / 100 : 0})`,
             transformOrigin: 'left',
             height: '0.35rem',
             borderRadius: '1rem',

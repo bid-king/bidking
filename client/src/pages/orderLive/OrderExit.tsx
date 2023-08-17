@@ -10,7 +10,7 @@ import colors from '../../_libs/design/colors';
 export function OrderExit() {
   const navigate = useNavigate();
   useEffect(() => {
-    setTimeout(() => navigate(''), 2000);
+    setTimeout(() => navigate('/'), 2000);
   }, []);
   return (
     <div
@@ -26,7 +26,7 @@ export function OrderExit() {
       }}
     >
       <Spinner />
-      <Spacing rem="1" />
+      <Spacing rem="2" />
       <Text content={'경매가 종료되었어요. 잠시 후 메인 페이지로 이동해요.'} type={'h2'} />
       <Spacing rem="1" />
       <Text content={'메인 페이지로 이동되지 않으면, 아래 버튼을 클릭하세요.'} />
