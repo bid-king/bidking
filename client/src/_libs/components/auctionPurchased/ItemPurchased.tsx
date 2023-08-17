@@ -42,7 +42,7 @@ export function ItemPurchased({ theme = 'light', item }: Props) {
       </div>
       <Spacing rem="1" />
       <div className="cardBody-ItemName">
-        <Text type="h3" content={item.orderItemName} />
+        <Text type="h2" content={item.orderItemName} />
       </div>
       <Spacing rem="1" />
       <div
@@ -73,23 +73,25 @@ export function ItemPurchased({ theme = 'light', item }: Props) {
       <div
         css={{
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: 'column',
         }}
       >
-        <div
-          css={{
-            width: '50%',
-          }}
-        >
-          <Text content={'낙찰 시간 '} />
-          <Text type="bold" content={item.paymentDeadline ? detailDateParse(item.orderedAt) : ''} />
-        </div>
-
-        <div>
-          <Text content={'결제 기한 '} />
-          <Text type="bold" content={item.paymentDeadline ? detailDateParse(item.paymentDeadline) : ''} />
-        </div>
+        <Text content={'낙찰 시간 '} />
+        <Spacing rem="0.25" />
+        <Text type="bold" content={item.paymentDeadline ? detailDateParse(item.orderedAt) : ''} />
       </div>
+      <Spacing rem="1" />
+      <div
+        css={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Text content={'결제 기한 '} />
+        <Spacing rem="0.25" />
+        <Text type="bold" content={item.paymentDeadline ? detailDateParse(item.paymentDeadline) : ''} />
+      </div>
+
       <Spacing rem="1" />
 
       <div
@@ -105,8 +107,8 @@ export function ItemPurchased({ theme = 'light', item }: Props) {
               flexDirection: 'column',
             }}
           >
-            <Text type="bold" content="배송지" />
-            <Spacing rem="1" />
+            <Text content="배송지" />
+            <Spacing rem="0.25" />
             <Text type="bold" content={`${item.address.street} ${item.address.details} ${item.address.zipCode}`} />
           </div>
         )}

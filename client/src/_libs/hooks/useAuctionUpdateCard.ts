@@ -59,6 +59,14 @@ export function useAuctionUpdateCard(ordering: number) {
     setStartPrice(e.target.value);
   };
 
+  const isStartPriceAllowed = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length >= 4) {
+      return;
+    } else {
+      setStartPrice('');
+    }
+  };
+
   const handleDescription = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
   };
@@ -127,5 +135,6 @@ export function useAuctionUpdateCard(ordering: number) {
     handleDescriptionChange,
     previewImageURL,
     itemImageUrl,
+    isStartPriceAllowed,
   };
 }

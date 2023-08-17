@@ -49,24 +49,28 @@ export function MyPageBox() {
   return (
     <div
       css={{
-        width: '50rem',
-        borderRadius: '0.5rem',
-        padding: '2rem',
-        display: 'flex',
-        flexDirection: 'column',
+        width: '33vw',
+        minWidth: '27rem',
+        borderRadius: '1.5rem',
+        padding: '0 1.5rem 0 1.5rem',
         backgroundColor: colors.backgroundLight2,
       }}
     >
-      <div>
+      <Spacing rem="1.5" />
+      <div css={{ display: 'flex', justifyContent: 'space-between' }}>
         <ProfileImage src={previewImageURL ? previewImageURL : imgSrc} rem={4} />
-        <InputFile label="파일 선택" accept="image/*" color="white" onChange={handleImageChange} />
-      </div>
-      <div>
-        <Text type="h1" content={nickname} />
+        <div>
+          <InputFile label="프로필 이미지 변경" accept="image/*" color="white" onChange={handleImageChange} />
+        </div>
       </div>
       <Spacing rem="1" />
       <div>
+        <Text type="h1" content={nickname} />
+      </div>
+      <Spacing rem="1.5" />
+      <div>
         <Text type="h3" content="아이디" />
+        <Spacing rem="0.5" />
         <div>
           <Text type="bold" content={userId} />
         </div>
@@ -74,7 +78,7 @@ export function MyPageBox() {
       <Spacing rem="1" />
       <div className="phone-nubmer">
         <Label theme="light" value="핸드폰 번호" htmlFor="phone-nubmer-input" />
-        <Spacing rem="1" />
+        <Spacing rem="0.5" />
         <div
           css={{
             display: 'flex',
@@ -82,13 +86,13 @@ export function MyPageBox() {
         >
           <div
             css={{
-              width: '180rem',
+              width: '280%',
             }}
           >
             <Input id="phone-nubmer-input" value={phoneNumber} onChange={handlePhoneChange} placeholder="" />
           </div>
+          <Spacing rem="1" />
           <Spacing rem="3" dir="h" />
-          <Spacing rem="2" />
           {!isCertificationDisabled && isPhoneValid && (
             <ConfirmButton btnType="certification" onClick={requestVerification} label="인증번호 전송" />
           )}
@@ -102,8 +106,12 @@ export function MyPageBox() {
         {isVerificationVisible && isPhoneValid && (
           <div>
             <Spacing rem="1" />
-            <Text type="bold" content="문자로 전송된 본인인증 번호를 입력해 주세요" />
-            <Spacing rem="1" />
+            <Label
+              theme="light"
+              value="문자로 전송된 본인인증 번호를 입력해 주세요"
+              htmlFor="phone-verification-input"
+            />
+            <Spacing rem="0.5" />
             <div
               css={{
                 display: 'flex',
@@ -111,7 +119,7 @@ export function MyPageBox() {
             >
               <div
                 css={{
-                  width: '120rem',
+                  width: '280%',
                 }}
               >
                 <Input id="phone-verification-input" onChange={handleCertificateCode} placeholder="" />
@@ -139,7 +147,7 @@ export function MyPageBox() {
 
       <div className="address">
         <Label theme="light" value="주소" htmlFor="street-signup-input" />
-        <Spacing rem="1" />
+        <Spacing rem="0.5" />
         <Input
           id="street-signup-input"
           value={street}
@@ -151,7 +159,7 @@ export function MyPageBox() {
 
       <div className="address-details">
         <Label theme="light" value="상세 주소" htmlFor="details-signup-input" />
-        <Spacing rem="1" />
+        <Spacing rem="0.5" />
         <Input
           id="details-signup-input"
           value={details}
@@ -163,13 +171,13 @@ export function MyPageBox() {
 
       <div className="zip-code">
         <Label theme="light" value="우편번호" htmlFor="zip-code-signup-input" />
-        <Spacing rem="1" />
+        <Spacing rem="0.5" />
         <Input id="zip-code-signup-input" value={zipCode} onChange={handleZipCodeChange} placeholder="12345" />
       </div>
       <Spacing rem="2" />
 
       <Label theme="light" value="기존 비밀번호" htmlFor="old-password-input" />
-      <Spacing rem="1" />
+      <Spacing rem="0.5" />
       <div
         className="old-password"
         css={{
@@ -178,7 +186,7 @@ export function MyPageBox() {
       >
         <div
           css={{
-            width: '180rem',
+            width: '280%',
           }}
         >
           <Input
@@ -199,7 +207,7 @@ export function MyPageBox() {
         <div>
           <div className="new-password">
             <Label theme="light" value="새 비밀번호" htmlFor="new-password-input" />
-            <Spacing rem="1" />
+            <Spacing rem="0.5" />
 
             <Input
               id="new-password-input"
@@ -217,6 +225,7 @@ export function MyPageBox() {
       {isButtonDisabled && <ConfirmButton btnType="disabled" label="완료" />}
 
       {!isButtonDisabled && <ConfirmButton label="완료" onClick={memberUpdate} />}
+      <Spacing rem="1" />
     </div>
   );
 }

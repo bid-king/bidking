@@ -55,6 +55,8 @@ export function SellerDetail() {
           backgroundColor: colors.backgroundDark,
           color: colors.white,
           justifyContent: 'center',
+          alignItems: 'center',
+          paddingBottom: '5rem',
         }}
       >
         <Link to={'/login'}>
@@ -72,17 +74,17 @@ export function SellerDetail() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingBottom: '10rem',
+        paddingBottom: '5rem',
         backgroundColor: colors.backgroundDark,
-        color: colors.white,
         minHeight: '100vh',
+        color: colors.white,
       }}
     >
       <Spacing rem="3" />
       <div
         css={{
-          width: '50%',
-          minHeight: '430px',
+          width: '33vw',
+          minWidth: '27rem',
           padding: '0 1.5rem 0 1.5rem',
           backgroundColor: colors.backgroundDark2,
           borderRadius: '1.5rem',

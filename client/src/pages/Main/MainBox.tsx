@@ -56,10 +56,10 @@ export function MainBox() {
           justifyContent: 'center',
         }}
       >
-        {isLogined && (
+        {isLogined && auctionListBookmarked.length !== 0 && (
           <div>
             <Text type="h1" content="관심 경매" />
-            <Spacing rem="1" />
+            <Spacing rem="1.5" />
             <div
               css={{
                 display: 'flex',
@@ -109,24 +109,12 @@ export function MainBox() {
                   <Spacing rem="1" />
                 </div>
               ))}
-
-              {auctionListBookmarked.length === 0 && (
-                <div
-                  css={{
-                    height: '20rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text type="h2" content="관심 경매를 추가하세요" />
-                </div>
-              )}
             </div>
           </div>
         )}
         <div>
           <Text type="h1" content="경매 목록" />
-          <Spacing rem="1" />
+          <Spacing rem="1.5" />
           <div
             css={{
               display: 'flex',

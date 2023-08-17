@@ -50,7 +50,7 @@ export function AlarmBox({ theme = 'light', alarmList, alarmCheck, eventSourceRe
                 }}
               >
                 <Text type="bold" content={auctionDateParse(alarm.createdTime)} />
-                <Spacing rem="1" dir="h" />
+                <Spacing rem="0.5" dir="h" />
                 <div
                   css={{
                     display: 'flex',
@@ -64,7 +64,7 @@ export function AlarmBox({ theme = 'light', alarmList, alarmCheck, eventSourceRe
                   >
                     <Text type="bold" content={`[${ALARM_VARIANT[alarm.alarmType].text}]`} />
                   </div>
-                  <Spacing rem="0.25" dir="h" />
+                  <Spacing rem="0.5" dir="h" />
 
                   <Text type="bold" content={alarm.content} />
                 </div>
@@ -77,7 +77,7 @@ export function AlarmBox({ theme = 'light', alarmList, alarmCheck, eventSourceRe
                   checked={alarm.isRead}
                 />
               </div>
-              <Spacing rem="1" />
+              <Spacing rem="0.5" />
             </div>
           );
         })}

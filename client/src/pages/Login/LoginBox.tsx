@@ -27,16 +27,17 @@ export function LoginBox() {
     <form
       onSubmit={handleSubmit}
       css={{
-        width: '50rem',
+        width: '33vw',
+        minWidth: '27rem',
         borderRadius: '0.5rem',
         padding: '2rem',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: colors.backgroundLight,
+        backgroundColor: colors.backgroundLight2,
       }}
     >
       <Text type="h2" content="로그인" />
-      <Spacing rem="2" />
+      <Spacing rem="1.5" />
       <div
         css={{
           padding: '0.5rem',
@@ -46,7 +47,7 @@ export function LoginBox() {
           <label htmlFor="userId-input">
             <Text type="bold" content="아이디" />
           </label>
-          <Spacing rem="1" />
+          <Spacing rem="0.5" />
           <Input
             id="userId-input"
             placeholder=""
@@ -61,7 +62,7 @@ export function LoginBox() {
           <label htmlFor="password-input">
             <Text type="bold" content="비밀번호" />
           </label>
-          <Spacing rem="1" />
+          <Spacing rem="0.5" />
           <Input
             id="password-input"
             placeholder=""
@@ -79,7 +80,7 @@ export function LoginBox() {
           </>
         )}
         <ConfirmButton label="로그인" type="submit" onClick={handleSubmit} />
-        <Spacing rem="2" />
+        <Spacing rem="1" />
         <div
           css={{
             display: 'flex',

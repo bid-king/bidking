@@ -42,17 +42,17 @@ export function AuctionUpdateBox() {
   return (
     <div
       css={{
-        width: '50rem',
-        borderRadius: '0.5rem',
-        padding: '1rem',
-        display: 'flex',
-        flexDirection: 'column',
+        width: '33vw',
+        minWidth: '27rem',
+        padding: '0 1.5rem 0 1.5rem',
         backgroundColor: colors.backgroundDark2,
+        borderRadius: '1.5rem',
         color: colors.white,
       }}
     >
       {detail && isLogined && (
         <div>
+          <Spacing rem="1.5" />
           <div
             css={{
               display: 'flex',
@@ -60,7 +60,7 @@ export function AuctionUpdateBox() {
               justifyContent: 'space-between',
             }}
           >
-            <Text type="h1" content="경매 정보" />
+            <Text type="h1" content="경매 수정" />
             <div
               css={{
                 display: 'flex',
@@ -72,7 +72,7 @@ export function AuctionUpdateBox() {
               <Spacing rem="0.5" dir="h" />
             </div>
           </div>
-          <Spacing rem="2" />
+          <Spacing rem="1.5" />
           <div
             css={{
               padding: '0.5rem',
@@ -82,7 +82,7 @@ export function AuctionUpdateBox() {
               <label htmlFor="auctionTitle-input">
                 <Text type="bold" content="경매 제목을 입력하세요" />
               </label>
-              <Spacing rem="1" />
+              <Spacing rem="0.5" />
               <Input
                 id="auctionTitle-input"
                 value={auctionTitle}
@@ -91,13 +91,13 @@ export function AuctionUpdateBox() {
                 onChange={handleAuctionTitle}
               />
             </div>
-            <Spacing rem="2" />
+            <Spacing rem="1" />
 
             <div className="startedAt">
               <label htmlFor="startedAt-input">
                 <Text type="bold" content="경매 날짜와 시간을 선택하세요" />
               </label>
-              <Spacing rem="1" />
+              <Spacing rem="0.5" />
               <Input
                 id="startedAt-input"
                 value={startedAt}
@@ -143,9 +143,12 @@ export function AuctionUpdateBox() {
                   onChange={handleAuctionRoomType}
                 />
               </div>
+              <Spacing rem="0.5" />
               <div
                 css={{
                   display: 'flex',
+                  opacity: '0.5',
+                  cursor: 'not-allowed',
                 }}
               >
                 <Text type="p" content="네덜란드" />
@@ -153,6 +156,7 @@ export function AuctionUpdateBox() {
                 <RadioButton
                   name="auctionRoomType"
                   value="REVERSE"
+                  disabled={true}
                   checkedValue={auctionRoomType}
                   onChange={handleAuctionRoomType}
                 />
@@ -163,7 +167,7 @@ export function AuctionUpdateBox() {
             <div className="auction-image">
               <Text type="bold" content="경매 정보를 알려줄 수 있는 썸네일을 등록하세요" />
               <Spacing rem="1" />
-              <div>
+              <div css={{ display: 'flex', flexDirection: 'column' }}>
                 <Image
                   src={previewImageURL ? previewImageURL : auctionRoomUrl}
                   alt="auctionRoomUrl"
@@ -173,7 +177,10 @@ export function AuctionUpdateBox() {
                     target.src = '/image/nonImageDark.png';
                   }}
                 />
-                <InputFile label="파일 선택" accept="image/*" color="white" onChange={handleImageChange} />
+                {previewImageURL ? <Spacing rem="0.25" /> : null}
+                <div>
+                  <InputFile label="썸네일 선택" accept="image/*" color="white" onChange={handleImageChange} />
+                </div>
               </div>
             </div>
             <Spacing rem="2" />
@@ -184,8 +191,8 @@ export function AuctionUpdateBox() {
                   display: 'flex',
                 }}
               >
-                <Text type="bold" content="경매할 상품과 순서를 입력하세요." />
-                <Spacing rem="1" dir="h" />
+                <Text type="bold" content="입찰왕 규정에 동의해주세요." />
+                <Spacing rem="1" />
               </div>
               <Spacing rem="1" />
               <div
@@ -230,10 +237,7 @@ export function AuctionUpdateBox() {
                   alignItems: 'center',
                 }}
               >
-                <Text
-                  type="p"
-                  content="상품이 낙찰되면 판매자가 결제한 날로부터 일 주일 안에 상품을 발송하고, 배송 정보를 제공하겠습니다."
-                />
+                <Text type="p" content="낙찰 물품 배송 관련 규정을 숙지하였습니다." />
                 <Spacing rem="1" dir="h" />
                 <div
                   css={{
@@ -260,35 +264,18 @@ export function AuctionUpdateBox() {
                 </div>
               </div>
             </div>
-
-            <Spacing rem="2" />
-            <div
-              css={{
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              {/* <ConfirmButton label="물품추가" onClick={addItem} /> */}
-            </div>
-
-            {/* {itemList.map((item, index) => {
-              return (
-                <div key={index}>
-                  <AuctionUpdateCreateCard ordering={currentOrdering + 1} />
-                  <Spacing rem="2" />
-                </div>
-              );
-            })} */}
+            <Spacing rem="1" />
 
             {items.map((item, index) => {
               return (
                 <div key={index}>
                   <AuctionUpdateCard ordering={items.length - index} />
-                  <Spacing rem="2" />
+                  <Spacing rem="1" />
                 </div>
               );
             })}
             {errMessage && <Text content={errMessage} />}
+            <Spacing rem="0.5" />
             {itemPermissionChecked && deliveryRulesChecked ? (
               <ConfirmButton btnType="confirm" label="경매수정" onClick={updateAuction} />
             ) : (
@@ -307,6 +294,7 @@ export function AuctionUpdateBox() {
           <Text type="h1" content="경매물품이 존재하지 않습니다." />
         </div>
       )}
+      <Spacing rem="1" />
     </div>
   );
 }

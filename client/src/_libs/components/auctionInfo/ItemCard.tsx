@@ -30,20 +30,20 @@ export function ItemCard({ theme = 'light', item }: Props) {
         <Text type="bold" content={'순번 ' + item.itemOrdering} />
       </div>
       <Spacing rem="1" />
+      <div className="cardBody-ItemName">
+        <Text type="h2" content={item.itemName} />
+      </div>
+      <Spacing rem="1" />
       <div
         css={{
           display: 'flex',
         }}
       >
-        <Text type="bold" content={'카테고리'} />
+        <Text content={'카테고리'} />
         <Spacing rem="0.5" dir="h" />
-        <Text type="bold" content={item.category} />
+        <Text type="h3" content={item.category} />
       </div>
-      <Spacing rem="1" />
-      <div className="cardBody-ItemName">
-        <Text type="h3" content={item.itemName} />
-      </div>
-      <Spacing rem="1" />
+      <Spacing rem="0.5" />
       <div>
         <div
           className="cardBody-orderInfo"
@@ -58,9 +58,9 @@ export function ItemCard({ theme = 'light', item }: Props) {
               display: 'flex',
             }}
           >
-            <Text type="bold" content={'경매 시작가 '} />
+            <Text content={'시작가 '} />
             <Spacing rem="0.5" dir="h" />
-            <Text type="bold" content={String(item.startPrice)} />
+            <Text type="h3" content={`${String(item.startPrice)} 원`} />
           </div>
         </div>
       </div>
