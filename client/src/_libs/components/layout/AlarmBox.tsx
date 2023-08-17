@@ -32,84 +32,84 @@ export function AlarmBox({ theme = 'light', alarmList, alarmCheck, eventSourceRe
       </div>
       <Spacing rem="1" />
 
-      <div
-        css={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        {alarmList.map(alarm => {
-          return (
-            <div
-              css={{
-                display: 'flex',
-                flex: 'column',
-              }}
-              key={alarm.id}
-            >
+      <div>
+        <div
+          css={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {alarmList.map(alarm => {
+            return (
               <div
                 css={{
                   display: 'flex',
+                  flex: 'row',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  justifyContent: 'flex-start',
                 }}
+                key={alarm.id}
               >
-                <Text type="bold" content={auctionDateParse(alarm.createdTime)} />
-                <Spacing rem="0.5" dir="h" />
                 <div
                   css={{
                     display: 'flex',
-                    opacity: alarm.isRead ? '0.4' : '1',
+                    alignItems: 'center',
+                    flex: 1,
                   }}
                 >
+                  <Text type="bold" content={auctionDateParse(alarm.createdTime)} />
+                  <Spacing rem="0.5" dir="h" />
                   <div
                     css={{
-                      color: ALARM_VARIANT[alarm.alarmType].color,
+                      display: 'flex',
+                      opacity: alarm.isRead ? '0.4' : '1',
+                      alignItems: 'center',
                     }}
                   >
-                    <Text type="bold" content={`[${ALARM_VARIANT[alarm.alarmType].text}]`} />
-                  </div>
-                  <Spacing rem="0.5" dir="h" />
+                    <div
+                      css={{
+                        color: ALARM_VARIANT[alarm.alarmType].color,
+                      }}
+                    >
+                      <Text type="bold" content={`[${ALARM_VARIANT[alarm.alarmType].text}]`} />
+                    </div>
+                    <Spacing rem="0.5" dir="h" />
 
-                  <Text type="bold" content={alarm.content} />
+                    <Text type="bold" content={alarm.content} />
+                  </div>
+                  <Spacing rem="1" dir="h" />
                 </div>
-                <Spacing rem="1" dir="h" />
+                <div
+                  css={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Checkbox
+                    theme={theme}
+                    id="1"
+                    value="cheked"
+                    onChange={() => alarmCheck(alarm.id)}
+                    checked={alarm.isRead}
+                  />
+                </div>
+                <Spacing rem="1.5" />
               </div>
-              <div
-                css={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                }}
-              >
-                <Checkbox
-                  theme={theme}
-                  id="1"
-                  value="cheked"
-                  onChange={() => alarmCheck(alarm.id)}
-                  checked={alarm.isRead}
-                />
-              </div>
-              <Spacing rem="1.5" />
-            </div>
-          );
-        })}
-        {alarmList.length === 0 && (
-          <div>
-            <div
-              css={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Text type="bold" content="알림이 존재하지 않습니다." />
-              <Spacing rem="1" />
-            </div>
-          </div>
-        )}
+            );
+          })}
+        </div>
       </div>
+      {alarmList.length === 0 && (
+        <div
+          css={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Text type="bold" content="알림이 존재하지 않습니다." />
+          <Spacing rem="1" />
+        </div>
+      )}
     </div>
   );
 }
