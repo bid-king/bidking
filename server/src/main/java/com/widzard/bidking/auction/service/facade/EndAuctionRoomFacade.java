@@ -5,6 +5,7 @@ import com.widzard.bidking.auction.dto.AfterAuctionDto;
 import com.widzard.bidking.auction.dto.OrdererDto;
 import com.widzard.bidking.auction.dto.redis.ItemAfterBidResult;
 import com.widzard.bidking.auction.entity.AuctionRoom;
+import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.auction.service.AuctionService;
 import com.widzard.bidking.item.entity.Item;
@@ -75,6 +76,7 @@ public class EndAuctionRoomFacade {
         // 알림 서비스 dto
         int failCnt = 0;
         int successCnt = 0;
+        int numberOfItems = itemList.size();
         List<OrdererDto> ordererDtoList = new ArrayList<>();
 
         for (Item item : itemList) {
@@ -117,6 +119,10 @@ public class EndAuctionRoomFacade {
                     )
                 );
             }
+        }
+        // 모두 유찰일 때 all completed 처리
+        if (failCnt == numberOfItems) {
+            auctionRoom.changeTradeState(AuctionRoomTradeState.ALL_COMPLETED);
         }
         return AfterAuctionDto.builder()
             .sellerId(auctionRoom.getSeller().getId())
