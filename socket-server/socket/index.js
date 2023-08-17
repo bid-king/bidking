@@ -67,6 +67,13 @@ module.exports = (server, app) => {
 
     socket.on('disconnect', () => {
       console.log('socket 접속 해제');
+      for (const roomId in roomOwners) {
+        if (roomOwners[roomId] === socket.id) {
+          http.post(`/api/v1/bid/${roomId}/end`).then(() => {
+            io.to(Number(roomId)).emit('roomClosed', { roomId });
+          });
+        }
+      }
     });
   });
 };
