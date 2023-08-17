@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Publisher } from 'openvidu-browser';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import colors from '../../design/colors';
 import { useSellerStream } from '../../hooks/useSellerStream';
 import { useStream } from '../../hooks/useStream';
@@ -38,13 +38,13 @@ export function SellerStream({ auctionRoomId, userId }: Props) {
           <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
           <RoundButton
             onClick={handleMicToggle}
-            color={publisher.stream.audioActive ? 'white' : 'confirm'}
-            label={publisher.stream.audioActive ? '마이크 끄기' : '마이크 켜기'}
+            color={micStatus ? 'white' : 'confirm'}
+            label={micStatus ? '마이크 끄기' : '마이크 켜기'}
           />
           <RoundButton
             onClick={handleCameraToggle}
-            color={publisher.stream.videoActive ? 'white' : 'confirm'}
-            label={publisher.stream.videoActive ? '카메라 끄기' : '카메라 켜기'}
+            color={videoStatus ? 'white' : 'confirm'}
+            label={videoStatus ? '카메라 끄기' : '카메라 켜기'}
           />
         </div>
       ) : (
