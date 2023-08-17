@@ -1,6 +1,7 @@
 /**입력한 input값을 세 자리 단위로 끊어 쉼표(,)를 찍어 리턴합니다. */
-export function bidPriceParse(price: string): string {
-  const num = price.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export function bidPriceParse(price: number): string {
+  const str = price.toString();
+  const num = str.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return num;
 }
 
@@ -12,7 +13,7 @@ export function askingPriceParse(price: number): string {
 /**숫자만 입력했는지 검증합니다. */
 export function validateBidPrice(price: string): boolean {
   const check = /^\d+$/;
-  if (!check.test(price.trim())) return false;
+  if (!check.test(price)) return false;
   if (price.length > 12) return false;
   return true;
 }

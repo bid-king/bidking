@@ -47,6 +47,8 @@ export function AuctionList({
           height: '100%',
           minHeight: '15rem',
           objectFit: 'cover',
+          ...LIVE_VARIANT[auctionRoomLiveState],
+          ...THEME_VARIANT[auctionRoomTradeState],
           '&:hover': {
             filter: 'brightness(66%)',
           },
@@ -60,11 +62,19 @@ export function AuctionList({
       />
       <Spacing rem="0.5" />
       <div css={{ position: 'absolute', bottom: '1rem', left: '1rem', filter: 'drop-shadow(0 0 0.1rem black)' }}>
-        {auctionRoomTradeState === 'ALL_COMPLETED' && <Text content={'모든 절차가 끝났어요'} />}
-        {auctionRoomTradeState === 'IN_PROGRESS' && <Text content={'상품을 배송하지 않았어요'} />}
+        {auctionRoomTradeState === 'ALL_COMPLETED' && (
+          <div css={{ color: colors.ok }}>
+            <Text content={'모든 절차가 끝났어요'} />
+          </div>
+        )}
+        {auctionRoomTradeState === 'IN_PROGRESS' && (
+          <div css={{ color: colors.confirm }}>
+            <Text content={'상품을 배송하지 않았어요'} />
+          </div>
+        )}
         {auctionRoomLiveState === 'ON_LIVE' ? (
           <div css={{ color: colors.warn }}>
-            <Text type="bold" content={'LIVE'} />
+            <Text type="bold" content={'● LIVE'} />
           </div>
         ) : (
           <div>
@@ -79,3 +89,17 @@ export function AuctionList({
     </div>
   );
 }
+const THEME_VARIANT = {
+  ALL_COMPLETED: {
+    filter: 'brightness(66%)',
+  },
+  IN_PROGRESS: { filter: 'brightness(66%)' },
+  BEFORE_PROGRESS: {},
+  NONE: {},
+};
+const LIVE_VARIANT = {
+  ON_LIVE: {
+    filter: 'brightness(66%)',
+  },
+  BEFORE_LIVE: {},
+};

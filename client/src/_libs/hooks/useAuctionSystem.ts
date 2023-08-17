@@ -46,7 +46,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>, userTy
       setCurrId(itemId);
       setCurrPrice(price);
       setAskingPrice(askingPrice);
-      setPriceArr([bidPriceParse(String(price))]);
+      setPriceArr([bidPriceParse(askingPrice)]);
       setDisable(true);
     }); //다음 아이템 설명시작
 
@@ -56,12 +56,12 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>, userTy
       setCurrId(itemId);
       setCurrPrice(price);
       setAskingPrice(askingPrice);
-      setPriceArr(bidPriceParse('0').split(''));
+      setPriceArr(bidPriceParse(0).split(''));
     }); //아이템 경매 시작 (전체 경매가 시작되는것)
 
     socket.current?.on('updateBid', ({ itemId, userId, nickname, price, time, askingPrice }: Result) => {
       setCurrPrice(price);
-      setPriceArr(bidPriceParse(String(price)).split(''));
+      setPriceArr(bidPriceParse(price).split(''));
       setTopBidder(nickname);
       setAskingPrice(askingPrice);
       setDisable(true);
