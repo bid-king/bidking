@@ -15,7 +15,6 @@ import com.widzard.bidking.auction.exception.AuctionRoomNotStartedException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.exception.InvalidAuctionRoomRequestException;
 import com.widzard.bidking.auction.exception.UnableToDeleteAuctionNow;
-import com.widzard.bidking.auction.exception.UnableToUpdateAuctionNow;
 import com.widzard.bidking.auction.exception.UnauthorizedAuctionRoomAccessException;
 import com.widzard.bidking.auction.exception.UserCannotStartBiddingException;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
@@ -200,13 +199,12 @@ public class AuctionServiceImpl implements AuctionService {
     ) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
-        //시작시간이 20분이하로 남은경우 수정 불가능
-        LocalDateTime auctionStartTime = auctionRoom.getStartedAt();
-        LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
-        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(
-            twentyMinutesAgo)) {
-            throw new UnableToUpdateAuctionNow();
+
+        // 시작시간 예외 검증 (현재보다 이후로만 수정 가능)
+        if (auctionRoom.getStartedAt().isBefore(LocalDateTime.now())) {
+            throw new AuctionStartTimeInvalidException();
         }
+        
         log.info("auctionRoom ItemList={}", auctionRoom.getItemList().toString());
         //auctionRoom 기본자료형 필드 업데이트
         auctionRoom.update(req);
