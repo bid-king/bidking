@@ -10,9 +10,17 @@ import { Input } from '../../common/Input';
 import { Spacing } from '../../common/Spacing';
 import { Text } from '../../common/Text';
 
-export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice, askingPrice, disable }: Props) {
+export function BiddingForm({
+  theme = 'light',
+  auctionRoomId,
+  itemId,
+  currPrice,
+  askingPrice,
+  disable,
+  setAlert,
+}: Props) {
   const [bidPrice, setBidPrice] = useState<string>('');
-  const [alert, setAlert] = useState<string>('');
+
   const { accessToken } = useAppSelector(state => state.user);
 
   return (
@@ -28,8 +36,12 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
         <ConfirmButton
           disable={disable}
           btnType="progress"
-          label={bidPriceParse(String(askingPrice)) + '원 즉시입찰'}
-          onClick={() => bid(auctionRoomId, itemId, askingPrice, accessToken)}
+          label={
+            String(askingPrice).length < 13
+              ? bidPriceParse(String(askingPrice)) + '원 즉시입찰'
+              : '더 높은 금액으로는 입찰할 수 없어요'
+          }
+          onClick={() => (String(askingPrice).length < 13 ? bid(auctionRoomId, itemId, askingPrice, accessToken) : {})}
         />
       </div>
       <div
@@ -40,9 +52,7 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           padding: '0 0.75rem 0 0.75rem',
           fontSize: '0.66rem',
         }}
-      >
-        <Text content={alert} />
-      </div>
+      ></div>
       <div css={{ display: 'flex' }}>
         <Input
           theme={theme}
@@ -51,10 +61,10 @@ export function BiddingForm({ theme = 'light', auctionRoomId, itemId, currPrice,
           onChange={e =>
             validateBidPrice(bidPrice) || bidPrice === ''
               ? setBidPrice(e.target.value)
-              : setAlert('1조 미만의 숫자만 입력 가능해요')
+              : console.log('1조 미만의 숫자만 입력 가능해요')
           }
           onKeyDown={e => {
-            if (e.key === 'Enter') setAlert('엔터키로는 입찰할 수 없어요');
+            if (e.key === 'Enter') console.log('엔터키로는 입찰할 수 없어요');
           }}
         />
         <Spacing rem="1" dir="h" />
@@ -89,4 +99,5 @@ interface Props {
   auctionRoomId: number;
   itemId: number;
   disable: boolean;
+  setAlert: (arg: string) => void;
 }
