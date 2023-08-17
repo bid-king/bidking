@@ -115,7 +115,7 @@ public class EndAuctionRoomFacade {
                 ordererDtoList.add(
                     new OrdererDto(
                         Long.parseLong(bidResult.getUserId()),
-                        bidResult.getPrice()
+                        item.getName
                     )
                 );
             }
