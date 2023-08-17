@@ -31,11 +31,7 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
   const { Alert, alertTrigger } = useAlert('msg', 'error');
   if (auctionRoomId)
     return (
-      <div
-        css={{
-          height: 'calc(100vh - 4rem)',
-        }}
-      >
+      <div>
         <div
           css={{
             width: '100%',
@@ -49,9 +45,9 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
           <Bidder theme={theme} bidder={topbidder} />
           <Spacing rem="1" />
           <BidPrice align="center" theme={theme} priceArr={priceArr} />
-          <Spacing rem="1.5" />
+          <Spacing rem="2" />
           <Timer theme={theme} time={currTime} />
-          <Spacing rem="1.5" />
+          <Spacing rem="2" />
           {userType === 'order' ? (
             <BiddingForm
               auctionRoomId={auctionRoomId}
@@ -77,7 +73,17 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
         <ChatRoom roomId={auctionRoomId} nickname={nickname} theme={theme} userType="order" socket={socket} />
       </div>
     );
-  else return <></>;
+  else
+    return (
+      <div
+        css={{
+          width: '100%',
+          borderRadius: '1.85rem',
+          padding: '1rem',
+          ...THEME_VARIANT[theme],
+        }}
+      />
+    );
 }
 
 const THEME_VARIANT = {

@@ -80,39 +80,40 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
 
       <div
         css={{
-          padding: '1rem',
-          height: '33vh',
+          padding: '1rem 1.5rem 1rem 1.5rem',
+          height: '14vh',
           borderRadius: '1.85rem',
           backgroundColor: userType === 'order' ? colors.backgroundLight2 : colors.backgroundDark2,
-          overflow: 'hidden',
+          overflow: 'auto',
         }}
       >
-        <Spacing rem="0.5" />
-        {notice.map((item, idx) => {
-          if (item.indexOf('SYSTEM') === 1)
-            if (item.indexOf('상품이 유찰되었어요.') > 0)
-              return (
-                <div key={idx} css={{ color: colors.disabled }}>
-                  <Text content={item} type="bold" />
-                  <Spacing rem="0.25" />
-                </div>
-              );
-          if (item.indexOf('SYSTEM') === 1) {
-            if (item.indexOf('원에 낙찰되었어요.') > 0)
-              return (
-                <div key={idx} css={{ color: colors.ok }}>
-                  <Text content={item} type="bold" />
-                  <Spacing rem="0.25" />
-                </div>
-              );
-          }
-          return (
-            <div key={idx} css={{ color: userType === 'order' ? colors.black : colors.white }}>
-              <Text content={item} />
-              <Spacing rem="0.25" />
-            </div>
-          );
-        })}
+        <div css={{}}>
+          {notice.map((item, idx) => {
+            if (item.indexOf('SYSTEM') === 1)
+              if (item.indexOf('상품이 유찰되었어요.') > 0)
+                return (
+                  <div key={idx} css={{ color: colors.disabled }}>
+                    <Text content={item} type="bold" />
+                    <Spacing rem="0.25" />
+                  </div>
+                );
+            if (item.indexOf('SYSTEM') === 1) {
+              if (item.indexOf('원에 낙찰되었어요.') > 0)
+                return (
+                  <div key={idx} css={{ color: colors.ok }}>
+                    <Text content={item} type="bold" />
+                    <Spacing rem="0.25" />
+                  </div>
+                );
+            }
+            return (
+              <div key={idx} css={{ color: userType === 'order' ? colors.black : colors.white }}>
+                <Text content={item} />
+                <Spacing rem="0.25" />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );

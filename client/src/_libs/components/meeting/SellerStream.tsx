@@ -9,10 +9,7 @@ import { Spacing } from '../common/Spacing';
 import { Text } from '../common/Text';
 
 export function SellerStream({ auctionRoomId, userId }: Props) {
-  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession, session, setSession } = useSellerStream(
-    userId,
-    auctionRoomId
-  );
+  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useSellerStream(userId, auctionRoomId);
   const { speaking, micStatus, videoStatus, videoRef } = useStream(publisher || undefined);
 
   const [mic, setMic] = useState<boolean | null | undefined>(null);
@@ -22,11 +19,6 @@ export function SellerStream({ auctionRoomId, userId }: Props) {
     if (publisher && videoRef?.current) {
       publisher.addVideoElement(videoRef.current);
     }
-
-    return () => {
-      session?.disconnect();
-      setSession(null);
-    };
   }, [publisher, videoRef.current]);
 
   const handleMicToggle = () => {
@@ -44,25 +36,31 @@ export function SellerStream({ auctionRoomId, userId }: Props) {
   };
 
   return (
-    <div css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem', border: '1px solid transparent' }}>
+    <div
+      css={{
+        width: '100%',
+        maxHeight: '60vh',
+        borderRadius: '1.5rem',
+        border: '1px solid transparent',
+      }}
+    >
       {publisher ? (
         <div>
-          <video
-            ref={videoRef}
-            autoPlay={true}
-            css={{ width: '100%', height: '56.25%', maxHeight: '50vh', borderRadius: '1.5rem' }}
-          />
-          <RoundButton
-            onClick={handleMicToggle}
-            color={mic ? 'white' : 'confirm'}
-            label={mic ? '마이크 끄기' : '마이크 켜기'}
-          />
-          <Spacing rem="0.5" dir="h" />
-          <RoundButton
-            onClick={handleCameraToggle}
-            color={cam ? 'white' : 'confirm'}
-            label={cam ? '카메라 끄기' : '카메라 켜기'}
-          />
+          <video ref={videoRef} autoPlay={true} css={{ width: '100%', maxHeight: '53vh', borderRadius: '1.85rem' }} />
+          <Spacing rem="0.25" />
+          <div css={{ display: 'flex' }}>
+            <RoundButton
+              onClick={handleMicToggle}
+              color={!mic ? 'white' : 'confirm'}
+              label={!mic ? '마이크 끄기' : '마이크 켜기'}
+            />
+            <Spacing rem="0.25" dir="h" />
+            <RoundButton
+              onClick={handleCameraToggle}
+              color={!cam ? 'white' : 'confirm'}
+              label={!cam ? '카메라 끄기' : '카메라 켜기'}
+            />
+          </div>
         </div>
       ) : (
         <div
