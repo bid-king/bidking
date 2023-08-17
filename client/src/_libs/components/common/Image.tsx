@@ -6,6 +6,7 @@ export function Image({ src = '/public/image/logo/logo_light.png', alt = 'bidkin
     <img
       css={{
         width: '100%',
+        display: 'block',
       }}
       src={src}
       alt={alt}

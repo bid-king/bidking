@@ -8,6 +8,15 @@ export function useSellerBox() {
   const [auctionListAfterLive, setAuctionListAfterLive] = useState<SellerAuctionRoomListResponse[]>([]);
   const { id, isLogined, accessToken } = useAppSelector(state => state.user);
   const [status, setStatus] = useState<SellerDashBoardResponce | null>(null);
+  const [column, setColumn] = useState<number>(Math.floor(window.innerWidth / 300));
+  const [width, setWidth] = useState<number>(window.innerWidth);
+  useEffect(() => {
+    function handleColumn() {
+      setWidth(column * 300);
+      setColumn(Math.floor(window.innerWidth / 300));
+    }
+    window.addEventListener('resize', handleColumn);
+  }, [Math.floor(window.innerWidth / 300)]);
 
   useEffect(() => {
     auction

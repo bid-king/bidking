@@ -44,7 +44,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
             css={{ display: 'flex' }}
             onSubmit={e => {
               e.preventDefault();
-              live(socket.current).send.notice(auctionRoomId, noticeInput.trim());
+              if (noticeInput.trim().length > 0) live(socket.current).send.notice(auctionRoomId, noticeInput.trim());
               setNoticeInput('');
             }}
           >
@@ -57,7 +57,8 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
               onChange={e => setNoticeInput(e.target.value)}
               onKeyDown={e => {
                 if (e.key === 'enter') {
-                  live(socket.current).send.notice(auctionRoomId, noticeInput.trim());
+                  if (noticeInput.trim().length > 0)
+                    live(socket.current).send.notice(auctionRoomId, noticeInput.trim());
                   setNoticeInput('');
                 }
               }}
@@ -69,7 +70,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
               color="confirm"
               label="보내기"
               onClick={() => {
-                live(socket.current).send.notice(auctionRoomId, noticeInput);
+                if (noticeInput.trim().length > 0) live(socket.current).send.notice(auctionRoomId, noticeInput);
                 setNoticeInput('');
               }}
             />

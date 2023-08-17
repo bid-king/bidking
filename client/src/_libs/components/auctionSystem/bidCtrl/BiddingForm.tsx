@@ -38,7 +38,7 @@ export function BiddingForm({
           btnType="progress"
           label={
             String(askingPrice).length < 13
-              ? bidPriceParse(String(askingPrice)) + '원 즉시입찰'
+              ? bidPriceParse(askingPrice) + '원 즉시입찰'
               : '1조 원 미만으로 입찰할 수 있어요'
           }
           onClick={() => (String(askingPrice).length < 13 ? bid(auctionRoomId, itemId, askingPrice, accessToken) : {})}
@@ -61,15 +61,17 @@ export function BiddingForm({
           placeholder={'입찰가'}
           value={bidPrice}
           onChange={e => {
-            if (validateBidPrice(bidPrice) || bidPrice === '') setBidPrice(e.target.value);
+            if (e.target.value === '' || validateBidPrice(e.target.value)) setBidPrice(e.target.value);
             else {
               console.log('입찰가는 1조 미만의 숫자여야 해요.');
               setBidPrice('');
             }
           }}
           onKeyDown={e => {
-            if (e.key === 'Enter') console.log('엔터키로는 입찰할 수 없어요');
-            setBidPrice('');
+            if (e.key === 'Enter') {
+              console.log('엔터키로는 입찰할 수 없어요');
+              setBidPrice('');
+            }
           }}
         />
         <Spacing rem="1" dir="h" />

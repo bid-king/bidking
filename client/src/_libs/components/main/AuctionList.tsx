@@ -28,16 +28,16 @@ export function AuctionList({
   return (
     <div
       css={{
-        width: '22%',
-        height: '13.5%',
-        minWidth: '20rem',
-        minHeight: '13.5rem',
+        width: '20rem',
+        height: '15rem',
         position: 'relative',
         cursor: 'pointer',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        padding: '0.5rem 0.5rem 1rem 0.5rem',
+        borderRadius: '0.8rem',
+        color: colors.white,
+        marginBottom: '1rem',
       }}
     >
       <img
@@ -45,8 +45,13 @@ export function AuctionList({
         css={{
           width: '100%',
           height: '100%',
+          minHeight: '15rem',
           objectFit: 'cover',
-          borderRadius: '0.8rem',
+          ...LIVE_VARIANT[auctionRoomLiveState],
+          ...THEME_VARIANT[auctionRoomTradeState],
+          '&:hover': {
+            filter: 'brightness(66%)',
+          },
         }}
         onError={e => {
           const target = e.target as HTMLImageElement;
@@ -56,19 +61,23 @@ export function AuctionList({
         alt={title}
       />
       <Spacing rem="0.5" />
-      <div
-        css={{
-          color: colors.black,
-        }}
-      >
-        {auctionRoomTradeState === 'ALL_COMPLETED' && <Text content={'모든 절차가 끝났어요'} />}
-        {auctionRoomTradeState === 'IN_PROGRESS' && <Text content={'상품을 배송하지 않았어요'} />}
+      <div css={{ position: 'absolute', bottom: '1rem', left: '1rem', filter: 'drop-shadow(0 0 0.1rem black)' }}>
+        {auctionRoomTradeState === 'ALL_COMPLETED' && (
+          <div css={{ color: colors.ok }}>
+            <Text content={'모든 절차가 끝났어요'} />
+          </div>
+        )}
+        {auctionRoomTradeState === 'IN_PROGRESS' && (
+          <div css={{ color: colors.confirm }}>
+            <Text content={'상품을 배송하지 않았어요'} />
+          </div>
+        )}
         {auctionRoomLiveState === 'ON_LIVE' ? (
           <div css={{ color: colors.warn }}>
-            <Text type="bold" content={'LIVE'} />
+            <Text type="bold" content={'● LIVE'} />
           </div>
         ) : (
-          <div css={{ color: colors.black }}>
+          <div>
             <Text content={auctionDateParse(date)} />
           </div>
         )}
@@ -80,3 +89,17 @@ export function AuctionList({
     </div>
   );
 }
+const THEME_VARIANT = {
+  ALL_COMPLETED: {
+    filter: 'brightness(66%)',
+  },
+  IN_PROGRESS: { filter: 'brightness(66%)' },
+  BEFORE_PROGRESS: {},
+  NONE: {},
+};
+const LIVE_VARIANT = {
+  ON_LIVE: {
+    filter: 'brightness(66%)',
+  },
+  BEFORE_LIVE: {},
+};

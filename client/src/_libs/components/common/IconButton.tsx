@@ -13,6 +13,7 @@ export function IconButton({ type, background = 'transparent', color = 'lightgre
         borderRadius: '3rem',
         textAlign: 'center',
         lineHeight: '0',
+
         ...BACKGROUND_VARIANT[background],
         ...SIZE_VARIANT[size],
         '&:hover': {
@@ -21,12 +22,12 @@ export function IconButton({ type, background = 'transparent', color = 'lightgre
       }}
       onClick={onClick}
     >
-      <Icon type={type} color={color} rem={size === 'small' ? '0.85' : '1.15'} />
+      <Icon type={type} color={color} rem={size === 'small' ? '0.85' : '1.25'} />
     </button>
   );
 }
 const BACKGROUND_VARIANT = {
-  white: { backgroundColor: colors.white, border: '1px solid transparent' },
+  white: { backgroundColor: colors.white, border: `1px solid ${colors.whitegrey}` },
   black: { backgroundColor: colors.backgroundDark3, border: '1px solid transparent' },
   dark: { backgroundColor: colors.backgroundDark3, border: '1px solid transparent' },
   light: { backgroundColor: colors.backgroundLight2, border: '1px solid transparent' },
@@ -39,11 +40,11 @@ const BACKGROUND_VARIANT = {
 const SIZE_VARIANT = {
   small: {
     height: '1.75rem',
-    width: '3rem',
+    width: '1.75rem',
   },
   large: {
-    height: '2.25rem',
-    width: '4rem',
+    height: '2.5rem',
+    width: '2.5rem',
   },
 };
 

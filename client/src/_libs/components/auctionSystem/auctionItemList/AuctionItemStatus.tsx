@@ -56,8 +56,8 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                         <Text type="h3" content={item.name} />
                         <Spacing rem="0.25" />
                         <Text content={'경매 시작가'} />
-                        <Spacing rem="0.25" />
-                        <Text content={bidPriceParse(String(item.startPrice)) + '원'} />
+                        <br />
+                        <Text content={bidPriceParse(item.startPrice) + '원'} />
                       </div>
                     </div>
                   );

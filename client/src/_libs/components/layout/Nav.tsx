@@ -82,7 +82,7 @@ export function Nav({ theme = 'light' }: Props) {
               className="logo"
               css={{
                 width: '5rem',
-                height: '1rem',
+                height: '3rem',
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -115,6 +115,7 @@ export function Nav({ theme = 'light' }: Props) {
                 setKeyword('');
               }}
             >
+              <Spacing rem="1.5" dir="h" />
               <div>
                 <Input
                   shape="round"
