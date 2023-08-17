@@ -41,6 +41,7 @@ export function Nav({ theme = 'light' }: Props) {
     keyword,
     handleKeyword,
     searchKeyword,
+    setKeyword,
     id,
     searchClickKeyword,
     eventSourceRef,
@@ -104,20 +105,33 @@ export function Nav({ theme = 'light' }: Props) {
           </div>
           <Spacing rem="1" dir="h" />
           {theme === 'light' && (
-            <form css={{ display: 'flex' }} onSubmit={searchKeyword}>
+            <form
+              css={{ display: 'flex' }}
+              onSubmit={e => {
+                searchKeyword(e);
+                setKeyword('');
+              }}
+            >
               <div>
                 <Input
                   shape="round"
                   theme={theme}
                   onChange={handleKeyword}
-                  placeholder="경매방을 검색하세요"
+                  placeholder="경매나 상품을 검색하세요"
                   size="small"
                   value={keyword}
                 />
               </div>
               <Spacing rem="0.5" dir="h" />
               <div>
-                <RoundButton onClick={searchClickKeyword} label="검색" size="small" />
+                <RoundButton
+                  onClick={e => {
+                    searchClickKeyword(e);
+                    setKeyword('');
+                  }}
+                  label="검색"
+                  size="small"
+                />
               </div>
             </form>
           )}
@@ -157,7 +171,7 @@ export function Nav({ theme = 'light' }: Props) {
                   </Link>
                   <Spacing rem="0.5" dir="h" />
                   <Link to={'/seller'}>
-                    <RoundButton label="판매 모드" size="small" color="white" />
+                    <RoundButton label="판매하기" size="small" color="confirm" />
                   </Link>
                 </div>
               )}
@@ -172,7 +186,7 @@ export function Nav({ theme = 'light' }: Props) {
                   </Link>
                   <Spacing rem="0.5" dir="h" />
                   <Link to={'/'}>
-                    <RoundButton label="구매 모드" size="small" color="white" />
+                    <RoundButton label="구매하기" size="small" color="confirm" />
                   </Link>
                 </div>
               )}

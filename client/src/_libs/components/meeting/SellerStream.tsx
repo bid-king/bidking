@@ -5,21 +5,28 @@ import colors from '../../design/colors';
 import { useSellerStream } from '../../hooks/useSellerStream';
 import { useStream } from '../../hooks/useStream';
 import { RoundButton } from '../common/RoundButton';
+import { Spacing } from '../common/Spacing';
 import { Text } from '../common/Text';
 
 export function SellerStream({ auctionRoomId, userId }: Props) {
-  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useSellerStream(userId, auctionRoomId);
+  const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession, session, setSession } = useSellerStream(
+    userId,
+    auctionRoomId
+  );
   const { speaking, micStatus, videoStatus, videoRef } = useStream(publisher || undefined);
 
-  const [mic, setMic] = useState<boolean | null | undefined>(publisher?.stream.audioActive);
-  const [cam, setCam] = useState<boolean | null | undefined>(publisher?.stream.videoActive);
+  const [mic, setMic] = useState<boolean | null | undefined>(null);
+  const [cam, setCam] = useState<boolean | null | undefined>(null);
 
   useEffect(() => {
-    console.log(videoRef.current);
-    console.log(publisher);
     if (publisher && videoRef?.current) {
       publisher.addVideoElement(videoRef.current);
     }
+
+    return () => {
+      session?.disconnect();
+      setSession(null);
+    };
   }, [publisher, videoRef.current]);
 
   const handleMicToggle = () => {
@@ -40,12 +47,17 @@ export function SellerStream({ auctionRoomId, userId }: Props) {
     <div css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem', border: '1px solid transparent' }}>
       {publisher ? (
         <div>
-          <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
+          <video
+            ref={videoRef}
+            autoPlay={true}
+            css={{ width: '100%', height: '56.25%', maxHeight: '50vh', borderRadius: '1.5rem' }}
+          />
           <RoundButton
             onClick={handleMicToggle}
             color={mic ? 'white' : 'confirm'}
             label={mic ? '마이크 끄기' : '마이크 켜기'}
           />
+          <Spacing rem="0.5" dir="h" />
           <RoundButton
             onClick={handleCameraToggle}
             color={cam ? 'white' : 'confirm'}

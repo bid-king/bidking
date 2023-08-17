@@ -15,7 +15,7 @@ export function BidNumber({ n, o }: Props) {
     <div
       css={{
         // border: '1px solid black',
-        width: n === 1 ? '0.9rem' : '1.15rem',
+        width: n === 1 ? '0.95rem' : '1.25rem',
         textAlign: 'center',
         fontWeight: '600',
         fontFeatureSettings: '"tnum"',

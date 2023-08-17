@@ -11,6 +11,7 @@ interface Props extends HTMLAttributes<HTMLInputElement> {
   size?: 'small' | 'large';
   placeholder: string;
   value?: string;
+  autoComplete?: 'off' | undefined;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -26,6 +27,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
       theme = 'light',
       shape = 'square',
       value,
+      autoComplete = undefined,
       onChange,
       onBlur,
       onKeyDown,
@@ -41,6 +43,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
         type={inputType}
         placeholder={placeholder}
         value={value}
+        autoComplete={autoComplete}
         css={{
           width: '100%',
           paddingLeft: '1rem',
