@@ -8,6 +8,7 @@ export function AuctionItem({ item, idx }: Props) {
     <div
       key={idx}
       css={{
+        backgroundColor: '',
         backgroundImage: `url('${item.imageUrl}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center center',

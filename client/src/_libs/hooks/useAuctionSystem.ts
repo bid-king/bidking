@@ -24,11 +24,13 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>, userTy
   useEffect(() => {
     orderRef.current = order;
     itemListRef.current = itemList;
+    console.log('useEffect[order,itemlist]', orderRef.current, itemListRef.current);
   }, [order, itemList]);
 
   useEffect(() => {
     socket.current?.on('init', ({ currentItemId, itemList }: Init) => {
       const adjusted = arrayPadding(itemList, DUMMY, 2);
+      console.log('init', itemList);
       setItemList(adjusted);
       setCurrId(currentItemId);
     }); //API 요청 성공시, 이 데이터가 소켓에서옴
@@ -77,6 +79,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>, userTy
       });
       setCurrId(itemListRef.current ? itemListRef.current[orderRef.current + 1].itemId : 0);
       setOrder(orderRef.current && orderRef.current + 1);
+      console.log('successBid', orderRef.current + 1);
       setLiveStatus(
         orderRef.current === (itemListRef.current?.length && itemListRef.current.length - 4) ? 'end' : 'beforeDesc'
       ); //지금 순서가 마지막 순서였으면 끝내고, 아니면 계속 진행
@@ -94,6 +97,7 @@ export function useAuctionSystem(socket: MutableRefObject<Socket | null>, userTy
       });
       setCurrId(itemListRef.current ? itemListRef.current[orderRef.current + 1].itemId : 0);
       setOrder(orderRef.current && orderRef.current + 1);
+      console.log('failBid', orderRef.current + 1);
       setLiveStatus(
         orderRef.current === (itemListRef.current?.length && itemListRef.current.length - 4) ? 'end' : 'beforeDesc'
       ); //지금 순서가 마지막 순서였으면 끝내고, 아니면 계속 진행

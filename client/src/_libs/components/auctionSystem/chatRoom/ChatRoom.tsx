@@ -16,12 +16,22 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const chatRef = useRef<HTMLDivElement>(null);
 
+  const countRef = useRef(count);
+
+  useEffect(() => {
+    countRef.current = count;
+  }, [count]);
+
   useEffect(() => {
     socket.current?.on('chat', data => {
       setChats([...chats, data]);
     });
     socket.current?.on('newUser', ({ newUser }) => {
       setChats([...chats, { nickname: newUser, msg: '님이 입장했어요.' }]);
+      setCount(countRef.current + 1);
+    });
+    socket.current?.on('leaveRoom', () => {
+      setCount(countRef.current - 1);
     });
   }, [socket.current, chats]);
 
@@ -41,7 +51,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
     <div
       css={{
         width: '100%',
-        minHeight: '60vh',
+        height: 'calc(60vh - 3rem)',
         borderRadius: '1.85rem',
         padding: '1rem',
         position: 'relative',
@@ -50,7 +60,8 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
         flexDirection: 'column',
       }}
     >
-      <div css={{ overflowY: 'auto', height: '55vh' }}>
+      <Text content={String(count)} type="h2" />
+      <div css={{ overflowY: 'auto', height: 'calc(55vh - 3rem)' }}>
         <div css={{ paddingBottom: '1rem' }}>
           {chats.map((chat, idx) => (
             <ChatMessage key={idx} nickname={chat.nickname} msg={chat.msg} />
@@ -71,14 +82,19 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
       >
         {userType === 'order' && (
           <div css={{ width: '100%' }}>
-            <form>
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                live(socket.current).send.chat(roomId, nickname, input);
+                setInput('');
+              }}
+            >
               <div css={{ display: 'flex', width: '100%', alignItems: 'center' }}>
                 <Input
                   id="chat"
                   placeholder=""
                   shape="round"
                   size="small"
-                  value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => {
                     e.key === 'enter' && input.length > 0 && live(socket.current).send.chat(roomId, nickname, input);

@@ -9,16 +9,13 @@ import colors from '../../_libs/design/colors';
 
 export function SellerExit() {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setTimeout(() => navigate('/seller'), 2000);
-    return;
-  }, []);
+  setTimeout(() => navigate('/seller'), 2000);
 
   return (
     <div
       css={{
         backgroundColor: colors.backgroundDark,
+        color: colors.white,
         width: '100%',
         height: '100%',
         display: 'flex',
