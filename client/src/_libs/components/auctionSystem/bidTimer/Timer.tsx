@@ -30,7 +30,7 @@ export function Timer({ theme = 'light', time }: Props) {
             transformOrigin: 'left',
             height: '0.35rem',
             borderRadius: '1rem',
-            backgroundColor: `${time >= 5 ? colors.ok : time > 2 ? colors.confirm : colors.warn}`, //5초 이상은 초록, 2-4초는 노랑, 0-2초는 빨강
+            backgroundColor: `${time >= 6 ? colors.ok : time > 2 ? colors.confirm : colors.warn}`, //5초 이상은 초록, 2-4초는 노랑, 0-2초는 빨강
             transition: 'transform 1s linear',
           }}
         />

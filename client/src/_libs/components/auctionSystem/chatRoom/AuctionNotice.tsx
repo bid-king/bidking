@@ -41,7 +41,14 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
       {userType === 'seller' && (
         <>
           <Spacing rem="0.5" />
-          <form css={{ display: 'flex' }} onSubmit={e => e.preventDefault()}>
+          <form
+            css={{ display: 'flex' }}
+            onSubmit={e => {
+              e.preventDefault();
+              live(socket.current).send.notice(auctionRoomId, noticeInput.trim());
+              setNoticeInput('');
+            }}
+          >
             <Input
               placeholder="참여자 모두에게 전달할 메세지를 입력하세요"
               size="large"
@@ -51,7 +58,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
               onChange={e => setNoticeInput(e.target.value)}
               onKeyDown={e => {
                 if (e.key === 'enter') {
-                  live(socket.current).send.notice(auctionRoomId, noticeInput);
+                  live(socket.current).send.notice(auctionRoomId, noticeInput.trim());
                   setNoticeInput('');
                 }
               }}
