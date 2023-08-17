@@ -6,6 +6,7 @@ module.exports = app => {
 
   const subscriber = redis.createClient({
     url: process.env.REDIS_URL,
+    password: "0613"
   });
 
   subscriber.subscribe('StartAuctionItem');

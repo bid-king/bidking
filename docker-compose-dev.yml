@@ -2,6 +2,9 @@ version: '3'
 
 services:
   redis-server:
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
     image: dajeongyun/redis
     hostname: redis
     ports:
@@ -18,6 +21,7 @@ services:
     stdin_open: true
 
   springboot:
+    image: dajeongyun/docker-nodejs-server
     build:
       context: ./server
       dockerfile: Dockerfile
