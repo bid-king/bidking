@@ -54,32 +54,34 @@ export function BiddingForm({
         }}
       ></div>
       <div css={{ display: 'flex' }}>
-        <Input
-          theme={theme}
-          inputType="text"
-          placeholder={'입찰가'}
-          value={bidPrice}
-          onChange={e =>
-            validateBidPrice(bidPrice) || bidPrice === ''
-              ? setBidPrice(e.target.value)
-              : console.log('1조 원까지 입찰할 수 있어요')
-          }
-          onKeyDown={e => {
-            if (e.key === 'Enter') console.log('엔터키로는 입찰할 수 없어요');
-          }}
-        />
-        <Spacing rem="1" dir="h" />
-        <ConfirmButton
-          disable={disable}
-          btnType="confirm"
-          label="입찰"
-          onClick={() => {
-            if (currPrice < Number(bidPrice) && validateBidPrice(bidPrice)) {
-              bid(auctionRoomId, itemId, Number(bidPrice), accessToken);
-              setBidPrice('');
-            } else return;
-          }}
-        />
+        <form autoComplete="off" onSubmit={e => e.preventDefault()}>
+          <Input
+            theme={theme}
+            inputType="text"
+            placeholder={'입찰가'}
+            value={bidPrice}
+            onChange={e =>
+              validateBidPrice(bidPrice) || bidPrice === ''
+                ? setBidPrice(e.target.value)
+                : console.log('1조 원까지 입찰할 수 있어요')
+            }
+            onKeyDown={e => {
+              if (e.key === 'Enter') console.log('엔터키로는 입찰할 수 없어요');
+            }}
+          />
+          <Spacing rem="1" dir="h" />
+          <ConfirmButton
+            disable={disable}
+            btnType="confirm"
+            label="입찰"
+            onClick={() => {
+              if (currPrice < Number(bidPrice) && validateBidPrice(bidPrice)) {
+                bid(auctionRoomId, itemId, Number(bidPrice), accessToken);
+                setBidPrice('');
+              } else return;
+            }}
+          />
+        </form>
       </div>
     </div>
   );
