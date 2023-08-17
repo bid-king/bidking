@@ -71,8 +71,8 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                 e.preventDefault();
                 if (input.trim().length > 0) {
                   live(socket.current).send.chat(roomId, nickname, input.trim());
-                  setInput('');
                 }
+                setInput('');
               }}
             >
               <div css={{ display: 'flex', width: '100%', alignItems: 'center' }}>
@@ -99,8 +99,8 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   onClick={e => {
                     if (input.length > 0) {
                       live(socket.current).send.chat(roomId, nickname, input.trim());
-                      setInput('');
                     }
+                    setInput('');
                   }}
                 />
               </div>

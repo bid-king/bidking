@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import colors from '../../design/colors';
 import { Text } from '../common/Text';
 import { auctionDateParse } from '../../util/auctionDateParse';
+import { Spacing } from '../common/Spacing';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   title?: string;
@@ -31,24 +32,21 @@ export function AuctionList({
         height: '13.5%',
         minWidth: '20rem',
         minHeight: '13.5rem',
-        borderRadius: '1.5rem',
         position: 'relative',
         cursor: 'pointer',
         overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '0.5rem 0.5rem 1rem 0.5rem',
       }}
     >
       <img
         src={img}
         css={{
-          position: 'absolute',
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          borderRadius: '1.5rem',
-          transition: 'filter 0.15s',
-          '&:hover': {
-            filter: 'blur(0.25rem)',
-          },
+          borderRadius: '0.8rem',
         }}
         onError={e => {
           const target = e.target as HTMLImageElement;
@@ -57,64 +55,28 @@ export function AuctionList({
         }}
         alt={title}
       />
-
+      <Spacing rem="0.5" />
       <div
         css={{
-          bottom: '1.5rem',
-          left: '1.5rem',
-          position: 'absolute',
-          color: 'white',
-          filter: 'drop-shadow(0 0 0.5rem #000)',
+          color: colors.black,
         }}
       >
+        {auctionRoomTradeState === 'ALL_COMPLETED' && <Text content={'모든 절차가 끝났어요'} />}
+        {auctionRoomTradeState === 'IN_PROGRESS' && <Text content={'상품을 배송하지 않았어요'} />}
+        {auctionRoomLiveState === 'ON_LIVE' ? (
+          <div css={{ color: colors.warn }}>
+            <Text type="bold" content={'LIVE'} />
+          </div>
+        ) : (
+          <div css={{ color: colors.black }}>
+            <Text content={auctionDateParse(date)} />
+          </div>
+        )}
+        <Spacing rem="0.5" />
         <Text type="h2" content={title} />
-        <Text type="h3" content={auctionDateParse(date)} />
+        <Spacing rem="0.5" />
         <Text content={items.slice(0, 3).join(', ')} />
-      </div>
-      <div
-        css={{
-          position: 'absolute',
-          textAlign: 'center',
-          width: '100%',
-          borderRadius: '1rem',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          opacity: '0.9',
-          ...TRADE_STATE[auctionRoomTradeState],
-          ...LIVE_STATE[auctionRoomLiveState],
-        }}
-      >
-        {auctionRoomTradeState === 'ALL_COMPLETED' && '모든 절차가 끝났어요.'}
-        {auctionRoomTradeState === 'IN_PROGRESS' && '아직 판매가 진행중이에요'}
-
-        {auctionRoomLiveState === 'ON_LIVE' && 'LIVE'}
       </div>
     </div>
   );
 }
-
-const TRADE_STATE = {
-  NONE: {},
-  ALL_COMPLETED: {
-    height: '100%',
-    backgroundColor: colors.black,
-    opacity: '0.66',
-    color: `${colors.white}`,
-  },
-  IN_PROGRESS: {
-    height: '3rem',
-    backgroundColor: colors.progress,
-    color: `${colors.white}`,
-  },
-  BEFORE_PROGRESS: {},
-};
-
-const LIVE_STATE = {
-  BEFORE_LIVE: {},
-  ON_LIVE: {
-    height: '3rem',
-    backgroundColor: colors.warn,
-    color: `${colors.white}`,
-  },
-};
