@@ -9,15 +9,16 @@ import colors from '../../_libs/design/colors';
 
 export function OrderExit() {
   const navigate = useNavigate();
-  setTimeout(() => navigate(''), 2000);
-
+  useEffect(() => {
+    setTimeout(() => navigate(''), 2000);
+  }, []);
   return (
     <div
       css={{
         backgroundColor: colors.backgroundLight,
         color: colors.black,
         width: '100%',
-        height: '100%',
+        height: 'calc(100vh - 3rem)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',

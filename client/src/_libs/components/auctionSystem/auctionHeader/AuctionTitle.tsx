@@ -6,10 +6,6 @@ import { Text } from '../../common/Text';
 export function AuctionTitle({ theme, sellerNickname, title, auctionRoomType }: Props) {
   return (
     <div>
-      <div css={{ padding: '0 0.5rem 0 0.5rem' }}>
-        <Text content={title} type="h3" />
-      </div>
-      <Spacing rem="0.5" />
       <div css={{ display: 'flex', alignItems: 'center' }}>
         <div
           css={{
@@ -31,6 +27,10 @@ export function AuctionTitle({ theme, sellerNickname, title, auctionRoomType }: 
         >
           <Text content={'판매자 '} />
           <Text content={sellerNickname} type="bold" />
+        </div>
+        <Spacing rem="0.5" />
+        <div css={{ padding: '0 0.5rem 0 0.5rem' }}>
+          <Text content={title} type="h3" />
         </div>
       </div>
     </div>
