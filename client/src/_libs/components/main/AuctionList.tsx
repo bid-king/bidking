@@ -28,14 +28,16 @@ export function AuctionList({
   return (
     <div
       css={{
-        width: '100%',
+        width: '20rem',
+        height: '15rem',
         position: 'relative',
         cursor: 'pointer',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        padding: '0.5rem 0 1rem 0',
-        ...THEME_VARIANT[auctionRoomTradeState],
+        borderRadius: '0.8rem',
+        color: colors.white,
+        marginBottom: '1rem',
       }}
     >
       <img
@@ -43,8 +45,11 @@ export function AuctionList({
         css={{
           width: '100%',
           height: '100%',
-          objectFit: 'fill',
-          borderRadius: '0.8rem',
+          minHeight: '15rem',
+          objectFit: 'cover',
+          '&:hover': {
+            filter: 'brightness(66%)',
+          },
         }}
         onError={e => {
           const target = e.target as HTMLImageElement;
@@ -54,7 +59,7 @@ export function AuctionList({
         alt={title}
       />
       <Spacing rem="0.5" />
-      <div>
+      <div css={{ position: 'absolute', bottom: '1rem', left: '1rem', filter: 'drop-shadow(0 0 0.1rem black)' }}>
         {auctionRoomTradeState === 'ALL_COMPLETED' && <Text content={'모든 절차가 끝났어요'} />}
         {auctionRoomTradeState === 'IN_PROGRESS' && <Text content={'상품을 배송하지 않았어요'} />}
         {auctionRoomLiveState === 'ON_LIVE' ? (
@@ -74,18 +79,3 @@ export function AuctionList({
     </div>
   );
 }
-
-const THEME_VARIANT = {
-  ALL_COMPLETED: {
-    color: colors.white,
-  },
-  IN_PROGRESS: {
-    color: colors.white,
-  },
-  NONE: {
-    color: colors.black,
-  },
-  BEFORE_PROGRESS: {
-    color: colors.black,
-  },
-};

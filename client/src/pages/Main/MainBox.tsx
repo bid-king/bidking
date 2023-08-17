@@ -54,7 +54,7 @@ export function MainBox() {
         </div>
         <Spacing rem="2" />
       </div>
-      <div css={{ width: width, margin: '0 auto' }}>
+      <div>
         <div
           css={{
             display: 'flex',
@@ -62,10 +62,10 @@ export function MainBox() {
         ></div>
         <div
           css={{
-            padding: '0 2rem',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
+            width: '100%',
+            padding: '0 2rem 0 2rem',
           }}
         >
           {isLogined && auctionListBookmarked.length !== 0 && (
@@ -74,14 +74,15 @@ export function MainBox() {
               <Spacing rem="1" />
               <div
                 css={{
-                  columnCount: column,
-                  width: width,
+                  display: 'flex',
+                  flexWrap: 'wrap',
                 }}
               >
                 {auctionListBookmarked.map((auction, index) => (
                   <div
                     css={{
                       position: 'relative',
+                      marginRight: '1rem',
                     }}
                     key={auction.id}
                   >
@@ -98,8 +99,8 @@ export function MainBox() {
                       <div
                         css={{
                           position: 'absolute',
-                          top: '1rem',
-                          left: '0.5rem',
+                          top: '0.75rem',
+                          right: '0.75rem',
                         }}
                       >
                         <IconButton
@@ -114,7 +115,6 @@ export function MainBox() {
                         />
                       </div>
                     )}
-                    <Spacing rem="1" />
                   </div>
                 ))}
               </div>
@@ -126,9 +126,8 @@ export function MainBox() {
             <Spacing rem="1" />
             <div
               css={{
-                columnCount: column,
-                width: width,
-                minHeight: '100vh',
+                display: 'flex',
+                flexWrap: 'wrap',
               }}
             >
               {auctionList.map(auction => (
@@ -153,8 +152,8 @@ export function MainBox() {
                     <div
                       css={{
                         position: 'absolute',
-                        top: '1rem',
-                        left: '0.5rem',
+                        top: '0.75rem',
+                        right: '0.75rem',
                       }}
                     >
                       <IconButton
@@ -169,7 +168,6 @@ export function MainBox() {
                       />
                     </div>
                   )}
-                  <Spacing rem="1" />
                 </div>
               ))}
 
