@@ -65,7 +65,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Override
     public void sendAuctionCreateToSeller(Member member) {
-        send(member, Content.AUCTION_REGISTERED.toString(), AlarmType.AUCTION);
+        send(member, Content.AUCTION_REGISTERED.getContent(), AlarmType.AUCTION);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class AlarmServiceImpl implements AlarmService {
         for (Optional<Bookmark> bookmark : bookmarkList
         ) {
             if (bookmark.isPresent()) {
-                send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK.toString(),
+                send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK.getContent(),
                     AlarmType.AUCTION);
             }
         }
@@ -92,7 +92,7 @@ public class AlarmServiceImpl implements AlarmService {
         for (Optional<Bookmark> bookmark : bookmarkList
         ) {
             if (bookmark.isPresent()) {
-                send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK.toString(),
+                send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK.getContent(),
                     AlarmType.AUCTION);
             }
         }
