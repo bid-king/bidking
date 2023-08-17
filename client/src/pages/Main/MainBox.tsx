@@ -171,18 +171,9 @@ export function MainBox() {
                 </div>
               ))}
 
-              {auctionList.length === 0 && (
-                <div
-                  css={{
-                    height: '20rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text content="경매가 존재하지 않습니다" />
-                </div>
-              )}
-            </div>
+                <Spacing rem="1" />
+              </div>
+            ))}
           </div>
         </div>
       </div>
