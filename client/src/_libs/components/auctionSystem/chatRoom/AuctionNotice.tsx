@@ -7,6 +7,7 @@ import { Input } from '../../common/Input';
 import { Spacing } from '../../common/Spacing';
 import { live, liveItemList } from '../../../../api/live';
 import { RoundButton } from '../../common/RoundButton';
+import { bidPriceParse } from '../../../util/bidPriceParse';
 
 export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
   const [itemList, setItemList] = useState<liveItemList | undefined>(undefined);
@@ -15,7 +16,6 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
   useEffect(() => {
     socket.current?.on('init', ({ currentItemId, itemList }) => {
       setItemList(itemList);
-      console.log(itemList);
     }); //API 요청 성공시, 이 데이터가 소켓에서옴
 
     socket.current?.on('notice', ({ msg }) => {
@@ -24,15 +24,13 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
     socket.current?.on('successBid', ({ itemId, userId, nickname, price, time }) => {
       //TODO: 상품 뭔지 알려줘야함
       const result = itemList?.find(item => item.itemId === itemId);
-      console.log('낙찰성공', result);
-      const msg = `<SYSTEM> ${result?.name} 상품이 ${nickname}님께 ${price}원에 낙찰되었습니다.`;
+      const msg = `<SYSTEM> ${result?.name} 상품이 ${nickname}님께 ${bidPriceParse(price)}원에 낙찰되었어요.`;
       setNotice([msg, ...notice]);
     }); //낙찰
     socket.current?.on('failBid', ({ itemId }) => {
       //TODO: 상품 뭔지 알려줘야함
       const result = itemList?.find(item => item.itemId === itemId);
-      console.log('유찰', result);
-      const msg = `<SYSTEM> ${result?.name} 상품이 유찰되었습니다.`;
+      const msg = `<SYSTEM> ${result?.name} 상품이 유찰되었어요.`;
       setNotice([msg, ...notice]);
     }); //유찰
   }, [socket.current, notice]);
@@ -51,7 +49,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
             }}
           >
             <Input
-              placeholder="참여자 모두에게 전달할 메세지를 입력하세요"
+              placeholder="공지사항을 입력하세요."
               size="large"
               theme="dark"
               shape="round"
@@ -82,19 +80,40 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
 
       <div
         css={{
-          color: colors.confirm,
-          padding: '1rem',
-          borderRadius: '1.5rem',
+          padding: '1rem 1.5rem 1rem 1.5rem',
+          height: '14vh',
+          borderRadius: '1.85rem',
           backgroundColor: userType === 'order' ? colors.backgroundLight2 : colors.backgroundDark2,
+          overflow: 'auto',
         }}
       >
-        <Spacing rem="0.5" />
-        {notice.map((item, idx) => (
-          <div key={idx}>
-            <Text content={item} type="bold" />
-            <Spacing rem="0.5" />
-          </div>
-        ))}
+        <div css={{}}>
+          {notice.map((item, idx) => {
+            if (item.indexOf('SYSTEM') === 1)
+              if (item.indexOf('상품이 유찰되었어요.') > 0)
+                return (
+                  <div key={idx} css={{ color: colors.disabled }}>
+                    <Text content={item} type="bold" />
+                    <Spacing rem="0.25" />
+                  </div>
+                );
+            if (item.indexOf('SYSTEM') === 1) {
+              if (item.indexOf('원에 낙찰되었어요.') > 0)
+                return (
+                  <div key={idx} css={{ color: colors.ok }}>
+                    <Text content={item} type="bold" />
+                    <Spacing rem="0.25" />
+                  </div>
+                );
+            }
+            return (
+              <div key={idx} css={{ color: userType === 'order' ? colors.black : colors.white }}>
+                <Text content={item} />
+                <Spacing rem="0.25" />
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );

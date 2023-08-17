@@ -108,6 +108,7 @@ export function useNavBar() {
     keyword,
     handleKeyword,
     searchKeyword,
+    setKeyword,
     id,
     searchClickKeyword,
     eventSourceRef,

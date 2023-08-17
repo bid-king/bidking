@@ -23,7 +23,7 @@ export function AuctionHeader({ userType, theme, sellerNickname, auctionRoomType
 }
 
 const THEME_VARIANT = {
-  light: { backgroundColor: colors.backgroundLight2, filter: `drop-shadow(0 0 0.15rem ${colors.lightgrey})` },
+  light: { backgroundColor: colors.backgroundLight2 },
   dark: {
     backgroundColor: colors.backgroundDark2,
     color: colors.white,

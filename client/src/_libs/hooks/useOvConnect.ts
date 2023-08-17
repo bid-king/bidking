@@ -23,7 +23,7 @@ export function useOrderOV(userId: number, auctionRoomId: number) {
     if (userId && auctionRoomId) {
       const openVidu = new OpenVidu();
       const session = openVidu.initSession();
-      console.log('구매자 오픈비두 연결 요청');
+
       session.on('streamCreated', event => {
         const subscriber = session.subscribe(event.stream, '');
         const data = JSON.parse(event.stream.connection.data);
@@ -109,7 +109,6 @@ export function useSellerOV(userId: number, auctionRoomId: number) {
 
             setPublisher(publisher);
             session.publish(publisher);
-            console.log('오픈비두 연결 요청');
           })
           .catch(error => {
             console.log('There was an error connecting to the session:', error.code, error.message);

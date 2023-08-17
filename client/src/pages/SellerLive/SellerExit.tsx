@@ -28,10 +28,10 @@ export function SellerExit() {
     >
       <Spinner />
       <Spacing rem="2" />
-      <Text content={'경매를 종료했어요. 잠시 후 판매 모드 페이지로 이동해요.'} type={'h2'} />
-      <Spacing rem="1" />
-      <Text content={'판매 모드 페이지로 이동되지 않으면, 아래 버튼을 클릭하세요.'} />
-      <Spacing rem="1" />
+      <Text content={'경매를 종료했어요. 잠시 후 판매하기 페이지로 이동해요.'} type={'h2'} />
+      <Spacing rem="0.5" />
+      <Text content={'판매하기 페이지로 이동되지 않으면, 아래 버튼을 클릭하세요.'} />
+      <Spacing rem="1.5" />
       <RoundButton onClick={() => navigate('/seller')} label="판매자 페이지로 이동하기" />
     </div>
   );

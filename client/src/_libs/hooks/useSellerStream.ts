@@ -84,5 +84,7 @@ export function useSellerStream(userId: number, roomId: number) {
     onChangeCameraStatus,
     onChangeMicStatus,
     leaveSession,
+    session,
+    setSession,
   };
 }

@@ -46,7 +46,7 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                           backgroundRepeat: 'no-repeat',
                           borderRadius: '1rem',
                           border: '1px solid ' + colors.confirm,
-                          filter: `drop-shadow(0 0 0.025rem ${colors.confirm})`,
+                          filter: `drop-shadow(0 0 0.015rem ${colors.confirm})`,
                           width: '3rem',
                           height: '3rem',
                         }}
@@ -55,7 +55,9 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                       <div css={{ display: 'flex', flexDirection: 'column' }}>
                         <Text type="h3" content={item.name} />
                         <Spacing rem="0.25" />
-                        <Text content={'경매 시작가 ' + bidPriceParse(String(item.startPrice)) + '원'} />
+                        <Text content={'경매 시작가'} />
+                        <Spacing rem="0.25" />
+                        <Text content={bidPriceParse(String(item.startPrice)) + '원'} />
                       </div>
                     </div>
                   );
@@ -68,12 +70,12 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                     borderRadius: '1rem',
                     border: '1px solid transparent',
                     width: '100%',
-                    height: '3rem',
+                    height: '2.25rem',
                     display: 'flex',
                     justifyContent: 'center',
                   }}
                 >
-                  <Text type="h2" content="경매 종료" />
+                  <Text type="h1" content="경매 종료" />
                 </div>
                 <Spacing rem="1" dir="h" />
                 <div
@@ -82,9 +84,11 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                     flexDirection: 'column',
                     justifyContent: 'center',
                     textAlign: 'center',
-                    height: '3.25rem',
+                    height: '3rem',
                   }}
-                />
+                >
+                  <Text type="h1" content="-" />
+                </div>
               </>
             )}
             {!itemList && (
@@ -95,12 +99,12 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                     borderRadius: '1rem',
                     border: '1px solid transparent',
                     width: '100%',
-                    height: '3rem',
+                    height: '2.25rem',
                     display: 'flex',
                     justifyContent: 'center',
                   }}
                 >
-                  <Text type="h2" content="경매 대기" />
+                  <Text type="h1" content="경매 대기" />
                 </div>
                 <Spacing rem="1" dir="h" />
                 <div
@@ -109,9 +113,11 @@ export function AuctionItemStatus({ theme, itemList, currentItemId, order }: Pro
                     flexDirection: 'column',
                     justifyContent: 'center',
                     textAlign: 'center',
-                    height: '3.25rem',
+                    height: '3rem',
                   }}
-                />
+                >
+                  <Text type="h1" content="-" />
+                </div>
               </>
             )}
           </div>

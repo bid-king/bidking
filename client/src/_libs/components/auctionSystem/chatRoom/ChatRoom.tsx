@@ -31,17 +31,11 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
       chatRef.current?.scrollIntoView();
     }
   }, [chats]);
-
-  useEffect(() => {
-    return () => {
-      // live(socket.current).send.leave(roomId);
-    };
-  }, []);
   return (
     <div
       css={{
         width: '100%',
-        height: 'calc(60vh - 3rem)',
+        height: userType === 'seller' ? 'calc(50vh - 2rem)' : 'calc(50vh - 7rem)',
         borderRadius: '1.85rem',
         padding: '1rem',
         position: 'relative',
@@ -50,7 +44,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
         flexDirection: 'column',
       }}
     >
-      <div css={{ overflowY: 'auto', height: 'calc(55vh - 3rem)' }}>
+      <div css={{ overflowY: 'auto', height: userType === 'seller' ? 'calc(50vh - 2rem)' : 'calc(50vh - 12rem)' }}>
         <div css={{ paddingBottom: '1rem' }}>
           {chats.map((chat, idx) => (
             <ChatMessage key={idx} nickname={chat.nickname} msg={chat.msg} />

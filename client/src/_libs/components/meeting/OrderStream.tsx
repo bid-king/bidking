@@ -17,10 +17,17 @@ export function OrderStream({ auctionRoomId, userId, userType }: Props) {
   }, [sellerStreamManager]);
 
   return (
-    <div css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem', border: '1px solid transparent' }}>
+    <div
+      css={{
+        width: '100%',
+        maxHeight: '60vh',
+        borderRadius: '1.5rem',
+        border: '1px solid transparent',
+      }}
+    >
       {sellerStreamManager ? (
         <div>
-          <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
+          <video ref={videoRef} autoPlay={true} css={{ width: '100%', maxHeight: '53vh', borderRadius: '1.85rem' }} />
         </div>
       ) : (
         <div
