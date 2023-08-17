@@ -12,7 +12,15 @@ export function useMainBox() {
   const [auctionListBookmarked, setAuctionListBookmarked] = useState<AuctionRoomListResponse[]>([]);
   const [auctionList, setAuctionList] = useState<AuctionRoomListResponse[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-
+  const [column, setColumn] = useState<number>(Math.floor(window.innerWidth / 300));
+  const [width, setWidth] = useState<number>(window.innerWidth);
+  useEffect(() => {
+    function handleColumn() {
+      setWidth(column * 300);
+      setColumn(Math.floor(window.innerWidth / 300));
+    }
+    window.addEventListener('resize', handleColumn);
+  }, [Math.floor(window.innerWidth / 300)]);
   // 검색
   function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -152,5 +160,7 @@ export function useMainBox() {
     setPage,
     setNextPage,
     setFetching,
+    column,
+    width,
   };
 }

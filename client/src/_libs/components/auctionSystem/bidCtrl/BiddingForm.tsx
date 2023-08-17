@@ -68,8 +68,10 @@ export function BiddingForm({
             }
           }}
           onKeyDown={e => {
-            if (e.key === 'Enter') console.log('엔터키로는 입찰할 수 없어요');
-            setBidPrice('');
+            if (e.key === 'Enter') {
+              console.log('엔터키로는 입찰할 수 없어요');
+              setBidPrice('');
+            }
           }}
         />
         <Spacing rem="1" dir="h" />

@@ -28,16 +28,13 @@ export function AuctionList({
   return (
     <div
       css={{
-        width: '22%',
-        height: '13.5%',
-        minWidth: '20rem',
-        minHeight: '13.5rem',
+        width: '100%',
         position: 'relative',
         cursor: 'pointer',
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        padding: '0.5rem 0.5rem 1rem 0.5rem',
+        padding: '0.5rem 0 1rem 0',
         ...THEME_VARIANT[auctionRoomTradeState],
       }}
     >
@@ -46,7 +43,7 @@ export function AuctionList({
         css={{
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
+          objectFit: 'fill',
           borderRadius: '0.8rem',
         }}
         onError={e => {
