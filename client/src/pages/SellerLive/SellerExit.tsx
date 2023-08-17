@@ -9,7 +9,9 @@ import colors from '../../_libs/design/colors';
 
 export function SellerExit() {
   const navigate = useNavigate();
-  setTimeout(() => navigate('/seller'), 2000);
+  useEffect(() => {
+    setTimeout(() => navigate('/seller'), 2000);
+  }, []);
 
   return (
     <div
@@ -17,7 +19,7 @@ export function SellerExit() {
         backgroundColor: colors.backgroundDark,
         color: colors.white,
         width: '100%',
-        height: '100%',
+        height: 'calc(100vh - 3rem)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',

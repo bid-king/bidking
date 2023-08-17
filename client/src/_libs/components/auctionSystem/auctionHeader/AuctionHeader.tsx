@@ -11,6 +11,7 @@ export function AuctionHeader({ userType, theme, sellerNickname, auctionRoomType
       css={{
         padding: '1rem',
         borderRadius: '1.85rem',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         ...THEME_VARIANT[theme],
