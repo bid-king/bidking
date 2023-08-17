@@ -11,6 +11,9 @@ export function SellerStream({ auctionRoomId, userId }: Props) {
   const { publisher, onChangeCameraStatus, onChangeMicStatus, leaveSession } = useSellerStream(userId, auctionRoomId);
   const { speaking, micStatus, videoStatus, videoRef } = useStream(publisher || undefined);
 
+  const [mic, setMic] = useState<boolean | null | undefined>(publisher?.stream.audioActive);
+  const [cam, setCam] = useState<boolean | null | undefined>(publisher?.stream.videoActive);
+
   useEffect(() => {
     console.log(videoRef.current);
     console.log(publisher);
@@ -22,12 +25,14 @@ export function SellerStream({ auctionRoomId, userId }: Props) {
   const handleMicToggle = () => {
     if (publisher) {
       onChangeMicStatus(!publisher.stream.audioActive);
+      setMic(!publisher.stream.audioActive);
     }
   };
 
   const handleCameraToggle = () => {
     if (publisher) {
       onChangeCameraStatus(!publisher.stream.videoActive);
+      setCam(!publisher.stream.videoActive);
     }
   };
 
@@ -38,13 +43,13 @@ export function SellerStream({ auctionRoomId, userId }: Props) {
           <video ref={videoRef} autoPlay={true} css={{ width: '100%', height: '56.25%', borderRadius: '1.5rem' }} />
           <RoundButton
             onClick={handleMicToggle}
-            color={micStatus ? 'white' : 'confirm'}
-            label={micStatus ? '마이크 끄기' : '마이크 켜기'}
+            color={mic ? 'white' : 'confirm'}
+            label={mic ? '마이크 끄기' : '마이크 켜기'}
           />
           <RoundButton
             onClick={handleCameraToggle}
-            color={videoStatus ? 'white' : 'confirm'}
-            label={videoStatus ? '카메라 끄기' : '카메라 켜기'}
+            color={cam ? 'white' : 'confirm'}
+            label={cam ? '카메라 끄기' : '카메라 켜기'}
           />
         </div>
       ) : (
