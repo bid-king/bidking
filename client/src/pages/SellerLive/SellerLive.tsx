@@ -24,7 +24,7 @@ export function SellerLive() {
   } = useLiveConnection();
 
   return (
-    <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
+    <div css={{ display: 'flex', width: '100%', height: 'calc(100vh)', backgroundColor: colors.backgroundDark }}>
       <div css={{ width: '100%', padding: '1rem 0.25rem 0.5rem 0.5rem' }}>
         <div css={{ display: 'flex', width: '100%' }}>
           <AuctionHeader
@@ -36,17 +36,19 @@ export function SellerLive() {
           />
         </div>
         <Spacing rem="0.5" />
-        <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-          <div>{seller && <SellerStream auctionRoomId={auctionRoomId} userId={userId} />}</div>
-          <Spacing rem="0.5" />
+        <div css={{ width: '100%' }}>
+          <div css={{ width: '100%', height: '75%', maxHeight: '75vh', overflow: 'hidden' }}>
+            {<SellerStream auctionRoomId={auctionRoomId} userId={userId} />}
+          </div>
+        </div>
+        <Spacing rem="0.5" />
+        <div css={{ position: 'absolute', bottom: '1rem', width: 'calc(100% - 21rem)' }}>
           <AuctionNotice auctionRoomId={auctionRoomId} userType="seller" socket={SOCKET} />
         </div>
       </div>
       <div
         css={{
           minWidth: '20.5rem',
-          display: 'flex',
-          flexDirection: 'column',
           padding: '1rem 0.5rem 0.5rem 0.25rem',
         }}
       >

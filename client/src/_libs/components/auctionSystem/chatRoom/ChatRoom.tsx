@@ -35,17 +35,16 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
     <div
       css={{
         width: '100%',
-        height: 'calc(50vh - 2rem)',
+        height: userType === 'seller' ? 'calc(50vh - 2rem)' : 'calc(50vh - 7rem)',
         borderRadius: '1.85rem',
         padding: '1rem',
         position: 'relative',
         ...THEME_VARIANT[theme],
         display: 'flex',
         flexDirection: 'column',
-        border: '1px solid black',
       }}
     >
-      <div css={{ overflowY: 'auto', height: 'calc(50vh - 7rem)', backgroundColor: 'black' }}>
+      <div css={{ overflowY: 'auto', height: userType === 'seller' ? 'calc(50vh - 2rem)' : 'calc(50vh - 12rem)' }}>
         <div css={{ paddingBottom: '1rem' }}>
           {chats.map((chat, idx) => (
             <ChatMessage key={idx} nickname={chat.nickname} msg={chat.msg} />

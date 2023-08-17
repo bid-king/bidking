@@ -7,7 +7,7 @@ export function AuctionTitle({ theme, sellerNickname, title, auctionRoomType }: 
   return (
     <div>
       <div css={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <div>
+        <div css={{ display: 'flex' }}>
           <div
             css={{
               padding: '0.2rem 1rem 0.2rem 1rem',
@@ -18,7 +18,7 @@ export function AuctionTitle({ theme, sellerNickname, title, auctionRoomType }: 
           >
             <Text content={AUCTION_TYPE[auctionRoomType]} type="bold" />
           </div>
-          <Spacing rem="0.5" dir="h" />
+          <Spacing rem="0.25" dir="h" />
           <div
             css={{
               padding: '0.2rem 1rem 0.2rem 1rem',
@@ -31,8 +31,8 @@ export function AuctionTitle({ theme, sellerNickname, title, auctionRoomType }: 
           </div>
         </div>
         <Spacing rem="0.5" />
-        <div css={{ padding: '0 0.5rem 0 0.5rem' }}>
-          <Text content={title} type="h3" />
+        <div css={{ padding: '0.25rem 0.5rem 0 0.5rem' }}>
+          <Text content={title ? title : '경매방 제목'} type="h2" />
         </div>
       </div>
     </div>
