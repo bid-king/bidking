@@ -2,6 +2,9 @@ version: '3'
 services:
   redis-server:
     image: dajeongyun/redis
+    build: 
+      context: ./redis
+      dockerfile: Dockerfile
     hostname: redis
     ports:
       - '6379:6379'
