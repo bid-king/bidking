@@ -38,6 +38,7 @@ export function AuctionList({
         display: 'flex',
         flexDirection: 'column',
         padding: '0.5rem 0.5rem 1rem 0.5rem',
+        ...THEME_VARIANT[auctionRoomTradeState],
       }}
     >
       <img
@@ -56,11 +57,7 @@ export function AuctionList({
         alt={title}
       />
       <Spacing rem="0.5" />
-      <div
-        css={{
-          color: colors.black,
-        }}
-      >
+      <div>
         {auctionRoomTradeState === 'ALL_COMPLETED' && <Text content={'모든 절차가 끝났어요'} />}
         {auctionRoomTradeState === 'IN_PROGRESS' && <Text content={'상품을 배송하지 않았어요'} />}
         {auctionRoomLiveState === 'ON_LIVE' ? (
@@ -68,7 +65,7 @@ export function AuctionList({
             <Text type="bold" content={'LIVE'} />
           </div>
         ) : (
-          <div css={{ color: colors.black }}>
+          <div>
             <Text content={auctionDateParse(date)} />
           </div>
         )}
@@ -80,3 +77,18 @@ export function AuctionList({
     </div>
   );
 }
+
+const THEME_VARIANT = {
+  ALL_COMPLETED: {
+    color: colors.white,
+  },
+  IN_PROGRESS: {
+    color: colors.white,
+  },
+  NONE: {
+    color: colors.black,
+  },
+  BEFORE_PROGRESS: {
+    color: colors.black,
+  },
+};
