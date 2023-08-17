@@ -33,7 +33,7 @@ public class StartBiddingFacade {
 
         redisTemplate.opsForValue().set(
             generateStartPriceKey(auctionId),
-            item.getId(),
+            item.getStartPrice(),
             Duration.ofDays(1)
         );
 
