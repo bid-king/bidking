@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect } from 'react';
 import { SignUpBox } from './SignUpBox';
+import colors from '../../_libs/design/colors';
 
 export function SignUp() {
   return (
@@ -10,7 +11,8 @@ export function SignUp() {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        height: '91.5vh',
+        height: '94vh',
+        backgroundColor: colors.backgroundLight,
       }}
     >
       <SignUpBox />

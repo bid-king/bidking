@@ -121,7 +121,7 @@ export function Detail() {
             </div>
             <ConfirmButton
               btnType="disabled"
-              label={`판매자 ${detail.sellerNickname}가 아직 방송을 시작하지 않았어요`}
+              label={`판매자 ${detail.sellerNickname}님이 아직 라이브를 시작하지 않았어요`}
             />
           </div>
         )}

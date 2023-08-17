@@ -29,6 +29,7 @@ export function DashBoard({
     <div
       css={{
         width: isSmall ? undefined : '33vw',
+        minWidth: isSmall ? undefined : '27rem',
         justifyContent: isSmall ? undefined : 'space-around',
         flexDirection: isSmall ? 'column' : undefined,
         ...THEME_VARIANTS[theme],

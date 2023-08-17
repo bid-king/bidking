@@ -9,55 +9,27 @@ import { useLocation } from 'react-router-dom';
 export function useNavBar() {
   const { isLogined, accessToken, id } = useAppSelector(state => state.user);
   const [showModal, setShowModal] = useState(false);
-  const timer = useRef<NodeJS.Timeout | null>(null);
-  const AlarmTimer = useRef<NodeJS.Timeout | null>(null);
   const [showAlarm, setAlarm] = useState(false);
   const [imgSrc, setImgSrc] = useState('');
   const [profileError, setProfileError] = useState('');
-  const handleMouseEnter = () => {
-    if (timer.current) {
-      clearTimeout(timer.current);
-    }
-    setShowModal(true);
+  const profileRef = useRef<HTMLDivElement>(null);
+  const alarmRef = useRef<HTMLDivElement>(null);
+
+  const profileClick = () => {
+    setShowModal(prevState => !prevState); // 프로필 모달의 상태를 토글
+    setAlarm(false); // 알람 모달을 비활성화
   };
 
-  const handleMouseLeave = () => {
-    timer.current = setTimeout(() => {
-      setShowModal(false);
-    }, 300);
+  const alarmClick = () => {
+    setAlarm(prevState => !prevState); // 알람 모달의 상태를 토글
+    setShowModal(false); // 프로필 모달을 비활성화
   };
-
-  const handleAlarmMouseEnter = () => {
-    if (AlarmTimer.current) {
-      clearTimeout(AlarmTimer.current);
-    }
-    setAlarm(true);
-  };
-
-  const handleAlarmMouseLeave = () => {
-    AlarmTimer.current = setTimeout(() => {
-      setAlarm(false);
-    }, 300);
-  };
-
-  // useEffect(() => {
-  //   if (id && isLogined) {
-  //     member
-  //       .get(id, accessToken)
-  //       .then(data => {
-  //         if (data.imageUrl === '') {
-  //           setImgSrc('/image/profile.png');
-  //         } else {
-  //           setImgSrc(data.imageUrl);
-  //         }
-  //       })
-  //       .catch(err => {
-  //         console.log(err);
-  //       });
-  //   }
-  // }, [id, isLogined]);
 
   const location = useLocation();
+  useEffect(() => {
+    setAlarm(false);
+    setShowModal(false);
+  }, [isLogined, location]);
 
   const getProfileImage = () => {
     if (id && isLogined) {
@@ -128,11 +100,9 @@ export function useNavBar() {
   return {
     showModal,
     isLogined,
-    handleMouseEnter,
-    handleMouseLeave,
+    profileClick,
+    alarmClick,
     showAlarm,
-    handleAlarmMouseEnter,
-    handleAlarmMouseLeave,
     imgSrc,
     accessToken,
     keyword,
@@ -142,5 +112,7 @@ export function useNavBar() {
     id,
     searchClickKeyword,
     eventSourceRef,
+    profileRef,
+    alarmRef,
   };
 }

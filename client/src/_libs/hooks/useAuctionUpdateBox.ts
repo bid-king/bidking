@@ -11,6 +11,7 @@ import {
   resetAuctionUpdate,
   setAuctionItem,
 } from '../../store/slices/auctionUpdateSlice';
+import { resetItemImg } from '../../store/slices/auctionUpdateItemImgSlice';
 
 import { ROOT } from '../util/http';
 import { useNavigate } from 'react-router-dom';
@@ -154,6 +155,7 @@ export function useAuctionUpdateBox() {
   useEffect(() => {
     return () => {
       dispatch(resetAuctionUpdate());
+      dispatch(resetItemImg());
     };
   }, [dispatch]);
 
