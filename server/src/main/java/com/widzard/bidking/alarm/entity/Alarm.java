@@ -40,9 +40,8 @@ public class Alarm extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member; // ( 수신 고객 )
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
-    private Content content; // ( 내용 )
+    @Column(nullable = false, length = 150)
+    private String content; // ( 내용 )
 
     @Column(nullable = false)
     private Boolean isSend; // ( 전송 성공 여부 )
@@ -58,10 +57,38 @@ public class Alarm extends BaseEntity {
     @Column(nullable = false, length = 10)
     private AlarmType alarmType; // ( 알림 메시지 타입 )
 
-    public static Alarm create(Member member, Content content, AlarmType alarmType) {
+    public static Alarm create(Member member, String content, AlarmType alarmType) {
         return Alarm.builder()
             .member(member)
             .content(content)
+            .isSend(true)
+            .isRead(false)
+            .mediaType(MediaType.NOTIFICATION)
+            .alarmType(alarmType)
+            .build();
+    }
+
+    public static Alarm createSuccessItem(Member member, AlarmType alarmType, String itemName) {
+        StringBuilder sb = new StringBuilder("[").append(itemName)
+            .append("]이 낙찰되었습니다. 구매 내역에서 낙찰 목록을 확인하고 7일 이내로 결제해주세요.");
+        return Alarm.builder()
+            .member(member)
+            .content(sb.toString())
+            .isSend(true)
+            .isRead(false)
+            .mediaType(MediaType.NOTIFICATION)
+            .alarmType(alarmType)
+            .build();
+    }
+
+    public static Alarm closeAuction(Member member, AlarmType alarmType, String auctionRoomTitle,
+        int orderSuccessCnt, int orderFailCnt) {
+        StringBuilder sb = new StringBuilder("[").append(auctionRoomTitle)
+            .append("] 경매방이 종료되었습니다. 최종낙찰 ").append(orderSuccessCnt).append("개 유찰 ")
+            .append(orderFailCnt).append("개입니다.");
+        return Alarm.builder()
+            .member(member)
+            .content(sb.toString())
             .isSend(true)
             .isRead(false)
             .mediaType(MediaType.NOTIFICATION)

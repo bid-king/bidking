@@ -9,12 +9,16 @@ import com.widzard.bidking.alarm.exception.AlarmNotFoundException;
 import com.widzard.bidking.alarm.exception.ClientConnectionException;
 import com.widzard.bidking.alarm.repository.AlarmRepository;
 import com.widzard.bidking.alarm.repository.EmitterRepository;
+import com.widzard.bidking.auction.dto.AfterAuctionDto;
+import com.widzard.bidking.auction.dto.OrdererDto;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.exception.AuctionRoomNotFoundException;
 import com.widzard.bidking.auction.repository.AuctionRoomRepository;
 import com.widzard.bidking.bookmark.entity.Bookmark;
 import com.widzard.bidking.bookmark.repository.BookmarkRepository;
 import com.widzard.bidking.member.entity.Member;
+import com.widzard.bidking.member.exception.MemberNotFoundException;
+import com.widzard.bidking.member.repository.MemberRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     private final AlarmRepository alarmRepository;
     private final AuctionRoomRepository auctionRoomRepository;
+    private final MemberRepository memberRepository;
     private final BookmarkRepository bookmarkRepository;
     private final EmitterRepository emitterRepository;
 
@@ -60,7 +65,7 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Override
     public void sendAuctionCreateToSeller(Member member) {
-        send(member, Content.AUCTION_REGISTERED, AlarmType.AUCTION);
+        send(member, Content.AUCTION_REGISTERED.toString(), AlarmType.AUCTION);
     }
 
     @Override
@@ -72,7 +77,7 @@ public class AlarmServiceImpl implements AlarmService {
         for (Optional<Bookmark> bookmark : bookmarkList
         ) {
             if (bookmark.isPresent()) {
-                send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK,
+                send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK.toString(),
                     AlarmType.AUCTION);
             }
         }
@@ -87,24 +92,26 @@ public class AlarmServiceImpl implements AlarmService {
         for (Optional<Bookmark> bookmark : bookmarkList
         ) {
             if (bookmark.isPresent()) {
-                send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK,
+                send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK.toString(),
                     AlarmType.AUCTION);
             }
         }
     }
-
     @Override
-    public void sendAuctionUpComingToSeller(Member seller) {
-        send(seller, Content.AUCTION_UPCOMING, AlarmType.AUCTION);
-    }
+    public void sendAuctionCloseToSellerAndOrderer(AfterAuctionDto afterAuctionDto) {
+        Member seller = memberRepository.findById(afterAuctionDto.getSellerId()).orElseThrow(
+            MemberNotFoundException::new);
+        Alarm closeAuctionAlarm = Alarm.closeAuction(seller, AlarmType.AUCTION,
+            afterAuctionDto.getAuctionRoomTitle(), afterAuctionDto.getOrderSuccessCnt(),
+            afterAuctionDto.getOrderFailCnt());
+        send(seller, closeAuctionAlarm.getContent(), AlarmType.AUCTION);
+        List<OrdererDto> ordererDtoList = afterAuctionDto.getOrdererDtoList();
 
-    @Override
-    public void sendAuctionUpComingToBookmarkMember(AuctionRoom auctionRoom) {
-        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
-            auctionRoom);
-        for (Optional<Bookmark> bookmark : bookmarkList
-        ) {
-            send(bookmark.get().getMember(), Content.AUCTION_UPCOMING_BOOKMARK, AlarmType.AUCTION);
+        for (OrdererDto ordererDto : ordererDtoList
+        ) { Member orderer = memberRepository.findById(ordererDto.getOrdererId())
+            .orElseThrow(MemberNotFoundException::new);
+            Alarm successItemAlarm = Alarm.createSuccessItem(orderer, AlarmType.ORDER, ordererDto.getItemName());
+            send(orderer, successItemAlarm.getContent(), AlarmType.ORDER);
         }
     }
 
@@ -130,7 +137,7 @@ public class AlarmServiceImpl implements AlarmService {
         return alarmResponseList;
     }
 
-    private void send(Member member, Content content, AlarmType alarmType) {
+    private void send(Member member, String content, AlarmType alarmType) {
         Alarm alarm = Alarm.create(member, content, alarmType);
         alarmRepository.save(alarm);
         String sendId = String.valueOf(member.getId());
