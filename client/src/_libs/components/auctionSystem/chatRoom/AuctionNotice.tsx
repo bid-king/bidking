@@ -42,6 +42,7 @@ export function AuctionNotice({ auctionRoomId, socket, userType }: Props) {
         <>
           <Spacing rem="0.5" />
           <form
+            autoComplete="off"
             css={{ display: 'flex' }}
             onSubmit={e => {
               e.preventDefault();

@@ -72,6 +72,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
         {userType === 'order' && (
           <div css={{ width: '100%' }}>
             <form
+              autoComplete="off"
               onSubmit={e => {
                 e.preventDefault();
                 if (input.trim().length > 0) {
