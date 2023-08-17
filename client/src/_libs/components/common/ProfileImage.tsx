@@ -6,7 +6,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   src?: string;
   rem?: number;
 }
-export function ProfileImage({ src = '/image/profile.png', rem = 2 }: Props) {
+export function ProfileImage({ src, rem = 2 }: Props) {
   return (
     <img
       src={src}
@@ -18,7 +18,7 @@ export function ProfileImage({ src = '/image/profile.png', rem = 2 }: Props) {
       onError={e => {
         const target = e.target as HTMLImageElement;
         target.onerror = null;
-        target.src = '/image/profile.png';
+        target.src = process.env.PUBLIC_URL + '/image/profile.png';
       }}
     />
   );

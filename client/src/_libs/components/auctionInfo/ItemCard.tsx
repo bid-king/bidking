@@ -84,7 +84,8 @@ export function ItemCard({ theme = 'light', item }: Props) {
             onError={e => {
               const target = e.target as HTMLImageElement;
               target.onerror = null;
-              target.src = theme === 'light' ? '/image/nonImageLight.png' : '/image/nonImageDark.png';
+              const baseImageUrl = process.env.PUBLIC_URL + '/image/';
+              target.src = theme === 'light' ? baseImageUrl + 'nonImageLight.png' : baseImageUrl + 'nonImageDark.png';
             }}
           />
           <Spacing rem="1" />

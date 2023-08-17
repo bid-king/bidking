@@ -174,7 +174,7 @@ export function AuctionUpdateBox() {
                   onError={e => {
                     const target = e.target as HTMLImageElement;
                     target.onerror = null;
-                    target.src = '/image/nonImageDark.png';
+                    target.src = process.env.PUBLIC_URL + '/image/nonImageDark.png';
                   }}
                 />
                 {previewImageURL ? <Spacing rem="0.25" /> : null}

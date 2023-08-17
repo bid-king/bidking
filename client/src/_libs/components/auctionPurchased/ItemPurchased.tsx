@@ -142,7 +142,7 @@ export function ItemPurchased({ theme = 'light', item }: Props) {
             onError={e => {
               const target = e.target as HTMLImageElement;
               target.onerror = null;
-              target.src = '/image/nonImageLight.png';
+              target.src = process.env.PUBLIC_URL + '/image/nonImageLight.png';
             }}
           />
           <Spacing rem="1" />

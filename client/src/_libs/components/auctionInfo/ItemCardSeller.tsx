@@ -141,7 +141,7 @@ export function ItemCardSeller({ theme = 'dark', item }: Props) {
             onError={e => {
               const target = e.target as HTMLImageElement;
               target.onerror = null;
-              target.src = '/image/nonImageDark.png';
+              target.src = process.env.PUBLIC_URL + '/image/nonImageDark.png';
             }}
           />
           <Spacing rem="1" />

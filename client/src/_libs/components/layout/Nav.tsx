@@ -88,7 +88,7 @@ export function Nav({ theme = 'light' }: Props) {
               }}
             >
               <Link to={'/'}>
-                <Image src="/image/logo/logo_light.png" alt="dark-logo" />
+                <Image src={process.env.PUBLIC_URL + '/image/logo/logo_light.png'} alt="dark-logo" />
               </Link>
             </div>
           )}
@@ -103,7 +103,7 @@ export function Nav({ theme = 'light' }: Props) {
               }}
             >
               <Link to={'/seller'}>
-                <Image src="/image/logo/logo_dark.png" alt="dark-logo" />
+                <Image src={process.env.PUBLIC_URL + '/image/logo/logo_dark.png'} alt="dark-logo" />
               </Link>
             </div>
           )}

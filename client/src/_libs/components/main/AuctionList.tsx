@@ -51,7 +51,7 @@ export function AuctionList({
         onError={e => {
           const target = e.target as HTMLImageElement;
           target.onerror = null;
-          target.src = '/image/auctionListCardNoneImage.png';
+          target.src = process.env.PUBLIC_URL + '/image/auctionListCardNoneImage.png';
         }}
         alt={title}
       />
