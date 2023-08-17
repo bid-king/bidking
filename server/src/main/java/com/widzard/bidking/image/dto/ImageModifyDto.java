@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
 @ToString
 public class ImageModifyDto {
     private Long id;

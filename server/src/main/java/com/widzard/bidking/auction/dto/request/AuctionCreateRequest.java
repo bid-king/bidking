@@ -1,6 +1,8 @@
 package com.widzard.bidking.auction.dto.request;
 
 import com.widzard.bidking.auction.entity.AuctionRoomType;
+import com.widzard.bidking.item.dto.request.ItemCreateRequest;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
@@ -14,16 +16,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuctionCreateRequest {
 
     @NotBlank(message = "경매방 제목을 입력하세요")
     private String auctionTitle; //경매방 제목
 
     @NotNull(message = "시작 시간을 입력하세요")
-    private String startedAt; //경매방 시작시간
+    private LocalDateTime startedAt; //경매방 시작시간
 
     @NotNull(message = "경매 방식을 선택하세요")
     private AuctionRoomType auctionRoomType; //경매 방식
@@ -36,6 +38,5 @@ public class AuctionCreateRequest {
 
     @Valid
     private List<ItemCreateRequest> itemList = new ArrayList<>(); // 상품 리스트
-
 
 }

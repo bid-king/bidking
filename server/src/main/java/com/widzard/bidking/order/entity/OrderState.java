@@ -8,9 +8,10 @@ public enum OrderState {
     PAYMENT_WAITING("paymentWaiting"),
     DELIVERY_WAITING("deliveryWaiting"),
     DELIVERING("delivering"),
-    COMPLETED("completed"),
+    COMPLETED("completed"), // 낙찰되었는데 배송까지 될 경우
     ORDER_CANCELED("orderCanceled"),
-    DELIVERY_CANCELED("deliveryCanceled");
+    DELIVERY_CANCELED("deliveryCanceled"),
+    ORDER_FAILED("orderFailed");
 
     private String orderValue;
 

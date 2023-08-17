@@ -27,14 +27,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@ToString
-@Getter
 @Entity
+@Getter
 @Builder
+@ToString
+@DynamicInsert
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
@@ -45,29 +48,35 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(name = "member_id")
     private Long id; // 멤버 식별자
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, length = 12, unique = true)
     private String userId; // 유저 아이디
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 60)
     private String password; // 유저 패스워드
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, length = 10, unique = true)
     private String nickname; // 닉네임
 
+    @Column(nullable = false, length = 11, unique = true)
     private String phoneNumber; // 핸드폰 번호
 
     @Embedded
+    @Column(nullable = false)
     private Address address; // 기본배송지
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id")
     private Image image; // 프로필 사진
 
+    @Column(nullable = false, columnDefinition = "tinyint(1) default 1")
     private boolean available; // 활성화 여부 (탈퇴 시 false)
 
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("'USER'")
+    @Column(nullable = false, length = 10)
     private MemberRole memberRole; // 역할
 
+    @Column(nullable = false)
     private int penalty;
 
     public static Member createMember(MemberFormRequest request, String encodedPassword) {
@@ -147,3 +156,4 @@ public class Member extends BaseEntity implements UserDetails {
         return (otherCourse.id == this.id);
     }
 }
+

@@ -3,7 +3,9 @@ package com.widzard.bidking.global.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,6 +14,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @Slf4j
 @RestControllerAdvice
 public class ControllerAdvice {
+
+    // TODO 401, 403, validation error
 
     /*
      * business custom exception 발생
@@ -51,7 +55,19 @@ public class ControllerAdvice {
         return createErrorResponseEntity(ErrorCode.NOT_FOUND);
     }
 
-    // 401, 403, valid TODO
+    /*
+     * Request Validation Handler
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleRequestValidation(
+        MethodArgumentNotValidException e) {
+        ObjectError error = e.getBindingResult().getAllErrors().get(0);
+        log.error("MethodArgumentNotValidException: {}", e.getMessage());
+        return new ResponseEntity<>(
+            ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, error.getDefaultMessage()),
+            HttpStatus.BAD_REQUEST);
+    }
 
     private ResponseEntity<ErrorResponse> createErrorResponseEntity(ErrorCode errorCode) {
         return new ResponseEntity<>(ErrorResponse.of(errorCode), errorCode.getStatus());

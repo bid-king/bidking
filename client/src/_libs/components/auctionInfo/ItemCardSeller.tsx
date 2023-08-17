@@ -5,51 +5,16 @@ import { Text } from '../common/Text';
 import paymentState from '../../constants/paymentState';
 import { Input } from '../common/Input';
 import { Spacing } from '../common/Spacing';
+import { detailDateParse } from '../../util/detailDateParse';
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
-  theme?: 'light' | 'dark';
-  item: {
-    itemId: string;
-    itemName: string;
-    category: string;
-    itemImage: string;
-    itemDescription: string;
-    itemOrdering: string;
-    paymentState: 'PAYMENT_WAITING' | 'PAYMENT_OK' | 'PAYMENT_CANCELED';
-    successTime: string;
-    successPrice: string;
-    successMemberNickname: string;
-    deliveryAddress: string;
-    deliveryMsg: string;
-    invoice: { courier: string; invoiceNumber: string };
-  };
-}
-
-export function ItemCardSeller({
-  theme = 'light',
-  item = {
-    itemId: '1',
-    itemName: '낙찰된 상품명',
-    category: '카테고리',
-    itemImage: 'img src',
-    itemDescription: '상품 설명',
-    itemOrdering: '1',
-    paymentState: 'PAYMENT_OK',
-    successTime: '2023-03-03 22:00:00',
-    successPrice: '4000',
-    successMemberNickname: '윤다정',
-    deliveryAddress: '서울시 우리 집',
-    deliveryMsg: '잘 보내주세요',
-    invoice: { courier: 'LOGEN', invoiceNumber: '1313242435354646' },
-  },
-}: Props) {
+export function ItemCardSeller({ theme = 'dark', item }: Props) {
   const [detailDisplay, setDetailDisplay] = useState<boolean>(false);
   return (
     <div
       className="container"
       css={{
         ...THEME_VARIENT[theme],
-        ...BORDER_VARIENT[item.paymentState],
+        ...BORDER_VARIENT[item.orderState],
         display: 'flex',
         flexDirection: 'column',
         padding: '1rem',
@@ -65,13 +30,28 @@ export function ItemCardSeller({
         }}
       >
         <Text type="bold" content={'순번 ' + item.itemOrdering} />
-        <Text type="bold" content={paymentState[item.paymentState]} />
+        <div
+          css={{
+            ...TEXT_VARIENT[item.orderState],
+          }}
+        >
+          <Text type="bold" content={paymentState[item.orderState]} />
+        </div>
       </div>
       <Spacing rem="1" />
       <div className="cardBody-ItemName">
-        <Text type="h3" content={item.itemName} />
+        <Text type="h2" content={item.itemName} />
       </div>
-      <Spacing rem="1" />
+      <Spacing rem="1" />{' '}
+      <div
+        css={{
+          display: 'flex',
+        }}
+      >
+        <Text content={'카테고리'} />
+        <Spacing rem="0.5" dir="h" />
+        <Text type="h3" content={item.category} />
+      </div>
       <div
         className="cardBody-orderInfo"
         css={{
@@ -79,46 +59,68 @@ export function ItemCardSeller({
           flexDirection: 'row',
         }}
       >
-        <div
-          css={{
-            width: '50%',
-          }}
-        >
-          <Text content={'낙찰자 '} />
-          <Text type="bold" content={item.successMemberNickname} />
-        </div>
-        <div>
-          <Text content={'낙찰가 '} />
-          <Text type="bold" content={item.successPrice} />
-        </div>
-      </div>
-      <div>
-        <Text type="bold" content={item.successTime + ' 낙찰'} />
+        {item.successMemberNickname && item.successMemberId && item.successTime && (
+          <div
+            css={{
+              width: '50%',
+            }}
+          >
+            <Spacing rem="1" />
+            <Text content={'낙찰자 '} />
+            <Text type="bold" content={item.successMemberNickname} />
+          </div>
+        )}
+        {item.price !== 0 && (
+          <div>
+            <Spacing rem="1" />
+            <Text content={'낙찰가 '} />
+            <Text type="bold" content={`${item.price.toString()} 원`} />
+          </div>
+        )}
       </div>
       <Spacing rem="1" />
-      <div>
+      {item.successTime && (
+        <div
+          css={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Text type="p" content="라이브 종료 시간" />
+          <Text type="bold" content={detailDateParse(item.successTime)} />
+          <Spacing rem="1" />
+        </div>
+      )}
+      <div
+        css={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
         <Text content={'배송정보'} />
-        {item.paymentState === 'PAYMENT_OK' && item.deliveryAddress.length > 0 ? (
+        {item.deliveryAddress && item.deliveryAddress.length > 0 ? (
           <div
             css={{
               display: 'flex',
               flexDirection: 'column',
             }}
           >
-            <Text type="bold" content={item.deliveryAddress} />
-            <Text type="bold" content={item.deliveryMsg} />
+            <Text type="bold" content={item.deliveryAddress ? item.deliveryAddress : ''} />
+            <Text type="bold" content={item.deliveryMsg ? item.deliveryMsg : ''} />
           </div>
         ) : (
-          <Text content={'낙찰자가 배송지를 입력하지 않았어요'} />
+          <div>
+            <Text type="bold" content={'낙찰자가 배송지를 입력하지 않았어요'} />
+            {/* <div
+              css={{
+                display: 'flex',
+              }} 
+            >
+              <Input theme={theme} inputType="text" placeholder="택배사" />
+              <Input theme={theme} inputType="text" placeholder="배송메시지" />
+            </div> */}
+          </div>
         )}
-      </div>
-      <div
-        css={{
-          display: 'flex',
-        }}
-      >
-        <Input theme={theme} inputType="text" placeholder={item.invoice.courier} />
-        <Input theme={theme} inputType="text" placeholder={item.invoice.invoiceNumber} />
       </div>
       <Spacing rem="1" />
       {/*이 아래는 접으면 접히는 부분*/}
@@ -129,12 +131,17 @@ export function ItemCardSeller({
       >
         <div>
           <img
-            src={item.itemImage}
+            src={item.itemImageUrl}
             alt={item.itemDescription}
             css={{
               borderRadius: '1rem',
               width: '100%',
               maxHeight: '15rem',
+            }}
+            onError={e => {
+              const target = e.target as HTMLImageElement;
+              target.onerror = null;
+              target.src = '/image/nonImageDark.png';
             }}
           />
           <Spacing rem="1" />
@@ -144,7 +151,6 @@ export function ItemCardSeller({
         </div>
         <Spacing rem="2" />
       </div>
-
       {/* 여기까지 접는 부분 */}
       <div css={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => setDetailDisplay(!detailDisplay)}>
         {detailDisplay ? '접기' : '펼치기'}
@@ -167,10 +173,54 @@ const THEME_VARIENT = {
 };
 
 const BORDER_VARIENT = {
-  PAYMENT_OK: {
-    border: `1px solid ${colors.ok}`,
-    filter: `drop-shadow(0 0 0.25rem ${colors.ok})`,
-  },
-  PAYMENT_WAITING: {},
-  PAYMENT_CANCELED: {},
+  PAYMENT_WAITING: { border: `1px solid ${colors.confirm}`, filter: `drop-shadow(0 0 0.25rem ${colors.confirm})` },
+  DELIVERY_WAITING: { border: `1px solid ${colors.confirm}`, filter: `drop-shadow(0 0 0.25rem ${colors.confirm})` },
+  DELIVERING: { border: `1px solid ${colors.progress}`, filter: `drop-shadow(0 0 0.25rem ${colors.progress})` },
+  COMPLETED: { border: `1px solid ${colors.ok}`, filter: `drop-shadow(0 0 0.25rem ${colors.ok})` },
+  ORDER_CANCELED: { border: `1px solid ${colors.warn}`, filter: `drop-shadow(0 0 0.25rem ${colors.warn})` },
+  DELIVERY_CANCELED: { border: `1px solid ${colors.warn}`, filter: `drop-shadow(0 0 0.25rem ${colors.warn})` },
+  ORDER_FAILED: { border: `1px solid ${colors.warn}`, filter: `drop-shadow(0 0 0.25rem ${colors.warn})` },
 };
+
+const TEXT_VARIENT = {
+  PAYMENT_WAITING: { color: colors.confirm },
+  DELIVERY_WAITING: { color: colors.confirm },
+  DELIVERING: { color: colors.progress },
+  COMPLETED: { color: colors.ok },
+  ORDER_CANCELED: { color: colors.warn },
+  DELIVERY_CANCELED: { color: colors.warn },
+  ORDER_FAILED: { color: colors.warn },
+};
+
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  theme?: 'light' | 'dark';
+  item: {
+    itemId: number;
+    itemName: string;
+    category: string;
+    price: number;
+    itemImageUrl: string;
+    itemDescription: string;
+    itemOrdering: number;
+    successTime: string | null;
+    successMemberId: number | null;
+    successMemberNickname: string | null;
+    deliveryAddress: string | null;
+    deliveryMsg: string | null;
+    orderState:
+      | 'PAYMENT_WAITING'
+      | 'DELIVERY_WAITING'
+      | 'DELIVERING'
+      | 'COMPLETED'
+      | 'ORDER_CANCELED'
+      | 'DELIVERY_CANCELED'
+      | 'ORDER_FAILED';
+    invoice?: { courier: string; invoiceId?: number; invoiceNumber: string };
+  };
+}
+
+interface Invoice {
+  courier: string;
+  invoiceId?: number;
+  invoiceNumber: string;
+}

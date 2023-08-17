@@ -13,4 +13,5 @@ public class MemberCheckResponse {
     public static MemberCheckResponse from(boolean isDuplicated) {
         return new MemberCheckResponse(isDuplicated);
     }
+
 }

@@ -13,17 +13,34 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Getter
 @Entity
+@ToString
+@Builder
+@DynamicInsert
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "orders")
+@Table(
+    name = "orders",
+    indexes = {
+        @Index(name = "idx__order_state__orderer_id__seller_id",
+            columnList = "order_state, orderer_id, seller_id")
+    }
+)
 public class Order extends BaseEntity {
 
     @Id
@@ -32,18 +49,32 @@ public class Order extends BaseEntity {
     private Long id; // (주문코드)
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "orderer_id")
     private Member orderer;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id", nullable = false)
+    private Member seller;
+
     @Enumerated(EnumType.STRING)
+    @ColumnDefault("'PAYMENT_WAITING'")
+    @Column(name = "order_state", nullable = false, length = 20)
     private OrderState orderState; // (주문 상태 (OrderState))
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_room_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_room_id", nullable = false)
     private AuctionRoom auctionRoom; // 경매 방
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
+    public static Order create(AuctionRoom auctionRoom, Member orderer, OrderState orderState) {
+        return Order.builder()
+            .orderer(orderer)
+            .seller(auctionRoom.getSeller())
+            .orderState(orderState)
+            .auctionRoom(auctionRoom)
+            .build();
+    }
 }

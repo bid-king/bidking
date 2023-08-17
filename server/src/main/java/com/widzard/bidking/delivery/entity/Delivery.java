@@ -25,15 +25,18 @@ public class Delivery extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "delivery_id")
-    private Long id; //
+    private Long id;
 
     @Embedded
-    private Address address; //
+    @Column(nullable = false)
+    private Address address;
 
     private String message; // (배송 메세지)
 
+    @Column(nullable = false, length = 10)
     private String receiverName;
 
+    @Column(nullable = false, length = 11)
     private String receiverPhoneNumber;
 
     @OneToOne(fetch = FetchType.LAZY)

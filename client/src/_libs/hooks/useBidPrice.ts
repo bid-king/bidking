@@ -10,7 +10,8 @@ export function useBidPrice(): [string[], string, string, Error | null] {
     //Socket Call
     setPrev(curr);
     setCurr(prev); //새로운 데이터
-    setPriceArr(bidPriceParse(curr).split(''));
+    const str = Number(curr);
+    setPriceArr(bidPriceParse(str).split(''));
   }, []);
 
   return [priceArr, prev, curr, err];

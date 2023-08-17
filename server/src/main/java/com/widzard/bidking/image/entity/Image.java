@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @AllArgsConstructor
-@Table(name = "image")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "image")
 public class Image extends BaseEntity {
 
     @Id
@@ -28,16 +28,17 @@ public class Image extends BaseEntity {
     @Column(name = "image_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 140)
     private String originalFileName; // asd.jpg
 
     @Column(nullable = false, unique = true)
     private String fileName;
 
-    @Column(nullable = false)
-    private String filePath; // https: S3 주소
+    @Column(nullable = false, unique = true)
+    private String filePath; // https: S3 주소/fileName
 
-    public void modify(ImageModifyDto imageModifyDto){
+
+    public void modify(ImageModifyDto imageModifyDto) {
         this.originalFileName = imageModifyDto.getOriginalFileName();
         this.fileName = imageModifyDto.getFileName();
         this.filePath = imageModifyDto.getFilePath();

@@ -13,9 +13,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    variant: 'confirm',
+    color: 'confirm',
     size: 'small',
     label: '로그인',
-    activated: 1,
   },
 };

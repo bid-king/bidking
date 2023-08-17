@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'node-18'
+    }
+
+    stages {
+
+        stage('Clear current directory') {
+            steps {
+                dir('client') {
+                    sh "rm -rf *"
+                }
+            }
+        }
+        
+        stage('Git clone') {
+            steps {
+                dir('client') {
+                    git branch: 'develop', credentialsId: 'real_final', url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A706'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('client') {
+                    echo "Building the project..."
+                    sh "npm install -g yarn"
+                    sh "yarn"
+                    sh "yarn build"
+                }
+            }
+        }
+    }
+}

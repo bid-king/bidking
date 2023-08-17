@@ -15,4 +15,5 @@ public class MemberCreateResponse {
     public static MemberCreateResponse from(Member savedMember) {
         return new MemberCreateResponse(savedMember.getId());
     }
+
 }

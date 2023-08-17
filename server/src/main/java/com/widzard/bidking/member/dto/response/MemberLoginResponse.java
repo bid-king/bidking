@@ -10,10 +10,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MemberLoginResponse {
 
+    private Long id;
+    private String nickname;
     private String grantType;
     private String accessToken;
 
-    public static MemberLoginResponse from(String token) {
-        return new MemberLoginResponse(TOKEN_HEADER_PREFIX, token);
+    public static MemberLoginResponse from(AuthInfo authInfo) {
+        return new MemberLoginResponse(authInfo.getId(), authInfo.getNickname(),
+            TOKEN_HEADER_PREFIX, authInfo.getToken());
     }
+
 }

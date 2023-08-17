@@ -1,0 +1,39 @@
+{
+  "name": "bidking-socket",
+  "version": "1.0.0",
+  "description": "Bidking Socket Server",
+  "main": "app.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production PORT=8005 pm2 start app.js",
+    "dev": "nodemon app",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A706"
+  },
+  "author": "Code Wizards",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "hpp": "^0.2.3",
+    "morgan": "^1.10.0",
+    "pm2": "^5.3.0",
+    "socket.io": "^4.7.1",
+    "redis": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.22.9",
+    "babel-loader": "^9.1.3",
+    "nodemon": "^3.0.1",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
+  }
+}

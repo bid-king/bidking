@@ -12,7 +12,7 @@ public class JwtConstants {
     public static final long DAY = 24 * HOUR;
     public static final long MONTH = 30 * DAY;
     public static final long RT_EXP_TIME = 7 * DAY; // 리프레시 토큰 만료 시간
-    public static final long AT_EXP_TIME = 20 * MINUTE; // 엑세스 토큰 만료 시간
+    public static final long AT_EXP_TIME = 1 * DAY; // 엑세스 토큰 만료 시간
     // Header
     public static final String AT_HEADER = "access_token";
     public static final String RT_HEADER = "refresh_token";

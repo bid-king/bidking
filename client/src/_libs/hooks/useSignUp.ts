@@ -1,12 +1,13 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import axios from 'axios';
+import { useState, useEffect, useRef, ChangeEvent, FormEvent, KeyboardEvent, FocusEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import member from '../../api/member';
 
 export function useSignUp() {
-  const [step, setStep] = useState('userName');
-  const [userName, setUserName] = useState('');
+  const [step, setStep] = useState('nickname');
   const [nickname, setNickname] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordValid, setPasswordValid] = useState(false);
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [certificateCode, setCertificateCode] = useState('');
@@ -21,14 +22,44 @@ export function useSignUp() {
   const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
   const [certifiedNumber, setCertifiedNumber] = useState('');
+  const [isPhoneError, setIsPhoneError] = useState(false);
+  const [phoneErrorMessage, setPhoneErrorMessage] = useState('');
+  const [certifiedErrMessage, setCertifiedErrMessage] = useState('');
+  const [isCertificationDisabled, setIsCertificationDisabled] = useState(false);
+  const [nicknameError, setNicknameError] = useState('');
+  const [idError, setIdError] = useState('');
+  const [error, setError] = useState(false);
 
-  const API_URL = 'http://70.12.247.172:8080';
+  // 포커싱 로직
+  const nicknameRef = useRef<HTMLInputElement | null>(null);
+  const userIdRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+  const passwordConfirmationRef = useRef<HTMLInputElement | null>(null);
+  const phoneNumberRef = useRef<HTMLInputElement | null>(null);
+  const addressRef = useRef<HTMLInputElement | null>(null);
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (step === 'nickname' && nicknameRef.current) {
+      nicknameRef.current.focus();
+    } else if (step === 'id' && userIdRef.current) {
+      userIdRef.current.focus();
+    } else if (step === 'password' && passwordRef.current) {
+      passwordRef.current.focus();
+    } else if (step === 'password-again' && passwordConfirmationRef.current) {
+      passwordConfirmationRef.current.focus();
+    } else if (step === 'phone-number' && phoneNumberRef.current) {
+      phoneNumberRef.current.focus();
+    } else if (step === 'address' && addressRef.current) {
+      addressRef.current.focus();
+    }
+  }, [step]);
+
+  // 단계 로직
   const handleNextStep = (e: FormEvent) => {
     e.preventDefault();
-    if (step === 'userName' && userName !== '') {
-      setStep('nickname');
-    } else if (step === 'nickname' && nickname !== '' && !isNicknameDuplicated) {
+    if (step === 'nickname' && nickname !== '' && !isNicknameDuplicated) {
       setStep('id');
     } else if (step === 'id' && userId !== '' && !isIdDuplicated) {
       setStep('password');
@@ -38,47 +69,42 @@ export function useSignUp() {
       setStep('phone-number');
     } else if (step === 'phone-number' && isRequestCerificated) {
       setStep('address');
-    } else if (step === 'address' && street !== '' && details !== '' && zipCode !== '') {
-      axios
-        .post(`${API_URL}/api/v1/members/signup`, {
-          userId: userId,
-          password: password,
-          name: userName,
-          nickname: nickname,
-          phoneNumber: phoneNumber,
-          address: {
-            street: street,
-            details: details,
-            zipCode: zipCode,
-          },
-        })
+    } else if (step === 'address' && street !== '' && details !== '' && zipCode !== '' && zipCode.length === 5) {
+      member
+        .signup(userId, password, nickname, phoneNumber, { street, details, zipCode })
         .then(res => {
           setSuccess(true);
+          setTimeout(() => {
+            navigate('/login');
+          }, 3000);
         })
         .catch(err => {
-          console.log(err);
+          setError(true);
         });
     }
   };
 
-  // const checkIdDuplication = async (userId: string) => {
-  //   if (userId) {
-  //     try {
-  //       const data = await member.idValidate({ userId });
-  //       setIsIdDuplicated(data.duplicated);
-  //       console.log(data.duplicated);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  // };
+  // 뒤로가기 로직
+  const handlePrevStep = () => {
+    if (step === 'id') {
+      setStep('nickname');
+    } else if (step === 'password') {
+      setStep('id');
+    } else if (step === 'password-again') {
+      setStep('password');
+    } else if (step === 'phone-number') {
+      setStep('password-again');
+    } else if (step === 'address') {
+      setStep('phone-number');
+    }
+  };
 
   const checkIdDuplication = async (userId: string) => {
     if (userId) {
-      axios
-        .post(`${API_URL}/api/v1/members/check/userId`, { userId })
+      member
+        .idValidate({ userId })
         .then(res => {
-          setIsIdDuplicated(res.data.duplicated);
+          setIsIdDuplicated(res.duplicated);
         })
         .catch(err => {
           console.log(err);
@@ -86,13 +112,13 @@ export function useSignUp() {
     }
   };
 
+  // 닉네임 중복검사
   const checkNicknameDuplication = async (nickname: string) => {
     if (nickname) {
-      axios
-        .post(`${API_URL}/api/v1/members/check/nickname`, { nickname })
+      member
+        .nicknameValidate({ nickname })
         .then(res => {
-          setIsNicknameDuplicated(res.data.duplicated);
-          console.log(res.data.duplicated);
+          setIsNicknameDuplicated(res.duplicated);
         })
         .catch(err => {
           console.log(err);
@@ -102,16 +128,22 @@ export function useSignUp() {
 
   // 인증번호 요청 함수
   const requestVerification = () => {
+    setIsCertificationDisabled(true);
     if (phoneNumber && isPhoneValid) {
-      axios
-        .post(`${API_URL}/api/v1/members/check/phoneNumber`, { phoneNumber })
+      member
+        .phoneVerification({ phoneNumber })
         .then(res => {
-          setCertifiedNumber(res.data.certifiedNumber);
+          setCertifiedNumber(res.certifiedNumber);
           setVerificationVisible(true);
         })
         .catch(err => {
           console.log(err);
+          setIsPhoneError(true);
+          setPhoneErrorMessage(err.response.data.message);
         });
+      setTimeout(() => {
+        setIsCertificationDisabled(false);
+      }, 10000);
     }
   };
 
@@ -120,9 +152,20 @@ export function useSignUp() {
     if (certificateCode) {
       if (certificateCode === certifiedNumber) {
         setRequestCerificated(true);
+        setVerificationVisible(false);
+        setCertifiedErrMessage('');
+        setPhoneErrorMessage('');
+      } else {
+        setCertifiedErrMessage('인증번호가 일치하지 않습니다.');
       }
     }
   };
+
+  // 비밀번호 유효성 체크
+  useEffect(() => {
+    const passwordRegex = /^.{8,16}$/;
+    setPasswordValid(passwordRegex.test(password));
+  }, [password]);
 
   // 핸드폰번호 유효성 체크(변경 가능)
   useEffect(() => {
@@ -132,31 +175,50 @@ export function useSignUp() {
 
   // 휴대폰 본인인증 버튼 활성화 체크
   useEffect(() => {
-    if (isRequestCerificated && isVerificationVisible && isPhoneValid) {
+    if (isRequestCerificated && isPhoneValid) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
     }
-  }, [isRequestCerificated, isVerificationVisible, isPhoneValid]);
+  }, [isRequestCerificated, isPhoneValid]);
 
   // 인풋값 관리
-  const handleUserNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserName(e.target.value.trim());
-  };
   const handleNicknameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value.trim());
-  };
+    const nickname = e.target.value.trim();
+    setNickname(nickname);
 
-  const handleNicknameBlur = () => {
-    checkNicknameDuplication(nickname);
+    if (nickname === '') {
+      setNicknameError('');
+      setIsNicknameDuplicated(false);
+      return;
+    }
+    if (nickname.length < 2 || nickname.length > 12) {
+      setNicknameError('닉네임은 2자 이상, 12자 이하로 입력해주세요.');
+      return;
+    } else {
+      setNicknameError('');
+    }
+
+    checkNicknameDuplication(e.target.value);
   };
 
   const handleUserIdChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserId(e.target.value.trim());
-  };
+    const id = e.target.value.trim();
+    setUserId(id);
 
-  const handleUserIdBlur = () => {
-    checkIdDuplication(userId);
+    if (id === '') {
+      setIdError('');
+      setIsNicknameDuplicated(false);
+      return;
+    }
+    if (id.length < 4 || id.length > 12) {
+      setIdError('아이디는 4자 이상, 12자 이하로 입력해주세요.');
+      return;
+    } else {
+      setIdError('');
+    }
+
+    checkIdDuplication(e.target.value);
   };
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -176,11 +238,11 @@ export function useSignUp() {
   };
 
   const handleStreetChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setStreet(e.target.value.trim());
+    setStreet(e.target.value);
   };
 
   const handleDetailsChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setDetails(e.target.value.trim());
+    setDetails(e.target.value);
   };
 
   const handleZipCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -211,12 +273,25 @@ export function useSignUp() {
     userId,
     isIdDuplicated,
     isNicknameDuplicated,
-    handleUserIdBlur,
     nickname,
     handleNicknameChange,
-    handleNicknameBlur,
-    handleUserNameChange,
     handleCertificateCode,
     isSuccess,
+    isPhoneError,
+    phoneErrorMessage,
+    isPasswordValid,
+    certifiedErrMessage,
+    isCertificationDisabled,
+    nicknameError,
+    idError,
+    nicknameRef,
+    userIdRef,
+    passwordRef,
+    passwordConfirmationRef,
+    phoneNumberRef,
+    addressRef,
+    error,
+    handlePrevStep,
+    phoneNumber,
   };
 }

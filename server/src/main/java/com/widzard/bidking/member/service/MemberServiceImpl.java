@@ -1,15 +1,16 @@
 package com.widzard.bidking.member.service;
 
-import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
-import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.auction.exception.SendingMessageFailureException;
 import com.widzard.bidking.global.jwt.service.TokenProvider;
 import com.widzard.bidking.image.entity.Image;
+import com.widzard.bidking.image.exception.ImageOperationFailException;
 import com.widzard.bidking.image.service.ImageService;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
+import com.widzard.bidking.member.dto.response.AuthInfo;
 import com.widzard.bidking.member.entity.Member;
+import com.widzard.bidking.member.exception.LoginFailureException;
 import com.widzard.bidking.member.exception.MemberDuplicatedException;
 import com.widzard.bidking.member.exception.MemberNotFoundException;
 import com.widzard.bidking.member.repository.MemberRepository;
@@ -18,6 +19,8 @@ import com.widzard.bidking.order.repository.OrderRepository;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.java_sdk.api.Message;
@@ -25,7 +28,9 @@ import net.nurigo.java_sdk.exceptions.CoolsmsException;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,14 +39,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
-
-    private static final List<AuctionRoomLiveState> LIVE_STATE = List.of(
-        AuctionRoomLiveState.OFF_LIVE);
-    private static final List<AuctionRoomTradeState> TRADE_STATE = List.of(
-        AuctionRoomTradeState.IN_PROGRESS,
-        AuctionRoomTradeState.ALL_COMPLETED);
-    private static final List<OrderState> ORDER_STATE = List.of(OrderState.PAYMENT_WAITING,
-        OrderState.DELIVERY_WAITING);
 
     private static final String PENALTY = "penalty";
     private static final String MSG_TYPE = "SMS";
@@ -53,6 +50,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
+    SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
     @Value("${coolsms.api_key}")
     private String API_KEY;
@@ -97,11 +95,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String login(MemberLoginRequest request) {
+    public AuthInfo login(MemberLoginRequest request) {
         Member member = memberRepository.findByUserId(request.getUserId())
-            .orElseThrow(MemberNotFoundException::new);
-        comparePassword(request.getPassword(), member.getPassword());
-        return tokenProvider.generateAccessToken(member);
+            .orElseThrow(LoginFailureException::new);
+        if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
+            throw new LoginFailureException();
+        }
+        String loginToken = tokenProvider.generateAccessToken(member);
+        return new AuthInfo(member.getId(), member.getNickname(), loginToken);
     }
 
 
@@ -169,9 +170,7 @@ public class MemberServiceImpl implements MemberService {
 
         HashMap<String, Integer> dashboardResult = new HashMap<>();
 
-        List<Object[]> dashboard = orderRepository.countOrdersByState(member, LIVE_STATE,
-            TRADE_STATE,
-            ORDER_STATE);
+        List<Object[]> dashboard = orderRepository.countOrdersByState(member);
 
         for (Object[] obj : dashboard) {
             dashboardResult.put(obj[0].toString(), Integer.valueOf(obj[1].toString()));
@@ -187,7 +186,9 @@ public class MemberServiceImpl implements MemberService {
         throws IOException {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new MemberNotFoundException());
-        comparePassword(request.getOldPassword(), member.getPassword());
+        if (!passwordEncoder.matches(request.getOldPassword(), member.getPassword())) {
+            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+        }
 
         String newPassword = request.getNewPassword();
         if (newPassword.isBlank()) {
@@ -195,27 +196,36 @@ public class MemberServiceImpl implements MemberService {
         }
 
         Image savedImage = null;
+        //변경요청이 존재하는 경우
         if (image != null) {
+            //기존 프사 있는 경우
             if (member.getImage() != null) {
-                imageService.deleteImage(member.getImage());
+                savedImage = imageService.modifyImage(image, memberId);
+            } else {//기존 프사 없는 경우
+                savedImage = imageService.uploadImage(image);
             }
-            savedImage = imageService.uploadImage(image);
+            //변경요청이 있는데 변경된 이미지가 없음
+            if (savedImage == null) {
+                throw new ImageOperationFailException();
+            }
         }
-
         member.updateItem(request, passwordEncoder.encode(newPassword), savedImage);
     }
 
     @Override
     public void deleteMember(Long userId) {
         Member member = memberRepository.findById(userId)
-            .orElseThrow(() -> new MemberNotFoundException());
+            .orElseThrow(MemberNotFoundException::new);
         member.changeToUnavailable();
         memberRepository.save(member);
     }
 
-    private void comparePassword(String rawPassword, String encodedPassword) {
-        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
-            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
-        }
+    @Override
+    public void logout(
+        Authentication authentication,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) {
+        logoutHandler.logout(request, response, authentication);
     }
 }

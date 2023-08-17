@@ -3,40 +3,36 @@ import React, { MouseEvent } from 'react';
 import colors from '../../design/colors';
 import { ButtonHTMLAttributes } from 'react';
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  btnType?: 'confirm' | 'warn' | 'progress' | 'ok' | 'disabled' | 'certification';
-  activated?: 0 | 1;
-  label?: string;
-  type?: 'submit' | 'button' | 'reset';
-  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
-}
-
 export function ConfirmButton({
-  type = 'button',
   btnType = 'confirm',
-  activated = 1,
   label = '안녕 나는 확인버튼이야',
   onClick,
+  type = 'button',
+  disable = false,
 }: Props) {
   return (
     <button
       onClick={onClick}
       type={type}
+      disabled={disable}
       css={{
         cursor: 'pointer',
         width: '100%',
-        height: '3rem',
+        height: '2.25rem',
         border: 'none',
         outline: 'none',
-        borderRadius: '1rem',
+        borderRadius: '0.85rem',
         fontWeight: '600',
-        fontSize: '1.15rem',
-        transition: 'filter 0.3s',
+        fontSize: '1rem',
         '&:hover': {
           filter: 'brightness(0.9)',
         },
+        '&:disabled': {
+          background: colors.disabled,
+          color: colors.grey,
+          cursor: 'not-allowed',
+        },
         ...BTN_TYPES[btnType],
-        ...BTN_TYPES[activated],
       }}
     >
       {label}
@@ -65,6 +61,12 @@ const BTN_TYPES = {
       filter: 'brightness(0.8)',
     },
   },
-  0: {},
-  1: {},
 };
+
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  btnType?: 'confirm' | 'warn' | 'progress' | 'ok' | 'disabled' | 'certification';
+  label?: string;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  type?: 'button' | 'submit';
+  disable?: boolean;
+}

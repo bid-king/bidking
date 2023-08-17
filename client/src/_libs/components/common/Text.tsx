@@ -7,7 +7,7 @@ interface Props {
   content: string;
 }
 
-export function Text({ type = 'normal', content = '예시 텍스트' }: Props) {
+export function Text({ type = 'normal', content = '' }: Props) {
   if (type === 'h1') return <h1 css={{ ...FONT_TYPE[type] }}>{content}</h1>;
   if (type === 'h2') return <h2 css={{ ...FONT_TYPE[type] }}>{content}</h2>;
   if (type === 'h3') return <h3 css={{ ...FONT_TYPE[type] }}>{content}</h3>;
@@ -24,19 +24,19 @@ const FONT_TYPE = {
   },
   h1: {
     fontWeight: '600',
-    fontSize: '1.75rem',
+    fontSize: '1.5rem',
   },
   h2: {
     fontWeight: '700',
-    fontSize: '1.5rem',
+    fontSize: '1.25rem',
   },
   h3: {
     fontWeight: '700',
-    fontSize: '1.25rem',
+    fontSize: '1rem',
   },
   p: {
     fontWeight: '400',
-    fontSize: '1rem',
+    fontSize: '0.9rem',
   },
 };
 

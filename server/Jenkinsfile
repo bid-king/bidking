@@ -1,0 +1,53 @@
+// pipeline {
+//     agent any
+//
+//     stages {
+//         stage('Prepare') {
+//             steps {
+//                 echo 'Checking current file list...'
+//                 sh 'ls server'
+//                 echo 'Preparing the environment...'
+//                 sh 'chmod +x ./server/gradlew'
+//             }
+//         }
+//         stage('Build') {
+//             steps {
+//                 dir('server') {
+//                     echo 'Building the project...'
+//                     sh './gradlew clean build'
+//                 }
+//             }
+//         }
+//     }
+// }
+pipeline {
+    agent any
+    stages {
+        stage('Git clone') {
+            steps {
+                dir('server') {
+                    git branch: 'develop', credentialsId: 'real_final', url: 'https://lab.ssafy.com/s09-webmobile1-sub2/S09P12A706'
+                }
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                dir('server') {
+                    echo "Compiled successfully!"
+                    sh './gradlew build'  // Gradle 빌드 명령어 실행
+                }
+            }
+        }
+
+        stage('JUnit') {
+            steps {
+                dir('server') {
+                    echo "JUnit passed successfully!"
+                    sh './gradlew test'  // Gradle 테스트 명령어 실행
+                }
+            }
+        }
+     
+    }
+}

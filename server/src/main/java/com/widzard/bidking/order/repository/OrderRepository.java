@@ -1,7 +1,5 @@
 package com.widzard.bidking.order.repository;
 
-import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
-import com.widzard.bidking.auction.entity.AuctionRoomTradeState;
 import com.widzard.bidking.member.entity.Member;
 import com.widzard.bidking.order.entity.Order;
 import com.widzard.bidking.order.entity.OrderState;
@@ -19,15 +17,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         "JOIN oi.order o " +
         "JOIN oi.item i " +
         "JOIN i.auctionRoom a " +
-        "WHERE i.itemState = 'SUCCESS' " +
+        "WHERE i.itemState = 'AFTER_AUCTION' " +
         "and a.seller = :member " +
-        "AND a.auctionRoomLiveState IN :liveState " +
-        "AND a.auctionRoomTradeState IN :tradeState " +
-        "AND o.orderState IN :orderState " +
+        "AND a.auctionRoomLiveState != 'BEFORE_LIVE' " +
+        "AND a.auctionRoomTradeState = 'IN_PROGRESS' " +
         "GROUP BY o.orderState")
-
-    List<Object[]> countOrdersByState(@Param("member") Member member,
-        @Param("liveState") List<AuctionRoomLiveState> liveState,
-        @Param("tradeState") List<AuctionRoomTradeState> tradeState,
-        @Param("orderState") List<OrderState> orderState);
+    List<Object[]> countOrdersByState(@Param("member") Member member);
 }

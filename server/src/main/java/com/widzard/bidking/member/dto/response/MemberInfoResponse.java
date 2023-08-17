@@ -41,4 +41,5 @@ public class MemberInfoResponse {
             .imageUrl(imgPath)
             .build();
     }
+
 }

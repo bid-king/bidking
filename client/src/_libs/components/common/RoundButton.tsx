@@ -1,26 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import colors from '../../design/colors';
 import { ButtonHTMLAttributes } from 'react';
+import { Icon } from './Icon';
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'confirm' | 'white';
-  size?: 'small' | 'large';
-  label: string;
-  activated?: 0 | 1;
-}
-
-export function RoundButton({ variant = 'confirm', label = '로그인', size = 'large' }: Props) {
+export function RoundButton({ color = 'confirm', label, size = 'large', onClick }: Props) {
   return (
     <button
       type="button"
+      onClick={onClick}
       css={{
         cursor: 'pointer',
         borderRadius: '2.25rem',
-        transition: 'filter 0.3s',
         fontWeight: '600',
-
-        ...TYPE_VARIANTS[variant],
+        whiteSpace: 'nowrap',
+        ...COLOR_VARIANTS[color],
         ...SIZE_VARIANT[size],
       }}
     >
@@ -29,10 +23,18 @@ export function RoundButton({ variant = 'confirm', label = '로그인', size = '
   );
 }
 
-const TYPE_VARIANTS = {
+const COLOR_VARIANTS = {
   confirm: {
-    border: `1px solid ${colors.confirm}`,
+    border: '1px solid transparent',
     backgroundColor: colors.confirm,
+    '&:hover': {
+      filter: 'brightness(0.9)',
+    },
+  },
+  black: {
+    border: '1px solid transparent',
+    backgroundColor: colors.black,
+    color: colors.white,
     '&:hover': {
       filter: 'brightness(0.9)',
     },
@@ -44,17 +46,32 @@ const TYPE_VARIANTS = {
       filter: 'brightness(0.9)',
     },
   },
+  delete: {
+    border: `1px solid ${colors.warn33}`,
+    color: colors.white,
+    backgroundColor: colors.warn,
+    '&:hover': {
+      filter: 'brightness(0.9)',
+    },
+  },
 };
 
 const SIZE_VARIANT = {
   small: {
-    height: '2rem',
-    padding: '0 1rem 0 1rem',
+    height: '1.75rem',
+    padding: '0 0.75rem 0 0.75rem',
     fontSize: '0.9rem',
   },
   large: {
-    height: '3rem',
-    padding: '0 1.5rem 0 1.5rem',
-    fontSize: '1.1rem',
+    height: '2.25rem',
+    padding: '0 1.15rem 0 1.15rem',
+    fontSize: '0.95rem',
   },
 };
+
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  color?: 'confirm' | 'black' | 'white' | 'delete';
+  size?: 'small' | 'large';
+  label: string;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+}

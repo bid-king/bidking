@@ -6,6 +6,7 @@ import com.widzard.bidking.member.dto.request.MemberPhoneVerificationRequest;
 import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
 import com.widzard.bidking.member.dto.request.UserIdRequest;
 import com.widzard.bidking.member.dto.request.UserNicknameRequest;
+import com.widzard.bidking.member.dto.response.AuthInfo;
 import com.widzard.bidking.member.dto.response.DashboardResponse;
 import com.widzard.bidking.member.dto.response.MemberCheckResponse;
 import com.widzard.bidking.member.dto.response.MemberCreateResponse;
@@ -18,12 +19,15 @@ import com.widzard.bidking.member.service.MemberService;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,15 +87,22 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<MemberLoginResponse> login(
         @RequestBody @Valid MemberLoginRequest request) {
-        String token = memberService.login(request);
-        return new ResponseEntity<>(MemberLoginResponse.from(token), HttpStatus.OK);
+        AuthInfo loginInfo = memberService.login(request);
+        return new ResponseEntity<>(MemberLoginResponse.from(loginInfo), HttpStatus.OK);
     }
 
+    /*
+     * redis, refresh token 리팩토링 필요
+     */
     @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
-        return new ResponseEntity<>("ok", HttpStatus.OK);
+    public ResponseEntity<String> logout(
+        Authentication authentication,
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) {
+        memberService.logout(authentication, request, response);
+        return new ResponseEntity<>("logout ok", HttpStatus.OK);
     }
-
 
     @GetMapping("/{memberId}")
     public ResponseEntity<MemberInfoResponse> getUserDetail(@PathVariable Long memberId) {
@@ -116,6 +127,8 @@ public class MemberController {
     public ResponseEntity<?> updateMember(@PathVariable Long memberId,
         @RequestPart(name = "request") @Valid MemberUpdateRequest request,
         @RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+        log.info("requet = {}", request);
+
         memberService.updateMember(memberId, request, image);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

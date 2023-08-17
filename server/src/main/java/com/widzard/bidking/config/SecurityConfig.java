@@ -5,7 +5,6 @@ import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -49,9 +48,15 @@ public class SecurityConfig {
                 "/api/v1/members/check/**",
                 "/api/v1/members/signup",
                 "/api/v1/items/categories",
-                "/api/v1/auctions/**"
+                "/api/v1/auctions/**/items",
+                "/api/v1/auctions",
+                "/api/v1/auctions/status",
+                "/api/v1/auctions/bookmarks/count",
+                "/api/v1/refresh",
+                "/api/v1/bid/**",
+                "/api/v1/alarms/**",
+                "/api/v1/test/**"
             ).permitAll()
-            .antMatchers(HttpMethod.GET, "/api/v1/auctions").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -79,6 +84,5 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
 }

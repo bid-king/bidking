@@ -1,0 +1,50 @@
+version: '3'
+services:
+  redis-server:
+    image: dajeongyun/redis
+    build: 
+      context: ./redis
+      dockerfile: Dockerfile
+    hostname: redis
+    ports:
+      - '6379:6379'
+
+  react:
+    image: dajeongyun/docker-client
+    volumes:
+      - ./client:/app
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment: # 윈도우 환경에서 실시간으로 매핑하려면 필요
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+
+  springboot:
+    image: dajeongyun/docker-springboot-server
+    volumes:
+      - ./server:/app
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    depends_on:
+      - 'redis-server'
+
+  nodejs:
+    image: dajeongyun/docker-nodejs-server
+    ports:
+      - '8005:8005'
+    build:
+      context: ./socket-server
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./socket-server:/app
+    depends_on:
+      - 'redis-server'
+# volumes:
+#   redis-data:

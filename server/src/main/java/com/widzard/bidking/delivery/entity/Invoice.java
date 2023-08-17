@@ -24,9 +24,11 @@ public class Invoice extends BaseEntity {
     @Column(name = "invoice_id")
     private Long id;
 
+    @Column(nullable = false, length = 15)
     private String number;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
     private Courier courier;
 
 }

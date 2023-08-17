@@ -3,9 +3,13 @@ package com.widzard.bidking.member.service;
 import com.widzard.bidking.member.dto.request.MemberFormRequest;
 import com.widzard.bidking.member.dto.request.MemberLoginRequest;
 import com.widzard.bidking.member.dto.request.MemberUpdateRequest;
+import com.widzard.bidking.member.dto.response.AuthInfo;
 import com.widzard.bidking.member.entity.Member;
 import java.io.IOException;
 import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MemberService {
@@ -18,7 +22,7 @@ public interface MemberService {
 
     boolean checkPhoneNumber(String phoneNumber);
 
-    String login(MemberLoginRequest request);
+    AuthInfo login(MemberLoginRequest request);
 
     void certifiedPhoneNumber(String phoneNumber, String cerNum);
 
@@ -33,4 +37,6 @@ public interface MemberService {
 
     void deleteMember(Long userId);
 
+    void logout(Authentication authentication, HttpServletRequest request,
+        HttpServletResponse response);
 }
