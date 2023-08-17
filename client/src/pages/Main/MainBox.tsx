@@ -58,11 +58,6 @@ export function MainBox() {
         <div
           css={{
             display: 'flex',
-          }}
-        ></div>
-        <div
-          css={{
-            display: 'flex',
             flexDirection: 'column',
             width: '100%',
             padding: '0 2rem 0 2rem',
@@ -115,12 +110,13 @@ export function MainBox() {
                         />
                       </div>
                     )}
+                    <Spacing rem="3" />
                   </div>
                 ))}
               </div>
             </div>
           )}
-          <Spacing rem="3" />
+
           <div>
             <Text type="h1" content="전체보기" />
             <Spacing rem="1" />
@@ -171,9 +167,8 @@ export function MainBox() {
                 </div>
               ))}
 
-                <Spacing rem="1" />
-              </div>
-            ))}
+              <Spacing rem="1" />
+            </div>
           </div>
         </div>
       </div>

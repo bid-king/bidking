@@ -17,7 +17,7 @@ export function NotFound404() {
           maxWidth: '100%',
           maxHeight: '30rem',
         }}
-        src="/image/NotFound404.png"
+        src={process.env.PUBLIC_URL + '/image/NotFound404.png'}
         alt="404"
       />
     </div>
