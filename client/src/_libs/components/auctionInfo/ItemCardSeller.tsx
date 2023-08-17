@@ -40,9 +40,18 @@ export function ItemCardSeller({ theme = 'dark', item }: Props) {
       </div>
       <Spacing rem="1" />
       <div className="cardBody-ItemName">
-        <Text type="h3" content={item.itemName} />
+        <Text type="h2" content={item.itemName} />
       </div>
-      <Spacing rem="1" />
+      <Spacing rem="1" />{' '}
+      <div
+        css={{
+          display: 'flex',
+        }}
+      >
+        <Text content={'카테고리'} />
+        <Spacing rem="0.5" dir="h" />
+        <Text type="h3" content={item.category} />
+      </div>
       <div
         className="cardBody-orderInfo"
         css={{
@@ -50,29 +59,38 @@ export function ItemCardSeller({ theme = 'dark', item }: Props) {
           flexDirection: 'row',
         }}
       >
-        {item.successMemberNickname && (
+        {item.successMemberNickname && item.successMemberId && item.successTime && (
           <div
             css={{
               width: '50%',
             }}
           >
+            <Spacing rem="1" />
             <Text content={'낙찰자 '} />
             <Text type="bold" content={item.successMemberNickname} />
           </div>
         )}
-        {item.price && (
+        {item.price !== 0 && (
           <div>
+            <Spacing rem="1" />
             <Text content={'낙찰가 '} />
-            <Text type="bold" content={item.price.toString()} />
+            <Text type="bold" content={`${item.price.toString()} 원`} />
           </div>
         )}
       </div>
       <Spacing rem="1" />
-
-      <div>
-        <Text type="bold" content={item.successTime ? detailDateParse(item.successTime) + ' 낙찰' : ''} />
-      </div>
-      <Spacing rem="1" />
+      {item.successTime && (
+        <div
+          css={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Text type="p" content="라이브 종료 시간" />
+          <Text type="bold" content={detailDateParse(item.successTime)} />
+          <Spacing rem="1" />
+        </div>
+      )}
       <div
         css={{
           display: 'flex',
@@ -92,15 +110,15 @@ export function ItemCardSeller({ theme = 'dark', item }: Props) {
           </div>
         ) : (
           <div>
-            <Text content={'낙찰자가 배송지를 입력하지 않았어요'} />
-            <div
+            <Text type="bold" content={'낙찰자가 배송지를 입력하지 않았어요'} />
+            {/* <div
               css={{
                 display: 'flex',
-              }}
+              }} 
             >
               <Input theme={theme} inputType="text" placeholder="택배사" />
               <Input theme={theme} inputType="text" placeholder="배송메시지" />
-            </div>
+            </div> */}
           </div>
         )}
       </div>
@@ -133,7 +151,6 @@ export function ItemCardSeller({ theme = 'dark', item }: Props) {
         </div>
         <Spacing rem="2" />
       </div>
-
       {/* 여기까지 접는 부분 */}
       <div css={{ textAlign: 'center', cursor: 'pointer' }} onClick={() => setDetailDisplay(!detailDisplay)}>
         {detailDisplay ? '접기' : '펼치기'}

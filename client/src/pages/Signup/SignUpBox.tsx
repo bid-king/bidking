@@ -9,6 +9,7 @@ import colors from '../../_libs/design/colors';
 import { useSignUp } from '../../_libs/hooks/useSignUp';
 import { Image } from '../../_libs/components/common/Image';
 import { css, keyframes } from '@emotion/react';
+import { Spinner } from '../../_libs/components/common/Spinner';
 
 export function SignUpBox() {
   const {
@@ -57,33 +58,19 @@ export function SignUpBox() {
     phoneNumber,
   } = useSignUp();
 
-  const rotateAnimation = keyframes`
-  0% {
-    transform: rotateY(0deg);
-  }
-  100% {
-    transform: rotateY(360deg);
-  }
-`;
-
-  const rotatingStyle = css`
-    perspective: 1000px;
-    transform-style: preserve-3d;
-    animation: ${rotateAnimation} 5s infinite linear;
-  `;
-
   return (
     <>
       {!isSuccess && (
         <form
           onSubmit={handleNextStep}
           css={{
-            width: '50rem',
+            width: '33vw',
+            minWidth: '27rem',
             borderRadius: '0.5rem',
             padding: '2rem',
             display: 'flex',
             flexDirection: 'column',
-            backgroundColor: colors.backgroundLight,
+            backgroundColor: colors.backgroundLight2,
           }}
         >
           <Text type="h2" content="간단하게 가입해요." />
@@ -237,7 +224,7 @@ export function SignUpBox() {
                   >
                     <div
                       css={{
-                        width: '80rem',
+                        width: '280%',
                       }}
                     >
                       <Input
@@ -396,8 +383,8 @@ export function SignUpBox() {
           }}
         >
           <Link to={'/login'}>
-            <div css={rotatingStyle}>
-              <Image src="/image/logo/crown.png" alt="" />
+            <div>
+              <Spinner />
             </div>
             <Spacing rem="1" />
             <Text type="h1" content="가입을 축하합니다! 잠시후 로그인 화면으로 이동합니다" />

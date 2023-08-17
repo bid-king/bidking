@@ -11,6 +11,7 @@ import {
 } from '../../store/slices/auctionCreateSlice';
 import { ROOT } from '../util/http';
 import { useNavigate } from 'react-router-dom';
+import { resetItemImg } from '../../store/slices/auctionCreateItemImgSlice';
 
 export function useAuctionCreateBox() {
   const dispatch = useAppDispatch();
@@ -19,6 +20,9 @@ export function useAuctionCreateBox() {
     useAppSelector(state => state.auctionCreate);
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(null);
   const token = useAppSelector(state => state.user.accessToken);
+  const [image, setImage] = useState<File | null>(null);
+  const [itemList, setItemList] = useState<number[]>([0]);
+  const [errMessage, SetErrMessage] = useState('');
 
   const handleAuctionTitle = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(setAuctionTitle(e.target.value));
@@ -42,9 +46,6 @@ export function useAuctionCreateBox() {
     dispatch(setDeliveryRulesChecked());
   };
 
-  const [image, setImage] = useState<File | null>(null);
-  const [itemList, setItemList] = useState<number[]>([0]);
-  const [errMessage, SetErrMessage] = useState('');
   const addItem = () => {
     setItemList(prevItem => [prevItem.length, ...prevItem]);
   };
@@ -112,6 +113,7 @@ export function useAuctionCreateBox() {
   useEffect(() => {
     return () => {
       dispatch(resetAuctionCreate());
+      dispatch(resetItemImg());
     };
   }, [dispatch]);
 

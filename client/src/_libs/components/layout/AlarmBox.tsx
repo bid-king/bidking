@@ -42,11 +42,18 @@ export function AlarmBox({ theme = 'light', alarmList, alarmCheck, eventSourceRe
       >
         {alarmList.map(alarm => {
           return (
-            <div key={alarm.id}>
+            <div
+              css={{
+                display: 'flex',
+                flex: 'column',
+              }}
+              key={alarm.id}
+            >
               <div
                 css={{
                   display: 'flex',
                   alignItems: 'center',
+                  justifyContent: 'flex-start',
                 }}
               >
                 <Text type="bold" content={auctionDateParse(alarm.createdTime)} />
@@ -69,6 +76,14 @@ export function AlarmBox({ theme = 'light', alarmList, alarmCheck, eventSourceRe
                   <Text type="bold" content={alarm.content} />
                 </div>
                 <Spacing rem="1" dir="h" />
+              </div>
+              <div
+                css={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                }}
+              >
                 <Checkbox
                   theme={theme}
                   id="1"
@@ -77,7 +92,7 @@ export function AlarmBox({ theme = 'light', alarmList, alarmCheck, eventSourceRe
                   checked={alarm.isRead}
                 />
               </div>
-              <Spacing rem="0.5" />
+              <Spacing rem="1.5" />
             </div>
           );
         })}
@@ -121,6 +136,6 @@ const THEME_VARIANT = {
 
 const ALARM_VARIANT = {
   AUCTION: { text: '경매', color: colors.confirm },
-  ORDER: { text: '경매', color: colors.ok },
-  DELIVERY: { text: '경매', color: colors.progress },
+  ORDER: { text: '낙찰', color: colors.ok },
+  DELIVERY: { text: '배송', color: colors.progress },
 };

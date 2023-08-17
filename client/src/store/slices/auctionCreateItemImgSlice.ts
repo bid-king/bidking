@@ -15,9 +15,12 @@ export const auctionCreateItemImgSlice = createSlice({
     setItemImg: (state, action: PayloadAction<{ id: string; file: File }>) => {
       state.itemImgs[action.payload.id] = action.payload.file;
     },
+    resetItemImg: state => {
+      state.itemImgs = initialState.itemImgs;
+    },
   },
 });
 
-export const { setItemImg } = auctionCreateItemImgSlice.actions;
+export const { setItemImg, resetItemImg } = auctionCreateItemImgSlice.actions;
 
 export default auctionCreateItemImgSlice.reducer;

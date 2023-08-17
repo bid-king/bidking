@@ -22,6 +22,7 @@ export function useSellerDetailOffLive() {
     auction
       .getSeller(auctionId, accessToken)
       .then(data => {
+        console.log(data);
         setDetail(data);
       })
       .catch(err => setError(err));

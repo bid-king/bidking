@@ -14,6 +14,7 @@ import { AlarmBox } from './AlarmBox';
 import { ROOT } from '../../util/http';
 import { useAlarm } from '../../hooks/useAlarm';
 import { Image } from '../common/Image';
+import { keyframes } from '@emotion/react';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   theme?: 'light' | 'dark';
@@ -32,11 +33,9 @@ export function Nav({ theme = 'light' }: Props) {
   const {
     showModal,
     isLogined,
-    handleMouseEnter,
-    handleMouseLeave,
+    profileClick,
+    alarmClick,
     showAlarm,
-    handleAlarmMouseEnter,
-    handleAlarmMouseLeave,
     imgSrc,
     keyword,
     handleKeyword,
@@ -44,7 +43,20 @@ export function Nav({ theme = 'light' }: Props) {
     id,
     searchClickKeyword,
     eventSourceRef,
+    profileRef,
+    alarmRef,
   } = useNavBar();
+
+  const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
   return (
     <div>
@@ -83,7 +95,7 @@ export function Nav({ theme = 'light' }: Props) {
             <div
               className="logo"
               css={{
-                width: '5rem',
+                width: '7rem',
                 height: '1rem',
                 display: 'flex',
                 alignItems: 'center',
@@ -94,15 +106,6 @@ export function Nav({ theme = 'light' }: Props) {
               </Link>
             </div>
           )}
-
-          <div>
-            {theme === 'dark' && (
-              <div css={{ color: colors.white }}>
-                <Text type="h3" content="판매" />
-              </div>
-            )}
-          </div>
-          <Spacing rem="1" dir="h" />
           {theme === 'light' && (
             <form css={{ display: 'flex' }} onSubmit={searchKeyword}>
               <div>
@@ -153,7 +156,7 @@ export function Nav({ theme = 'light' }: Props) {
                   }}
                 >
                   <Link to={`/purchased/${id}`}>
-                    <RoundButton label="구매 내역" size="small" color="white" />
+                    <RoundButton label="낙찰 내역" size="small" color="white" />
                   </Link>
                   <Spacing rem="0.5" dir="h" />
                   <Link to={'/seller'}>
@@ -177,7 +180,12 @@ export function Nav({ theme = 'light' }: Props) {
                 </div>
               )}
               <Spacing rem="2" dir="h" />
-              <div onMouseEnter={handleAlarmMouseEnter} onMouseLeave={handleAlarmMouseLeave}>
+              <div
+                css={{
+                  cursor: 'pointer',
+                }}
+                onClick={alarmClick}
+              >
                 <Icon type="noti" color={theme} rem="1.5" />
                 {unreadAlarmsCount !== 0 && (
                   <div
@@ -196,7 +204,12 @@ export function Nav({ theme = 'light' }: Props) {
                 )}
               </div>
               <Spacing rem="1" dir="h" />
-              <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+              <div
+                css={{
+                  cursor: 'pointer',
+                }}
+                onClick={profileClick}
+              >
                 <ProfileImage src={imgSrc ? imgSrc : ''} />
               </div>
               <Spacing rem="2" dir="h" />
@@ -210,9 +223,8 @@ export function Nav({ theme = 'light' }: Props) {
             position: 'absolute',
             right: 0,
             zIndex: 1,
+            animation: `${fadeIn} 0.3s forwards`,
           }}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
         >
           <NavBarModal theme={theme} />
         </div>
@@ -223,9 +235,8 @@ export function Nav({ theme = 'light' }: Props) {
             position: 'absolute',
             right: 0,
             zIndex: 1,
+            animation: `${fadeIn} 0.3s forwards`,
           }}
-          onMouseEnter={handleAlarmMouseEnter}
-          onMouseLeave={handleAlarmMouseLeave}
         >
           <AlarmBox theme={theme} alarmList={alarmList} alarmCheck={alarmCheck} eventSourceRef={eventSourceRef} />
         </div>

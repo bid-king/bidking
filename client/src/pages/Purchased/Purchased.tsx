@@ -66,12 +66,11 @@ export function Purchased() {
         paymentWaiting={status?.paymentWaiting}
         penalty={status?.penalty}
       />
-      <Spacing rem="3" />
+      <Spacing rem="2" />
       <div
         css={{
           width: '33vw',
           minWidth: '27rem',
-
           padding: '0 1.5rem 0 1.5rem',
           backgroundColor: colors.backgroundLight2,
           borderRadius: '1.5rem',

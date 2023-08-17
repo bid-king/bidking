@@ -6,11 +6,8 @@ import { Text } from '../../_libs/components/common/Text';
 import colors from '../../_libs/design/colors';
 import { ConfirmButton } from '../../_libs/components/common/ConfirmButton';
 import { QuestionModal } from '../../_libs/components/auctionCreate/QuestionModal';
-import { Checkbox } from '../../_libs/components/common/Checkbox';
-import auctionRoomLiveState from '../../_libs/constants/auctionRoomLiveState';
 import { detailDateParse } from '../../_libs/util/detailDateParse';
 import { Link } from 'react-router-dom';
-import { RoundButton } from '../../_libs/components/common/RoundButton';
 import { useSellerDetailOffLive } from '../../_libs/hooks/useSellerDetailOffLive';
 
 export function SellerDetailOffLive() {
@@ -78,18 +75,11 @@ export function SellerDetailOffLive() {
         }}
       >
         <Spacing rem="1.5" />
-        <div
-          css={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <Text type="h1" content="경매 완료" />
-        </div>
-        <Spacing rem="1" />
+
+        <Text type="h1" content="경매 완료" />
+        <Spacing rem="1.5" />
         <div>
-          <Text type="h1" content={detail.name} />
+          <Text type="h2" content={detail.name} />
           <Spacing rem="1" />
           <div
             className="auctionEnterPermission"
@@ -119,14 +109,12 @@ export function SellerDetailOffLive() {
                 content2="네덜란드 경매(Dutch Auction): 이 경매 방식은 일반적인 경매와는 반대로, 가장 높은 가격에서 시작하여 점차 가격을 낮추는 방식입니다. 참가자들은 가격이 내려갈수록 입찰을 기다리다가, 자신이 원하는 가격에 도달했을 때 입찰을 합니다. 처음으로 입찰한 사람이 물건을 얻게 됩니다. 이 방식은 일반적으로 꽃이나 농산물 등 시간이 지날수록 가치가 떨어지는 상품을 판매할 때 사용됩니다."
               />
             </div>
-            <Spacing rem="1" dir="h" />
           </div>
         </div>
         <div>
-          <Spacing rem="1" />
           <Text type="h3" content={`${detailDateParse(detail.startedAt)} 시작`} />
         </div>
-        <Spacing rem="1" />
+        <Spacing rem="0.5" />
         {detail.itemList.some(item =>
           ['PAYMENT_WAITING', 'DELIVERY_WAITING', 'DELIVERING'].includes(item.orderState)
         ) && <ConfirmButton btnType="progress" label="결제/배송중" />}
@@ -140,20 +128,14 @@ export function SellerDetailOffLive() {
         <Spacing rem="1" />
         <Text type="h1" content="경매 물품" />
         <Spacing rem="1" />
-        <div
-          css={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          {error && <Text content={error.message} />}
-          {detail.itemList.map((item, idx) => (
-            <div key={idx}>
-              <ItemCardSeller theme="dark" item={item} />
-              <Spacing rem="1" />
-            </div>
-          ))}
-        </div>
+
+        {error && <Text content={error.message} />}
+        {detail.itemList.map((item, idx) => (
+          <div key={idx}>
+            <ItemCardSeller theme="dark" item={item} />
+            <Spacing rem="1" />
+          </div>
+        ))}
       </div>
     </div>
   );
