@@ -8,9 +8,10 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   checkedValue: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 }
 
-export function RadioButton({ name, onChange, value, checkedValue }: Props) {
+export function RadioButton({ name, onChange, value, checkedValue, disabled }: Props) {
   return (
     <input
       type="radio"
@@ -18,6 +19,7 @@ export function RadioButton({ name, onChange, value, checkedValue }: Props) {
       checked={checkedValue === value}
       value={value}
       onChange={onChange}
+      disabled={disabled}
       css={{
         appearance: 'none',
         cursor: 'pointer',

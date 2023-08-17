@@ -107,7 +107,7 @@ export function NavBarModal({ theme = 'light' }: Props) {
         <Link to={`/mypage/${id}`}>
           <Text type="bold" content="개인정보 수정" />
         </Link>
-        <Spacing rem="1" />
+        <Spacing rem="0.5" />
         <div
           css={{
             cursor: 'pointer',

@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 // import { KakaoButton } from '../_libs/components/common/KakaoButton';
 import { LoginBox } from './LoginBox';
+import colors from '../../_libs/design/colors';
 
 export function Login() {
   return (
@@ -11,7 +12,8 @@ export function Login() {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        height: '91.5vh',
+        height: '94vh',
+        backgroundColor: colors.backgroundLight,
       }}
     >
       <LoginBox />

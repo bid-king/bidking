@@ -32,6 +32,7 @@ export function Detail() {
       .get(auctionId, accessToken)
       .then(data => {
         setDetail(data);
+        console.log(data);
       })
       .catch(err => {
         setError(err);
@@ -61,7 +62,7 @@ export function Detail() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        paddingBottom: '10rem',
+        paddingBottom: '5rem',
         backgroundColor: colors.backgroundLight,
         minHeight: '100vh',
       }}
@@ -69,8 +70,8 @@ export function Detail() {
       <Spacing rem="3" />
       <div
         css={{
-          width: '50%',
-          minHeight: '430px',
+          width: '33vw',
+          minWidth: '27rem',
           padding: '0 1.5rem 0 1.5rem',
           backgroundColor: colors.backgroundLight2,
           borderRadius: '1.5rem',
@@ -78,9 +79,9 @@ export function Detail() {
       >
         <Spacing rem="1.5" />
         <Text type="h1" content="경매 정보" />
-        <Spacing rem="1" />
+        <Spacing rem="1.5" />
         <div>
-          <Text type="h1" content={detail.name} />
+          <Text type="h2" content={detail.name} />
           <Spacing rem="1" />
           <div
             className="auctionEnterPermission"
@@ -110,18 +111,19 @@ export function Detail() {
                 content2="네덜란드 경매(Dutch Auction): 이 경매 방식은 일반적인 경매와는 반대로, 가장 높은 가격에서 시작하여 점차 가격을 낮추는 방식입니다. 참가자들은 가격이 내려갈수록 입찰을 기다리다가, 자신이 원하는 가격에 도달했을 때 입찰을 합니다. 처음으로 입찰한 사람이 물건을 얻게 됩니다. 이 방식은 일반적으로 꽃이나 농산물 등 시간이 지날수록 가치가 떨어지는 상품을 판매할 때 사용됩니다."
               />
             </div>
-            <Spacing rem="1" dir="h" />
           </div>
         </div>
         {detail.auctionRoomLiveState === 'BEFORE_LIVE' && (
           <div>
-            <Spacing rem="1" />
-            <Text type="h3" content={`${detailDateParse(detail.startedAt)} 시작`} />
+            <div>
+              <Text type="h3" content={`${detailDateParse(detail.startedAt)} 시작`} />
+              <Spacing rem="0.5" />
+            </div>
+            <ConfirmButton
+              btnType="disabled"
+              label={`판매자 ${detail.sellerNickname}가 아직 방송을 시작하지 않았어요`}
+            />
           </div>
-        )}
-
-        {detail.auctionRoomLiveState === 'BEFORE_LIVE' && (
-          <ConfirmButton btnType="disabled" label="판매자가 아직 방송을 시작하지 않았어요" />
         )}
 
         {detail.auctionRoomLiveState === 'ON_LIVE' && (
@@ -134,7 +136,7 @@ export function Detail() {
                 alignItems: 'center',
               }}
             >
-              <Text type="p" content="입찰 시 주의사항에 동의해주세요" />
+              <Text type="h3" content="입찰 시 주의사항에 동의해주세요" />
               <Spacing rem="1" dir="h" />
               <div
                 css={{
@@ -160,6 +162,7 @@ export function Detail() {
                 />
               </div>
             </div>
+
             {!isChecked && <ConfirmButton btnType="disabled" label="경매 주의사항을 동의 해주세요" />}
             {isChecked && (
               <Link to={`/auction/${auctionId}`}>

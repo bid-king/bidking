@@ -36,17 +36,17 @@ export function AuctionCreateBox() {
   return (
     <div
       css={{
-        width: '50rem',
-        borderRadius: '0.5rem',
-        padding: '1rem',
-        display: 'flex',
-        flexDirection: 'column',
+        width: '33vw',
+        minWidth: '27rem',
+        padding: '0 1.5rem 0 1.5rem',
         backgroundColor: colors.backgroundDark2,
+        borderRadius: '1.5rem',
         color: colors.white,
       }}
     >
-      <Text type="h2" content="경매 등록" />
-      <Spacing rem="2" />
+      <Spacing rem="1.5" />
+      <Text type="h1" content="경매 등록" />
+      <Spacing rem="1.5" />
       <div
         css={{
           padding: '0.5rem',
@@ -56,15 +56,15 @@ export function AuctionCreateBox() {
           <label htmlFor="auctionTitle-input">
             <Text type="bold" content="경매 제목을 입력하세요" />
           </label>
-          <Spacing rem="1" />
+          <Spacing rem="0.5" />
           <Input id="auctionTitle-input" placeholder="" inputType="text" onChange={handleAuctionTitle} />
         </div>
-        <Spacing rem="2" />
+        <Spacing rem="1" />
         <div className="startedAt">
           <label htmlFor="startedAt-input">
             <Text type="bold" content="경매 날짜와 시간을 선택하세요" />
           </label>
-          <Spacing rem="1" />
+          <Spacing rem="0.5" />
           <Input id="startedAt-input" placeholder="" inputType="datetime-local" onChange={handleStartedAt} />
         </div>
         <Spacing rem="2" />
@@ -103,10 +103,12 @@ export function AuctionCreateBox() {
               onChange={handleAuctionRoomType}
             />
           </div>
-          <Spacing rem="0.25" />
+          <Spacing rem="0.5" />
           <div
             css={{
               display: 'flex',
+              opacity: '0.5',
+              cursor: 'not-allowed',
             }}
           >
             <Text type="p" content="네덜란드" />
@@ -114,6 +116,7 @@ export function AuctionCreateBox() {
             <RadioButton
               name="auctionRoomType"
               value="REVERSE"
+              disabled={true}
               checkedValue={auctionRoomType}
               onChange={handleAuctionRoomType}
             />
@@ -123,21 +126,17 @@ export function AuctionCreateBox() {
         <div className="auction-image">
           <Text type="bold" content="경매 정보를 알려줄 수 있는 썸네일을 등록하세요" />
           <Spacing rem="1" />
-          <div>
+          <div css={{ display: 'flex', flexDirection: 'column' }}>
             {image && <Image src={previewImageURL ? previewImageURL : '#'} alt="auctionRoomUrl" />}
-            <InputFile label="파일 선택" accept="image/*" color="white" onChange={handleImageChange} />
+            {previewImageURL ? <Spacing rem="0.25" /> : null}
+            <div>
+              <InputFile label="썸네일 선택" accept="image/*" color="white" onChange={handleImageChange} />
+            </div>
           </div>
         </div>
         <Spacing rem="2" />
         <div className="auction-confirm-check">
-          <div
-            css={{
-              display: 'flex',
-            }}
-          >
-            <Text type="bold" content="경매할 상품과 순서를 입력하세요." />
-            <Spacing rem="1" dir="h" />
-          </div>
+          <Text type="bold" content="입찰왕 규정에 동의해주세요." />
           <Spacing rem="1" />
           <div
             className="itemPermissionChecked"
@@ -181,10 +180,7 @@ export function AuctionCreateBox() {
               alignItems: 'center',
             }}
           >
-            <Text
-              type="p"
-              content="상품이 낙찰되면 판매자가 결제한 날로부터 일 주일 안에 상품을 발송하고, 배송 정보를 제공하겠습니다."
-            />
+            <Text type="p" content="낙찰 물품 배송 관련 규정을 숙지하였습니다." />
             <Spacing rem="1" dir="h" />
             <div
               css={{
@@ -211,7 +207,7 @@ export function AuctionCreateBox() {
             </div>
           </div>
         </div>
-        <Spacing rem="2" />
+        <Spacing rem="1" />
         <div
           css={{
             display: 'flex',
@@ -222,21 +218,23 @@ export function AuctionCreateBox() {
           <Spacing rem="5" dir="h" />
           <ConfirmButton label="물품추가" onClick={addItem} />
         </div>
-        <Spacing rem="2" />
+        <Spacing rem="1" />
         {itemList.map((item, index) => {
           return (
             <div key={item}>
               <AuctionCreateCard ordering={itemList.length - index} />
-              <Spacing rem="2" />
+              <Spacing rem="1" />
             </div>
           );
         })}
         {errMessage && <Text content={errMessage} />}
+        <Spacing rem="0.5" />
         {itemPermissionChecked && deliveryRulesChecked ? (
           <ConfirmButton btnType="confirm" label="경매등록" onClick={createAuction} />
         ) : (
           <ConfirmButton btnType="disabled" label="경매등록" />
         )}
+        <Spacing rem="1" />
       </div>
     </div>
   );

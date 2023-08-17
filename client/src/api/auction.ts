@@ -31,6 +31,7 @@ export interface AuctionRoomResponse {
   auctionRoomType: 'COMMON';
   startedAt: string;
   imageURL: string;
+  sellerNickname: string;
   itemList: ItemList[];
 }
 

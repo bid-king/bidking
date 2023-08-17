@@ -28,6 +28,7 @@ export function AuctionCreateCard({ ordering }: Props) {
     itemOrdering,
     categoryList,
     previewImageURL,
+    isStartPriceAllowed,
   } = useAuctionCreateCard(ordering);
 
   return (
@@ -70,16 +71,25 @@ export function AuctionCreateCard({ ordering }: Props) {
         <Spacing rem="1" />
 
         <div>
-          <Input value={startPrice} inputType="number" placeholder="경매시작가" onChange={handleStartPrice} />
+          <Input
+            value={startPrice}
+            inputType="number"
+            placeholder="경매시작가(1000원 이상 입력해주세요)"
+            onChange={handleStartPrice}
+            onBlur={isStartPriceAllowed}
+          />
         </div>
         <Spacing rem="1" />
 
         <div className="auction-image">
           <Text type="bold" content="물품 대표사진을 등록하세요" />
           <Spacing rem="1" />
-          <div>
+          <div css={{ display: 'flex', flexDirection: 'column' }}>
             <Image src={previewImageURL ? previewImageURL : '#'} alt="" />
-            <InputFile label="파일 선택" accept="image/*" color="white" onChange={handleItemImg} />
+            {previewImageURL ? <Spacing rem="0.25" /> : null}
+            <div>
+              <InputFile label="물품 이미지 선택" accept="image/*" color="white" onChange={handleItemImg} />
+            </div>
           </div>
         </div>
         <Spacing rem="1" />

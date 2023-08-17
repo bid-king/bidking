@@ -32,11 +32,11 @@ export function Purchased() {
       <div
         css={{
           display: 'flex',
-          flexDirection: 'column',
-          textAlign: 'center',
-          minHeight: '100vh',
-          backgroundColor: colors.backgroundLight,
           justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          height: '94vh',
+          backgroundColor: colors.backgroundLight,
         }}
       >
         <Link to={'/login'}>
@@ -69,8 +69,9 @@ export function Purchased() {
       <Spacing rem="3" />
       <div
         css={{
-          width: '50%',
-          minHeight: '430px',
+          width: '33vw',
+          minWidth: '27rem',
+
           padding: '0 1.5rem 0 1.5rem',
           backgroundColor: colors.backgroundLight2,
           borderRadius: '1.5rem',
