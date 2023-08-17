@@ -43,17 +43,16 @@ export function OrderLive() {
     return (
       <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>
         <div css={{ width: '100%', padding: '0 0.25rem 0.5rem 0.5rem' }}>
-          <div css={{ display: 'flex', position: 'fixed', bottom: '1rem', width: 'calc(100vw - 22.5rem)' }}>
-            <div css={{ width: 'auto', maxWidth: '33vw' }}>
-              <AuctionHeader
-                theme="light"
-                sellerNickname={sellerNickname}
-                auctionRoomType={auctionRoomType}
-                title={title}
-                userType="order"
-              />
-            </div>
+          <div css={{ display: 'flex', width: '100%' }}>
+            <AuctionHeader
+              theme="light"
+              sellerNickname={sellerNickname}
+              auctionRoomType={auctionRoomType}
+              title={title}
+              userType="order"
+            />
           </div>
+          <Spacing rem="0.5" />
           <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
             <div>{auctionRoomId && <OrderStream auctionRoomId={auctionRoomId} userId={userId} userType="order" />}</div>
             <Spacing rem="0.5" />

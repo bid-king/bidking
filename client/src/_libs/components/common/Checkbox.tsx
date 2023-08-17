@@ -20,6 +20,7 @@ export function Checkbox({ theme, id, value, onChange, checked }: Props) {
         borderRadius: '0.3rem',
         '&:checked': {
           backgroundImage: 'url("/image/check.svg")',
+          backgroundSize: '0.9rem',
           backgroundPosition: 'center center',
           borderColor: 'transparent',
           backgroundColor: colors.confirm,

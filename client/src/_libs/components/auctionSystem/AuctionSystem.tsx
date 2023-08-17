@@ -9,7 +9,7 @@ import { Bidder } from './bidder/Bidder';
 import { BiddingForm } from './bidCtrl/BiddingForm';
 import { Socket } from 'socket.io-client';
 import { ChatRoom } from './chatRoom/ChatRoom';
-import { askingPriceParse } from '../../util/bidPriceParse';
+import { useAlert } from '../../hooks/useAlert';
 import { useAuctionSystem } from '../../hooks/useAuctionSystem';
 import { BidCtrl } from './bidCtrl/BidCtrl';
 
@@ -28,6 +28,7 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
     setCurrId,
     setLiveStatus,
   } = useAuctionSystem(socket, userType);
+  const { Alert, alertTrigger } = useAlert('msg', 'error');
   if (auctionRoomId)
     return (
       <div>
@@ -55,6 +56,7 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
               currPrice={currPrice}
               askingPrice={askingPrice}
               disable={disable}
+              setAlert={alertTrigger}
             />
           ) : (
             <BidCtrl

@@ -1,6 +1,5 @@
 package com.widzard.bidking.auction.service;
 
-import com.widzard.bidking.auction.dto.AfterAuctionDto;
 import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
@@ -15,7 +14,6 @@ import com.widzard.bidking.auction.exception.AuctionRoomNotStartedException;
 import com.widzard.bidking.auction.exception.AuctionStartTimeInvalidException;
 import com.widzard.bidking.auction.exception.InvalidAuctionRoomRequestException;
 import com.widzard.bidking.auction.exception.UnableToDeleteAuctionNow;
-import com.widzard.bidking.auction.exception.UnableToUpdateAuctionNow;
 import com.widzard.bidking.auction.exception.UnauthorizedAuctionRoomAccessException;
 import com.widzard.bidking.auction.exception.UserCannotStartBiddingException;
 import com.widzard.bidking.auction.repository.AuctionListSearch;
@@ -200,13 +198,12 @@ public class AuctionServiceImpl implements AuctionService {
     ) throws IOException {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
-        //시작시간이 20분이하로 남은경우 수정 불가능
-        LocalDateTime auctionStartTime = auctionRoom.getStartedAt();
-        LocalDateTime twentyMinutesAgo = LocalDateTime.now().minusMinutes(20);
-        if (auctionStartTime.isBefore(twentyMinutesAgo) || auctionStartTime.isEqual(
-            twentyMinutesAgo)) {
-            throw new UnableToUpdateAuctionNow();
+
+        // 시작시간 예외 검증 (현재보다 이후로만 수정 가능)
+        if (auctionRoom.getStartedAt().isBefore(LocalDateTime.now())) {
+            throw new AuctionStartTimeInvalidException();
         }
+
         log.info("auctionRoom ItemList={}", auctionRoom.getItemList().toString());
         //auctionRoom 기본자료형 필드 업데이트
         auctionRoom.update(req);
@@ -413,23 +410,25 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionRoom;
     }
 
+
+    @Transactional
     @Override
-    public AfterAuctionDto getAfterAuctionInfo(AuctionRoom auctionRoom) {
-
-
-                /*
-         {
-         {낙찰자 id, 상품 이름} list
-          셀러 id, 경매방 제목, 낙찰 갯수, 유찰 갯수,
-         }
-         */
-
-//        return new AfterAuctionDto(
-//            auctionRoom.getSeller().getId(),
-//            auctionRoom.getId(),
-//            auctionRoom.getName()
-//        );
-        return null;
+    public Item startBidding(Member member, Long auctionId) {
+        // 1. 사용자/경매방 검증 (셀러인지, 셀러가 만든 경매방이 맞는지)
+        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(auctionId, member)
+            .orElseThrow(UserCannotStartBiddingException::new);
+        int itemOrder = auctionRoom.getCurrentLiveItemOrder();
+        // 2. 현재 시작해야할 순서의 아이템을 가져오기
+        Item item = itemRepository.findItemByAuctionRoomIdAndOrdering(auctionId, itemOrder)
+            .orElseThrow(ItemNotFoundException::new);
+        item.isBiddable();
+        // 3. 해당 아이템 경매 진행으로 변경
+        item.changeOnBid();
+        // 4. 경매 진행 첫번째 상품이면 tradestate => in progress로 상태 변경
+        auctionRoom.TradeStart();
+        // 5. 경매방의 다음 아이템 순서 업데이트
+        auctionRoom.nextItemOrdering();
+        return item;
     }
 
     @Transactional

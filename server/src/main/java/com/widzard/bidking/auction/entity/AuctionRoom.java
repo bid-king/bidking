@@ -91,6 +91,9 @@ public class AuctionRoom extends BaseEntity {
     @JoinColumn(name = "image_id", nullable = false)
     private Image image; // (썸네일)
 
+    @Column(name = "current_item_order")
+    private int currentLiveItemOrder; // 현재 진행해야 하는 아이템 순서
+
     @Default
     @OneToMany(mappedBy = "auctionRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> itemList = new ArrayList<>();
@@ -110,6 +113,7 @@ public class AuctionRoom extends BaseEntity {
             .auctionRoomLiveState(AuctionRoomLiveState.BEFORE_LIVE)
             .startedAt(startedAt)
             .image(auctionRoomImg)
+            .currentLiveItemOrder(1)
             .itemList(new ArrayList<>())
             .build();
     }
@@ -182,6 +186,10 @@ public class AuctionRoom extends BaseEntity {
 
     public void quit() {
         changeLiveState(AuctionRoomLiveState.OFF_LIVE);
+    }
+
+    public void nextItemOrdering() {
+        this.currentLiveItemOrder++;
     }
 }
 

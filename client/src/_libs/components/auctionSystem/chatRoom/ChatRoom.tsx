@@ -12,7 +12,6 @@ import { ChatMessage } from './ChatMessage';
 export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order', socket }: Props) {
   const [chats, setChats] = useState<Chatting[]>([]);
   const [input, setInput] = useState<string>('');
-  const [count, setCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const chatRef = useRef<HTMLDivElement>(null);
 
@@ -23,6 +22,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
     socket.current?.on('newUser', ({ newUser }) => {
       setChats([...chats, { nickname: newUser, msg: '님이 입장했어요.' }]);
     });
+    socket.current?.on('leaveRoom', () => {});
   }, [socket.current, chats]);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
     <div
       css={{
         width: '100%',
-        minHeight: '60vh',
+        height: 'calc(60vh - 3rem)',
         borderRadius: '1.85rem',
         padding: '1rem',
         position: 'relative',
@@ -50,7 +50,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
         flexDirection: 'column',
       }}
     >
-      <div css={{ overflowY: 'auto', height: '55vh' }}>
+      <div css={{ overflowY: 'auto', height: 'calc(55vh - 3rem)' }}>
         <div css={{ paddingBottom: '1rem' }}>
           {chats.map((chat, idx) => (
             <ChatMessage key={idx} nickname={chat.nickname} msg={chat.msg} />
@@ -71,7 +71,16 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
       >
         {userType === 'order' && (
           <div css={{ width: '100%' }}>
-            <form>
+            <form
+              autoComplete="off"
+              onSubmit={e => {
+                e.preventDefault();
+                if (input.trim().length > 0) {
+                  live(socket.current).send.chat(roomId, nickname, input.trim());
+                  setInput('');
+                }
+              }}
+            >
               <div css={{ display: 'flex', width: '100%', alignItems: 'center' }}>
                 <Input
                   id="chat"
@@ -81,8 +90,10 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => {
-                    e.key === 'enter' && input.length > 0 && live(socket.current).send.chat(roomId, nickname, input);
-                    setInput('');
+                    if (e.key === 'enter' && input.trim().length > 0) {
+                      live(socket.current).send.chat(roomId, nickname, input.trim());
+                      setInput('');
+                    }
                   }}
                 />
                 <Spacing rem="0.5" dir="h" />
@@ -93,7 +104,7 @@ export function ChatRoom({ roomId, nickname, theme = 'light', userType = 'order'
                   size="small"
                   onClick={e => {
                     if (input.length > 0) {
-                      live(socket.current).send.chat(roomId, nickname, input);
+                      live(socket.current).send.chat(roomId, nickname, input.trim());
                       setInput('');
                     }
                   }}

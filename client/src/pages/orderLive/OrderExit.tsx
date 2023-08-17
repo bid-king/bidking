@@ -9,18 +9,16 @@ import colors from '../../_libs/design/colors';
 
 export function OrderExit() {
   const navigate = useNavigate();
-
   useEffect(() => {
-    setTimeout(() => navigate(''), 2000);
-    return;
+    setTimeout(() => navigate('/'), 2000);
   }, []);
-
   return (
     <div
       css={{
-        backgroundColor: colors.backgroundDark,
+        backgroundColor: colors.backgroundLight,
+        color: colors.black,
         width: '100%',
-        height: '100%',
+        height: 'calc(100vh - 3rem)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -28,7 +26,7 @@ export function OrderExit() {
       }}
     >
       <Spinner />
-      <Spacing rem="1" />
+      <Spacing rem="2" />
       <Text content={'경매가 종료되었어요. 잠시 후 메인 페이지로 이동해요.'} type={'h2'} />
       <Spacing rem="1" />
       <Text content={'메인 페이지로 이동되지 않으면, 아래 버튼을 클릭하세요.'} />

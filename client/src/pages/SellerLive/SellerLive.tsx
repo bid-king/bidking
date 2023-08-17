@@ -25,18 +25,17 @@ export function SellerLive() {
 
   return (
     <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundDark }}>
-      <div css={{ width: '100%', padding: '1rem 0.25rem 0.5rem 0.5rem' }}>
-        <div css={{ display: 'flex', position: 'fixed', bottom: '1rem', width: 'calc(100vw - 22.5rem)' }}>
-          <div>
-            <AuctionHeader
-              userType="seller"
-              theme="dark"
-              sellerNickname={sellerNickname}
-              auctionRoomType={auctionRoomType}
-              title={title}
-            />
-          </div>
+      <div css={{ width: '100%', padding: '0 0.25rem 0.5rem 0.5rem' }}>
+        <div css={{ display: 'flex', width: '100%' }}>
+          <AuctionHeader
+            theme="dark"
+            sellerNickname={sellerNickname}
+            auctionRoomType={auctionRoomType}
+            title={title}
+            userType="seller"
+          />
         </div>
+        <Spacing rem="0.5" />
         <div css={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
           <div>{seller && <SellerStream auctionRoomId={auctionRoomId} userId={userId} />}</div>
           <Spacing rem="0.5" />

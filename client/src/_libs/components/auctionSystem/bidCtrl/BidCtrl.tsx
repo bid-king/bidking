@@ -17,7 +17,7 @@ export function BidCtrl({ socket, liveStatus, auctionRoomId, itemId, setCurrId, 
       <ConfirmButton
         label={'다음 상품 소개 시작하기'}
         onClick={() => {
-          descStart(auctionRoomId, itemId, accessToken).then(() => {
+          descStart(auctionRoomId, accessToken).then(() => {
             setLiveStatus('inDesc');
           });
         }}

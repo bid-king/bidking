@@ -41,6 +41,22 @@ export function AppRouter() {
         <Route path=":auctionId" element={<SellerLive />} />
       </Route>
 
+      {/* 판매자 라우터 페이지 */}
+      <Route element={<SellerLayout />}>
+        <Route path="seller" element={<ProtectedRoute />}>
+          <Route path="create-auction" element={<SellerCreateAuction />} />
+          <Route path="update-auction/:auctionId" element={<SellerUpdateAuction />} />
+          <Route path="detail/:auctionId" element={<SellerDetail />} />
+          <Route path="detail/complete/:auctionId" element={<SellerDetailOffLive />} />
+          <Route path="exit" element={<SellerExit />} />
+          <Route index element={<Seller />} />
+        </Route>
+        <Route path="seller/auction" element={<ProtectedRoute />}>
+          <Route path=":auctionId" element={<SellerLive />} />
+        </Route>
+      </Route>
+      {/* 네브바가 안들어가는 페이지 및 판매페이지 */}
+
       {/* 구매자 라우터 페이지 */}
       <Route element={<Layout />}>
         <Route path="/" element={<Main />} />

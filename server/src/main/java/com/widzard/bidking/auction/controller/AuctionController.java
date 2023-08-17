@@ -222,8 +222,7 @@ public class AuctionController {
 
 
     /*
-     * 상품 경매 시작
-     */
+     * 상품 경매 시작 (이전 버전)
     @PostMapping("/bid/{auctionId}/items/{itemId}/start")
     public ResponseEntity<String> startBidding(
         @AuthenticationPrincipal Member member,
@@ -231,6 +230,23 @@ public class AuctionController {
         @PathVariable("itemId") Long itemId
     ) {
         startBiddingFacade.startBidding(member, auctionId, itemId);
+        return new ResponseEntity<>(
+            "ok",
+            HttpStatus.OK
+        );
+    }
+     */
+
+    /*
+     * 상품 경매 시작 (경매방 룸 ID 받기)
+     * 클라이언트에서 ORDERSTATE 받아오는 부분 에러가 생겨 서버에서 판단한도록 로직 변경
+     */
+    @PostMapping("/bid/{auctionId}/start")
+    public ResponseEntity<String> startBidding(
+        @AuthenticationPrincipal Member member,
+        @PathVariable("auctionId") Long auctionId
+    ) {
+        startBiddingFacade.startBidding(member, auctionId);
         return new ResponseEntity<>(
             "ok",
             HttpStatus.OK
@@ -268,7 +284,8 @@ public class AuctionController {
     public ResponseEntity<String> endBiddingRoom(
         @PathVariable("auctionId") Long auctionId
     ) {
-        AfterAuctionDto alarmDto = endAuctionRoomFacade.end(auctionId); // TODO 알람 처리
+        AfterAuctionDto alarmDto = endAuctionRoomFacade.end(auctionId);
+        alarmService.sendAuctionCloseToSellerAndOrderer(alarmDto);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
 

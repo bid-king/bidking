@@ -3,7 +3,6 @@ package com.widzard.bidking.auction.repository;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.member.entity.Member;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,8 +29,5 @@ public interface AuctionRoomRepository extends JpaRepository<AuctionRoom, Long> 
         @Param("member") Member member
     );
 
-    @Query("select a from AuctionRoom a where a.startedAt <= :startedAt")
-    List<Optional<AuctionRoom>> findUpcomingAuctionRoomList(
-        @Param("startedAt")LocalDateTime startedAt
-    );
+
 }
