@@ -38,6 +38,8 @@
 
    Google Java Style Guide를 기반으로 커스텀함
 
+   [BidkingStyle](https://github.com/jeong-yeji/bidking/blob/master/server/docs/BidkingStyle.xml)
+
 1. [Git Commit Rule](./docs/git_convention.md)
 
 1. [Git Branch Strategy](./docs/git_branch.md)
