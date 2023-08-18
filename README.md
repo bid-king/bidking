@@ -49,3 +49,9 @@
 - [사용 버전](./docs/version.md)
 
 - [포팅 매뉴얼](./docs/porting_manual.md)
+
+---
+
+## 최종 발표
+
+- [최종 발표 PPT](./docs/final_presentation.pdf)
