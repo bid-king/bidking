@@ -8,7 +8,6 @@ import { ConfirmButton } from '../../common/ConfirmButton';
 import { Input } from '../../common/Input';
 
 import { Spacing } from '../../common/Spacing';
-import { Text } from '../../common/Text';
 
 export function BiddingForm({
   theme = 'light',
@@ -17,7 +16,7 @@ export function BiddingForm({
   currPrice,
   askingPrice,
   disable,
-  setAlert,
+  alertTrigger,
 }: Props) {
   const [bidPrice, setBidPrice] = useState<string>('');
 
@@ -39,7 +38,7 @@ export function BiddingForm({
           label={
             String(askingPrice).length < 13
               ? bidPriceParse(askingPrice) + '원 즉시입찰'
-              : '1조 원 미만으로 입찰할 수 있어요'
+              : '1조 원 이상으로 입찰할 수 없어요'
           }
           onClick={() => (String(askingPrice).length < 13 ? bid(auctionRoomId, itemId, askingPrice, accessToken) : {})}
         />
@@ -63,13 +62,13 @@ export function BiddingForm({
           onChange={e => {
             if (e.target.value === '' || validateBidPrice(e.target.value)) setBidPrice(e.target.value);
             else {
-              console.log('입찰가는 1조 미만의 숫자여야 해요.');
+              alertTrigger('입찰가는 1조 미만의 숫자여야 해요.');
               setBidPrice('');
             }
           }}
           onKeyDown={e => {
             if (e.key === 'Enter') {
-              console.log('엔터키로는 입찰할 수 없어요');
+              alertTrigger('엔터키로는 입찰할 수 없어요');
               setBidPrice('');
             }
           }}
@@ -83,7 +82,7 @@ export function BiddingForm({
             if (currPrice < Number(bidPrice) && validateBidPrice(bidPrice)) {
               bid(auctionRoomId, itemId, Number(bidPrice), accessToken);
             } else {
-              console.log('입찰가는 현재 최고 입찰가보다 높아야 하지만, 1조 원 미만으로 쓸 수 있어요.');
+              alertTrigger('입찰가는 현재 최고 입찰가보다 높아야 하고, 1조 원 미만만 쓸 수 있어요.');
             }
             setBidPrice('');
           }}
@@ -110,5 +109,5 @@ interface Props {
   auctionRoomId: number;
   itemId: number;
   disable: boolean;
-  setAlert: (arg: string) => void;
+  alertTrigger: (arg: string) => void;
 }
