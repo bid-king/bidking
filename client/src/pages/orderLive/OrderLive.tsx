@@ -8,6 +8,7 @@ import colors from '../../_libs/design/colors';
 import { useLiveConnection } from '../../_libs/hooks/useLiveConnection';
 import { AuctionNotice } from '../../_libs/components/auctionSystem/chatRoom/AuctionNotice';
 import { Text } from '../../_libs/components/common/Text';
+import { useAlert } from '../../_libs/hooks/useAlert';
 
 export function OrderLive() {
   const {
@@ -22,7 +23,7 @@ export function OrderLive() {
     SOCKET,
     error,
   } = useLiveConnection();
-
+  const { Alert, alertTrigger } = useAlert('error');
   if (seller)
     return (
       <>
@@ -43,6 +44,7 @@ export function OrderLive() {
     return (
       <div css={{ display: 'flex', width: '100%', backgroundColor: colors.backgroundLight }}>
         <div css={{ width: '100%', padding: '0 0.25rem 0.5rem 0.5rem' }}>
+          {Alert}
           <div css={{ display: 'flex', width: '100%' }}>
             <AuctionHeader
               theme="light"
@@ -75,6 +77,7 @@ export function OrderLive() {
             auctionRoomId={auctionRoomId}
             theme="light"
             socket={SOCKET}
+            alertTrigger={alertTrigger}
           />
         </div>
       </div>

@@ -13,7 +13,7 @@ import { useAlert } from '../../hooks/useAlert';
 import { useAuctionSystem } from '../../hooks/useAuctionSystem';
 import { BidCtrl } from './bidCtrl/BidCtrl';
 
-export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoomId, socket }: Props) {
+export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoomId, socket, alertTrigger }: Props) {
   const {
     order,
     currPrice,
@@ -28,7 +28,6 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
     setCurrId,
     setLiveStatus,
   } = useAuctionSystem(socket, userType);
-  const { Alert, alertTrigger } = useAlert('msg', 'error');
   if (auctionRoomId)
     return (
       <div>
@@ -56,7 +55,7 @@ export function AuctionSystem({ userType, theme = 'light', nickname, auctionRoom
               currPrice={currPrice}
               askingPrice={askingPrice}
               disable={disable}
-              setAlert={alertTrigger}
+              alertTrigger={alertTrigger}
             />
           ) : (
             <BidCtrl
@@ -104,4 +103,5 @@ interface Props {
   auctionRoomId: number;
   socket: MutableRefObject<Socket | null>;
   setNotice?: () => Promise<unknown>;
+  alertTrigger: (arg: string) => void;
 }

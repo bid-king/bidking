@@ -3,8 +3,9 @@ import React, { useState, useEffect, HTMLAttributes } from 'react';
 import { Text } from '../components/common/Text';
 import colors from '../design/colors';
 
-export function useAlert(message: string, type: 'success' | 'error', duration = 1500) {
-  const [show, setShow] = useState(false);
+export function useAlert(type: 'success' | 'error', duration = 1500) {
+  const [show, setShow] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -14,7 +15,13 @@ export function useAlert(message: string, type: 'success' | 'error', duration = 
     return () => clearTimeout(timer);
   }, [show]);
 
-  return { Alert: <Alert message={message} type={type} show={show} />, alertTrigger: () => setShow(true) };
+  return {
+    Alert: <Alert message={message} type={type} show={show} />,
+    alertTrigger: (msg: string) => {
+      setMessage(msg);
+      setShow(true);
+    },
+  };
 }
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -25,8 +32,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 function Alert({ message, type, show }: Props) {
   const STYLES = {
-    success: { border: '1px solid ' + colors.ok },
-    error: { border: '1px solid ' + colors.warn },
+    success: { backgroundColor: colors.ok, color: colors.black },
+    error: { backgroundColor: colors.warn, color: colors.white },
 
     show: show
       ? {
@@ -43,21 +50,23 @@ function Alert({ message, type, show }: Props) {
       css={{
         fontSize: '1rem',
         position: 'fixed',
+
         left: '0',
         right: 0,
         margin: '0 auto',
-        backgroundColor: colors.backgroundLight2,
-        color: colors.black,
         opacity: 0,
-        borderRadius: '100%',
+        borderRadius: '1rem',
+        width: '50%',
+        maxWidth: '20rem',
         padding: '1rem 2rem 1rem 2rem',
         transition: 'transform 0.25s',
+        lineHeight: '1.5',
         ...STYLES[type],
         ...STYLES['show'],
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Text content={message} type="h2" />
+        <Text content={message} type="h3" />
       </div>
     </div>
   );
