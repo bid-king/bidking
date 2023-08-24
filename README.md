@@ -4,6 +4,39 @@
 
 ---
 
+## 팀 멤버
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="./docs/images/profile/승윤.png" width="100px;" height="100px" alt=""/><br />
+      <sub><b>유승윤</b></sub><br />
+      <sub>Frontend</sub>
+    </td>
+    <td align="center">
+      <img src="./docs/images/profile/성용.png" width="100px;" height="100px" alt=""/><br />
+      <sub><b>김성용</b></sub><br />
+      <sub>Frontend</sub>
+    </td><td align="center">
+      <img src="./docs/images/profile/다정.jpg" width="100px;" height="100px" alt=""/><br />
+      <sub><b>윤다정</b></sub><br />
+      <sub>Backend</sub>
+    </td><td align="center">
+      <img src="./docs/images/profile/예지.png" width="100px;" height="100px" alt=""/><br />
+      <sub><b>정예지</b></sub><br />
+      <sub>Backend</sub>
+    </td><td align="center">
+      <img src="./docs/images/profile/동현.png" width="100px;" height="100px" alt=""/><br />
+      <sub><b>김동현</b></sub><br />
+      <sub>Backend</sub>
+    </td><td align="center">
+      <img src="./docs/images/profile/연우.png" width="100px;" height="100px" alt=""/><br />
+      <sub><b>이연우</b></sub><br />
+      <sub>Backend</sub>
+    </td>
+  </tr>
+</table>
+
 ## 서비스 화면
 
 - 회원 기능
@@ -64,17 +97,17 @@
       - live-enter.gif
       - live-item-fail.gif
       - live-leave.gif
-  
+
   - 입찰 컴포넌트
-  
+
     ![입찰 컴포넌트](./docs/images/gifs/live/others/component.gif)
-  
+
   - 슬라이딩 윈도우
-  
-    | 판매자                                                       | 구매자                                                       |
-    | ------------------------------------------------------------ | ------------------------------------------------------------ |
+
+    | 판매자                                                                              | 구매자                                                                       |
+    | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
     | ![판매자 슬라이딩 윈도우](./docs/images/gifs/live/others/sliding-window-seller.gif) | ![구매자 슬라이딩 윈도우](./docs/images/gifs/live/others/sliding-window.gif) |
-  
+
 - 알림
 
   - 판매자
@@ -102,6 +135,14 @@
 ## ERD
 
 ![ERD](./docs/images/erd.png)
+
+---
+
+## WIREFRAME
+
+![ERD](./docs/images/wireframe.png)
+
+[와이어프레임 PDF 파일 보기](./docs/wireframe.pdf)
 
 ---
 
