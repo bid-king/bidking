@@ -156,9 +156,9 @@ public class AuctionController {
         @AuthenticationPrincipal Member member,
         @PathVariable Long auctionId
     ) {
-        auctionService.deleteAuctionRoom(member, auctionId);
-
         alarmService.sendAuctionDeleteToBookmarkMember(auctionId);
+
+        auctionService.deleteAuctionRoom(member, auctionId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
