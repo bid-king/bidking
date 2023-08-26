@@ -9,30 +9,42 @@
 <table>
   <tr>
     <td align="center">
-      <img src="./docs/images/profile/승윤.png" width="100px;" height="100px" alt=""/><br />
-      <sub><b>유승윤</b></sub><br />
-      <sub>Frontend</sub>
+      <a href="https://github.com/brewcoldblue">
+        <img src="./docs/images/profile/승윤.png" width="100px;" height="100px" alt=""/><br />
+        <sub><b>유승윤</b></sub><br />
+        <sub>Frontend</sub>
+      </a>
     </td>
     <td align="center">
-      <img src="./docs/images/profile/성용.png" width="100px;" height="100px" alt=""/><br />
-      <sub><b>김성용</b></sub><br />
-      <sub>Frontend</sub>
+      <a href="https://github.com/yongseong2">
+        <img src="./docs/images/profile/성용.png" width="100px;" height="100px" alt=""/><br />
+        <sub><b>김성용</b></sub><br />
+        <sub>Frontend</sub>
+      </a>
     </td><td align="center">
-      <img src="./docs/images/profile/다정.jpg" width="100px;" height="100px" alt=""/><br />
-      <sub><b>윤다정</b></sub><br />
-      <sub>Backend</sub>
+      <a href="https://github.com/DJ-archive">
+        <img src="./docs/images/profile/다정.jpg" width="100px;" height="100px" alt=""/><br />
+        <sub><b>윤다정</b></sub><br />
+        <sub>Backend</sub>
+      </a>
     </td><td align="center">
-      <img src="./docs/images/profile/예지.png" width="100px;" height="100px" alt=""/><br />
-      <sub><b>정예지</b></sub><br />
-      <sub>Backend</sub>
+      <a href="https://github.com/jeong-yeji">
+        <img src="./docs/images/profile/예지.png" width="100px;" height="100px" alt=""/><br />
+        <sub><b>정예지</b></sub><br />
+        <sub>Backend</sub>
+    	</a>
     </td><td align="center">
-      <img src="./docs/images/profile/동현.png" width="100px;" height="100px" alt=""/><br />
-      <sub><b>김동현</b></sub><br />
-      <sub>Backend</sub>
+      <a href="https://github.com/DHKIM-0511">
+        <img src="./docs/images/profile/동현.png" width="100px;" height="100px" alt=""/><br />
+        <sub><b>김동현</b></sub><br />
+        <sub>Backend</sub>
+    	</a>
     </td><td align="center">
-      <img src="./docs/images/profile/연우.png" width="100px;" height="100px" alt=""/><br />
-      <sub><b>이연우</b></sub><br />
-      <sub>Backend</sub>
+      <a href="https://github.com/yyanoos">
+        <img src="./docs/images/profile/연우.png" width="100px;" height="100px" alt=""/><br />
+        <sub><b>이연우</b></sub><br />
+        <sub>Backend</sub>
+ 	   </a>
     </td>
   </tr>
 </table>
@@ -56,6 +68,8 @@
   - 경매 수정
 
   - 경매 삭제
+
+    ![경매 삭제](./docs/images/gifs/auction/auction_delete.gif)
 
   - 경매 목록 확인
 
