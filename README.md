@@ -1,7 +1,6 @@
 # 입찰왕(Bid King)
 
 실시간 경매 라이브 플랫폼
-
 ---
 
 ## 팀 멤버
@@ -50,6 +49,7 @@
 </table>
 
 ## 서비스 화면
+[경매 진행 파트 유튜브 영상](https://www.youtube.com/watch?v=iyUf4gSRbaA)
 
 - 회원 기능
 
