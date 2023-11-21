@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ItemCategoryListResponse {
 
+    @Builder.Default
     List<ItemCategoryResponse> categoryList = new ArrayList<>();
 
     public static ItemCategoryListResponse from(List<ItemCategory> itemCategoryList) {

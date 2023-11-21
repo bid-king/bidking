@@ -6,7 +6,6 @@ import com.widzard.bidking.order.entity.OrderItem;
 import com.widzard.bidking.order.service.OrderItemService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,13 +27,10 @@ public class OrderController {
     public ResponseEntity<List<SuccessItemResponse>> readSuccessItemList(
         @AuthenticationPrincipal Member member
     ) {
-        List<Optional<OrderItem>> orderItemList = orderItemService.readOrderItemByMember(member);
+        List<OrderItem> orderItemList = orderItemService.readOrderItemByMember(member);
         List<SuccessItemResponse> successItemResponseList = new ArrayList<>();
-        for (Optional<OrderItem> orderItem : orderItemList
-        ) {
-            if (orderItem.isPresent()) {
-                successItemResponseList.add(SuccessItemResponse.from(orderItem.get(), member));
-            }
+        for (OrderItem orderItem : orderItemList) {
+            successItemResponseList.add(SuccessItemResponse.from(orderItem, member));
         }
         return new ResponseEntity<>(successItemResponseList, HttpStatus.OK);
     }

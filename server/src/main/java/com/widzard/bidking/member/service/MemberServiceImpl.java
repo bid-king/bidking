@@ -96,7 +96,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public AuthInfo login(MemberLoginRequest request) {
-        Member member = memberRepository.findByUserId(request.getUserId())
+        Member member = memberRepository.findByUserIdAndAvailableTrue(request.getUserId())
             .orElseThrow(LoginFailureException::new);
         if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
             throw new LoginFailureException();
@@ -140,12 +140,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member getUserDetail(Long userId) {
-        return memberRepository.findById(userId).orElseThrow(MemberNotFoundException::new);
+        return memberRepository.findByIdAndAvailableTrue(userId).orElseThrow(MemberNotFoundException::new);
     }
 
     @Override
     public HashMap<String, Integer> getUserDashboard(Long userId) {
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByIdAndAvailableTrue(userId)
             .orElseThrow(() -> new MemberNotFoundException());
 
         HashMap<String, Integer> dashboardResult = new HashMap<>();
@@ -165,7 +165,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public HashMap<String, Integer> getSellerDashboard(Long userId) {
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByIdAndAvailableTrue(userId)
             .orElseThrow(() -> new MemberNotFoundException());
 
         HashMap<String, Integer> dashboardResult = new HashMap<>();
@@ -184,7 +184,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void updateMember(Long memberId, MemberUpdateRequest request, MultipartFile image)
         throws IOException {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdAndAvailableTrue(memberId)
             .orElseThrow(() -> new MemberNotFoundException());
         if (!passwordEncoder.matches(request.getOldPassword(), member.getPassword())) {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
@@ -214,7 +214,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(Long userId) {
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByIdAndAvailableTrue(userId)
             .orElseThrow(MemberNotFoundException::new);
         member.changeToUnavailable();
         memberRepository.save(member);

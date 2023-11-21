@@ -37,6 +37,7 @@ public class AuctionCreateRequest {
     private Boolean deliveryRulesChecked; // 배송 규정 확인 여부
 
     @Valid
+    @Builder.Default
     private List<ItemCreateRequest> itemList = new ArrayList<>(); // 상품 리스트
 
 }

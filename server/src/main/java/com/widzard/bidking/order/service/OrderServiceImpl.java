@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
         Long price) {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomId).orElseThrow(
             AuctionRoomNotFoundException::new);
-        Member orderer = memberRepository.findById(ordererId)
+        Member orderer = memberRepository.findByIdAndAvailableTrue(ordererId)
             .orElseThrow(MemberNotFoundException::new);
         Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
 

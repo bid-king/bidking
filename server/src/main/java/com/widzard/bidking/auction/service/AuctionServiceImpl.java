@@ -109,7 +109,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public Long getTotalBookmarkCount(Member member) {
-        return bookmarkRepository.countBookmarkAllByMember(member);
+        return bookmarkRepository.countByMemberAndIsAddedTrue(member);
     }
 
     @Transactional
@@ -291,14 +291,11 @@ public class AuctionServiceImpl implements AuctionService {
         checkOwner(member, auctionRoom);
 
         //북마크 삭제
-        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+        List<Bookmark> bookmarkList = bookmarkRepository.findAllByAuctionRoomAndIsAddedTrue(
             auctionRoom);
 
-        for (Optional<Bookmark> bookmark : bookmarkList
-        ) {
-            if (bookmark.isPresent()) {
-                bookmarkRepository.deleteById(bookmark.get().getId());
-            }
+        for (Bookmark bookmark : bookmarkList) {
+            bookmarkRepository.deleteById(bookmark.getId());
         }
 
         //경매방 삭제
@@ -331,14 +328,14 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId) {
-        Member seller = memberRepository.findById(member.getId())
+        Member seller = memberRepository.findByIdAndAvailableTrue(member.getId())
             .orElseThrow(MemberNotFoundException::new);
         AuctionRoom auctionRoom = auctionRoomRepository.findOffLiveById(auctionId)
             .orElseThrow(AuctionRoomNotFoundException::new);
         if (!auctionRoom.getSeller().equals(seller)) {
             throw new UnauthorizedAuctionRoomAccessException();
         }
-        List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByAuctionRoom(
+        List<OrderItem> orderItemList = orderItemRepository.findAllByItem_AuctionRoom(
             auctionRoom);
         log.info("orderItemList = {}", orderItemList);
 
@@ -438,9 +435,9 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     private void checkOwner(Member member, AuctionRoom auctionRoom) {
-        Member loginMember = memberRepository.findById(member.getId()).orElseThrow(
+        Member loginMember = memberRepository.findByIdAndAvailableTrue(member.getId()).orElseThrow(
             MemberNotFoundException::new);
-        Member seller = memberRepository.findById(auctionRoom.getSeller().getId())
+        Member seller = memberRepository.findByIdAndAvailableTrue(auctionRoom.getSeller().getId())
             .orElseThrow(MemberNotFoundException::new);
         if (loginMember != seller) {
             throw new UnauthorizedAuctionRoomAccessException();
