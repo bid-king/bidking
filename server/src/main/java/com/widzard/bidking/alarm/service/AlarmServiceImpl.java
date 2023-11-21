@@ -6,7 +6,6 @@ import com.widzard.bidking.alarm.entity.Alarm;
 import com.widzard.bidking.alarm.entity.AlarmType;
 import com.widzard.bidking.alarm.entity.Content;
 import com.widzard.bidking.alarm.exception.AlarmNotFoundException;
-import com.widzard.bidking.alarm.exception.ClientConnectionException;
 import com.widzard.bidking.alarm.repository.AlarmRepository;
 import com.widzard.bidking.alarm.repository.EmitterRepository;
 import com.widzard.bidking.auction.dto.AfterAuctionDto;
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,14 +70,11 @@ public class AlarmServiceImpl implements AlarmService {
     public void sendAuctionUpdateToBookmarkMember(Long auctionId) {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId).orElseThrow(
             AuctionRoomNotFoundException::new);
-        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+        List<Bookmark> bookmarkList = bookmarkRepository.findAllByAuctionRoomAndIsAddedTrue(
             auctionRoom);
-        for (Optional<Bookmark> bookmark : bookmarkList
-        ) {
-            if (bookmark.isPresent()) {
-                send(bookmark.get().getMember(), Content.AUCTION_UPDATED_BOOKMARK.getContent(),
-                    AlarmType.AUCTION);
-            }
+        for (Bookmark bookmark : bookmarkList) {
+            send(bookmark.getMember(), Content.AUCTION_UPDATED_BOOKMARK.getContent(),
+                AlarmType.AUCTION);
         }
     }
 
@@ -87,20 +82,19 @@ public class AlarmServiceImpl implements AlarmService {
     public void sendAuctionDeleteToBookmarkMember(Long auctionId) {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionId).orElseThrow(
             AuctionRoomNotFoundException::new);
-        List<Optional<Bookmark>> bookmarkList = bookmarkRepository.findBookmarkByAuctionRoom(
+        List<Bookmark> bookmarkList = bookmarkRepository.findAllByAuctionRoomAndIsAddedTrue(
             auctionRoom);
-        for (Optional<Bookmark> bookmark : bookmarkList
-        ) {
-            if (bookmark.isPresent()) {
-                send(bookmark.get().getMember(), Content.AUCTION_DELETED_BOOKMARK.getContent(),
-                    AlarmType.AUCTION);
-            }
+        for (Bookmark bookmark : bookmarkList) {
+            send(bookmark.getMember(), Content.AUCTION_DELETED_BOOKMARK.getContent(),
+                AlarmType.AUCTION);
         }
     }
+
     @Override
     public void sendAuctionCloseToSellerAndOrderer(AfterAuctionDto afterAuctionDto) {
-        Member seller = memberRepository.findById(afterAuctionDto.getSellerId()).orElseThrow(
-            MemberNotFoundException::new);
+        Member seller = memberRepository.findByIdAndAvailableTrue(afterAuctionDto.getSellerId())
+            .orElseThrow(
+                MemberNotFoundException::new);
         Alarm closeAuctionAlarm = Alarm.closeAuction(seller, AlarmType.AUCTION,
             afterAuctionDto.getAuctionRoomTitle(), afterAuctionDto.getOrderSuccessCnt(),
             afterAuctionDto.getOrderFailCnt());
@@ -108,9 +102,11 @@ public class AlarmServiceImpl implements AlarmService {
         List<OrdererDto> ordererDtoList = afterAuctionDto.getOrdererDtoList();
 
         for (OrdererDto ordererDto : ordererDtoList
-        ) { Member orderer = memberRepository.findById(ordererDto.getOrdererId())
-            .orElseThrow(MemberNotFoundException::new);
-            Alarm successItemAlarm = Alarm.createSuccessItem(orderer, AlarmType.ORDER, ordererDto.getItemName());
+        ) {
+            Member orderer = memberRepository.findByIdAndAvailableTrue(ordererDto.getOrdererId())
+                .orElseThrow(MemberNotFoundException::new);
+            Alarm successItemAlarm = Alarm.createSuccessItem(orderer, AlarmType.ORDER,
+                ordererDto.getItemName());
             send(orderer, successItemAlarm.getContent(), AlarmType.ORDER);
         }
     }
