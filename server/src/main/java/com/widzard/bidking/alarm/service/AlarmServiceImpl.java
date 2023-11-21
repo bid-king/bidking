@@ -124,11 +124,9 @@ public class AlarmServiceImpl implements AlarmService {
         List<Alarm> alarmList = alarmRepository.findTop5ByMemberIdOrderByCreatedAtDesc(
             member.getId());
         List<AlarmResponse> alarmResponseList = new ArrayList<>();
-        if (!alarmList.isEmpty()) {
-            for (Alarm alarm : alarmList
-            ) {
-                alarmResponseList.add(AlarmResponse.from(alarm));
-            }
+        for (Alarm alarm : alarmList
+        ) {
+            alarmResponseList.add(AlarmResponse.from(alarm));
         }
         return alarmResponseList;
     }
