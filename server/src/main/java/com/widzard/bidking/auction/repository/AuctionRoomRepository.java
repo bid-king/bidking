@@ -6,28 +6,14 @@ import com.widzard.bidking.member.entity.Member;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface AuctionRoomRepository extends JpaRepository<AuctionRoom, Long> {
 
-    @Query("select a from AuctionRoom a"
-        + " where a.auctionRoomLiveState = :state"
-        + " AND a.seller = :member")
-    List<AuctionRoom> findAllByAuctionRoomLiveStateAndSeller(
-        @Param("member") Member member,
-        @Param("state") AuctionRoomLiveState auctionRoomLiveState);
+    List<AuctionRoom> findAllBySellerAndAuctionRoomLiveState(Member seller,
+        AuctionRoomLiveState auctionRoomLiveState);
 
-    @Query("select a from AuctionRoom a where a.auctionRoomLiveState = 'OFF_LIVE' and a.id=:auctionId ")
-    Optional<AuctionRoom> findOffLiveById(
-        @Param("auctionId") Long auctionId
-    );
+    Optional<AuctionRoom> findAuctionRoomByIdAndAuctionRoomLiveState(Long auctionId,
+        AuctionRoomLiveState auctionRoomLiveState);
 
-    @Query("select a from AuctionRoom a where a.seller=:member and a.id=:auctionId")
-    Optional<AuctionRoom> findByIdAndMember(
-        @Param("auctionId") Long auctionId,
-        @Param("member") Member member
-    );
-
-
+    Optional<AuctionRoom> findAuctionRoomByIdAndSeller(Long auctionId,Member seller);
 }

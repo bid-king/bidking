@@ -314,14 +314,14 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public List<AuctionRoom> readAuctionOffLive(Member member) {
-        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllByAuctionRoomLiveStateAndSeller(
+        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllBySellerAndAuctionRoomLiveState(
             member, AuctionRoomLiveState.OFF_LIVE);
         return auctionRoomList;
     }
 
     @Override
     public List<AuctionRoom> readAuctionBeforeLive(Member member) {
-        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllByAuctionRoomLiveStateAndSeller(
+        List<AuctionRoom> auctionRoomList = auctionRoomRepository.findAllBySellerAndAuctionRoomLiveState(
             member, AuctionRoomLiveState.BEFORE_LIVE);
         return auctionRoomList;
     }
@@ -330,7 +330,8 @@ public class AuctionServiceImpl implements AuctionService {
     public AuctionRoomSellerResponse readAuctionRoomSeller(Member member, Long auctionId) {
         Member seller = memberRepository.findByIdAndAvailableTrue(member.getId())
             .orElseThrow(MemberNotFoundException::new);
-        AuctionRoom auctionRoom = auctionRoomRepository.findOffLiveById(auctionId)
+        AuctionRoom auctionRoom = auctionRoomRepository.findAuctionRoomByIdAndAuctionRoomLiveState(auctionId,
+                AuctionRoomLiveState.OFF_LIVE)
             .orElseThrow(AuctionRoomNotFoundException::new);
         if (!auctionRoom.getSeller().equals(seller)) {
             throw new UnauthorizedAuctionRoomAccessException();
@@ -356,7 +357,7 @@ public class AuctionServiceImpl implements AuctionService {
         log.info("memberId: {}", member.getId());
         log.info("sellerId: {}", auctionRoom.getSeller().getId());
 
-        if (auctionRoom.getSeller().getId() != member.getId()) {
+        if (!auctionRoom.getSeller().getId().equals(member.getId())) {
             isSeller = false;
             if (!auctionRoom.getAuctionRoomLiveState().equals(AuctionRoomLiveState.ON_LIVE)) {
                 throw new AuctionRoomNotStartedException();
@@ -402,7 +403,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Item startBidding(Member member, Long auctionId) {
         // 1. 사용자/경매방 검증 (셀러인지, 셀러가 만든 경매방이 맞는지)
-        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(auctionId, member)
+        AuctionRoom auctionRoom = auctionRoomRepository.findAuctionRoomByIdAndSeller(auctionId, member)
             .orElseThrow(UserCannotStartBiddingException::new);
         int itemOrder = auctionRoom.getCurrentLiveItemOrder();
         // 2. 현재 시작해야할 순서의 아이템을 가져오기
@@ -422,7 +423,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Long startBidding(Member member, Long auctionId, Long itemId) {
         // 1. 사용자/경매방 검증 (셀러인지, 셀러가 만든 경매방이 맞는지)
-        AuctionRoom auctionRoom = auctionRoomRepository.findByIdAndMember(auctionId, member)
+        AuctionRoom auctionRoom = auctionRoomRepository.findAuctionRoomByIdAndSeller(auctionId, member)
             .orElseThrow(UserCannotStartBiddingException::new);
         // 2. 경매 진행될 수 있는 아이템인지 검증
         Item item = itemRepository.findById(itemId).orElseThrow(ItemNotFoundException::new);
