@@ -4,7 +4,8 @@ import com.widzard.bidking.auction.dto.AuctionRoomEnterDto;
 import com.widzard.bidking.auction.dto.request.AuctionCreateRequest;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
-import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
+import com.widzard.bidking.auction.dto.BookmarkedAuctionDto;
+import com.widzard.bidking.auction.dto.response.AuctionListBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
@@ -44,6 +45,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,46 +69,46 @@ public class AuctionServiceImpl implements AuctionService {
     private final MemberRepository memberRepository;
 
     @Override
-    public List<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
-        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAllById(
-            auctionListRequest.getCategoryList());
-        return auctionListSearch.findAllBySearchCondition(auctionListRequest, itemCategoryList);
+    public Page<AuctionRoom> readAuctionRoomList(AuctionListRequest auctionListRequest) {
+        Pageable pageable = PageRequest.of(auctionListRequest.getPage(), auctionListRequest.getPerPage());
+        return auctionListSearch.findAllBySearchCondition(auctionListRequest, pageable);
     }
 
     @Override
-    public List<AuctionBookmarkResponse> readAuctionRoomListWithLoginStatus(
-        AuctionListRequest auctionListRequest,
-        Member member) {
-        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAllById(
-            auctionListRequest.getCategoryList());
-        List<AuctionRoom> auctionRoomList = auctionListSearch.findAllBySearchCondition(
-            auctionListRequest, itemCategoryList);
-        List<AuctionBookmarkResponse> auctionBookmarkResponseList = new ArrayList<>();
-        for (AuctionRoom auctionRoom : auctionRoomList
-        ) {
+    public AuctionListBookmarkResponse readAuctionRoomListWithLoginStatus(
+        AuctionListRequest auctionListRequest, Member member) {
+        Pageable pageable = PageRequest.of(auctionListRequest.getPage(), auctionListRequest.getPerPage());
+
+        Page<AuctionRoom> auctionRoomPage = auctionListSearch.findAllBySearchCondition(
+            auctionListRequest, pageable);
+
+        List<BookmarkedAuctionDto> auctionBookmarkResponseList = new ArrayList<>();
+        for (AuctionRoom auctionRoom : auctionRoomPage) {
             Optional<Bookmark> bookmark = bookmarkRepository.findBookmarkByMemberAndAuctionRoom(
                 member, auctionRoom);
 
             if (bookmark.isPresent()) {
                 auctionBookmarkResponseList.add(
-                    AuctionBookmarkResponse.from(auctionRoom, bookmark.get()
-                        .isAdded()));
+                    BookmarkedAuctionDto.from(auctionRoom,
+                        bookmark.get().isAdded()));
             } else {
-                auctionBookmarkResponseList.add(AuctionBookmarkResponse.from(auctionRoom, false));
+                auctionBookmarkResponseList.add(BookmarkedAuctionDto.from(auctionRoom, false));
             }
         }
 
-        return auctionBookmarkResponseList;
+        return AuctionListBookmarkResponse.from(
+            auctionBookmarkResponseList,
+            auctionRoomPage.getTotalPages(),
+            auctionRoomPage.getNumber(),
+            auctionRoomPage.hasNext());
     }
 
     @Override
-    public List<AuctionRoom> readAuctionRoomListOnlyBookmarked(
+    public Page<AuctionRoom> readAuctionRoomListOnlyBookmarked(
         AuctionListRequest auctionListRequest,
         Member member) {
-        List<ItemCategory> itemCategoryList = itemCategoryRepository.findAllById(
-            auctionListRequest.getCategoryList());
-        return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest, member,
-            itemCategoryList);
+        Pageable pageable = PageRequest.of(auctionListRequest.getPage(), auctionListRequest.getPerPage());
+        return auctionListSearch.findAllBySearchConditionOnlyBookmarked(auctionListRequest, member, pageable);
     }
 
     @Override
