@@ -32,15 +32,11 @@ public class AuctionListResponse {
             auctionDtoList.add(AuctionResponse.from(auctionRoom));
         }
 
-        long totalPage = auctionRoomPage.getTotalPages();
-        long currentPage = auctionRoomPage.getNumber();
-        boolean hasNext = auctionRoomPage.hasNext();
-
         return AuctionListResponse.builder()
             .auctionDtoList(auctionDtoList)
-            .totalPage(totalPage)
-            .currentPage(currentPage)
-            .hasNext(hasNext)
+            .totalPage(auctionRoomPage.getTotalPages())
+            .currentPage(auctionRoomPage.getNumber())
+            .hasNext(auctionRoomPage.hasNext())
             .build();
     }
 }
