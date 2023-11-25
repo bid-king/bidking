@@ -8,13 +8,15 @@ import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.dto.request.AuctionUpdateRequest;
 import com.widzard.bidking.auction.dto.request.TryBiddingRequest;
 import com.widzard.bidking.auction.dto.response.AuctionBookmarkCountResponse;
-import com.widzard.bidking.auction.dto.response.AuctionBookmarkResponse;
 import com.widzard.bidking.auction.dto.response.AuctionCreateResponse;
 import com.widzard.bidking.auction.dto.response.AuctionResponse;
+import com.widzard.bidking.auction.dto.response.AuctionListBookmarkResponse;
+import com.widzard.bidking.auction.dto.response.AuctionListResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomEnterItemsResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomEnterResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomResponse;
 import com.widzard.bidking.auction.dto.response.AuctionRoomSellerResponse;
+import com.widzard.bidking.auction.dto.response.BookmarkedAuctionListResponse;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.service.AuctionService;
 import com.widzard.bidking.auction.service.facade.EndAuctionRoomFacade;
@@ -58,48 +60,38 @@ public class AuctionController {
     private final EndAuctionRoomFacade endAuctionRoomFacade;
 
     @GetMapping("/auctions")
-    public ResponseEntity<List<AuctionResponse>> readAuctionList(
+    public ResponseEntity<AuctionListResponse> readAuctionList(
         @RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam(value = "page") int page,
         @RequestParam(value = "perPage") int perPage,
         @RequestParam(value = "categoryList") List<Long> categoryList
     ) {
-        List<AuctionResponse> auctionResponseList = getAuctionResponseList(
-            auctionService.readAuctionRoomList(
-                AuctionListRequest.create(keyword, page, perPage, categoryList)));
-        return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
+        return new ResponseEntity<>(AuctionListResponse.from(auctionService.readAuctionRoomList(
+            AuctionListRequest.create(keyword, page, perPage, categoryList))), HttpStatus.OK);
     }
 
     @GetMapping("/auctions/status")
-    public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListWithLoginStatus(
+    public ResponseEntity<AuctionListBookmarkResponse> readAuctionListWithLoginStatus(
         @AuthenticationPrincipal Member member,
         @RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam(value = "page") int page,
         @RequestParam(value = "perPage") int perPage,
         @RequestParam(value = "categoryList") List<Long> categoryList
     ) {
-        List<AuctionBookmarkResponse> auctionBookmarkResponseList = auctionService.readAuctionRoomListWithLoginStatus(
-            AuctionListRequest.create(keyword, page, perPage, categoryList), member);
-
-        return new ResponseEntity<>(auctionBookmarkResponseList, HttpStatus.OK);
+        return new ResponseEntity<>(auctionService.readAuctionRoomListWithLoginStatus(
+            AuctionListRequest.create(keyword, page, perPage, categoryList), member), HttpStatus.OK);
     }
 
     @GetMapping("/auctions/bookmarks")
-    public ResponseEntity<List<AuctionBookmarkResponse>> readAuctionListOnlyBookmarked(
+    public ResponseEntity<BookmarkedAuctionListResponse> readAuctionListOnlyBookmarked(
         @AuthenticationPrincipal Member member,
         @RequestParam(value = "keyword", required = false) String keyword,
         @RequestParam(value = "page") int page,
         @RequestParam(value = "perPage") int perPage,
         @RequestParam(value = "categoryList") List<Long> categoryList
     ) {
-        List<AuctionRoom> auctionRoomList = auctionService.readAuctionRoomListOnlyBookmarked(
-            AuctionListRequest.create(keyword, page, perPage, categoryList), member);
-        List<AuctionBookmarkResponse> auctionResponseList = new ArrayList<>();
-        for (AuctionRoom auctionRoom : auctionRoomList
-        ) {
-            auctionResponseList.add(AuctionBookmarkResponse.from(auctionRoom, true));
-        }
-        return new ResponseEntity<>(auctionResponseList, HttpStatus.OK);
+        return new ResponseEntity<>(BookmarkedAuctionListResponse.from(auctionService.readAuctionRoomListOnlyBookmarked(
+            AuctionListRequest.create(keyword, page, perPage, categoryList), member)), HttpStatus.OK);
     }
 
     @GetMapping("/auctions/bookmarks/count")

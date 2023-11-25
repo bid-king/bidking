@@ -1,141 +1,119 @@
 package com.widzard.bidking.auction.repository;
 
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
-import com.widzard.bidking.item.entity.ItemCategory;
+import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
 import com.widzard.bidking.member.entity.Member;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import static org.springframework.util.StringUtils.isEmpty;
+import static com.widzard.bidking.bookmark.entity.QBookmark.bookmark;
+import static com.widzard.bidking.auction.entity.QAuctionRoom.auctionRoom;
+import static com.widzard.bidking.item.entity.QItem.item;
+
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class AuctionListSearch {
 
-    private final EntityManager entityManager;
+    private final JPAQueryFactory queryFactory;
 
-    public List<AuctionRoom> findAllBySearchCondition(AuctionListRequest auctionListRequest,
-        List<ItemCategory> itemCategoryList) {
-        StringBuilder jpqlBuilder = new StringBuilder(
-            "SELECT DISTINCT a FROM AuctionRoom a JOIN a.itemList i");
+    public Page<AuctionRoom> findAllBySearchCondition(AuctionListRequest auctionListRequest, Pageable pageable){
+        List<AuctionRoom> auctionRoomList = queryFactory
+            .select(auctionRoom)
+            .distinct()
+            .from(auctionRoom)
+            .join(auctionRoom.itemList, item)
+            .where(categoryEqual(auctionListRequest.getCategoryList()),
+                keywordEqual(auctionListRequest.getKeyword()),
+                auctionRoom.auctionRoomLiveState.ne(AuctionRoomLiveState.valueOf("OFF_LIVE")))
+            .orderBy(getLongOrderSpecifier())
+            .offset(auctionListRequest.getPage())
+            .limit(auctionListRequest.getPerPage())
+            .fetch();
 
-        boolean isFirst = true;
-        // 카테고리 적용
-        isFirst = applyCategory(auctionListRequest, jpqlBuilder, isFirst);
-
-        // 검색어 적용
-        isFirst = applyKeyword(auctionListRequest, jpqlBuilder, isFirst);
-
-        // auctionRoomLiveState가 "OFF_LIVE"가 아닌 경우만 조회
-        searchBeforeOrOnlive(jpqlBuilder, isFirst);
-
-        // 경매 시작시간 - 현재 시간으로 오름차순
-        jpqlBuilder.append(" ORDER BY FUNCTION('TIMESTAMPDIFF', SECOND, " +
-            "CURRENT_TIMESTAMP(), " +
-            "FUNCTION('TIMESTAMP', a.startedAt)) ASC");
-
-        TypedQuery<AuctionRoom> query = entityManager.createQuery(jpqlBuilder.toString(),
-            AuctionRoom.class);
-
-        // 페이지 네이션 적용
-        applyPagination(auctionListRequest, query);
-
-        // 파라미터 적용
-        applyCategoryAndKeywordParameter(auctionListRequest, query, itemCategoryList);
-
-        return query.getResultList();
+        JPAQuery<AuctionRoom> countQuery = fetchCount(auctionListRequest);
+        return PageableExecutionUtils.getPage(auctionRoomList, pageable , countQuery::fetchCount);
     }
 
-    public List<AuctionRoom> findAllBySearchConditionOnlyBookmarked(
-        AuctionListRequest auctionListRequest, Member member, List<ItemCategory> itemCategoryList) {
-        StringBuilder jpqlBuilder = new StringBuilder(
-            "SELECT DISTINCT a FROM AuctionRoom a JOIN a.itemList i");
-        jpqlBuilder.append(" LEFT JOIN Bookmark b ON b.auctionRoom = a");
+    public Page<AuctionRoom> findAllBySearchConditionOnlyBookmarked(AuctionListRequest auctionListRequest, Member member,
+        Pageable pageable){
+            List<AuctionRoom> auctionRoomList = queryFactory
+                .select( auctionRoom)
+                .distinct()
+                .from(auctionRoom)
+                .join(auctionRoom.itemList, item)
+                .leftJoin(bookmark).on(bookmark.auctionRoom.eq(auctionRoom))
+                .where(categoryEqual(auctionListRequest.getCategoryList()),
+                    keywordEqual(auctionListRequest.getKeyword()),
+                    auctionRoom.auctionRoomLiveState.ne(AuctionRoomLiveState.valueOf("OFF_LIVE")),
+                    bookmark.isAdded.isTrue().and(bookmark.member.eq(member))
+                )
+                .orderBy(getLongOrderSpecifier())
+                .offset(auctionListRequest.getPage())
+                .limit(auctionListRequest.getPerPage())
+                .fetch();
 
-        boolean isFirst = true;
-        // 카테고리 적용
-        isFirst = applyCategory(auctionListRequest, jpqlBuilder, isFirst);
-
-        // 검색어 적용
-        isFirst = applyKeyword(auctionListRequest, jpqlBuilder, isFirst);
-
-        // auctionRoomLiveState가 "OFF_LIVE"가 아닌 경우만 조회
-        searchBeforeOrOnlive(jpqlBuilder, isFirst);
-
-        // 북마크 적용
-        jpqlBuilder.append(" AND b.isAdded = 1 AND b.member = :member");
-
-        // 경매 시작시간 - 현재 시간으로 오름차순
-        jpqlBuilder.append(" ORDER BY FUNCTION('TIMESTAMPDIFF', SECOND, " +
-            "CURRENT_TIMESTAMP(), " +
-            "FUNCTION('TIMESTAMP', a.startedAt)) ASC");
-
-        TypedQuery<AuctionRoom> query = entityManager.createQuery(jpqlBuilder.toString(),
-            AuctionRoom.class);
-
-        // 페이지 네이션 적용
-        applyPagination(auctionListRequest, query);
-
-        // 파라미터 적용
-        query.setParameter("member", member);
-        applyCategoryAndKeywordParameter(auctionListRequest, query, itemCategoryList);
-
-        return query.getResultList();
+        JPAQuery<AuctionRoom> countQuery = fetchCountWithBookmark(auctionListRequest, member);
+        return PageableExecutionUtils.getPage(auctionRoomList, pageable , countQuery::fetchCount);
     }
 
-    private boolean applyCategory(AuctionListRequest auctionListRequest, StringBuilder jpqlBuilder,
-        boolean isFirst) {
-        if (auctionListRequest.getCategoryList() != null && !auctionListRequest.getCategoryList()
-            .isEmpty()) {
-            jpqlBuilder.append(" WHERE i.itemCategory IN :categoryList");
-            isFirst = false;
-        }
-        return isFirst;
+    private JPAQuery<AuctionRoom> fetchCount(AuctionListRequest auctionListRequest) {
+        return queryFactory
+            .select(auctionRoom)
+            .from(auctionRoom)
+            .join(auctionRoom.itemList, item)
+            .where(categoryEqual(auctionListRequest.getCategoryList()),
+                keywordEqual(auctionListRequest.getKeyword()),
+                auctionRoom.auctionRoomLiveState.ne(AuctionRoomLiveState.valueOf("OFF_LIVE")));
     }
 
-    private boolean applyKeyword(AuctionListRequest auctionListRequest, StringBuilder jpqlBuilder,
-        boolean isFirst) {
-        if (auctionListRequest.getKeyword() != null && !auctionListRequest.getKeyword().isEmpty()) {
-            if (isFirst) {
-                jpqlBuilder.append(" WHERE");
-                isFirst = false;
-
-            } else {
-                jpqlBuilder.append(" AND");
-            }
-            jpqlBuilder.append(
-                " (a.name LIKE :keyword OR i.name LIKE :keyword OR i.description LIKE :keyword)");
-        }
-        return isFirst;
+    private JPAQuery<AuctionRoom> fetchCountWithBookmark(AuctionListRequest auctionListRequest, Member member) {
+        return queryFactory
+            .select(auctionRoom)
+            .from(auctionRoom)
+            .join(auctionRoom.itemList, item)
+            .leftJoin(bookmark).on(bookmark.auctionRoom.eq(auctionRoom))
+            .where(categoryEqual(auctionListRequest.getCategoryList()),
+                keywordEqual(auctionListRequest.getKeyword()),
+                auctionRoom.auctionRoomLiveState.ne(AuctionRoomLiveState.valueOf("OFF_LIVE")),
+                bookmark.isAdded.isTrue().and(bookmark.member.eq(member)));
     }
 
-    private void searchBeforeOrOnlive(StringBuilder jpqlBuilder, boolean isFirst) {
-        if (isFirst) {
-            jpqlBuilder.append(" WHERE a.auctionRoomLiveState <> 'OFF_LIVE'");
+    private OrderSpecifier<Long> getLongOrderSpecifier() {
+        return Expressions
+            .numberTemplate(Long.class,
+                "FUNCTION('TIMESTAMPDIFF', SECOND, CURRENT_TIMESTAMP(), FUNCTION('TIMESTAMP', started_at))")
+            .asc();
+    }
+
+    private BooleanExpression categoryEqual(List<Long> categoryList) {
+        if (categoryList == null || categoryList.isEmpty()) {
+            // categoryList가 비어있을 때 전체 카테고리 적용
+            return item.itemCategory.id.in(1L, 2L, 3L, 4L, 5L, 6L);
         } else {
-            jpqlBuilder.append(" AND a.auctionRoomLiveState <> 'OFF_LIVE'");
+            return item.itemCategory.id.in(categoryList);
         }
     }
 
-    private void applyPagination(AuctionListRequest auctionListRequest,
-        TypedQuery<AuctionRoom> query) {
-        int page = auctionListRequest.getPage();
-        int perPage = auctionListRequest.getPerPage();
-        int firstResult = (page - 1) * perPage;
-        query.setFirstResult(firstResult);
-        query.setMaxResults(perPage);
-    }
-
-    private void applyCategoryAndKeywordParameter(AuctionListRequest auctionListRequest,
-        TypedQuery<AuctionRoom> query, List<ItemCategory> itemCategoryList) {
-        if (auctionListRequest.getCategoryList() != null && !auctionListRequest.getCategoryList()
-            .isEmpty()) {
-            query.setParameter("categoryList", itemCategoryList);
-        }
-        if (auctionListRequest.getKeyword() != null && !auctionListRequest.getKeyword().isEmpty()) {
-            query.setParameter("keyword", "%" + auctionListRequest.getKeyword() + "%");
+    private BooleanExpression keywordEqual(String keyword){
+        if (isEmpty(keyword)) {
+            return null;
+        } else {
+            return auctionRoom.name.contains(keyword)
+                .or(item.name.contains(keyword))
+                .or(item.description.contains(keyword));
         }
     }
 }
