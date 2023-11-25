@@ -84,16 +84,12 @@ public class AuctionServiceImpl implements AuctionService {
 
         List<BookmarkedAuctionDto> auctionBookmarkResponseList = new ArrayList<>();
         for (AuctionRoom auctionRoom : auctionRoomPage) {
-            Optional<Bookmark> bookmark = bookmarkRepository.findBookmarkByMemberAndAuctionRoom(
-                member, auctionRoom);
-
-            if (bookmark.isPresent()) {
-                auctionBookmarkResponseList.add(
-                    BookmarkedAuctionDto.from(auctionRoom,
-                        bookmark.get().isAdded()));
-            } else {
-                auctionBookmarkResponseList.add(BookmarkedAuctionDto.from(auctionRoom, false));
-            }
+            bookmarkRepository.findBookmarkByMemberAndAuctionRoom(member, auctionRoom)
+                .ifPresentOrElse(
+                    bookmark -> auctionBookmarkResponseList.add(
+                        BookmarkedAuctionDto.from(auctionRoom, bookmark.isAdded())),
+                    () -> auctionBookmarkResponseList.add(BookmarkedAuctionDto.from(auctionRoom, false))
+                );
         }
 
         return AuctionListBookmarkResponse.from(
