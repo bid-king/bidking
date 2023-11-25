@@ -1,9 +1,6 @@
 package com.widzard.bidking.auction.repository;
 
-import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.CollectionExpression;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -11,8 +8,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.widzard.bidking.auction.dto.request.AuctionListRequest;
 import com.widzard.bidking.auction.entity.AuctionRoom;
 import com.widzard.bidking.auction.entity.AuctionRoomLiveState;
-import com.widzard.bidking.auction.entity.QAuctionRoom;
-import com.widzard.bidking.item.entity.ItemCategory;
 import com.widzard.bidking.member.entity.Member;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
