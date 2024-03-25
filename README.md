@@ -21,7 +21,7 @@
         <sub>Frontend</sub>
       </a>
     </td><td align="center">
-      <a href="https://github.com/DJ-archive">
+      <a href="https://github.com/2eve2">
         <img src="./docs/images/profile/다정.jpg" width="100px;" height="100px" alt=""/><br />
         <sub><b>윤다정</b></sub><br />
         <sub>Backend</sub>
